@@ -58,7 +58,7 @@ const config: ForgeConfig = {
         schemes: ["dyad"],
       },
     ],
-    icon: "./assets/icon/logo",
+    icon: "./build/icons/icon", // Custom Superman-style icon with 'A'
 
     osxSign: isEndToEndTestBuild
       ? undefined
