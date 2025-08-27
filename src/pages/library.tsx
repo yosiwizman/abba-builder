@@ -62,7 +62,7 @@ export default function LibraryPage() {
             <TabsContent value="github">
               <GitHubLauncher />
             </TabsContent>
-            
+
             <TabsContent value="knowledge" className="h-full">
               <KnowledgeHub />
             </TabsContent>
