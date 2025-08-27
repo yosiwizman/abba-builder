@@ -4,7 +4,7 @@ Abba is a local, open-source AI app builder. It's fast, private, and fully under
 
 [![Image](https://github.com/user-attachments/assets/f6c83dfc-6ffd-4d32-93dd-4b9c46d17790)](http://dyad.sh/)
 
-More info at: [http://dyad.sh/](http://dyad.sh/)
+
 
 ## 🚀 Features
 
