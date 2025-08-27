@@ -31,6 +31,8 @@ import { registerPortalHandlers } from "./handlers/portal_handlers";
 import { registerPromptHandlers } from "./handlers/prompt_handlers";
 import { registerHelpBotHandlers } from "./handlers/help_bot_handlers";
 import { registerGitHubLauncherHandlers } from "./handlers/github_launcher_handlers";
+import { registerEnhancedHandlers } from "./handlers/enhanced_handlers";
+import { registerKnowledgeHubHandlers } from "./handlers/knowledge_hub_handlers";
 
 export function registerIpcHandlers() {
   // Register all IPC handlers by category
@@ -67,4 +69,6 @@ export function registerIpcHandlers() {
   registerPromptHandlers();
   registerHelpBotHandlers();
   registerGitHubLauncherHandlers();
+  registerEnhancedHandlers();
+  registerKnowledgeHubHandlers();
 }
