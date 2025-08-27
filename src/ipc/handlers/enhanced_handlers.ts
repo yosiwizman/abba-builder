@@ -2,6 +2,7 @@ import { ipcMain } from "electron";
 import log from "electron-log";
 import path from "path";
 import { existsSync } from "fs";
+import { randomBytes } from "crypto";
 
 const logger = log.scope("enhanced_handlers");
 
@@ -63,182 +64,264 @@ async function getIntegrationHub() {
   return integrationHub;
 }
 
+// Enhanced logging wrapper with correlation IDs and timing
+function withLogging<T extends any[], R>(
+  handlerName: string,
+  handler: (...args: T) => Promise<R>,
+  validateInput?: (input: any) => string | null,
+) {
+  return async (...args: T): Promise<R> => {
+    const correlationId = randomBytes(8).toString("hex");
+    const startTime = Date.now();
+    const input = args[1]; // args[0] is event, args[1] is the actual input
+
+    logger.info(`[${correlationId}] ${handlerName} started`, {
+      handler: handlerName,
+      correlationId,
+      input: JSON.stringify(input).substring(0, 200), // Truncate for logging
+    });
+
+    // Validate input if validator provided
+    if (validateInput && input) {
+      const validationError = validateInput(input);
+      if (validationError) {
+        const error = `Input validation failed: ${validationError}`;
+        logger.error(`[${correlationId}] ${handlerName} validation error`, {
+          handler: handlerName,
+          correlationId,
+          error,
+          durationMs: Date.now() - startTime,
+        });
+        return {
+          success: false,
+          error,
+          correlationId,
+          data: null,
+        } as R;
+      }
+    }
+
+    try {
+      const result = await handler(...args);
+      const durationMs = Date.now() - startTime;
+
+      logger.info(`[${correlationId}] ${handlerName} completed`, {
+        handler: handlerName,
+        correlationId,
+        durationMs,
+        success: (result as any)?.success ?? true,
+      });
+
+      // Add correlation ID to result
+      if (typeof result === "object" && result !== null) {
+        (result as any).correlationId = correlationId;
+        (result as any).durationMs = durationMs;
+      }
+
+      return result;
+    } catch (error: any) {
+      const durationMs = Date.now() - startTime;
+      logger.error(`[${correlationId}] ${handlerName} failed`, {
+        handler: handlerName,
+        correlationId,
+        error: error.message || error,
+        stack: error.stack,
+        durationMs,
+      });
+
+      return {
+        success: false,
+        error: error.message || "Operation failed",
+        correlationId,
+        durationMs,
+        data: null,
+      } as R;
+    }
+  };
+}
+
+// Input validators
+const validators = {
+  build: (input: any) => {
+    if (!input?.description || typeof input.description !== "string") {
+      return "Description is required and must be a string";
+    }
+    if (input.description.length < 10) {
+      return "Description must be at least 10 characters";
+    }
+    if (input.techStack && !Array.isArray(input.techStack)) {
+      return "Tech stack must be an array if provided";
+    }
+    return null;
+  },
+  quickBuild: (input: any) => {
+    if (!input?.template || typeof input.template !== "string") {
+      return "Template is required and must be a string";
+    }
+    return null;
+  },
+  feedback: (input: any) => {
+    if (!input?.type || typeof input.type !== "string") {
+      return "Feedback type is required";
+    }
+    if (!input.data) {
+      return "Feedback data is required";
+    }
+    return null;
+  },
+  errorRecommendation: (input: any) => {
+    if (!input?.error) {
+      return "Error information is required";
+    }
+    return null;
+  },
+  matchPattern: (input: any) => {
+    if (!input?.input) {
+      return "Input for pattern matching is required";
+    }
+    return null;
+  },
+  importKnowledge: (input: any) => {
+    if (!input?.data) {
+      return "Knowledge data is required for import";
+    }
+    return null;
+  },
+};
+
 export function registerEnhancedHandlers() {
-  logger.info("Registering enhanced IPC handlers");
+  logger.info("Registering enhanced IPC handlers with structured logging");
 
   // Build and Deploy handler
   ipcMain.handle(
     "enhanced:build",
-    async (_event, { description, techStack }) => {
-      try {
-        logger.debug("Build request received:", { description, techStack });
+    withLogging(
+      "enhanced:build",
+      async (_event, { description, techStack }) => {
         const hub = await getIntegrationHub();
-
         const result = await hub.buildAndDeploy(description, techStack);
-        logger.info("Build completed:", result);
-
         return {
           success: result.success,
           data: result,
           error: result.error || null,
         };
-      } catch (error: any) {
-        logger.error("Build failed:", error);
-        return {
-          success: false,
-          error: error.message || "Build failed",
-          data: null,
-        };
-      }
-    },
+      },
+      validators.build,
+    ),
   );
 
   // Quick Build handler
   ipcMain.handle(
     "enhanced:quickBuild",
-    async (_event, { template, customization }) => {
-      try {
-        logger.debug("Quick build request:", { template, customization });
+    withLogging(
+      "enhanced:quickBuild",
+      async (_event, { template, customization }) => {
         const hub = await getIntegrationHub();
-
         const result = await hub.quickBuild(template, customization);
-        logger.info("Quick build completed:", result);
-
         return {
           success: result.success,
           data: result,
           error: result.error || null,
         };
-      } catch (error: any) {
-        logger.error("Quick build failed:", error);
-        return {
-          success: false,
-          error: error.message || "Quick build failed",
-          data: null,
-        };
-      }
-    },
+      },
+      validators.quickBuild,
+    ),
   );
 
   // Submit Feedback handler
-  ipcMain.handle("enhanced:feedback", async (_event, { type, data }) => {
-    try {
-      logger.debug("Feedback submission:", { type, data });
-      const hub = await getIntegrationHub();
-
-      const result = await hub.submitFeedback(type, data);
-      logger.info("Feedback submitted:", result);
-
-      return {
-        success: true,
-        data: result,
-      };
-    } catch (error: any) {
-      logger.error("Feedback submission failed:", error);
-      return {
-        success: false,
-        error: error.message || "Feedback submission failed",
-        data: null,
-      };
-    }
-  });
+  ipcMain.handle(
+    "enhanced:feedback",
+    withLogging(
+      "enhanced:feedback",
+      async (_event, { type, data }) => {
+        const hub = await getIntegrationHub();
+        const result = await hub.submitFeedback(type, data);
+        return {
+          success: true,
+          data: result,
+        };
+      },
+      validators.feedback,
+    ),
+  );
 
   // System Status handler
-  ipcMain.handle("enhanced:status", async (_event) => {
-    try {
-      logger.debug("System status check requested");
+  ipcMain.handle(
+    "enhanced:status",
+    withLogging("enhanced:status", async (_event) => {
       const hub = await getIntegrationHub();
-
       const status = await hub.getSystemStatus();
-      logger.info("System status:", status);
-
       return {
         success: true,
         data: status,
       };
-    } catch (error: any) {
-      logger.error("Status check failed:", error);
-      return {
-        success: false,
-        error: error.message || "Status check failed",
-        data: null,
-      };
-    }
-  });
+    }),
+  );
 
   // Error Recommendation handler
-  ipcMain.handle("enhanced:errorRecommendation", async (_event, { error }) => {
-    try {
-      logger.debug("Error recommendation requested:", error);
-      const hub = await getIntegrationHub();
-
-      if (hub.getErrorRecommendations) {
-        const recommendations = await hub.getErrorRecommendations(error);
-        return {
-          success: true,
-          data: recommendations,
-        };
-      } else {
-        // Fallback if method doesn't exist
-        return {
-          success: true,
-          data: {
-            recommendations: [
-              "Check the error message for syntax issues",
-              "Verify all dependencies are installed",
-              "Review recent changes that might have caused the error",
-            ],
-          },
-        };
-      }
-    } catch (error: any) {
-      logger.error("Error recommendation failed:", error);
-      return {
-        success: false,
-        error: error.message || "Failed to get recommendations",
-        data: null,
-      };
-    }
-  });
+  ipcMain.handle(
+    "enhanced:errorRecommendation",
+    withLogging(
+      "enhanced:errorRecommendation",
+      async (_event, { error }) => {
+        const hub = await getIntegrationHub();
+        if (hub.getErrorRecommendations) {
+          const recommendations = await hub.getErrorRecommendations(error);
+          return {
+            success: true,
+            data: recommendations,
+          };
+        } else {
+          // Fallback if method doesn't exist
+          return {
+            success: true,
+            data: {
+              recommendations: [
+                "Check the error message for syntax issues",
+                "Verify all dependencies are installed",
+                "Review recent changes that might have caused the error",
+              ],
+            },
+          };
+        }
+      },
+      validators.errorRecommendation,
+    ),
+  );
 
   // Pattern Matching handler
-  ipcMain.handle("enhanced:matchPattern", async (_event, { input }) => {
-    try {
-      logger.debug("Pattern matching requested:", input);
-      const hub = await getIntegrationHub();
-
-      if (hub.matchPattern) {
-        const matches = await hub.matchPattern(input);
-        return {
-          success: true,
-          data: matches,
-        };
-      } else {
-        // Fallback
-        return {
-          success: true,
-          data: {
-            patterns: [],
-            suggestions: ["No pattern matching available in mock mode"],
-          },
-        };
-      }
-    } catch (error: any) {
-      logger.error("Pattern matching failed:", error);
-      return {
-        success: false,
-        error: error.message || "Pattern matching failed",
-        data: null,
-      };
-    }
-  });
+  ipcMain.handle(
+    "enhanced:matchPattern",
+    withLogging(
+      "enhanced:matchPattern",
+      async (_event, { input }) => {
+        const hub = await getIntegrationHub();
+        if (hub.matchPattern) {
+          const matches = await hub.matchPattern(input);
+          return {
+            success: true,
+            data: matches,
+          };
+        } else {
+          // Fallback
+          return {
+            success: true,
+            data: {
+              patterns: [],
+              suggestions: ["No pattern matching available in mock mode"],
+            },
+          };
+        }
+      },
+      validators.matchPattern,
+    ),
+  );
 
   // Knowledge Export handler
-  ipcMain.handle("enhanced:exportKnowledge", async (_event) => {
-    try {
-      logger.debug("Knowledge export requested");
+  ipcMain.handle(
+    "enhanced:exportKnowledge",
+    withLogging("enhanced:exportKnowledge", async (_event) => {
       const hub = await getIntegrationHub();
-
       if (hub.exportKnowledge) {
         const knowledge = await hub.exportKnowledge();
         return {
@@ -257,46 +340,113 @@ export function registerEnhancedHandlers() {
           },
         };
       }
-    } catch (error: any) {
-      logger.error("Knowledge export failed:", error);
-      return {
-        success: false,
-        error: error.message || "Knowledge export failed",
-        data: null,
-      };
-    }
-  });
+    }),
+  );
 
   // Knowledge Import handler
-  ipcMain.handle("enhanced:importKnowledge", async (_event, { data }) => {
-    try {
-      logger.debug("Knowledge import requested");
-      const hub = await getIntegrationHub();
+  ipcMain.handle(
+    "enhanced:importKnowledge",
+    withLogging(
+      "enhanced:importKnowledge",
+      async (_event, { data }) => {
+        const hub = await getIntegrationHub();
+        if (hub.importKnowledge) {
+          const result = await hub.importKnowledge(data);
+          return {
+            success: true,
+            data: result,
+          };
+        } else {
+          // Fallback
+          return {
+            success: true,
+            data: {
+              message: "Knowledge import not available in mock mode",
+            },
+          };
+        }
+      },
+      validators.importKnowledge,
+    ),
+  );
 
-      if (hub.importKnowledge) {
-        const result = await hub.importKnowledge(data);
+  // Add three new handlers for Project Library integration
+  ipcMain.handle(
+    "enhanced:projectLibrary:list",
+    withLogging(
+      "enhanced:projectLibrary:list",
+      async (_event, { category, limit = 50 }) => {
+        const hub = await getIntegrationHub();
+        if (hub.getProjectLibrary) {
+          const library = await hub.getProjectLibrary();
+          const projects = category
+            ? await library.getProjectsByCategory(category)
+            : await library.getAllProjects();
+          return {
+            success: true,
+            data: projects.slice(0, limit),
+          };
+        } else {
+          // Mock response
+          return {
+            success: true,
+            data: [],
+          };
+        }
+      },
+    ),
+  );
+
+  ipcMain.handle(
+    "enhanced:projectLibrary:refresh",
+    withLogging("enhanced:projectLibrary:refresh", async (_event) => {
+      const hub = await getIntegrationHub();
+      if (hub.refreshProjectLibrary) {
+        const result = await hub.refreshProjectLibrary();
         return {
           success: true,
           data: result,
         };
       } else {
-        // Fallback
         return {
           success: true,
-          data: {
-            message: "Knowledge import not available in mock mode",
-          },
+          data: { message: "Library refresh not available" },
         };
       }
-    } catch (error: any) {
-      logger.error("Knowledge import failed:", error);
-      return {
-        success: false,
-        error: error.message || "Knowledge import failed",
-        data: null,
-      };
-    }
-  });
+    }),
+  );
 
-  logger.info("Enhanced IPC handlers registered successfully");
+  ipcMain.handle(
+    "enhanced:projectLibrary:details",
+    withLogging(
+      "enhanced:projectLibrary:details",
+      async (_event, { projectId }) => {
+        if (!projectId) {
+          return {
+            success: false,
+            error: "Project ID is required",
+            data: null,
+          };
+        }
+        const hub = await getIntegrationHub();
+        if (hub.getProjectDetails) {
+          const details = await hub.getProjectDetails(projectId);
+          return {
+            success: true,
+            data: details,
+          };
+        } else {
+          return {
+            success: false,
+            error: "Project details not available",
+            data: null,
+          };
+        }
+      },
+    ),
+  );
+
+  logger.info(
+    "Enhanced IPC handlers registered successfully with structured logging",
+  );
 }
