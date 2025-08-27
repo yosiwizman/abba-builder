@@ -98,6 +98,33 @@ function injectHTML(buf) {
 
   const scripts = [];
 
+  // Brand sanitizer to remove or replace remaining Dyad references rendered by the app itself
+  const brandSanitizerScript = `(function(){
+    function sanitize(){
+      try {
+        var nodes = Array.from(document.querySelectorAll('a, span, div, p'));
+        nodes.forEach(function(el){
+          if (!el || !el.textContent) return;
+          var txt = el.textContent.trim();
+          if (txt.includes('Made with Dyad')) {
+            el.textContent = txt.replace('Made with Dyad', 'Made with Abba');
+            if (el.tagName && el.tagName.toLowerCase() === 'a') {
+              el.removeAttribute('href');
+              el.removeAttribute('target');
+              el.style.pointerEvents = 'none';
+              el.style.textDecoration = 'none';
+            }
+          }
+        });
+      } catch (e) { /* noop */ }
+    }
+    // Run now, on DOMContentLoaded and whenever DOM changes
+    sanitize();
+    document.addEventListener('DOMContentLoaded', sanitize);
+    var mo = new MutationObserver(function(){ sanitize(); });
+    mo.observe(document.documentElement || document.body, { childList: true, subtree: true });
+  })();`;
+
   if (!legacyAppWithShim) {
     if (stacktraceJsContent) {
       scripts.push(`<script>${stacktraceJsContent}</script>`);
@@ -122,6 +149,10 @@ function injectHTML(buf) {
       '<script>console.warn("[proxy-worker] dyad component selector client was not injected.");</script>',
     );
   }
+
+  // Always inject branding sanitizer last
+  scripts.push(`<script>${brandSanitizerScript}</script>`);
+
   const allScripts = scripts.join("\n");
 
   const headRegex = /<head[^>]*>/i;

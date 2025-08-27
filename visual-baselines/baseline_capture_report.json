@@ -1,0 +1,135 @@
+{
+  "timestamp": 1756258319009,
+  "date": "2025-08-27T01:31:59.009Z",
+  "summary": {
+    "total": 1,
+    "successful": 1,
+    "failed": 0
+  },
+  "results": [
+    {
+      "target": "./test-apps",
+      "identifier": "test_apps",
+      "success": true,
+      "screenshots": 8,
+      "result": {
+        "success": true,
+        "baseline": {
+          "appId": "test_apps",
+          "timestamp": 1756258299773,
+          "version": "v1756258299773_3oti688ew",
+          "screenshots": [
+            {
+              "name": "test_apps_mobile_1x",
+              "viewport": {
+                "width": 375,
+                "height": 667,
+                "name": "mobile"
+              },
+              "pixelDensity": 1,
+              "path": "visual-baselines\\test_apps_mobile_1x_baseline.png",
+              "size": 2680
+            },
+            {
+              "name": "test_apps_mobile_2x",
+              "viewport": {
+                "width": 375,
+                "height": 667,
+                "name": "mobile"
+              },
+              "pixelDensity": 2,
+              "path": "visual-baselines\\test_apps_mobile_2x_baseline.png",
+              "size": 2680
+            },
+            {
+              "name": "test_apps_tablet_1x",
+              "viewport": {
+                "width": 768,
+                "height": 1024,
+                "name": "tablet"
+              },
+              "pixelDensity": 1,
+              "path": "visual-baselines\\test_apps_tablet_1x_baseline.png",
+              "size": 5095
+            },
+            {
+              "name": "test_apps_tablet_2x",
+              "viewport": {
+                "width": 768,
+                "height": 1024,
+                "name": "tablet"
+              },
+              "pixelDensity": 2,
+              "path": "visual-baselines\\test_apps_tablet_2x_baseline.png",
+              "size": 5095
+            },
+            {
+              "name": "test_apps_desktop_1x",
+              "viewport": {
+                "width": 1920,
+                "height": 1080,
+                "name": "desktop"
+              },
+              "pixelDensity": 1,
+              "path": "visual-baselines\\test_apps_desktop_1x_baseline.png",
+              "size": 9134
+            },
+            {
+              "name": "test_apps_desktop_2x",
+              "viewport": {
+                "width": 1920,
+                "height": 1080,
+                "name": "desktop"
+              },
+              "pixelDensity": 2,
+              "path": "visual-baselines\\test_apps_desktop_2x_baseline.png",
+              "size": 9134
+            },
+            {
+              "name": "test_apps_laptop_1x",
+              "viewport": {
+                "width": 1440,
+                "height": 900,
+                "name": "laptop"
+              },
+              "pixelDensity": 1,
+              "path": "visual-baselines\\test_apps_laptop_1x_baseline.png",
+              "size": 6469
+            },
+            {
+              "name": "test_apps_laptop_2x",
+              "viewport": {
+                "width": 1440,
+                "height": 900,
+                "name": "laptop"
+              },
+              "pixelDensity": 2,
+              "path": "visual-baselines\\test_apps_laptop_2x_baseline.png",
+              "size": 6469
+            }
+          ],
+          "metadata": {},
+          "scenarioScreenshots": [
+            {
+              "scenario": "initial_state",
+              "path": "visual-baselines\\test_apps_scenario_initial_state.png",
+              "timestamp": 1756258312761
+            },
+            {
+              "scenario": "scrolled_mid",
+              "path": "visual-baselines\\test_apps_scenario_scrolled_mid.png",
+              "timestamp": 1756258315866
+            },
+            {
+              "scenario": "scrolled_bottom",
+              "path": "visual-baselines\\test_apps_scenario_scrolled_bottom.png",
+              "timestamp": 1756258318975
+            }
+          ]
+        },
+        "totalScreenshots": 8,
+        "message": "Baseline captured successfully with 8 screenshots"
+      }
+    }
+  ]
+}

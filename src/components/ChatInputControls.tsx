@@ -14,7 +14,7 @@ export function ChatInputControls({
       <div className="w-1.5"></div>
       <ModelPicker />
       <div className="w-1.5"></div>
-      <ProModeSelector />
+      {/* Pro button disabled - removed popup */}
       <div className="w-1"></div>
       {showContextFilesPicker && (
         <>

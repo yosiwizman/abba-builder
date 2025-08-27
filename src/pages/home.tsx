@@ -243,40 +243,9 @@ export default function HomePage() {
           </button>
         </div>
       </div>
-      <PrivacyBanner />
+      {/* PrivacyBanner removed per user request */}
 
-      {/* Release Notes Dialog */}
-      <Dialog open={releaseNotesOpen} onOpenChange={setReleaseNotesOpen}>
-        <DialogContent className="max-w-4xl bg-(--docs-bg) pr-0 pt-4 pl-4 gap-1">
-          <DialogHeader>
-            <DialogTitle>What's new in v{appVersion}?</DialogTitle>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="absolute right-10 top-2 focus-visible:ring-0 focus-visible:ring-offset-0"
-              onClick={() =>
-                window.open(
-                  releaseUrl.replace("?hideHeader=true&theme=" + theme, ""),
-                  "_blank",
-                )
-              }
-            >
-              <ExternalLink className="w-4 h-4" />
-            </Button>
-          </DialogHeader>
-          <div className="overflow-auto h-[70vh] flex flex-col ">
-            {releaseUrl && (
-              <div className="flex-1">
-                <iframe
-                  src={releaseUrl}
-                  className="w-full h-full border-0 rounded-lg"
-                  title={`Release notes for v${appVersion}`}
-                />
-              </div>
-            )}
-          </div>
-        </DialogContent>
-      </Dialog>
+      {/* Release Notes Dialog removed per user request */}
     </div>
   );
 }

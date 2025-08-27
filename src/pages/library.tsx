@@ -1,41 +1,67 @@
-import React from "react";
+import React, { useState } from "react";
 import { usePrompts } from "@/hooks/usePrompts";
 import {
   CreatePromptDialog,
   CreateOrEditPromptDialog,
 } from "@/components/CreatePromptDialog";
 import { DeleteConfirmationDialog } from "@/components/DeleteConfirmationDialog";
+import { GitHubLauncher } from "@/components/GitHubLauncher";
+import { AppGallery } from "@/components/AppGallery";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function LibraryPage() {
   const { prompts, isLoading, createPrompt, updatePrompt, deletePrompt } =
     usePrompts();
+  const [activeTab, setActiveTab] = useState("apps");
 
   return (
     <div className="min-h-screen px-8 py-6">
       <div className="max-w-6xl mx-auto">
-        <div className="flex items-center justify-between mb-6">
-          <h1 className="text-3xl font-bold mr-4">Library: Prompts</h1>
-          <CreatePromptDialog onCreatePrompt={createPrompt} />
+        <div className="mb-6">
+          <h1 className="text-3xl font-bold mb-4">Library</h1>
+          
+          <Tabs value={activeTab} onValueChange={setActiveTab}>
+            <TabsList className="mb-4">
+              <TabsTrigger value="apps">App Gallery</TabsTrigger>
+              <TabsTrigger value="prompts">Prompts</TabsTrigger>
+              <TabsTrigger value="github">GitHub Launcher</TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="prompts">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-semibold">Prompts</h2>
+                <CreatePromptDialog onCreatePrompt={createPrompt} />
+              </div>
+              
+              {isLoading ? (
+                <div>Loading...</div>
+              ) : prompts.length === 0 ? (
+                <div className="text-muted-foreground">
+                  No prompts yet. Create one to get started.
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
+                  {prompts.map((p) => (
+                    <PromptCard
+                      key={p.id}
+                      prompt={p}
+                      onUpdate={updatePrompt}
+                      onDelete={deletePrompt}
+                    />
+                  ))}
+                </div>
+              )}
+            </TabsContent>
+            
+            <TabsContent value="apps">
+              <AppGallery />
+            </TabsContent>
+            
+            <TabsContent value="github">
+              <GitHubLauncher />
+            </TabsContent>
+          </Tabs>
         </div>
-
-        {isLoading ? (
-          <div>Loading...</div>
-        ) : prompts.length === 0 ? (
-          <div className="text-muted-foreground">
-            No prompts yet. Create one to get started.
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
-            {prompts.map((p) => (
-              <PromptCard
-                key={p.id}
-                prompt={p}
-                onUpdate={updatePrompt}
-                onDelete={deletePrompt}
-              />
-            ))}
-          </div>
-        )}
       </div>
     </div>
   );

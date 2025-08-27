@@ -55,20 +55,13 @@ export function Message({ spans }: MessageConfig) {
 // Predefined message configurations
 export const TURBO_EDITS_PROMO_MESSAGE: MessageConfig = {
   spans: [
-    { type: "text", content: "Tired of waiting on AI?" },
-    { type: "link", content: " Get Dyad Pro", url: "https://dyad.sh/pro#ai" },
-    { type: "text", content: " for faster edits with Turbo Edits." },
+    { type: "text", content: "Enjoy faster AI edits with Turbo Edits." },
   ],
 };
 
 export const SMART_CONTEXT_PROMO_MESSAGE: MessageConfig = {
   spans: [
-    { type: "text", content: "Save up to 5x on AI costs with " },
-    {
-      type: "link",
-      content: "Dyad Pro's Smart Context",
-      url: "https://dyad.sh/pro#ai",
-    },
+    { type: "text", content: "Save up to 5x on AI costs with Smart Context" },
   ],
 };
 
@@ -86,12 +79,7 @@ export const REDDIT_TIP: MessageConfig = {
   spans: [
     {
       type: "text",
-      content: "Join 600+ builders in the ",
-    },
-    {
-      type: "link",
-      content: "Dyad subreddit",
-      url: "https://www.reddit.com/r/dyadbuilders/",
+      content: "Welcome to Abba!",
     },
   ],
 };
@@ -124,7 +112,7 @@ export const BUILD_A_BIBLE_APP_TIP: MessageConfig = {
     },
     {
       type: "text",
-      content: " the creator of Dyad build a Bible app step-by-step",
+      content: " the creator build a Bible app step-by-step",
     },
   ],
 };
@@ -133,27 +121,17 @@ export const DEBUGGING_TIPS_TIP: MessageConfig = {
   spans: [
     {
       type: "text",
-      content: "Getting stuck? Read our ",
-    },
-    {
-      type: "link",
-      content: "debugging tips",
-      url: "https://www.dyad.sh/docs/guides/debugging",
+      content: "Getting stuck? Try a different approach or model.",
     },
   ],
 };
 
-// Advanced tip: Customize your AI rules https://www.dyad.sh/docs/guides/ai-rules
+// Advanced tip: Customize your AI rules
 export const AI_RULES_TIP: MessageConfig = {
   spans: [
     {
       type: "text",
-      content: "Advanced tip: Customize your ",
-    },
-    {
-      type: "link",
-      content: "AI rules",
-      url: "https://www.dyad.sh/docs/guides/ai-rules",
+      content: "Advanced tip: Customize your AI rules for better results",
     },
   ],
 };
@@ -167,32 +145,14 @@ export const NEW_CHAT_TIP: MessageConfig = {
   ],
 };
 
-// Want to know what's next? Checkout our roadmap https://www.dyad.sh/docs/roadmap
-export const ROADMAP_TIP: MessageConfig = {
-  spans: [
-    {
-      type: "text",
-      content: "Want to know what's next? Check out our ",
-    },
-    {
-      type: "link",
-      content: "roadmap",
-      url: "https://www.dyad.sh/docs/roadmap",
-    },
-  ],
-};
+// Removed roadmap tip - no longer needed
 
-// Like Dyad? Star it on GitHub https://github.com/dyad-sh/dyad/
+// Like Abba? Enjoy using it!
 export const GITHUB_TIP: MessageConfig = {
   spans: [
     {
       type: "text",
-      content: "Like Dyad? Star it on ",
-    },
-    {
-      type: "link",
-      content: "GitHub",
-      url: "https://github.com/dyad-sh/dyad",
+      content: "Enjoying Abba? Keep building awesome things!",
     },
   ],
 };
@@ -208,7 +168,7 @@ const ALL_MESSAGES = [
   DEBUGGING_TIPS_TIP,
   AI_RULES_TIP,
   NEW_CHAT_TIP,
-  ROADMAP_TIP,
+  // ROADMAP_TIP removed
   GITHUB_TIP,
 ];
 
