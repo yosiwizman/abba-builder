@@ -148,6 +148,7 @@
     "lexical-beautiful-mentions": "^0.1.47",
     "lucide-react": "^0.487.0",
     "monaco-editor": "^0.52.2",
+    "node-fetch": "^3.3.2",
     "openai": "^4.91.1",
     "pixelmatch": "^5.3.0",
     "playwright": "^1.40.0",
