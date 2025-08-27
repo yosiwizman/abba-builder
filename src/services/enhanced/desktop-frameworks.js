@@ -6,128 +6,176 @@
 class DesktopFrameworkManager {
   constructor() {
     this.supportedFrameworks = {
-      'electron': {
-        languages: ['JavaScript', 'TypeScript'],
-        templates: ['electron-forge', 'electron-builder'],
-        complexity: 'medium',
-        platforms: ['Windows', 'macOS', 'Linux'],
-        setupTime: 'fast',
-        bundleSize: 'large',
-        performance: 'good',
-        nativeFeatures: 'via-nodejs'
+      electron: {
+        languages: ["JavaScript", "TypeScript"],
+        templates: ["electron-forge", "electron-builder"],
+        complexity: "medium",
+        platforms: ["Windows", "macOS", "Linux"],
+        setupTime: "fast",
+        bundleSize: "large",
+        performance: "good",
+        nativeFeatures: "via-nodejs",
       },
-      'tauri': {
-        languages: ['Rust', 'JavaScript'],
-        templates: ['create-tauri-app'],
-        complexity: 'medium-hard',
-        platforms: ['Windows', 'macOS', 'Linux'],
-        setupTime: 'medium',
-        bundleSize: 'small',
-        performance: 'excellent',
-        nativeFeatures: 'direct'
+      tauri: {
+        languages: ["Rust", "JavaScript"],
+        templates: ["create-tauri-app"],
+        complexity: "medium-hard",
+        platforms: ["Windows", "macOS", "Linux"],
+        setupTime: "medium",
+        bundleSize: "small",
+        performance: "excellent",
+        nativeFeatures: "direct",
       },
-      'flutter': {
-        languages: ['Dart'],
-        templates: ['flutter create'],
-        complexity: 'medium',
-        platforms: ['Windows', 'macOS', 'Linux', 'Mobile'],
-        setupTime: 'medium',
-        bundleSize: 'medium',
-        performance: 'very-good',
-        nativeFeatures: 'via-platform-channels'
+      flutter: {
+        languages: ["Dart"],
+        templates: ["flutter create"],
+        complexity: "medium",
+        platforms: ["Windows", "macOS", "Linux", "Mobile"],
+        setupTime: "medium",
+        bundleSize: "medium",
+        performance: "very-good",
+        nativeFeatures: "via-platform-channels",
       },
-      'dotnet': {
-        languages: ['C#'],
-        templates: ['WPF', 'WinUI', 'MAUI'],
-        complexity: 'hard',
-        platforms: ['Windows', 'macOS', 'Linux'],
-        setupTime: 'slow',
-        bundleSize: 'medium',
-        performance: 'excellent',
-        nativeFeatures: 'direct'
+      dotnet: {
+        languages: ["C#"],
+        templates: ["WPF", "WinUI", "MAUI"],
+        complexity: "hard",
+        platforms: ["Windows", "macOS", "Linux"],
+        setupTime: "slow",
+        bundleSize: "medium",
+        performance: "excellent",
+        nativeFeatures: "direct",
       },
-      'python': {
-        languages: ['Python'],
-        templates: ['tkinter', 'PyQt', 'Kivy'],
-        complexity: 'easy-medium',
-        platforms: ['Windows', 'macOS', 'Linux'],
-        setupTime: 'fast',
-        bundleSize: 'small-medium',
-        performance: 'good',
-        nativeFeatures: 'via-libraries'
-      }
+      python: {
+        languages: ["Python"],
+        templates: ["tkinter", "PyQt", "Kivy"],
+        complexity: "easy-medium",
+        platforms: ["Windows", "macOS", "Linux"],
+        setupTime: "fast",
+        bundleSize: "small-medium",
+        performance: "good",
+        nativeFeatures: "via-libraries",
+      },
     };
   }
 
   /**
    * Select optimal framework based on requirements
    */
-  selectOptimalFramework(request, targetPlatforms = ['Windows', 'macOS', 'Linux'], userSkill = 'medium') {
+  selectOptimalFramework(
+    request,
+    targetPlatforms = ["Windows", "macOS", "Linux"],
+    userSkill = "medium",
+  ) {
     // Analyze request for hints
     const requestLower = request.toLowerCase();
-    
+
     // Web developers → Electron (familiar with JS/HTML/CSS)
     if (this.hasWebExperience(request)) {
-      console.log('Selected Electron: Web developer background detected');
-      return 'electron';
+      console.log("Selected Electron: Web developer background detected");
+      return "electron";
     }
-    
+
     // Performance critical → Tauri (faster, smaller)
     if (this.requiresPerformance(request)) {
-      console.log('Selected Tauri: Performance requirements detected');
-      return 'tauri';
+      console.log("Selected Tauri: Performance requirements detected");
+      return "tauri";
     }
-    
+
     // Cross-platform mobile + desktop → Flutter
-    if (targetPlatforms.includes('Mobile') || requestLower.includes('mobile')) {
-      console.log('Selected Flutter: Mobile platform required');
-      return 'flutter';
+    if (targetPlatforms.includes("Mobile") || requestLower.includes("mobile")) {
+      console.log("Selected Flutter: Mobile platform required");
+      return "flutter";
     }
-    
+
     // Windows-specific → .NET
-    if (targetPlatforms.length === 1 && targetPlatforms[0] === 'Windows' && 
-        (requestLower.includes('windows') || requestLower.includes('wpf') || requestLower.includes('winui'))) {
-      console.log('Selected .NET: Windows-specific app');
-      return 'dotnet';
+    if (
+      targetPlatforms.length === 1 &&
+      targetPlatforms[0] === "Windows" &&
+      (requestLower.includes("windows") ||
+        requestLower.includes("wpf") ||
+        requestLower.includes("winui"))
+    ) {
+      console.log("Selected .NET: Windows-specific app");
+      return "dotnet";
     }
-    
+
     // Simple apps → Python
     if (this.isSimpleApp(request)) {
-      console.log('Selected Python: Simple app requirements');
-      return 'python';
+      console.log("Selected Python: Simple app requirements");
+      return "python";
     }
-    
+
     // Default safe choice based on skill level
-    if (userSkill === 'beginner') {
-      return 'python';
+    if (userSkill === "beginner") {
+      return "python";
     }
-    
-    console.log('Selected Electron: Default choice for general desktop apps');
-    return 'electron';
+
+    console.log("Selected Electron: Default choice for general desktop apps");
+    return "electron";
   }
 
   /**
    * Check if user has web development experience
    */
   hasWebExperience(request) {
-    const webKeywords = ['react', 'vue', 'angular', 'html', 'css', 'javascript', 'typescript', 'node', 'npm', 'web'];
-    return webKeywords.some(keyword => request.toLowerCase().includes(keyword));
+    const webKeywords = [
+      "react",
+      "vue",
+      "angular",
+      "html",
+      "css",
+      "javascript",
+      "typescript",
+      "node",
+      "npm",
+      "web",
+    ];
+    return webKeywords.some((keyword) =>
+      request.toLowerCase().includes(keyword),
+    );
   }
 
   /**
    * Check if app requires high performance
    */
   requiresPerformance(request) {
-    const perfKeywords = ['fast', 'performance', 'speed', 'efficient', 'lightweight', 'small', 'minimal', 'gaming', 'realtime', 'low-latency'];
-    return perfKeywords.some(keyword => request.toLowerCase().includes(keyword));
+    const perfKeywords = [
+      "fast",
+      "performance",
+      "speed",
+      "efficient",
+      "lightweight",
+      "small",
+      "minimal",
+      "gaming",
+      "realtime",
+      "low-latency",
+    ];
+    return perfKeywords.some((keyword) =>
+      request.toLowerCase().includes(keyword),
+    );
   }
 
   /**
    * Check if app is simple
    */
   isSimpleApp(request) {
-    const simpleKeywords = ['simple', 'basic', 'quick', 'prototype', 'demo', 'tool', 'utility', 'calculator', 'notepad', 'timer'];
-    return simpleKeywords.some(keyword => request.toLowerCase().includes(keyword));
+    const simpleKeywords = [
+      "simple",
+      "basic",
+      "quick",
+      "prototype",
+      "demo",
+      "tool",
+      "utility",
+      "calculator",
+      "notepad",
+      "timer",
+    ];
+    return simpleKeywords.some((keyword) =>
+      request.toLowerCase().includes(keyword),
+    );
   }
 
   /**
@@ -139,9 +187,9 @@ class DesktopFrameworkManager {
       tauri: this.generateTauriPrompts(request, context),
       flutter: this.generateFlutterPrompts(request, context),
       dotnet: this.generateDotNetPrompts(request, context),
-      python: this.generatePythonPrompts(request, context)
+      python: this.generatePythonPrompts(request, context),
     };
-    
+
     return prompts[framework] || this.generateElectronPrompts(request, context);
   }
 
@@ -191,7 +239,7 @@ Include:
 - Secure IPC methods
 - No direct Node.js access
 - Type-safe communication
-- Error boundaries`
+- Error boundaries`,
     };
   }
 
@@ -239,7 +287,7 @@ Include:
 - Window configuration
 - Build settings
 - App metadata
-- Update configuration`
+- Update configuration`,
     };
   }
 
@@ -276,7 +324,7 @@ Include:
 - Native plugin integration
 - Platform channels
 - System tray support
-- Native menus`
+- Native menus`,
     };
   }
 
@@ -314,7 +362,7 @@ Include:
 - Commands (ICommand)
 - Validation
 - Business logic
-- Observable collections`
+- Observable collections`,
     };
   }
 
@@ -352,7 +400,7 @@ Include:
 - File I/O
 - Settings management
 - Threading helpers
-- Custom widgets`
+- Custom widgets`,
     };
   }
 
@@ -362,40 +410,40 @@ Include:
   getSetupInstructions(framework) {
     const instructions = {
       electron: {
-        install: 'npm create electron-app@latest my-app',
-        dev: 'npm start',
-        build: 'npm run make',
-        requirements: ['Node.js 18+', 'npm or yarn'],
-        estimatedTime: '5-10 minutes'
+        install: "npm create electron-app@latest my-app",
+        dev: "npm start",
+        build: "npm run make",
+        requirements: ["Node.js 18+", "npm or yarn"],
+        estimatedTime: "5-10 minutes",
       },
       tauri: {
-        install: 'npm create tauri-app@latest',
-        dev: 'npm run tauri dev',
-        build: 'npm run tauri build',
-        requirements: ['Node.js 18+', 'Rust 1.70+', 'Platform build tools'],
-        estimatedTime: '10-15 minutes'
+        install: "npm create tauri-app@latest",
+        dev: "npm run tauri dev",
+        build: "npm run tauri build",
+        requirements: ["Node.js 18+", "Rust 1.70+", "Platform build tools"],
+        estimatedTime: "10-15 minutes",
       },
       flutter: {
-        install: 'flutter create --platforms=windows,macos,linux my_app',
-        dev: 'flutter run',
-        build: 'flutter build windows/macos/linux',
-        requirements: ['Flutter SDK', 'Platform SDKs'],
-        estimatedTime: '15-20 minutes'
+        install: "flutter create --platforms=windows,macos,linux my_app",
+        dev: "flutter run",
+        build: "flutter build windows/macos/linux",
+        requirements: ["Flutter SDK", "Platform SDKs"],
+        estimatedTime: "15-20 minutes",
       },
       dotnet: {
-        install: 'dotnet new wpf -n MyApp',
-        dev: 'dotnet run',
-        build: 'dotnet publish -c Release',
-        requirements: ['.NET SDK 6.0+', 'Visual Studio (recommended)'],
-        estimatedTime: '5-10 minutes'
+        install: "dotnet new wpf -n MyApp",
+        dev: "dotnet run",
+        build: "dotnet publish -c Release",
+        requirements: [".NET SDK 6.0+", "Visual Studio (recommended)"],
+        estimatedTime: "5-10 minutes",
       },
       python: {
-        install: 'pip install PyQt6 # or tkinter (built-in)',
-        dev: 'python main.py',
-        build: 'pyinstaller --windowed main.py',
-        requirements: ['Python 3.8+', 'pip'],
-        estimatedTime: '5 minutes'
-      }
+        install: "pip install PyQt6 # or tkinter (built-in)",
+        dev: "python main.py",
+        build: "pyinstaller --windowed main.py",
+        requirements: ["Python 3.8+", "pip"],
+        estimatedTime: "5 minutes",
+      },
     };
 
     return instructions[framework] || instructions.electron;
@@ -406,7 +454,7 @@ Include:
    */
   compareFrameworks(requirements) {
     const comparison = [];
-    
+
     for (const [name, framework] of Object.entries(this.supportedFrameworks)) {
       const score = this.scoreFramework(framework, requirements);
       comparison.push({
@@ -414,7 +462,7 @@ Include:
         ...framework,
         score,
         pros: this.getFrameworkPros(name),
-        cons: this.getFrameworkCons(name)
+        cons: this.getFrameworkCons(name),
       });
     }
 
@@ -429,24 +477,24 @@ Include:
 
     // Platform support
     if (requirements.platforms) {
-      const supportedPlatforms = requirements.platforms.filter(p => 
-        framework.platforms.includes(p)
+      const supportedPlatforms = requirements.platforms.filter((p) =>
+        framework.platforms.includes(p),
       );
       score += supportedPlatforms.length * 10;
     }
 
     // Performance requirements
-    if (requirements.performance === 'high') {
-      if (framework.performance === 'excellent') score += 20;
-      else if (framework.performance === 'very-good') score += 15;
-      else if (framework.performance === 'good') score += 10;
+    if (requirements.performance === "high") {
+      if (framework.performance === "excellent") score += 20;
+      else if (framework.performance === "very-good") score += 15;
+      else if (framework.performance === "good") score += 10;
     }
 
     // Bundle size requirements
-    if (requirements.bundleSize === 'small') {
-      if (framework.bundleSize === 'small') score += 15;
-      else if (framework.bundleSize === 'small-medium') score += 10;
-      else if (framework.bundleSize === 'medium') score += 5;
+    if (requirements.bundleSize === "small") {
+      if (framework.bundleSize === "small") score += 15;
+      else if (framework.bundleSize === "small-medium") score += 10;
+      else if (framework.bundleSize === "medium") score += 5;
     }
 
     // Complexity match
@@ -462,11 +510,36 @@ Include:
    */
   getFrameworkPros(framework) {
     const pros = {
-      electron: ['Familiar web tech', 'Large ecosystem', 'Cross-platform', 'Rich UI capabilities'],
-      tauri: ['Small bundle size', 'Fast performance', 'Secure by default', 'Rust backend'],
-      flutter: ['Beautiful UI', 'Mobile + desktop', 'Hot reload', 'Single codebase'],
-      dotnet: ['Native performance', 'Windows integration', 'Enterprise ready', 'Visual Studio support'],
-      python: ['Easy to learn', 'Quick prototyping', 'Large library ecosystem', 'Cross-platform']
+      electron: [
+        "Familiar web tech",
+        "Large ecosystem",
+        "Cross-platform",
+        "Rich UI capabilities",
+      ],
+      tauri: [
+        "Small bundle size",
+        "Fast performance",
+        "Secure by default",
+        "Rust backend",
+      ],
+      flutter: [
+        "Beautiful UI",
+        "Mobile + desktop",
+        "Hot reload",
+        "Single codebase",
+      ],
+      dotnet: [
+        "Native performance",
+        "Windows integration",
+        "Enterprise ready",
+        "Visual Studio support",
+      ],
+      python: [
+        "Easy to learn",
+        "Quick prototyping",
+        "Large library ecosystem",
+        "Cross-platform",
+      ],
     };
 
     return pros[framework] || [];
@@ -477,11 +550,23 @@ Include:
    */
   getFrameworkCons(framework) {
     const cons = {
-      electron: ['Large bundle size', 'Memory usage', 'Security concerns if misconfigured'],
-      tauri: ['Rust learning curve', 'Smaller ecosystem', 'Newer technology'],
-      flutter: ['Dart language', 'Desktop still maturing', 'Large runtime'],
-      dotnet: ['Windows-centric', 'Requires .NET runtime', 'Steeper learning curve'],
-      python: ['Distribution challenges', 'UI limitations', 'Performance limitations']
+      electron: [
+        "Large bundle size",
+        "Memory usage",
+        "Security concerns if misconfigured",
+      ],
+      tauri: ["Rust learning curve", "Smaller ecosystem", "Newer technology"],
+      flutter: ["Dart language", "Desktop still maturing", "Large runtime"],
+      dotnet: [
+        "Windows-centric",
+        "Requires .NET runtime",
+        "Steeper learning curve",
+      ],
+      python: [
+        "Distribution challenges",
+        "UI limitations",
+        "Performance limitations",
+      ],
     };
 
     return cons[framework] || [];

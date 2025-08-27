@@ -43,7 +43,12 @@
         "stars": 84000,
         "description": "Secure, fast, cross-platform desktop apps",
         "complexity": "medium-hard",
-        "features": ["rust-backend", "web-frontend", "security", "small-bundle"],
+        "features": [
+          "rust-backend",
+          "web-frontend",
+          "security",
+          "small-bundle"
+        ],
         "setupCommands": ["cargo install create-tauri-app", "cargo tauri dev"],
         "customizationPoints": ["src-tauri/src", "src", "tauri.conf.json"]
       },
@@ -55,7 +60,11 @@
         "description": "Modern Tauri app with Vite and React",
         "complexity": "medium",
         "features": ["vite", "react", "typescript", "hot-reload"],
-        "setupCommands": ["npm create tauri-app", "npm install", "npm run tauri dev"],
+        "setupCommands": [
+          "npm create tauri-app",
+          "npm install",
+          "npm run tauri dev"
+        ],
         "customizationPoints": ["src", "src-tauri", "vite.config.ts"]
       }
     ],
@@ -68,7 +77,9 @@
         "description": "Cross-platform desktop and mobile apps",
         "complexity": "medium",
         "features": ["cross-platform", "hot-reload", "widgets", "material"],
-        "setupCommands": ["flutter create --platforms=windows,macos,linux myapp"],
+        "setupCommands": [
+          "flutter create --platforms=windows,macos,linux myapp"
+        ],
         "customizationPoints": ["lib", "pubspec.yaml"]
       },
       {

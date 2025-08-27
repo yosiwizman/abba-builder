@@ -19,7 +19,7 @@
   font-size: 2.5rem;
   font-weight: bold;
   margin-bottom: 0.5rem;
-  background: linear-gradient(45deg, #DC143C, #FFD700);
+  background: linear-gradient(45deg, #dc143c, #ffd700);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -174,7 +174,7 @@
 
 .menu-trigger:hover {
   background: rgba(255, 255, 255, 0.1);
-  color: #FFD700;
+  color: #ffd700;
 }
 
 .dropdown-menu {
@@ -218,7 +218,7 @@
 
 .dropdown-menu button:hover {
   background: rgba(255, 215, 0, 0.1);
-  color: #FFD700;
+  color: #ffd700;
 }
 
 .dropdown-menu button.delete {
@@ -249,7 +249,7 @@
 
 .app-meta .framework {
   background: rgba(255, 215, 0, 0.1);
-  color: #FFD700;
+  color: #ffd700;
   padding: 2px 8px;
   border-radius: 4px;
   font-weight: 500;
@@ -306,7 +306,7 @@
 }
 
 .modal h2 {
-  color: #FFD700;
+  color: #ffd700;
   margin-bottom: 1.5rem;
   font-size: 1.5rem;
   font-weight: 600;
@@ -340,7 +340,7 @@
 .form-group input:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: #FFD700;
+  border-color: #ffd700;
   background: rgba(255, 215, 0, 0.05);
 }
 
@@ -377,13 +377,13 @@
 }
 
 .modal-actions button.primary {
-  background: linear-gradient(135deg, #DC143C, #8B0000);
-  border: 1px solid #DC143C;
-  color: #FFD700;
+  background: linear-gradient(135deg, #dc143c, #8b0000);
+  border: 1px solid #dc143c;
+  color: #ffd700;
 }
 
 .modal-actions button.primary:hover {
-  background: linear-gradient(135deg, #FF1744, #DC143C);
+  background: linear-gradient(135deg, #ff1744, #dc143c);
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(220, 20, 60, 0.3);
 }
@@ -423,12 +423,12 @@
 
 /* Superman Theme Accents */
 .superman-accent {
-  background: linear-gradient(135deg, #DC143C, #8B0000);
-  border: 2px solid #FFD700;
+  background: linear-gradient(135deg, #dc143c, #8b0000);
+  border: 2px solid #ffd700;
 }
 
 .superman-text {
-  background: linear-gradient(45deg, #DC143C, #FFD700);
+  background: linear-gradient(45deg, #dc143c, #ffd700);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -439,11 +439,11 @@
   .apps-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .gallery-header h1 {
     font-size: 2rem;
   }
-  
+
   .modal {
     width: 95%;
     padding: 1.5rem;

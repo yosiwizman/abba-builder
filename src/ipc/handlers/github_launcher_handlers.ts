@@ -43,42 +43,60 @@ interface LaunchResult {
 export function registerGitHubLauncherHandlers() {
   ipcMain.handle(
     "github:launcher:analyze",
-    async (event, { githubUrl, customizations }: { githubUrl: string; customizations: string }) => {
+    async (
+      event,
+      {
+        githubUrl,
+        customizations,
+      }: { githubUrl: string; customizations: string },
+    ) => {
       try {
         logger.info("Starting GitHub project analysis", { githubUrl });
-        
+
         // Send progress updates
         safeSend(event.sender, "github:launcher:progress", {
           stage: "cloning",
-          message: "Cloning repository..."
+          message: "Cloning repository...",
         });
 
         const launcher = new GitHubProjectLauncher();
-        const result = await launcher.analyzeAndLaunchProject(githubUrl, customizations);
-        
+        const result = await launcher.analyzeAndLaunchProject(
+          githubUrl,
+          customizations,
+        );
+
         return result;
       } catch (error) {
         logger.error("GitHub launcher error:", error);
         return {
           success: false,
-          error: error instanceof Error ? error.message : String(error)
+          error: error instanceof Error ? error.message : String(error),
         };
       }
-    }
+    },
   );
 
   ipcMain.handle(
     "github:launcher:generate",
-    async (event, { understanding, customizations }: { understanding: string; customizations: string }) => {
+    async (
+      event,
+      {
+        understanding,
+        customizations,
+      }: { understanding: string; customizations: string },
+    ) => {
       try {
         const launcher = new GitHubProjectLauncher();
-        const result = await launcher.generateCustomizedProject(understanding, customizations);
+        const result = await launcher.generateCustomizedProject(
+          understanding,
+          customizations,
+        );
         return result;
       } catch (error) {
         logger.error("Generation error:", error);
         throw error;
       }
-    }
+    },
   );
 }
 
@@ -89,85 +107,97 @@ class GitHubProjectLauncher {
     this.octokit = new Octokit();
   }
 
-  async analyzeAndLaunchProject(githubUrl: string, userCustomizations: string = ""): Promise<LaunchResult> {
+  async analyzeAndLaunchProject(
+    githubUrl: string,
+    userCustomizations: string = "",
+  ): Promise<LaunchResult> {
     try {
       // Step 1: Clone and analyze the repository
       logger.info("📥 Cloning repository...");
       const projectAnalysis = await this.analyzeRepository(githubUrl);
-      
+
       // Step 2: Understand the project structure
       logger.info("🔍 Analyzing project structure...");
-      const understanding = await this.buildProjectUnderstanding(projectAnalysis);
-      
+      const understanding =
+        await this.buildProjectUnderstanding(projectAnalysis);
+
       // Step 3: Apply user customizations
       logger.info("⚡ Applying customizations...");
       const customizedProject = await this.applyCustomizations(
-        understanding, 
-        userCustomizations
+        understanding,
+        userCustomizations,
       );
-      
+
       // Step 4: Generate the enhanced version
       logger.info("🚀 Generating enhanced project...");
-      const result = await this.generateCustomizedProject(customizedProject, userCustomizations);
-      
+      const result = await this.generateCustomizedProject(
+        customizedProject,
+        userCustomizations,
+      );
+
       return {
         success: true,
         originalProject: projectAnalysis,
         understanding: understanding,
         customizations: userCustomizations,
         generatedProject: result,
-        setupInstructions: this.generateSetupInstructions(result)
+        setupInstructions: this.generateSetupInstructions(result),
       };
-      
     } catch (error) {
       logger.error("Project launch failed:", error);
       return {
         success: false,
         error: error instanceof Error ? error.message : String(error),
-        fallback: await this.suggestManualApproach(githubUrl, userCustomizations)
+        fallback: await this.suggestManualApproach(
+          githubUrl,
+          userCustomizations,
+        ),
       };
     }
   }
 
   private parseGitHubUrl(githubUrl: string): { owner: string; repo: string } {
     // Parse URLs like: https://github.com/owner/repo
-    const match = githubUrl.match(/github\.com\/([^\/]+)\/([^\/\?]+)/);
+    const match = githubUrl.match(/github\.com\/([^/]+)\/([^/?]+)/);
     if (!match) {
       throw new Error("Invalid GitHub URL format");
     }
     return {
       owner: match[1],
-      repo: match[2].replace(/\.git$/, "")
+      repo: match[2].replace(/\.git$/, ""),
     };
   }
 
   async analyzeRepository(githubUrl: string): Promise<GitHubProjectAnalysis> {
     const { owner, repo } = this.parseGitHubUrl(githubUrl);
-    
+
     // Get repository metadata
     const { data: repoData } = await this.octokit.repos.get({ owner, repo });
-    
+
     // Clone repository to temp directory
     const tempDir = path.join(process.cwd(), "temp", `${repo}_${Date.now()}`);
     await this.cloneRepository(githubUrl, tempDir);
-    
+
     // Analyze project structure
     const structure = await this.scanProjectStructure(tempDir);
-    
+
     return {
       metadata: repoData,
       localPath: tempDir,
       structure: structure,
       framework: this.detectFramework(structure),
       language: this.detectPrimaryLanguage(structure),
-      complexity: this.assessComplexity(structure)
+      complexity: this.assessComplexity(structure),
     };
   }
 
-  private async cloneRepository(githubUrl: string, targetDir: string): Promise<void> {
+  private async cloneRepository(
+    githubUrl: string,
+    targetDir: string,
+  ): Promise<void> {
     // Create temp directory
     await fs.mkdir(targetDir, { recursive: true });
-    
+
     // Clone the repository
     try {
       await execAsync(`git clone --depth 1 "${githubUrl}" "${targetDir}"`);
@@ -177,35 +207,37 @@ class GitHubProjectLauncher {
     }
   }
 
-  private async scanProjectStructure(projectPath: string): Promise<ProjectStructure> {
+  private async scanProjectStructure(
+    projectPath: string,
+  ): Promise<ProjectStructure> {
     const structure: ProjectStructure = {
       files: [],
       directories: [],
       totalFiles: 0,
       totalSize: 0,
-      fileTypes: new Map()
+      fileTypes: new Map(),
     };
 
     async function scanDir(dir: string) {
       const items = await fs.readdir(dir, { withFileTypes: true });
-      
+
       for (const item of items) {
         const fullPath = path.join(dir, item.name);
-        
+
         // Skip node_modules and .git
         if (item.name === "node_modules" || item.name === ".git") continue;
-        
+
         if (item.isDirectory()) {
           structure.directories.push(fullPath);
           await scanDir(fullPath);
         } else {
           structure.files.push(fullPath);
           structure.totalFiles++;
-          
+
           // Track file types
           const ext = path.extname(item.name);
           structure.fileTypes.set(ext, (structure.fileTypes.get(ext) || 0) + 1);
-          
+
           // Get file size
           const stat = await fs.stat(fullPath);
           structure.totalSize += stat.size;
@@ -218,33 +250,37 @@ class GitHubProjectLauncher {
   }
 
   private detectFramework(structure: ProjectStructure): string {
-    const files = structure.files.map(f => path.basename(f));
-    
+    const files = structure.files.map((f) => path.basename(f));
+
     // Check for common framework indicators
     if (files.includes("package.json")) {
       // Read package.json to detect framework
-      if (files.includes("next.config.js") || files.includes("next.config.mjs")) return "Next.js";
-      if (files.includes("vite.config.js") || files.includes("vite.config.ts")) return "Vite";
+      if (files.includes("next.config.js") || files.includes("next.config.mjs"))
+        return "Next.js";
+      if (files.includes("vite.config.js") || files.includes("vite.config.ts"))
+        return "Vite";
       if (files.includes("angular.json")) return "Angular";
       if (files.includes("vue.config.js")) return "Vue";
-      if (structure.files.some(f => f.includes("react"))) return "React";
+      if (structure.files.some((f) => f.includes("react"))) return "React";
     }
-    
-    if (files.includes("requirements.txt") || files.includes("setup.py")) return "Python";
+
+    if (files.includes("requirements.txt") || files.includes("setup.py"))
+      return "Python";
     if (files.includes("Gemfile")) return "Ruby on Rails";
     if (files.includes("composer.json")) return "PHP";
-    
+
     return "Unknown";
   }
 
   private detectPrimaryLanguage(structure: ProjectStructure): string {
-    const extensions = Array.from(structure.fileTypes.entries())
-      .sort((a, b) => b[1] - a[1]);
-    
+    const extensions = Array.from(structure.fileTypes.entries()).sort(
+      (a, b) => b[1] - a[1],
+    );
+
     const langMap: Record<string, string> = {
       ".js": "JavaScript",
       ".jsx": "JavaScript",
-      ".ts": "TypeScript", 
+      ".ts": "TypeScript",
       ".tsx": "TypeScript",
       ".py": "Python",
       ".java": "Java",
@@ -253,26 +289,28 @@ class GitHubProjectLauncher {
       ".go": "Go",
       ".rs": "Rust",
       ".cpp": "C++",
-      ".c": "C"
+      ".c": "C",
     };
-    
+
     for (const [ext] of extensions) {
       if (langMap[ext]) return langMap[ext];
     }
-    
+
     return "Unknown";
   }
 
   private assessComplexity(structure: ProjectStructure): string {
     const { totalFiles, totalSize } = structure;
-    
+
     if (totalFiles < 10 && totalSize < 100000) return "Simple";
     if (totalFiles < 50 && totalSize < 1000000) return "Medium";
     if (totalFiles < 200 && totalSize < 10000000) return "Complex";
     return "Very Complex";
   }
 
-  private async buildProjectUnderstanding(analysis: GitHubProjectAnalysis): Promise<string> {
+  private async buildProjectUnderstanding(
+    analysis: GitHubProjectAnalysis,
+  ): Promise<string> {
     const settings = await readSettings();
     const modelClient = await getModelClient(settings);
 
@@ -324,26 +362,42 @@ Be extremely detailed - you'll be using this to recreate and customize the proje
     return response.text;
   }
 
-  private async getKeyFilesContent(analysis: GitHubProjectAnalysis): Promise<string> {
-    const keyFiles = ["README.md", "package.json", "index.js", "index.ts", "main.py", "app.py"];
+  private async getKeyFilesContent(
+    analysis: GitHubProjectAnalysis,
+  ): Promise<string> {
+    const keyFiles = [
+      "README.md",
+      "package.json",
+      "index.js",
+      "index.ts",
+      "main.py",
+      "app.py",
+    ];
     const contents: string[] = [];
-    
+
     for (const fileName of keyFiles) {
-      const file = analysis.structure.files.find(f => path.basename(f) === fileName);
+      const file = analysis.structure.files.find(
+        (f) => path.basename(f) === fileName,
+      );
       if (file) {
         try {
           const content = await fs.readFile(file, "utf-8");
-          contents.push(`### ${fileName}\n\`\`\`\n${content.slice(0, 1000)}\n\`\`\``);
+          contents.push(
+            `### ${fileName}\n\`\`\`\n${content.slice(0, 1000)}\n\`\`\``,
+          );
         } catch (error) {
           // Skip if can't read
         }
       }
     }
-    
+
     return contents.join("\n\n");
   }
 
-  private async applyCustomizations(understanding: string, userCustomizations: string): Promise<string> {
+  private async applyCustomizations(
+    understanding: string,
+    userCustomizations: string,
+  ): Promise<string> {
     if (!userCustomizations.trim()) {
       return understanding;
     }
@@ -380,7 +434,10 @@ Provide a detailed plan for implementing all requested customizations while main
     return response.text;
   }
 
-  async generateCustomizedProject(customizedUnderstanding: string, customizations: string): Promise<any> {
+  async generateCustomizedProject(
+    customizedUnderstanding: string,
+    customizations: string,
+  ): Promise<any> {
     const settings = await readSettings();
     const modelClient = await getModelClient(settings);
 
@@ -408,47 +465,49 @@ Provide actual code for the main files.
 
     return {
       generatedCode: response.text,
-      files: this.extractFilesFromResponse(response.text)
+      files: this.extractFilesFromResponse(response.text),
     };
   }
 
-  private extractFilesFromResponse(response: string): Array<{name: string; content: string}> {
-    const files: Array<{name: string; content: string}> = [];
-    
+  private extractFilesFromResponse(
+    response: string,
+  ): Array<{ name: string; content: string }> {
+    const files: Array<{ name: string; content: string }> = [];
+
     // Extract code blocks with file names
-    const codeBlockRegex = /```(\w+)?\s+(?:\/\/|#|<!--)?\s*(.+?)\n([\s\S]*?)```/g;
+    const codeBlockRegex =
+      /```(\w+)?\s+(?:\/\/|#|<!--)?\s*(.+?)\n([\s\S]*?)```/g;
     let match;
-    
+
     while ((match = codeBlockRegex.exec(response)) !== null) {
       const fileName = match[2].trim();
       const content = match[3];
-      
+
       if (fileName && !fileName.includes(" ")) {
         files.push({ name: fileName, content });
       }
     }
-    
+
     return files;
   }
 
   private generateSetupInstructions(result: any): any {
     return {
       dependencies: "npm install (or appropriate package manager)",
-      setupCommands: [
-        "git init",
-        "npm install",
-        "npm run dev"
-      ],
+      setupCommands: ["git init", "npm install", "npm run dev"],
       configurationSteps: [
         "Configure environment variables",
         "Set up database if needed",
-        "Configure API keys"
+        "Configure API keys",
       ],
-      runInstructions: "npm run dev to start development server"
+      runInstructions: "npm run dev to start development server",
     };
   }
 
-  private async suggestManualApproach(githubUrl: string, customizations: string): Promise<string> {
+  private async suggestManualApproach(
+    githubUrl: string,
+    customizations: string,
+  ): Promise<string> {
     return `
 Manual Approach Suggested:
 

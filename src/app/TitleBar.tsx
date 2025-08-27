@@ -80,7 +80,9 @@ export const TitleBar = () => {
       <div className="@container z-11 w-full h-11 bg-(--sidebar) absolute top-0 left-0 app-region-drag flex items-center">
         <div className={`${showWindowControls ? "pl-2" : "pl-18"}`}></div>
 
-        <div className="w-6 h-6 mr-0.5 flex items-center justify-center bg-indigo-600 text-white font-bold rounded">A</div>
+        <div className="w-6 h-6 mr-0.5 flex items-center justify-center bg-indigo-600 text-white font-bold rounded">
+          A
+        </div>
         <Button
           data-testid="title-bar-app-name-button"
           variant="outline"

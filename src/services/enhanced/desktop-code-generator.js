@@ -14,41 +14,54 @@ class DesktopCodeGenerator {
    */
   async generateDesktopApp(request, framework, context) {
     console.log(`Generating ${framework} desktop app for: ${request}`);
-    
+
     try {
       // Get appropriate template
       const template = await this.findBestTemplate(request, framework);
-      
+
       // Generate framework-specific architecture
-      const architecture = await this.generateArchitecture(request, framework, template, context);
-      
+      const architecture = await this.generateArchitecture(
+        request,
+        framework,
+        template,
+        context,
+      );
+
       // Generate main process/backend code
       const mainCode = await this.generateMainCode(request, framework, context);
-      
+
       // Generate renderer/frontend code
-      const frontendCode = await this.generateFrontendCode(request, framework, context);
-      
+      const frontendCode = await this.generateFrontendCode(
+        request,
+        framework,
+        context,
+      );
+
       // Generate configuration files
-      const configFiles = await this.generateConfigurationFiles(request, framework, context);
-      
+      const configFiles = await this.generateConfigurationFiles(
+        request,
+        framework,
+        context,
+      );
+
       // Generate build/packaging scripts
       const buildScripts = await this.generateBuildScripts(request, framework);
-      
+
       // Generate setup instructions
       const setupInstructions = this.generateSetupInstructions(framework);
 
       return {
         framework,
-        template: template?.name || 'custom',
+        template: template?.name || "custom",
         architecture,
         files: {
           main: mainCode,
           frontend: frontendCode,
           config: configFiles,
-          build: buildScripts
+          build: buildScripts,
         },
         setupInstructions,
-        success: true
+        success: true,
       };
     } catch (error) {
       console.error(`Error generating ${framework} app:`, error);
@@ -56,7 +69,7 @@ class DesktopCodeGenerator {
         framework,
         success: false,
         error: error.message,
-        fallbackInstructions: this.getFallbackInstructions(framework)
+        fallbackInstructions: this.getFallbackInstructions(framework),
       };
     }
   }
@@ -71,7 +84,7 @@ class DesktopCodeGenerator {
 
     const searchQuery = `${request} ${framework} desktop app`;
     try {
-      return await this.templateMatcher.findBestTemplate(searchQuery, 'medium');
+      return await this.templateMatcher.findBestTemplate(searchQuery, "medium");
     } catch (error) {
       console.warn(`Could not find template for ${framework}:`, error.message);
       return null;
@@ -82,17 +95,25 @@ class DesktopCodeGenerator {
    * Generate application architecture
    */
   async generateArchitecture(request, framework, template, context) {
-    const architecturePrompt = this.getArchitecturePrompt(request, framework, template, context);
-    
+    const architecturePrompt = this.getArchitecturePrompt(
+      request,
+      framework,
+      template,
+      context,
+    );
+
     if (!this.claude) {
       return this.getDefaultArchitecture(framework);
     }
 
     try {
-      const response = await this.claude.generateWithFullContext(architecturePrompt, context);
+      const response = await this.claude.generateWithFullContext(
+        architecturePrompt,
+        context,
+      );
       return this.parseArchitectureResponse(response);
     } catch (error) {
-      console.error('Error generating architecture:', error);
+      console.error("Error generating architecture:", error);
       return this.getDefaultArchitecture(framework);
     }
   }
@@ -106,7 +127,7 @@ class DesktopCodeGenerator {
       tauri: () => this.generateTauriBackend(request, context),
       flutter: () => this.generateFlutterMain(request, context),
       dotnet: () => this.generateDotNetMain(request, context),
-      python: () => this.generatePythonMain(request, context)
+      python: () => this.generatePythonMain(request, context),
     };
 
     const generator = generators[framework];
@@ -126,7 +147,7 @@ class DesktopCodeGenerator {
       tauri: () => this.generateTauriFrontend(request, context),
       flutter: () => this.generateFlutterWidgets(request, context),
       dotnet: () => this.generateDotNetUI(request, context),
-      python: () => this.generatePythonUI(request, context)
+      python: () => this.generatePythonUI(request, context),
     };
 
     const generator = generators[framework];
@@ -146,7 +167,7 @@ class DesktopCodeGenerator {
       tauri: () => this.generateTauriConfig(request, context),
       flutter: () => this.generateFlutterConfig(request, context),
       dotnet: () => this.generateDotNetConfig(request, context),
-      python: () => this.generatePythonConfig(request, context)
+      python: () => this.generatePythonConfig(request, context),
     };
 
     const generator = configs[framework];
@@ -178,7 +199,7 @@ Generate production-ready code with comments.`;
       try {
         return await this.claude.generateWithFullContext(prompt, context);
       } catch (error) {
-        console.error('Error generating Electron main:', error);
+        console.error("Error generating Electron main:", error);
       }
     }
 
@@ -264,21 +285,24 @@ Generate complete, working code.`;
 
     if (this.claude) {
       try {
-        const response = await this.claude.generateWithFullContext(prompt, context);
+        const response = await this.claude.generateWithFullContext(
+          prompt,
+          context,
+        );
         return {
-          'index.html': this.extractHTMLFromResponse(response),
-          'renderer.js': this.extractJSFromResponse(response),
-          'style.css': this.extractCSSFromResponse(response),
-          'preload.js': this.generateElectronPreload()
+          "index.html": this.extractHTMLFromResponse(response),
+          "renderer.js": this.extractJSFromResponse(response),
+          "style.css": this.extractCSSFromResponse(response),
+          "preload.js": this.generateElectronPreload(),
         };
       } catch (error) {
-        console.error('Error generating Electron renderer:', error);
+        console.error("Error generating Electron renderer:", error);
       }
     }
 
     // Fallback templates
     return {
-      'index.html': `<!DOCTYPE html>
+      "index.html": `<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -303,7 +327,7 @@ Generate complete, working code.`;
     <script src="renderer.js"></script>
 </body>
 </html>`,
-      'renderer.js': `// Renderer process script
+      "renderer.js": `// Renderer process script
 document.addEventListener('DOMContentLoaded', async () => {
     // Get app version
     const version = await window.api.getVersion();
@@ -317,7 +341,7 @@ function initializeApp() {
     console.log('App initialized');
     // Add your app logic here
 }`,
-      'style.css': `* {
+      "style.css": `* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -352,7 +376,7 @@ footer {
     background: rgba(0, 0, 0, 0.2);
     text-align: center;
 }`,
-      'preload.js': this.generateElectronPreload()
+      "preload.js": this.generateElectronPreload(),
     };
   }
 
@@ -390,50 +414,50 @@ contextBridge.exposeInMainWorld('api', {
    */
   async generateElectronConfig(request, context) {
     const appName = this.sanitizeAppName(request);
-    
+
     return {
-      'package.json': {
-        name: appName.toLowerCase().replace(/\s+/g, '-'),
-        version: '1.0.0',
+      "package.json": {
+        name: appName.toLowerCase().replace(/\s+/g, "-"),
+        version: "1.0.0",
         description: request,
-        main: 'main.js',
+        main: "main.js",
         scripts: {
-          start: 'electron .',
-          dev: 'electron . --dev',
-          build: 'electron-builder',
-          dist: 'electron-builder --publish=never'
+          start: "electron .",
+          dev: "electron . --dev",
+          build: "electron-builder",
+          dist: "electron-builder --publish=never",
         },
         devDependencies: {
-          electron: '^31.0.0',
-          'electron-builder': '^24.13.0'
+          electron: "^31.0.0",
+          "electron-builder": "^24.13.0",
         },
         build: {
           appId: `com.example.${appName.toLowerCase()}`,
           productName: appName,
           directories: {
-            output: 'dist'
+            output: "dist",
           },
           files: [
-            '**/*',
-            '!**/*.ts',
-            '!*.code-workspace',
-            '!.gitignore',
-            '!README.md'
+            "**/*",
+            "!**/*.ts",
+            "!*.code-workspace",
+            "!.gitignore",
+            "!README.md",
           ],
           win: {
-            target: 'nsis',
-            icon: 'assets/icon.ico'
+            target: "nsis",
+            icon: "assets/icon.ico",
           },
           mac: {
-            target: 'dmg',
-            icon: 'assets/icon.icns'
+            target: "dmg",
+            icon: "assets/icon.icns",
           },
           linux: {
-            target: 'AppImage',
-            icon: 'assets/icon.png'
-          }
-        }
-      }
+            target: "AppImage",
+            icon: "assets/icon.png",
+          },
+        },
+      },
     };
   }
 
@@ -456,7 +480,7 @@ Generate complete Rust code.`;
       try {
         return await this.claude.generateWithFullContext(prompt, context);
       } catch (error) {
-        console.error('Error generating Tauri backend:', error);
+        console.error("Error generating Tauri backend:", error);
       }
     }
 
@@ -521,16 +545,19 @@ Generate complete frontend code.`;
 
     if (this.claude) {
       try {
-        const response = await this.claude.generateWithFullContext(prompt, context);
+        const response = await this.claude.generateWithFullContext(
+          prompt,
+          context,
+        );
         return this.parseFrontendResponse(response);
       } catch (error) {
-        console.error('Error generating Tauri frontend:', error);
+        console.error("Error generating Tauri frontend:", error);
       }
     }
 
     // Fallback template
     return {
-      'index.html': `<!DOCTYPE html>
+      "index.html": `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -550,7 +577,7 @@ Generate complete frontend code.`;
     <script src="main.js" type="module"></script>
 </body>
 </html>`,
-      'main.js': `import { invoke } from '@tauri-apps/api/tauri';
+      "main.js": `import { invoke } from '@tauri-apps/api/tauri';
 
 document.getElementById('greetBtn').addEventListener('click', async () => {
     const name = document.getElementById('nameInput').value;
@@ -564,7 +591,7 @@ document.getElementById('greetBtn').addEventListener('click', async () => {
         }
     }
 });`,
-      'style.css': `body {
+      "style.css": `body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     margin: 0;
     padding: 20px;
@@ -621,7 +648,7 @@ button:hover {
     background: #f0f0f0;
     border-radius: 5px;
     min-height: 50px;
-}`
+}`,
     };
   }
 
@@ -630,49 +657,49 @@ button:hover {
    */
   async generateTauriConfig(request, context) {
     const appName = this.sanitizeAppName(request);
-    
+
     return {
-      'tauri.conf.json': {
+      "tauri.conf.json": {
         build: {
-          beforeDevCommand: 'npm run dev',
-          beforeBuildCommand: 'npm run build',
-          devPath: 'http://localhost:3000',
-          distDir: '../dist',
-          withGlobalTauri: false
+          beforeDevCommand: "npm run dev",
+          beforeBuildCommand: "npm run build",
+          devPath: "http://localhost:3000",
+          distDir: "../dist",
+          withGlobalTauri: false,
         },
         package: {
           productName: appName,
-          version: '1.0.0'
+          version: "1.0.0",
         },
         tauri: {
           allowlist: {
             all: false,
             shell: {
               all: false,
-              open: true
+              open: true,
             },
             fs: {
               all: false,
               readFile: true,
               writeFile: true,
               readDir: true,
-              scope: ['$APPDATA', '$APPDATA/*']
-            }
+              scope: ["$APPDATA", "$APPDATA/*"],
+            },
           },
           bundle: {
             active: true,
-            targets: 'all',
+            targets: "all",
             identifier: `com.example.${appName.toLowerCase()}`,
             icon: [
-              'icons/32x32.png',
-              'icons/128x128.png',
-              'icons/128x128@2x.png',
-              'icons/icon.icns',
-              'icons/icon.ico'
-            ]
+              "icons/32x32.png",
+              "icons/128x128.png",
+              "icons/128x128@2x.png",
+              "icons/icon.icns",
+              "icons/icon.ico",
+            ],
           },
           security: {
-            csp: null
+            csp: null,
           },
           windows: [
             {
@@ -680,13 +707,13 @@ button:hover {
               resizable: true,
               title: appName,
               width: 1200,
-              height: 800
-            }
-          ]
-        }
+              height: 800,
+            },
+          ],
+        },
       },
-      'Cargo.toml': `[package]
-name = "${appName.toLowerCase().replace(/\s+/g, '-')}"
+      "Cargo.toml": `[package]
+name = "${appName.toLowerCase().replace(/\s+/g, "-")}"
 version = "1.0.0"
 edition = "2021"
 
@@ -697,7 +724,7 @@ tauri = { version = "1.6", features = ["shell-open", "fs-all"] }
 
 [features]
 default = ["custom-protocol"]
-custom-protocol = ["tauri/custom-protocol"]`
+custom-protocol = ["tauri/custom-protocol"]`,
     };
   }
 
@@ -720,7 +747,7 @@ Generate complete Flutter code.`;
       try {
         return await this.claude.generateWithFullContext(prompt, context);
       } catch (error) {
-        console.error('Error generating Flutter main:', error);
+        console.error("Error generating Flutter main:", error);
       }
     }
 
@@ -794,7 +821,7 @@ class _HomePageState extends State<HomePage> {
    */
   async generateFlutterWidgets(request, context) {
     return {
-      'lib/widgets/custom_button.dart': `import 'package:flutter/material.dart';
+      "lib/widgets/custom_button.dart": `import 'package:flutter/material.dart';
 
 class CustomButton extends StatelessWidget {
   final String text;
@@ -826,7 +853,7 @@ class CustomButton extends StatelessWidget {
     );
   }
 }`,
-      'lib/screens/home_screen.dart': `import 'package:flutter/material.dart';
+      "lib/screens/home_screen.dart": `import 'package:flutter/material.dart';
 import '../widgets/custom_button.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -874,7 +901,7 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
-}`
+}`,
     };
   }
 
@@ -882,10 +909,12 @@ class HomeScreen extends StatelessWidget {
    * Generate Flutter configuration
    */
   async generateFlutterConfig(request, context) {
-    const appName = this.sanitizeAppName(request).toLowerCase().replace(/\s+/g, '_');
-    
+    const appName = this.sanitizeAppName(request)
+      .toLowerCase()
+      .replace(/\s+/g, "_");
+
     return {
-      'pubspec.yaml': `name: ${appName}
+      "pubspec.yaml": `name: ${appName}
 description: ${request}
 publish_to: 'none'
 version: 1.0.0+1
@@ -911,7 +940,7 @@ flutter:
   uses-material-design: true
   # assets:
   #   - assets/images/
-  #   - assets/icons/`
+  #   - assets/icons/`,
     };
   }
 
@@ -934,13 +963,13 @@ Generate XAML and C# code.`;
       try {
         return await this.claude.generateWithFullContext(prompt, context);
       } catch (error) {
-        console.error('Error generating .NET main:', error);
+        console.error("Error generating .NET main:", error);
       }
     }
 
     // Fallback template
     return {
-      'MainWindow.xaml': `<Window x:Class="App.MainWindow"
+      "MainWindow.xaml": `<Window x:Class="App.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -991,7 +1020,7 @@ Generate XAML and C# code.`;
                          ShadowDepth="5" Opacity="0.3"/>
     </Window.Resources>
 </Window>`,
-      'MainWindow.xaml.cs': `using System;
+      "MainWindow.xaml.cs": `using System;
 using System.Windows;
 
 namespace App
@@ -1018,7 +1047,7 @@ namespace App
             }
         }
     }
-}`
+}`,
     };
   }
 
@@ -1027,7 +1056,7 @@ namespace App
    */
   async generateDotNetUI(request, context) {
     return {
-      'ViewModels/MainViewModel.cs': `using System;
+      "ViewModels/MainViewModel.cs": `using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
@@ -1109,7 +1138,7 @@ namespace App.ViewModels
             _execute(parameter);
         }
     }
-}`
+}`,
     };
   }
 
@@ -1118,16 +1147,16 @@ namespace App.ViewModels
    */
   async generateDotNetConfig(request, context) {
     const appName = this.sanitizeAppName(request);
-    
+
     return {
-      'App.csproj': `<Project Sdk="Microsoft.NET.Sdk">
+      "App.csproj": `<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net8.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>app.ico</ApplicationIcon>
     <AssemblyName>${appName}</AssemblyName>
-    <RootNamespace>${appName.replace(/\s+/g, '')}</RootNamespace>
+    <RootNamespace>${appName.replace(/\s+/g, "")}</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -1135,13 +1164,13 @@ namespace App.ViewModels
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
   </ItemGroup>
 </Project>`,
-      'appsettings.json': {
+      "appsettings.json": {
         AppSettings: {
           Title: request,
-          Version: '1.0.0',
-          Theme: 'Default'
-        }
-      }
+          Version: "1.0.0",
+          Theme: "Default",
+        },
+      },
     };
   }
 
@@ -1164,7 +1193,7 @@ Generate complete Python code.`;
       try {
         return await this.claude.generateWithFullContext(prompt, context);
       } catch (error) {
-        console.error('Error generating Python main:', error);
+        console.error("Error generating Python main:", error);
       }
     }
 
@@ -1316,7 +1345,7 @@ if __name__ == "__main__":
    */
   async generatePythonUI(request, context) {
     return {
-      'widgets.py': `from PyQt6.QtWidgets import QWidget, QPushButton, QVBoxLayout, QLabel
+      "widgets.py": `from PyQt6.QtWidgets import QWidget, QPushButton, QVBoxLayout, QLabel
 from PyQt6.QtCore import pyqtSignal
 
 class CustomButton(QPushButton):
@@ -1365,7 +1394,7 @@ class InfoPanel(QWidget):
         
     def update_info(self, text):
         self.info_label.setText(text)`,
-      'utils.py': `import json
+      "utils.py": `import json
 import os
 from pathlib import Path
 
@@ -1404,7 +1433,7 @@ class ConfigManager:
     def set(self, key, value):
         """Set configuration value"""
         self.config[key] = value
-        self.save_config()`
+        self.save_config()`,
     };
   }
 
@@ -1412,14 +1441,16 @@ class ConfigManager:
    * Generate Python configuration
    */
   async generatePythonConfig(request, context) {
-    const appName = this.sanitizeAppName(request).toLowerCase().replace(/\s+/g, '_');
-    
+    const appName = this.sanitizeAppName(request)
+      .toLowerCase()
+      .replace(/\s+/g, "_");
+
     return {
-      'requirements.txt': `PyQt6==6.6.1
+      "requirements.txt": `PyQt6==6.6.1
 PyQt6-Qt6==6.6.1
 PyQt6-sip==13.6.0
 pyinstaller==6.3.0`,
-      'setup.py': `from setuptools import setup, find_packages
+      "setup.py": `from setuptools import setup, find_packages
 
 setup(
     name="${appName}",
@@ -1436,7 +1467,7 @@ setup(
     },
     python_requires='>=3.8',
 )`,
-      'build.py': `import PyInstaller.__main__
+      "build.py": `import PyInstaller.__main__
 import os
 
 # Build executable
@@ -1449,7 +1480,7 @@ PyInstaller.__main__.run([
     '--add-data=assets;assets',
     '--clean',
     '--noconfirm',
-])`
+])`,
     };
   }
 
@@ -1459,59 +1490,59 @@ PyInstaller.__main__.run([
   async generateBuildScripts(request, framework) {
     const scripts = {
       electron: {
-        'build.sh': `#!/bin/bash
+        "build.sh": `#!/bin/bash
 npm install
 npm run build
 electron-builder --publish=never`,
-        'build.bat': `@echo off
+        "build.bat": `@echo off
 npm install
 npm run build
-electron-builder --publish=never`
+electron-builder --publish=never`,
       },
       tauri: {
-        'build.sh': `#!/bin/bash
+        "build.sh": `#!/bin/bash
 npm install
 npm run build
 cd src-tauri
 cargo build --release
 cd ..
 npm run tauri build`,
-        'build.bat': `@echo off
+        "build.bat": `@echo off
 npm install
 npm run build
 cd src-tauri
 cargo build --release
 cd ..
-npm run tauri build`
+npm run tauri build`,
       },
       flutter: {
-        'build.sh': `#!/bin/bash
+        "build.sh": `#!/bin/bash
 flutter pub get
 flutter build windows
 flutter build macos
 flutter build linux`,
-        'build.bat': `@echo off
+        "build.bat": `@echo off
 flutter pub get
-flutter build windows`
+flutter build windows`,
       },
       dotnet: {
-        'build.sh': `#!/bin/bash
+        "build.sh": `#!/bin/bash
 dotnet restore
 dotnet build --configuration Release
 dotnet publish --configuration Release --self-contained`,
-        'build.bat': `@echo off
+        "build.bat": `@echo off
 dotnet restore
 dotnet build --configuration Release
-dotnet publish --configuration Release --self-contained`
+dotnet publish --configuration Release --self-contained`,
       },
       python: {
-        'build.sh': `#!/bin/bash
+        "build.sh": `#!/bin/bash
 pip install -r requirements.txt
 python build.py`,
-        'build.bat': `@echo off
+        "build.bat": `@echo off
 pip install -r requirements.txt
-python build.py`
-      }
+python build.py`,
+      },
     };
 
     return scripts[framework] || scripts.electron;
@@ -1579,7 +1610,7 @@ python build.py`
    - Unix: source venv/bin/activate
 4. Install deps: pip install -r requirements.txt
 5. Run: python main.py
-6. Build exe: python build.py`
+6. Build exe: python build.py`,
     };
 
     return instructions[framework] || instructions.electron;
@@ -1602,10 +1633,10 @@ Manual setup instructions:
    * Parse architecture response
    */
   parseArchitectureResponse(response) {
-    if (typeof response === 'string') {
+    if (typeof response === "string") {
       return {
         overview: response,
-        structure: this.extractStructureFromResponse(response)
+        structure: this.extractStructureFromResponse(response),
       };
     }
     return response;
@@ -1615,18 +1646,18 @@ Manual setup instructions:
    * Parse frontend response
    */
   parseFrontendResponse(response) {
-    if (typeof response === 'string') {
+    if (typeof response === "string") {
       // Try to extract different file contents
       const files = {};
       const htmlMatch = response.match(/```html([\s\S]*?)```/);
       const jsMatch = response.match(/```javascript([\s\S]*?)```/);
       const cssMatch = response.match(/```css([\s\S]*?)```/);
 
-      if (htmlMatch) files['index.html'] = htmlMatch[1].trim();
-      if (jsMatch) files['main.js'] = jsMatch[1].trim();
-      if (cssMatch) files['style.css'] = cssMatch[1].trim();
+      if (htmlMatch) files["index.html"] = htmlMatch[1].trim();
+      if (jsMatch) files["main.js"] = jsMatch[1].trim();
+      if (cssMatch) files["style.css"] = cssMatch[1].trim();
 
-      return Object.keys(files).length > 0 ? files : { 'main.js': response };
+      return Object.keys(files).length > 0 ? files : { "main.js": response };
     }
     return response;
   }
@@ -1637,12 +1668,12 @@ Manual setup instructions:
   extractHTMLFromResponse(response) {
     const match = response.match(/```html([\s\S]*?)```/);
     if (match) return match[1].trim();
-    
+
     // Look for HTML-like content
-    if (response.includes('<!DOCTYPE') || response.includes('<html')) {
+    if (response.includes("<!DOCTYPE") || response.includes("<html")) {
       return response;
     }
-    
+
     return this.getDefaultHTML();
   }
 
@@ -1652,11 +1683,11 @@ Manual setup instructions:
   extractJSFromResponse(response) {
     const match = response.match(/```javascript([\s\S]*?)```/);
     if (match) return match[1].trim();
-    
+
     const jsMatch = response.match(/```js([\s\S]*?)```/);
     if (jsMatch) return jsMatch[1].trim();
-    
-    return '// Add your JavaScript code here';
+
+    return "// Add your JavaScript code here";
   }
 
   /**
@@ -1665,7 +1696,7 @@ Manual setup instructions:
   extractCSSFromResponse(response) {
     const match = response.match(/```css([\s\S]*?)```/);
     if (match) return match[1].trim();
-    
+
     return this.getDefaultCSS();
   }
 
@@ -1673,16 +1704,18 @@ Manual setup instructions:
    * Extract structure from response
    */
   extractStructureFromResponse(response) {
-    const lines = response.split('\n');
+    const lines = response.split("\n");
     const structure = [];
-    
+
     for (const line of lines) {
-      if (line.includes('├──') || line.includes('└──') || line.includes('│')) {
+      if (line.includes("├──") || line.includes("└──") || line.includes("│")) {
         structure.push(line);
       }
     }
-    
-    return structure.length > 0 ? structure.join('\n') : 'Standard project structure';
+
+    return structure.length > 0
+      ? structure.join("\n")
+      : "Standard project structure";
   }
 
   /**
@@ -1744,7 +1777,7 @@ body {
   getDefaultArchitecture(framework) {
     const architectures = {
       electron: {
-        overview: 'Electron app with main and renderer processes',
+        overview: "Electron app with main and renderer processes",
         structure: `
 ├── main.js           # Main process
 ├── preload.js        # Preload script
@@ -1752,10 +1785,10 @@ body {
 ├── renderer.js       # Renderer process
 ├── style.css         # Styles
 ├── package.json      # Dependencies
-└── assets/           # Icons and resources`
+└── assets/           # Icons and resources`,
       },
       tauri: {
-        overview: 'Tauri app with Rust backend and web frontend',
+        overview: "Tauri app with Rust backend and web frontend",
         structure: `
 ├── src-tauri/        # Rust backend
 │   ├── src/
@@ -1766,10 +1799,10 @@ body {
 │   ├── index.html
 │   ├── main.js
 │   └── style.css
-└── package.json`
+└── package.json`,
       },
       flutter: {
-        overview: 'Flutter desktop app with widget-based UI',
+        overview: "Flutter desktop app with widget-based UI",
         structure: `
 ├── lib/
 │   ├── main.dart     # Entry point
@@ -1778,10 +1811,10 @@ body {
 ├── windows/          # Windows specific
 ├── macos/            # macOS specific
 ├── linux/            # Linux specific
-└── pubspec.yaml      # Dependencies`
+└── pubspec.yaml      # Dependencies`,
       },
       dotnet: {
-        overview: '.NET WPF app with MVVM pattern',
+        overview: ".NET WPF app with MVVM pattern",
         structure: `
 ├── MainWindow.xaml   # Main window UI
 ├── MainWindow.xaml.cs
@@ -1789,18 +1822,18 @@ body {
 ├── Models/           # Data models
 ├── Views/            # Additional views
 ├── App.xaml          # Application config
-└── *.csproj          # Project file`
+└── *.csproj          # Project file`,
       },
       python: {
-        overview: 'Python desktop app with PyQt6',
+        overview: "Python desktop app with PyQt6",
         structure: `
 ├── main.py           # Entry point
 ├── widgets.py        # Custom widgets
 ├── utils.py          # Utility functions
 ├── requirements.txt  # Dependencies
 ├── build.py          # Build script
-└── assets/           # Icons and resources`
-      }
+└── assets/           # Icons and resources`,
+      },
     };
 
     return architectures[framework] || architectures.electron;
@@ -1811,11 +1844,11 @@ body {
    */
   sanitizeAppName(request) {
     return request
-      .replace(/[^a-zA-Z0-9\s]/g, '')
+      .replace(/[^a-zA-Z0-9\s]/g, "")
       .trim()
-      .split(' ')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-      .join('');
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join("");
   }
 }
 

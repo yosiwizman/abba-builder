@@ -3,10 +3,10 @@
  * Main coordinator for all enhanced services including desktop framework support
  */
 
-import DesktopFrameworkManager from './desktop-frameworks.js';
-import DesktopCodeGenerator from './desktop-code-generator.js';
-import AbbaTestingBots from './testing-bots.js';
-import MetricsTrackingSystem from './metrics-tracking-system.js';
+import DesktopFrameworkManager from "./desktop-frameworks.js";
+import DesktopCodeGenerator from "./desktop-code-generator.js";
+import AbbaTestingBots from "./testing-bots.js";
+import MetricsTrackingSystem from "./metrics-tracking-system.js";
 
 class EnhancedOrchestrator {
   constructor(config = {}) {
@@ -24,7 +24,7 @@ class EnhancedOrchestrator {
     // Initialize services (these will be lazy-loaded as needed)
     this.services = {};
     this.initialized = false;
-    
+
     // Initialize metrics tracking
     this.metrics = new MetricsTrackingSystem({
       enableRealTimeTracking: true,
@@ -32,8 +32,8 @@ class EnhancedOrchestrator {
       alertThresholds: {
         successRate: 0.85,
         avgIterations: 3,
-        tokenUsage: 50000
-      }
+        tokenUsage: 50000,
+      },
     });
   }
 
@@ -160,12 +160,12 @@ class EnhancedOrchestrator {
       timestamp: new Date().toISOString(),
       sessionId: this.generateSessionId(),
     };
-    
+
     // Track generation request
     const metricsId = this.metrics.trackGeneration({
-      type: options.type || 'general',
+      type: options.type || "general",
       framework: options.framework,
-      complexity: this.estimateComplexity(request)
+      complexity: this.estimateComplexity(request),
     });
 
     try {
@@ -183,7 +183,7 @@ class EnhancedOrchestrator {
       return await this.generateGeneralCode(request, options, context);
     } catch (error) {
       console.error("Code generation failed:", error);
-      
+
       // Track generation failure
       this.metrics.recordError(error, context);
       this.metrics.completeGeneration(metricsId, false);
@@ -196,7 +196,7 @@ class EnhancedOrchestrator {
     } finally {
       const duration = Date.now() - startTime;
       this.logMetrics(context, duration);
-      
+
       // Complete metrics tracking
       this.metrics.completeGeneration(metricsId, true, duration);
     }
@@ -250,9 +250,9 @@ class EnhancedOrchestrator {
         tokens: tokenUsage,
       });
     }
-    
+
     // Track token usage in metrics
-    this.metrics.trackTokenUsage('desktop-app', tokenUsage);
+    this.metrics.trackTokenUsage("desktop-app", tokenUsage);
 
     // Learn from the generation if learning is enabled
     if (this.services.learningSystem) {
@@ -526,41 +526,53 @@ class EnhancedOrchestrator {
 
     return 1000; // Default estimate
   }
-  
+
   /**
    * Estimate complexity of a request
    */
   estimateComplexity(request) {
     const requestLower = request.toLowerCase();
-    
+
     // High complexity indicators
     const highComplexity = [
-      'full application', 'complete system', 'enterprise',
-      'microservices', 'distributed', 'scalable',
-      'production-ready', 'commercial', 'professional'
+      "full application",
+      "complete system",
+      "enterprise",
+      "microservices",
+      "distributed",
+      "scalable",
+      "production-ready",
+      "commercial",
+      "professional",
     ];
-    
-    // Medium complexity indicators  
+
+    // Medium complexity indicators
     const mediumComplexity = [
-      'crud', 'dashboard', 'admin panel', 'api',
-      'database', 'authentication', 'multi-page',
-      'responsive', 'interactive'
+      "crud",
+      "dashboard",
+      "admin panel",
+      "api",
+      "database",
+      "authentication",
+      "multi-page",
+      "responsive",
+      "interactive",
     ];
-    
+
     // Check for complexity indicators
-    if (highComplexity.some(term => requestLower.includes(term))) {
-      return 'high';
+    if (highComplexity.some((term) => requestLower.includes(term))) {
+      return "high";
     }
-    
-    if (mediumComplexity.some(term => requestLower.includes(term))) {
-      return 'medium';
+
+    if (mediumComplexity.some((term) => requestLower.includes(term))) {
+      return "medium";
     }
-    
+
     // Check request length as a factor
-    if (request.length > 500) return 'high';
-    if (request.length > 200) return 'medium';
-    
-    return 'low';
+    if (request.length > 500) return "high";
+    if (request.length > 200) return "medium";
+
+    return "low";
   }
 
   /**
@@ -589,7 +601,7 @@ class EnhancedOrchestrator {
       initialized: this.initialized,
       services: {},
       config: this.config,
-      metrics: this.metrics.getMetricsSummary()
+      metrics: this.metrics.getMetricsSummary(),
     };
 
     for (const [name, service] of Object.entries(this.services)) {
@@ -607,9 +619,9 @@ class EnhancedOrchestrator {
    */
   async shutdown() {
     console.log("Shutting down orchestrator...");
-    
+
     // Export final metrics report
-    const finalReport = await this.metrics.exportReports('html');
+    const finalReport = await this.metrics.exportReports("html");
     console.log("Final metrics report saved:", finalReport);
 
     // Clean up services
@@ -631,25 +643,33 @@ class EnhancedOrchestrator {
   async runAutomatedTestsWithMetrics(appType, generatedCode, requirements) {
     const testId = this.metrics.trackTest(appType);
     const startTime = Date.now();
-    
+
     try {
-      const results = await this.runAutomatedTests(appType, generatedCode, requirements);
-      
+      const results = await this.runAutomatedTests(
+        appType,
+        generatedCode,
+        requirements,
+      );
+
       // Record test results in metrics
-      this.metrics.completeTest(testId, results?.overallSuccess || false, Date.now() - startTime);
-      
+      this.metrics.completeTest(
+        testId,
+        results?.overallSuccess || false,
+        Date.now() - startTime,
+      );
+
       if (results) {
         this.metrics.analyzeTestResults(results, appType);
       }
-      
+
       return results;
     } catch (error) {
       this.metrics.completeTest(testId, false, Date.now() - startTime);
-      this.metrics.recordError(error, { type: 'test', appType });
+      this.metrics.recordError(error, { type: "test", appType });
       throw error;
     }
   }
-  
+
   /**
    * Run automated tests on generated code
    */

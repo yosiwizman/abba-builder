@@ -2,7 +2,13 @@ import React, { useState } from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "./ui/card";
 import { Label } from "./ui/label";
 import { Loader2, Github, Rocket, AlertCircle } from "lucide-react";
 import { IpcClient } from "@/ipc/ipc_client";
@@ -43,19 +49,22 @@ export function GitHubLauncher() {
 
     try {
       const ipcClient = IpcClient.getInstance();
-      
+
       // Listen for progress updates
       const progressListener = (_event: any, data: any) => {
         setProgress(data.message || "Processing...");
       };
-      
+
       // Add listener for progress updates
-      (window as any).electronAPI?.on("github:launcher:progress", progressListener);
+      (window as any).electronAPI?.on(
+        "github:launcher:progress",
+        progressListener,
+      );
 
       // Analyze and launch the project
       const launchResult = await ipcClient.invoke("github:launcher:analyze", {
         githubUrl,
-        customizations
+        customizations,
       });
 
       setResult(launchResult);
@@ -67,13 +76,16 @@ export function GitHubLauncher() {
       }
 
       // Remove progress listener
-      (window as any).electronAPI?.removeListener("github:launcher:progress", progressListener);
+      (window as any).electronAPI?.removeListener(
+        "github:launcher:progress",
+        progressListener,
+      );
     } catch (error) {
       console.error("GitHub launcher error:", error);
       toast.error("Failed to analyze project");
       setResult({
         success: false,
-        error: error instanceof Error ? error.message : String(error)
+        error: error instanceof Error ? error.message : String(error),
       });
     } finally {
       setIsAnalyzing(false);
@@ -92,15 +104,18 @@ export function GitHubLauncher() {
 
     try {
       const ipcClient = IpcClient.getInstance();
-      
-      const generatedResult = await ipcClient.invoke("github:launcher:generate", {
-        understanding: result.understanding,
-        customizations: result.customizations || ""
-      });
+
+      const generatedResult = await ipcClient.invoke(
+        "github:launcher:generate",
+        {
+          understanding: result.understanding,
+          customizations: result.customizations || "",
+        },
+      );
 
       setResult({
         ...result,
-        generatedProject: generatedResult
+        generatedProject: generatedResult,
       });
 
       toast.success("Project generated successfully!");
@@ -210,7 +225,9 @@ export function GitHubLauncher() {
                   <div className="space-y-2">
                     <h3 className="font-semibold">Setup Instructions</h3>
                     <div className="text-sm bg-muted p-3 rounded-md">
-                      <p>Dependencies: {result.setupInstructions.dependencies}</p>
+                      <p>
+                        Dependencies: {result.setupInstructions.dependencies}
+                      </p>
                       <p>Run: {result.setupInstructions.runInstructions}</p>
                     </div>
                   </div>
@@ -222,9 +239,11 @@ export function GitHubLauncher() {
                     <div className="text-sm bg-muted p-3 rounded-md">
                       {result.generatedProject.files?.length > 0 ? (
                         <ul className="list-disc list-inside">
-                          {result.generatedProject.files.map((file: any, idx: number) => (
-                            <li key={idx}>{file.name}</li>
-                          ))}
+                          {result.generatedProject.files.map(
+                            (file: any, idx: number) => (
+                              <li key={idx}>{file.name}</li>
+                            ),
+                          )}
                         </ul>
                       ) : (
                         <p>Project code generated successfully</p>
@@ -242,7 +261,9 @@ export function GitHubLauncher() {
                 <p className="text-sm">{result.error}</p>
                 {result.fallback && (
                   <div className="mt-2 p-3 bg-muted rounded-md">
-                    <p className="text-sm whitespace-pre-wrap">{result.fallback}</p>
+                    <p className="text-sm whitespace-pre-wrap">
+                      {result.fallback}
+                    </p>
                   </div>
                 )}
               </div>

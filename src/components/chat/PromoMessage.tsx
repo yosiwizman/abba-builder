@@ -54,9 +54,7 @@ export function Message({ spans }: MessageConfig) {
 
 // Predefined message configurations
 export const TURBO_EDITS_PROMO_MESSAGE: MessageConfig = {
-  spans: [
-    { type: "text", content: "Enjoy faster AI edits with Turbo Edits." },
-  ],
+  spans: [{ type: "text", content: "Enjoy faster AI edits with Turbo Edits." }],
 };
 
 export const SMART_CONTEXT_PROMO_MESSAGE: MessageConfig = {

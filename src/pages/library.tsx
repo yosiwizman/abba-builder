@@ -19,20 +19,20 @@ export default function LibraryPage() {
       <div className="max-w-6xl mx-auto">
         <div className="mb-6">
           <h1 className="text-3xl font-bold mb-4">Library</h1>
-          
+
           <Tabs value={activeTab} onValueChange={setActiveTab}>
             <TabsList className="mb-4">
               <TabsTrigger value="apps">App Gallery</TabsTrigger>
               <TabsTrigger value="prompts">Prompts</TabsTrigger>
               <TabsTrigger value="github">GitHub Launcher</TabsTrigger>
             </TabsList>
-            
+
             <TabsContent value="prompts">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-xl font-semibold">Prompts</h2>
                 <CreatePromptDialog onCreatePrompt={createPrompt} />
               </div>
-              
+
               {isLoading ? (
                 <div>Loading...</div>
               ) : prompts.length === 0 ? (
@@ -52,11 +52,11 @@ export default function LibraryPage() {
                 </div>
               )}
             </TabsContent>
-            
+
             <TabsContent value="apps">
               <AppGallery />
             </TabsContent>
-            
+
             <TabsContent value="github">
               <GitHubLauncher />
             </TabsContent>
