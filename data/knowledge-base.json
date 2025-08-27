@@ -1,0 +1,380 @@
+{
+  "bugs": [
+    {
+      "id": 1,
+      "error": "Cannot read property of undefined",
+      "solution": "Add optional chaining (?.) or null checks before accessing properties",
+      "frequency": 245,
+      "source": "React",
+      "category": "runtime",
+      "severity": "high"
+    },
+    {
+      "id": 2,
+      "error": "Invalid hook call",
+      "solution": "Hooks must be called at top level of function components, not in conditions or loops",
+      "frequency": 189,
+      "source": "React",
+      "category": "hooks",
+      "severity": "high"
+    },
+    {
+      "id": 3,
+      "error": "Module not found",
+      "solution": "Check import paths, ensure module is installed with npm install",
+      "frequency": 312,
+      "source": "Node.js",
+      "category": "import",
+      "severity": "medium"
+    },
+    {
+      "id": 4,
+      "error": "CORS blocked by policy",
+      "solution": "Configure CORS headers on server or use proxy in development",
+      "frequency": 428,
+      "source": "API",
+      "category": "network",
+      "severity": "medium"
+    },
+    {
+      "id": 5,
+      "error": "useState not updating immediately",
+      "solution": "State updates are async, use useEffect for side effects after state change",
+      "frequency": 156,
+      "source": "React",
+      "category": "state",
+      "severity": "low"
+    },
+    {
+      "id": 6,
+      "error": "Memory leak in useEffect",
+      "solution": "Return cleanup function from useEffect to cancel subscriptions",
+      "frequency": 98,
+      "source": "React",
+      "category": "memory",
+      "severity": "high"
+    },
+    {
+      "id": 7,
+      "error": "Hydration mismatch",
+      "solution": "Ensure server and client render identical content, use useEffect for client-only code",
+      "frequency": 67,
+      "source": "Next.js",
+      "category": "ssr",
+      "severity": "medium"
+    },
+    {
+      "id": 8,
+      "error": "map is not a function",
+      "solution": "Ensure variable is an array before calling map, use Array.isArray() check",
+      "frequency": 234,
+      "source": "JavaScript",
+      "category": "type",
+      "severity": "medium"
+    },
+    {
+      "id": 9,
+      "error": "Unexpected token in JSON",
+      "solution": "Validate JSON syntax, remove trailing commas, use JSON.stringify/parse",
+      "frequency": 145,
+      "source": "API",
+      "category": "parsing",
+      "severity": "low"
+    },
+    {
+      "id": 10,
+      "error": "EADDRINUSE port already in use",
+      "solution": "Kill process on port using lsof -i:PORT or use different port",
+      "frequency": 203,
+      "source": "Node.js",
+      "category": "network",
+      "severity": "low"
+    },
+    {
+      "id": 11,
+      "error": "Cannot find module 'webpack'",
+      "solution": "Install webpack as dev dependency: npm install --save-dev webpack",
+      "frequency": 178,
+      "source": "Webpack",
+      "category": "build",
+      "severity": "high"
+    },
+    {
+      "id": 12,
+      "error": "TypeScript type mismatch",
+      "solution": "Fix type definitions, use 'as' for type assertions, or update tsconfig",
+      "frequency": 267,
+      "source": "TypeScript",
+      "category": "types",
+      "severity": "medium"
+    },
+    {
+      "id": 13,
+      "error": "Maximum update depth exceeded",
+      "solution": "Check for infinite loops in useEffect dependencies or setState calls",
+      "frequency": 89,
+      "source": "React",
+      "category": "performance",
+      "severity": "high"
+    },
+    {
+      "id": 14,
+      "error": "Failed to fetch",
+      "solution": "Check network connection, API endpoint URL, and CORS configuration",
+      "frequency": 334,
+      "source": "Fetch API",
+      "category": "network",
+      "severity": "medium"
+    },
+    {
+      "id": 15,
+      "error": "Unauthorized 401",
+      "solution": "Check authentication token, refresh if expired, verify API credentials",
+      "frequency": 256,
+      "source": "API",
+      "category": "auth",
+      "severity": "medium"
+    }
+  ],
+  "patterns": [
+    {
+      "id": 1,
+      "name": "React Hook Form Pattern",
+      "description": "Form validation with React Hook Form",
+      "successRate": 98,
+      "usage": 234,
+      "category": "Forms",
+      "difficulty": "medium"
+    },
+    {
+      "id": 2,
+      "name": "Auth Flow with Supabase",
+      "description": "Complete authentication system using Supabase",
+      "successRate": 95,
+      "usage": 189,
+      "category": "Authentication",
+      "difficulty": "medium"
+    },
+    {
+      "id": 3,
+      "name": "Responsive Grid Layout",
+      "description": "CSS Grid with responsive breakpoints",
+      "successRate": 99,
+      "usage": 456,
+      "category": "Layout",
+      "difficulty": "easy"
+    },
+    {
+      "id": 4,
+      "name": "API Error Handling",
+      "description": "Centralized error handling for API calls",
+      "successRate": 92,
+      "usage": 321,
+      "category": "Backend",
+      "difficulty": "medium"
+    },
+    {
+      "id": 5,
+      "name": "Redux Store Setup",
+      "description": "Redux Toolkit configuration with slices",
+      "successRate": 88,
+      "usage": 278,
+      "category": "State Management",
+      "difficulty": "hard"
+    },
+    {
+      "id": 6,
+      "name": "Infinite Scroll",
+      "description": "Implement infinite scrolling with intersection observer",
+      "successRate": 94,
+      "usage": 167,
+      "category": "UI",
+      "difficulty": "medium"
+    },
+    {
+      "id": 7,
+      "name": "Dark Mode Toggle",
+      "description": "Theme switching with CSS variables and localStorage",
+      "successRate": 97,
+      "usage": 389,
+      "category": "UI",
+      "difficulty": "easy"
+    },
+    {
+      "id": 8,
+      "name": "File Upload with Progress",
+      "description": "Multi-file upload with progress bars",
+      "successRate": 91,
+      "usage": 145,
+      "category": "Forms",
+      "difficulty": "hard"
+    },
+    {
+      "id": 9,
+      "name": "Real-time WebSocket",
+      "description": "WebSocket connection with auto-reconnect",
+      "successRate": 86,
+      "usage": 203,
+      "category": "Communication",
+      "difficulty": "hard"
+    },
+    {
+      "id": 10,
+      "name": "PWA Service Worker",
+      "description": "Progressive Web App with offline support",
+      "successRate": 90,
+      "usage": 112,
+      "category": "Performance",
+      "difficulty": "hard"
+    }
+  ],
+  "scraped": [
+    {
+      "id": 1,
+      "source": "React Repository",
+      "items": 1234,
+      "lastUpdate": "2024-08-27T10:00:00Z",
+      "status": "active",
+      "url": "https://github.com/facebook/react/issues"
+    },
+    {
+      "id": 2,
+      "source": "Next.js Issues",
+      "items": 892,
+      "lastUpdate": "2024-08-27T10:00:00Z",
+      "status": "active",
+      "url": "https://github.com/vercel/next.js/issues"
+    },
+    {
+      "id": 3,
+      "source": "StackOverflow React",
+      "items": 4567,
+      "lastUpdate": "2024-08-27T10:00:00Z",
+      "status": "syncing",
+      "url": "https://stackoverflow.com/questions/tagged/reactjs"
+    },
+    {
+      "id": 4,
+      "source": "Vue.js Patterns",
+      "items": 567,
+      "lastUpdate": "2024-08-27T10:00:00Z",
+      "status": "inactive",
+      "url": "https://github.com/vuejs/vue/issues"
+    },
+    {
+      "id": 5,
+      "source": "TypeScript Issues",
+      "items": 2341,
+      "lastUpdate": "2024-08-27T10:00:00Z",
+      "status": "active",
+      "url": "https://github.com/microsoft/TypeScript/issues"
+    },
+    {
+      "id": 6,
+      "source": "Node.js Best Practices",
+      "items": 789,
+      "lastUpdate": "2024-08-27T10:00:00Z",
+      "status": "active",
+      "url": "https://github.com/goldbergyoni/nodebestpractices"
+    }
+  ],
+  "templates": [
+    {
+      "id": 1,
+      "name": "E-commerce Starter",
+      "framework": "Next.js",
+      "components": 45,
+      "rating": 4.8,
+      "downloads": 12456,
+      "features": ["Cart", "Checkout", "Payment", "Auth"]
+    },
+    {
+      "id": 2,
+      "name": "Dashboard Admin",
+      "framework": "React",
+      "components": 67,
+      "rating": 4.9,
+      "downloads": 23789,
+      "features": ["Charts", "Tables", "Forms", "Auth"]
+    },
+    {
+      "id": 3,
+      "name": "Blog Platform",
+      "framework": "Gatsby",
+      "components": 23,
+      "rating": 4.6,
+      "downloads": 8934,
+      "features": ["MDX", "SEO", "Comments", "Search"]
+    },
+    {
+      "id": 4,
+      "name": "SaaS Boilerplate",
+      "framework": "Next.js",
+      "components": 89,
+      "rating": 4.7,
+      "downloads": 15678,
+      "features": ["Stripe", "Multi-tenant", "Teams", "Billing"]
+    },
+    {
+      "id": 5,
+      "name": "Mobile App",
+      "framework": "React Native",
+      "components": 34,
+      "rating": 4.5,
+      "downloads": 6789,
+      "features": ["Navigation", "Push Notifications", "Offline"]
+    },
+    {
+      "id": 6,
+      "name": "API Backend",
+      "framework": "Express",
+      "components": 28,
+      "rating": 4.8,
+      "downloads": 19234,
+      "features": ["JWT", "Database", "Validation", "Testing"]
+    }
+  ],
+  "solutions": [
+    {
+      "id": 1,
+      "problem": "State management complexity",
+      "solution": "Use Zustand for simple state, Redux Toolkit for complex",
+      "votes": 456
+    },
+    {
+      "id": 2,
+      "problem": "SEO in SPA",
+      "solution": "Use Next.js or Gatsby for SSG/SSR",
+      "votes": 389
+    },
+    {
+      "id": 3,
+      "problem": "Bundle size too large",
+      "solution": "Code splitting with dynamic imports, tree shaking",
+      "votes": 312
+    },
+    {
+      "id": 4,
+      "problem": "Slow initial load",
+      "solution": "Lazy loading, optimize images, use CDN",
+      "votes": 278
+    },
+    {
+      "id": 5,
+      "problem": "Testing components",
+      "solution": "Use React Testing Library with Jest",
+      "votes": 234
+    }
+  ],
+  "statistics": {
+    "totalBugs": 15,
+    "totalPatterns": 10,
+    "totalSolutions": 5,
+    "totalTemplates": 6,
+    "activeSources": 5,
+    "lastSync": "2024-08-27T10:00:00Z",
+    "successRate": 92.5
+  },
+  "lastUpdated": "2024-08-27T10:00:00Z",
+  "version": "1.0.0"
+}

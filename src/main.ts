@@ -18,10 +18,14 @@ import { BackupManager } from "./backup_manager";
 import { getDatabasePath, initializeDatabase } from "./db";
 import { UserSettings } from "./lib/schemas";
 import { handleNeonOAuthReturn } from "./neon_admin/neon_return_handler";
+import { setupErrorHandlers } from "./main-error-handler";
 
 log.errorHandler.startCatching();
 log.eventLogger.startLogging();
 log.scope.labelPadding = false;
+
+// Set up comprehensive error handling
+setupErrorHandlers();
 
 const logger = log.scope("main");
 
@@ -129,6 +133,9 @@ declare global {
 
 let mainWindow: BrowserWindow | null = null;
 
+// Track if app is quitting
+app.isQuitting = false;
+
 const createWindow = () => {
   // Create the browser window.
   mainWindow = new BrowserWindow({
@@ -146,8 +153,26 @@ const createWindow = () => {
       preload: path.join(__dirname, "preload.js"),
       // transparent: true,
     },
+    show: false, // Don't show until ready
     // backgroundColor: "#00000001",
     // frame: false,
+  });
+
+  // Show window when ready to prevent visual glitches
+  mainWindow.once("ready-to-show", () => {
+    mainWindow.show();
+    mainWindow.focus();
+  });
+
+  // Prevent window from closing the app
+  mainWindow.on("close", (event) => {
+    if (process.platform !== "darwin") {
+      // On Windows/Linux, hide instead of closing
+      if (!app.isQuitting) {
+        event.preventDefault();
+        mainWindow.hide();
+      }
+    }
   });
   // and load the index.html of the app.
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
@@ -264,11 +289,18 @@ function handleDeepLinkReturn(url: string) {
   dialog.showErrorBox("Invalid deep link URL", url);
 }
 
+// Set isQuitting flag when app is about to quit
+app.on("before-quit", () => {
+  app.isQuitting = true;
+});
+
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
+    // Set flag and quit
+    app.isQuitting = true;
     app.quit();
   }
 });
