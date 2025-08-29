@@ -51,11 +51,11 @@ import { generateProblemReport } from "../processors/tsc";
 import { createProblemFixPrompt } from "@/shared/problem_prompt";
 import { AsyncVirtualFileSystem } from "../../../shared/VirtualFilesystem";
 import {
-  getDyadAddDependencyTags,
-  getDyadWriteTags,
-  getDyadDeleteTags,
-  getDyadRenameTags,
-} from "../utils/dyad_tag_parser";
+  getAbbaAddDependencyTags,
+  getAbbaWriteTags,
+  getAbbaDeleteTags,
+  getAbbaRenameTags,
+} from '../utils/abba_tag_parser';
 import { fileExists } from "../utils/file_utils";
 import { FileUploadsState } from "../utils/file_uploads_state";
 import { OpenAIResponsesProviderOptions } from "@ai-sdk/openai";
@@ -770,11 +770,11 @@ This conversation includes one or more image attachments. When the user uploads 
           if (
             !abortController.signal.aborted &&
             settings.selectedChatMode !== "ask" &&
-            hasUnclosedDyadWrite(fullResponse)
+            hasUnclosedAbbaWrite(fullResponse)
           ) {
             let continuationAttempts = 0;
             while (
-              hasUnclosedDyadWrite(fullResponse) &&
+              hasUnclosedAbbaWrite(fullResponse) &&
               continuationAttempts < 2 &&
               !abortController.signal.aborted
             ) {
@@ -806,7 +806,7 @@ This conversation includes one or more image attachments. When the user uploads 
               }
             }
           }
-          const addDependencies = getDyadAddDependencyTags(fullResponse);
+          const addDependencies = getAbbaAddDependencyTags(fullResponse);
           if (
             !abortController.signal.aborted &&
             // If there are dependencies, we don't want to auto-fix problems
@@ -853,9 +853,9 @@ ${problemReport.problems
                     readFile: (fileName: string) => readFileWithCache(fileName),
                   },
                 );
-                const writeTags = getDyadWriteTags(fullResponse);
-                const renameTags = getDyadRenameTags(fullResponse);
-                const deletePaths = getDyadDeleteTags(fullResponse);
+                const writeTags = getAbbaWriteTags(fullResponse);
+                const renameTags = getAbbaRenameTags(fullResponse);
+                const deletePaths = getAbbaDeleteTags(fullResponse);
                 virtualFileSystem.applyResponseChanges({
                   deletePaths,
                   renameTags,
@@ -1240,7 +1240,7 @@ export function removeDyadTags(text: string): string {
   return text.replace(dyadRegex, "").trim();
 }
 
-export function hasUnclosedDyadWrite(text: string): boolean {
+export function hasUnclosedAbbaWrite(text: string): boolean {
   // Find the last opening dyad-write tag
   const openRegex = /<dyad-write[^>]*>/g;
   let lastOpenIndex = -1;
@@ -1286,3 +1286,7 @@ These are the other apps that I've mentioned in my prompt. These other apps' cod
 ${otherAppsCodebaseInfo}
 `;
 }
+
+
+
+

@@ -20,3 +20,4 @@ test("release channel - change from stable to beta and back", async ({
   ).toBeVisible();
   await po.snapshotSettings();
 });
+

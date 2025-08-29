@@ -11,3 +11,4 @@ test("switch apps", async ({ po }) => {
   const secondAppName = await po.getCurrentAppName();
   expect(secondAppName).not.toBe(firstAppName);
 });
+

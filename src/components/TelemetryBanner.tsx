@@ -33,7 +33,7 @@ export function PrivacyBanner() {
             <a
               onClick={() => {
                 IpcClient.getInstance().openExternalUrl(
-                  "https://dyad.sh/docs/policies/privacy-policy",
+                  "https://abba-ai-builder.local/docs/policies/privacy-policy",
                 );
               }}
               className="cursor-pointer text-sm text-blue-600 dark:text-blue-400 hover:underline"
@@ -73,3 +73,7 @@ export function PrivacyBanner() {
     </div>
   );
 }
+
+
+
+

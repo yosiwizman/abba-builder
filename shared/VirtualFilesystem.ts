@@ -352,3 +352,4 @@ export class AsyncVirtualFileSystem extends BaseVirtualFileSystem {
     }
   }
 }
+

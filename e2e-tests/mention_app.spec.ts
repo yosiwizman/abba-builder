@@ -19,3 +19,4 @@ test("mention app (with pro)", async ({ po }) => {
 
   await po.snapshotServerDump("all-messages");
 });
+

@@ -10,3 +10,4 @@ test("partial message is resumed", async ({ po }) => {
   await po.snapshotMessages({ replaceDumpPath: true });
   await po.snapshotAppFiles({ name: "message-resumed" });
 });
+

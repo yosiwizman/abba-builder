@@ -47,3 +47,7 @@ export function registerUploadHandlers() {
 
   logger.debug("Registered upload IPC handlers");
 }
+
+
+
+

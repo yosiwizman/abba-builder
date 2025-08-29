@@ -475,3 +475,7 @@ export const readAiRules = async (dyadAppPath: string) => {
     return DEFAULT_AI_RULES;
   }
 };
+
+
+
+

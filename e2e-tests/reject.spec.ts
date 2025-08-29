@@ -12,3 +12,4 @@ test("reject", async ({ po }) => {
 
   await expect(po.getPreviewIframeElement()).not.toBeVisible();
 });
+

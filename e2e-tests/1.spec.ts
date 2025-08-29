@@ -7,3 +7,4 @@ test("renders the first page", async ({ electronApp }) => {
   const text = await page.$eval("h1", (el) => el.textContent);
   expect(text).toBe("Build your dream app");
 });
+

@@ -12,3 +12,4 @@ export default {
     url: dbPath,
   },
 } satisfies Config;
+

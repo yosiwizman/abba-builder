@@ -53,3 +53,4 @@ test("edit custom model", async ({ po }) => {
   // Make sure UI hasn't freezed
   await po.goToAppsTab();
 });
+

@@ -128,3 +128,4 @@ testSkipIfWindows("supabase migrations with native git", async ({ po }) => {
     "DROP TABLE users;",
   );
 });
+

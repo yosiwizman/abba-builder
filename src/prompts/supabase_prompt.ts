@@ -422,3 +422,7 @@ You need to first add Supabase to your app and then we can add auth.
 
 <dyad-add-integration provider="supabase"></dyad-add-integration>
 `;
+
+
+
+

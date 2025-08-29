@@ -151,10 +151,10 @@ export function TokenBar({ chatId }: TokenBarProps) {
             onClick={() =>
               settings?.enableDyadPro
                 ? IpcClient.getInstance().openExternalUrl(
-                    "https://www.dyad.sh/docs/guides/ai-models/pro-modes#smart-context",
+                    "https://www.abba-ai-builder.local/docs/guides/ai-models/pro-modes#smart-context",
                   )
                 : IpcClient.getInstance().openExternalUrl(
-                    "https://dyad.sh/pro#ai",
+                    "https://abba-ai-builder.local/pro#ai",
                   )
             }
             className="text-blue-500 dark:text-blue-400 cursor-pointer hover:underline"
@@ -166,3 +166,7 @@ export function TokenBar({ chatId }: TokenBarProps) {
     </div>
   );
 }
+
+
+
+

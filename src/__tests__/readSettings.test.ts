@@ -403,3 +403,7 @@ function scrubSettings(result: UserSettings) {
     telemetryUserId: "[scrubbed]",
   };
 }
+
+
+
+

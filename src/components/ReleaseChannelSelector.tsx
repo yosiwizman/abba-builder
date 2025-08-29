@@ -27,7 +27,7 @@ export function ReleaseChannelSelector() {
         action: {
           label: "Download Stable",
           onClick: () => {
-            IpcClient.getInstance().openExternalUrl("https://dyad.sh/download");
+            IpcClient.getInstance().openExternalUrl("https://abba-ai-builder.local/download");
           },
         },
       });
@@ -74,3 +74,7 @@ export function ReleaseChannelSelector() {
     </div>
   );
 }
+
+
+
+

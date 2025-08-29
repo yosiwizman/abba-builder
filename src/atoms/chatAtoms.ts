@@ -19,3 +19,7 @@ export const chatsLoadingAtom = atom<boolean>(false);
 
 // Used for scrolling to the bottom of the chat messages
 export const chatStreamCountAtom = atom<number>(0);
+
+
+
+

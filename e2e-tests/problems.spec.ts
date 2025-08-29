@@ -137,3 +137,4 @@ testSkipIfWindows("problems - manual edit (next.js)", async ({ po }) => {
   await po.clickRecheckProblems();
   await po.snapshotProblemsPane();
 });
+

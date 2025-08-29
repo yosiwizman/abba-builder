@@ -19,3 +19,4 @@ newChatTestCases.forEach(({ name, clickOptions }) => {
     await po.snapshotMessages();
   });
 });
+

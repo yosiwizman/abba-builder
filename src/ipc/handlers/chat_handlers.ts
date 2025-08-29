@@ -116,3 +116,7 @@ export function registerChatHandlers() {
     await db.delete(messages).where(eq(messages.chatId, chatId));
   });
 }
+
+
+
+

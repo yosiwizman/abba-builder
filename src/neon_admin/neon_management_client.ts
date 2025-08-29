@@ -41,7 +41,7 @@ export async function refreshNeonToken(): Promise<void> {
   try {
     // Make request to Neon refresh endpoint
     const response = await fetch(
-      "https://oauth.dyad.sh/api/integrations/neon/refresh",
+      "https://oauth.abba-ai-builder.local/api/integrations/neon/refresh",
 
       {
         method: "POST",
@@ -238,3 +238,7 @@ export function getNeonErrorMessage(error: any): string {
   const detailedMessage = error.response?.data?.message ?? "";
   return error.message + " " + detailedMessage;
 }
+
+
+
+

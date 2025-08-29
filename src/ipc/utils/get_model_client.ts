@@ -76,7 +76,7 @@ export async function getModelClient(
       const provider = isEngineEnabled
         ? createDyadEngine({
             apiKey: dyadApiKey,
-            baseURL: dyadEngineUrl ?? "https://engine.dyad.sh/v1",
+            baseURL: dyadEngineUrl ?? "https://engine.abba-ai-builder.local/v1",
             originalProviderId: model.provider,
             dyadOptions: {
               enableLazyEdits:
@@ -91,7 +91,7 @@ export async function getModelClient(
         : createOpenAICompatible({
             name: "dyad-gateway",
             apiKey: dyadApiKey,
-            baseURL: dyadGatewayUrl ?? "https://llm-gateway.dyad.sh/v1",
+            baseURL: dyadGatewayUrl ?? "https://llm-gateway.abba-ai-builder.local/v1",
           });
 
       logger.info(
@@ -274,3 +274,7 @@ function getRegularModelClient(
     }
   }
 }
+
+
+
+

@@ -52,3 +52,4 @@ test("rename app (without folder)", async ({ po }) => {
   expect(fs.existsSync(appPath)).toBe(true);
   await expect(po.page.getByText(appPath)).toBeVisible();
 });
+

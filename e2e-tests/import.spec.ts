@@ -99,3 +99,4 @@ testSkipIfWindows(
     await po.snapshotPreview();
   },
 );
+

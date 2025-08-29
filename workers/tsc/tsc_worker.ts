@@ -318,3 +318,4 @@ parentPort?.on("message", async (input: WorkerInput) => {
 function normalizePath(path: string): string {
   return path.replace(/\\/g, "/");
 }
+

@@ -16,3 +16,4 @@ test("create next.js app", async ({ po }) => {
   await expect(po.getPreviewIframeElement()).toBeVisible({ timeout: 100_000 });
   await po.snapshotPreview();
 });
+

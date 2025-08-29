@@ -17,3 +17,4 @@ testSkipIfWindows("refresh app", async ({ po }) => {
   await po.clickPreviewRefresh();
   await po.snapshotPreview();
 });
+

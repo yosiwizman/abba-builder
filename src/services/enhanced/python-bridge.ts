@@ -367,3 +367,7 @@ export class PythonBridge {
 // Export singleton instance
 const pythonBridge = new PythonBridge();
 export default pythonBridge;
+
+
+
+

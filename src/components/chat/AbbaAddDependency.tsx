@@ -7,13 +7,13 @@ import { IpcClient } from "../../ipc/ipc_client";
 import { Package, ChevronsUpDown, ChevronsDownUp } from "lucide-react";
 import { CodeHighlight } from "./CodeHighlight";
 
-interface DyadAddDependencyProps {
+interface AbbaAddDependencyProps {
   children?: ReactNode;
   node?: any;
   packages?: string;
 }
 
-export const DyadAddDependency: React.FC<DyadAddDependencyProps> = ({
+export const AbbaAddDependency: React.FC<AbbaAddDependencyProps> = ({
   children,
   node,
 }) => {
@@ -91,3 +91,8 @@ export const DyadAddDependency: React.FC<DyadAddDependencyProps> = ({
     </div>
   );
 };
+
+
+
+
+

@@ -13,3 +13,4 @@ testSkipIfWindows("restart app", async ({ po }) => {
 
   await po.snapshotPreview();
 });
+

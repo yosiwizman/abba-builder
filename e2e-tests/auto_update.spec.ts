@@ -13,3 +13,4 @@ test("auto update - disable and enable", async ({ po }) => {
   await po.toggleAutoUpdate();
   await po.snapshotSettings();
 });
+

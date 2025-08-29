@@ -51,3 +51,4 @@ export interface VirtualRename {
   from: string;
   to: string;
 }
+

@@ -23,7 +23,7 @@ export function registerReleaseNoteHandlers() {
       if (IS_TEST_BUILD) {
         return { exists: false };
       }
-      const releaseNoteUrl = `https://www.dyad.sh/docs/releases/${version}`;
+      const releaseNoteUrl = `https://www.abba-ai-builder.local/docs/releases/${version}`;
 
       logger.debug(`Checking for release note at: ${releaseNoteUrl}`);
 
@@ -63,3 +63,7 @@ export function registerReleaseNoteHandlers() {
 
   logger.debug("Registered release note IPC handlers");
 }
+
+
+
+

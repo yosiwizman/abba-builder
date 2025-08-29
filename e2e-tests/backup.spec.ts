@@ -223,3 +223,4 @@ function calculateChecksum(filePath: string): string {
   hash.update(fileBuffer);
   return hash.digest("hex");
 }
+

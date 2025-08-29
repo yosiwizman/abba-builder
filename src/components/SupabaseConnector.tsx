@@ -210,7 +210,7 @@ export function SupabaseConnector({ appId }: { appId: number }) {
               });
             } else {
               await IpcClient.getInstance().openExternalUrl(
-                "https://supabase-oauth.dyad.sh/api/connect-supabase/login",
+                "https://supabase-oauth.abba-ai-builder.local/api/connect-supabase/login",
               );
             }
           }}
@@ -224,3 +224,7 @@ export function SupabaseConnector({ appId }: { appId: number }) {
     </div>
   );
 }
+
+
+
+

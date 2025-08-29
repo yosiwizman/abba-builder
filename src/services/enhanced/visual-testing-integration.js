@@ -577,3 +577,7 @@ class VisualTestingIntegration {
 }
 
 export default VisualTestingIntegration;
+
+
+
+

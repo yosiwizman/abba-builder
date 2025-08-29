@@ -17,3 +17,4 @@ test("template - community", async ({ po }) => {
     .click();
   await po.snapshotSettings();
 });
+

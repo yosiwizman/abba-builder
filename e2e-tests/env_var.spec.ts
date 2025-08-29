@@ -60,3 +60,4 @@ async function snapshotEnvVar({
     expect(envFileContent).toMatchSnapshot({ name });
   }).toPass();
 }
+

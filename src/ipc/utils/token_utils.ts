@@ -37,3 +37,7 @@ export async function getTemperature(
   const modelOption = await findLanguageModel(model);
   return modelOption?.temperature ?? 0;
 }
+
+
+
+

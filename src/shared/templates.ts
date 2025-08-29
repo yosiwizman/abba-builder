@@ -54,3 +54,7 @@ export const localTemplatesData: Template[] = [
     requiresNeon: true,
   },
 ];
+
+
+
+

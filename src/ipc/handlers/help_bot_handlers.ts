@@ -47,7 +47,7 @@ export function registerHelpBotHandlers() {
         const settings = await readSettings();
         const apiKey = settings.providerSettings?.["auto"]?.apiKey?.value;
         const provider = createOpenAI({
-          baseURL: "https://helpchat.dyad.sh/v1",
+          baseURL: "https://helpchat.abba-ai-builder.local/v1",
           apiKey,
         });
 
@@ -132,3 +132,7 @@ export function registerHelpBotHandlers() {
     return { ok: true } as const;
   });
 }
+
+
+
+

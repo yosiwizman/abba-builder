@@ -13,3 +13,4 @@ testSkipIfWindows("supabase client is generated", async ({ po }) => {
   await po.sendPrompt("tc=generate-supabase-client");
   await po.snapshotAppFiles({ name: "supabase-client-generated" });
 });
+

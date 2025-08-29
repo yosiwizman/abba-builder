@@ -12,3 +12,4 @@ testSkipIfWindows("auto-approve", async ({ po }) => {
   });
   await po.snapshotPreview();
 });
+

@@ -978,3 +978,7 @@ class VisualRegressionTester {
 }
 
 export default VisualRegressionTester;
+
+
+
+

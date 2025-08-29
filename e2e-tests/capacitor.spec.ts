@@ -32,3 +32,4 @@ testSkipIfWindows("capacitor upgrade and sync works", async ({ po }) => {
     .getByText("Sync & Open Android")
     .waitFor({ state: "visible", timeout: Timeout.LONG });
 });
+

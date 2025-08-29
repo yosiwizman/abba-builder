@@ -22,3 +22,4 @@ test("chat mode selector - ask mode", async ({ po }) => {
   await po.snapshotServerDump("all-messages");
   await po.snapshotMessages({ replaceDumpPath: true });
 });
+

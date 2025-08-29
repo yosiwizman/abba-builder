@@ -13,3 +13,4 @@ test("switching smart context mode saves the right setting", async ({ po }) => {
   await proModesDialog.setSmartContextMode("conservative");
   await po.snapshotSettings();
 });
+

@@ -6,3 +6,4 @@ test("dump messages", async ({ po }) => {
   await po.sendPrompt("[dump]");
   await po.snapshotServerDump();
 });
+

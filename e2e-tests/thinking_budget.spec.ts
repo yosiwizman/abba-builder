@@ -32,3 +32,4 @@ testSkipIfWindows("thinking budget", async ({ po }) => {
   await po.sendPrompt("[dump] hi");
   await po.snapshotServerDump("request");
 });
+

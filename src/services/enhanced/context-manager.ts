@@ -400,3 +400,7 @@ ${structure}
 // Export singleton instance
 const contextManager = new ContextManager();
 export default contextManager;
+
+
+
+

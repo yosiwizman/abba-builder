@@ -25,3 +25,4 @@ testSkipIfWindows("delete app", async ({ po }) => {
   expect(fs.existsSync(appPath)).toBe(false);
   expect(po.getAppListItem({ appName })).not.toBeVisible();
 });
+

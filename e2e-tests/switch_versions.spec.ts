@@ -32,3 +32,4 @@ testSkipIfWindows("switch versions", async ({ po }) => {
 testSkipIfWindows("switch versions with native git", async ({ po }) => {
   await runSwitchVersionTest(po, true);
 });
+

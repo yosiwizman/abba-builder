@@ -2,14 +2,14 @@ import type React from "react";
 import type { ReactNode } from "react";
 import { FileEdit } from "lucide-react";
 
-interface DyadRenameProps {
+interface AbbaRenameProps {
   children?: ReactNode;
   node?: any;
   from?: string;
   to?: string;
 }
 
-export const DyadRename: React.FC<DyadRenameProps> = ({
+export const AbbaRename: React.FC<AbbaRenameProps> = ({
   children,
   node,
   from: fromProp,
@@ -59,3 +59,8 @@ export const DyadRename: React.FC<DyadRenameProps> = ({
     </div>
   );
 };
+
+
+
+
+

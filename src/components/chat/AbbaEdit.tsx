@@ -4,21 +4,21 @@ import { useState } from "react";
 import {
   ChevronsDownUp,
   ChevronsUpDown,
-  Pencil,
   Loader,
   CircleX,
+  Rabbit,
 } from "lucide-react";
 import { CodeHighlight } from "./CodeHighlight";
 import { CustomTagState } from "./stateTypes";
 
-interface DyadWriteProps {
+interface AbbaEditProps {
   children?: ReactNode;
   node?: any;
   path?: string;
   description?: string;
 }
 
-export const DyadWrite: React.FC<DyadWriteProps> = ({
+export const AbbaEdit: React.FC<AbbaEditProps> = ({
   children,
   node,
   path: pathProp,
@@ -49,7 +49,12 @@ export const DyadWrite: React.FC<DyadWriteProps> = ({
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Pencil size={16} />
+          <div className="flex items-center">
+            <Rabbit size={16} />
+            <span className="bg-blue-500 text-white text-xs px-1.5 py-0.5 rounded ml-1 font-medium">
+              Turbo Edit
+            </span>
+          </div>
           {fileName && (
             <span className="text-gray-700 dark:text-gray-300 font-medium text-sm">
               {fileName}
@@ -58,7 +63,7 @@ export const DyadWrite: React.FC<DyadWriteProps> = ({
           {inProgress && (
             <div className="flex items-center text-amber-600 text-xs">
               <Loader size={14} className="mr-1 animate-spin" />
-              <span>Writing...</span>
+              <span>Editing...</span>
             </div>
           )}
           {aborted && (
@@ -94,10 +99,7 @@ export const DyadWrite: React.FC<DyadWriteProps> = ({
         </div>
       )}
       {isContentVisible && (
-        <div
-          className="text-xs cursor-text"
-          onClick={(e) => e.stopPropagation()}
-        >
+        <div className="text-xs">
           <CodeHighlight className="language-typescript">
             {children}
           </CodeHighlight>
@@ -106,3 +108,8 @@ export const DyadWrite: React.FC<DyadWriteProps> = ({
     </div>
   );
 };
+
+
+
+
+

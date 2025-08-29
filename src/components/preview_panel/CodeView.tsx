@@ -67,3 +67,7 @@ export const CodeView = ({ loading, app }: CodeViewProps) => {
 
   return <div className="text-center py-4 text-gray-500">No files found</div>;
 };
+
+
+
+

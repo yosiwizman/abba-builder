@@ -26,7 +26,7 @@ async function getPublishableKey({ projectId }: { projectId: string }) {
 
   if (!publishableKey) {
     throw new Error(
-      "No publishable key found for project. Make sure you are connected to the correct Supabase account and project. See https://dyad.sh/docs/integrations/supabase#no-publishable-keys",
+      "No publishable key found for project. Make sure you are connected to the correct Supabase account and project. See https://abba-ai-builder.local/docs/integrations/supabase#no-publishable-keys",
     );
   }
   return publishableKey.api_key;
@@ -91,3 +91,7 @@ export async function getSupabaseContext({
 
   return context;
 }
+
+
+
+

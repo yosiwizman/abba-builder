@@ -109,3 +109,7 @@ function processSettingsForTelemetry(settings: UserSettings) {
     window.localStorage.removeItem(TELEMETRY_USER_ID_KEY);
   }
 }
+
+
+
+

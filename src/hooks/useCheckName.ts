@@ -16,3 +16,7 @@ export const useCheckName = (appName: string) => {
     staleTime: 300000, // 5 minutes
   });
 };
+
+
+
+

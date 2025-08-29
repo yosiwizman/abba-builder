@@ -391,3 +391,7 @@ export function LexicalChatInput({
     </LexicalComposer>
   );
 }
+
+
+
+

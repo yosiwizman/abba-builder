@@ -11,14 +11,14 @@ import path from "node:path"; // Import path for basename
 // Import tag parsers
 import { processFullResponseActions } from "../processors/response_processor";
 import {
-  getDyadWriteTags,
-  getDyadRenameTags,
-  getDyadDeleteTags,
-  getDyadExecuteSqlTags,
-  getDyadAddDependencyTags,
+  getAbbaWriteTags,
+  getAbbaRenameTags,
+  getAbbaDeleteTags,
+  getAbbaExecuteSqlTags,
+  getAbbaAddDependencyTags,
   getDyadChatSummaryTag,
   getDyadCommandTags,
-} from "../utils/dyad_tag_parser";
+} from '../utils/abba_tag_parser';
 import log from "electron-log";
 import { isServerFunction } from "../../supabase_admin/supabase_utils";
 import {
@@ -152,11 +152,11 @@ const getProposalHandler = async (
 
         const proposalTitle = getDyadChatSummaryTag(messageContent);
 
-        const proposalWriteFiles = getDyadWriteTags(messageContent);
-        const proposalRenameFiles = getDyadRenameTags(messageContent);
-        const proposalDeleteFiles = getDyadDeleteTags(messageContent);
-        const proposalExecuteSqlQueries = getDyadExecuteSqlTags(messageContent);
-        const packagesAdded = getDyadAddDependencyTags(messageContent);
+        const proposalWriteFiles = getAbbaWriteTags(messageContent);
+        const proposalRenameFiles = getAbbaRenameTags(messageContent);
+        const proposalDeleteFiles = getAbbaDeleteTags(messageContent);
+        const proposalExecuteSqlQueries = getAbbaExecuteSqlTags(messageContent);
+        const packagesAdded = getAbbaAddDependencyTags(messageContent);
 
         const filesChanged = [
           ...proposalWriteFiles.map((tag) => ({
@@ -221,7 +221,7 @@ const getProposalHandler = async (
       }
       const actions: ActionProposal["actions"] = [];
       if (latestAssistantMessage?.content) {
-        const writeTags = getDyadWriteTags(latestAssistantMessage.content);
+        const writeTags = getAbbaWriteTags(latestAssistantMessage.content);
         const refactorTarget = writeTags.reduce(
           (largest, tag) => {
             const lineCount = tag.content.split("\n").length;
@@ -421,3 +421,7 @@ export function registerProposalHandlers() {
   handle("approve-proposal", approveProposalHandler);
   handle("reject-proposal", rejectProposalHandler);
 }
+
+
+
+

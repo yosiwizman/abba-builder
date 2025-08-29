@@ -164,7 +164,7 @@ ${debugInfo.logs.slice(-3_500) || "No logs available"}
 
       // Get signed URL
       const response = await fetch(
-        "https://upload-logs.dyad.sh/generate-upload-url",
+        "https://upload-logs.abba-ai-builder.local/generate-upload-url",
         {
           method: "POST",
           headers: {
@@ -403,7 +403,7 @@ Session ID: ${sessionId}
                 variant="outline"
                 onClick={() => {
                   IpcClient.getInstance().openExternalUrl(
-                    "https://www.dyad.sh/docs",
+                    "https://www.abba-ai-builder.local/docs",
                   );
                 }}
                 className="w-full py-6 bg-(--background-lightest)"
@@ -455,3 +455,7 @@ Session ID: ${sessionId}
     </Dialog>
   );
 }
+
+
+
+

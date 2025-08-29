@@ -26,3 +26,4 @@ test("telemetry - later", async ({ po }) => {
   // Expect telemetry settings to still NOT be set
   await po.snapshotSettings();
 });
+

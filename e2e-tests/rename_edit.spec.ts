@@ -7,3 +7,4 @@ test("rename then edit works", async ({ po }) => {
   await po.sendPrompt("tc=rename-edit");
   await po.snapshotAppFiles({ name: "rename-edit" });
 });
+

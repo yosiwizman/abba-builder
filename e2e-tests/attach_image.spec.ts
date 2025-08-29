@@ -102,3 +102,4 @@ test("attach image via drag - chat", async ({ po }) => {
   await po.snapshotServerDump("last-message", { name: SNAPSHOT_NAME });
   await po.snapshotMessages({ replaceDumpPath: true });
 });
+

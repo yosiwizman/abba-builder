@@ -10,3 +10,4 @@ test("delete custom provider should not freeze", async ({ po }) => {
   // Make sure UI hasn't freezed
   await po.goToAppsTab();
 });
+

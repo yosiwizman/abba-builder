@@ -23,3 +23,4 @@ testSkipIfWindows("supabase - stale ui", async ({ po }) => {
   await po.sendPrompt("tc=add-supabase");
   await po.snapshotMessages();
 });
+

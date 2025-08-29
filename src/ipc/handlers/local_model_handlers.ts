@@ -5,3 +5,7 @@ export function registerLocalModelHandlers() {
   registerOllamaHandlers();
   registerLMStudioHandlers();
 }
+
+
+
+

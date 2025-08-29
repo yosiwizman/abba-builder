@@ -89,7 +89,7 @@ async function cloneRepo(repoUrl: string): Promise<string> {
         url: apiUrl,
         method: "GET",
         headers: {
-          "User-Agent": "Dyad", // GitHub API requires a User-Agent
+          "User-Agent": "Abba AI Builder", // GitHub API requires a User-Agent
           Accept: "application/vnd.github.v3+json",
         },
       });
@@ -183,3 +183,7 @@ async function copyRepoToApp(repoCachePath: string, appPath: string) {
     throw err; // Re-throw the error after logging
   }
 }
+
+
+
+

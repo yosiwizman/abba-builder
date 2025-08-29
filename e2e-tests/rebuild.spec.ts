@@ -22,3 +22,4 @@ testSkipIfWindows("rebuild app", async ({ po }) => {
   expect(fs.existsSync(testPath)).toBe(false);
   await po.snapshotPreview();
 });
+

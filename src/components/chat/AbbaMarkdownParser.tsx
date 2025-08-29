@@ -1,24 +1,24 @@
 import React, { useMemo } from "react";
 import ReactMarkdown from "react-markdown";
 
-import { DyadWrite } from "./DyadWrite";
-import { DyadRename } from "./DyadRename";
-import { DyadDelete } from "./DyadDelete";
-import { DyadAddDependency } from "./DyadAddDependency";
-import { DyadExecuteSql } from "./DyadExecuteSql";
-import { DyadAddIntegration } from "./DyadAddIntegration";
-import { DyadEdit } from "./DyadEdit";
-import { DyadCodebaseContext } from "./DyadCodebaseContext";
-import { DyadThink } from "./DyadThink";
+import { AbbaWrite } from ./AbbaWrite";
+import { AbbaRename } from ./AbbaRename";
+import { AbbaDelete } from ./AbbaDelete";
+import { AbbaAddDependency } from ./AbbaAddDependency";
+import { AbbaExecuteSql } from ./AbbaExecuteSql";
+import { AbbaAddIntegration } from ./AbbaAddIntegration";
+import { AbbaEdit } from ./AbbaEdit";
+import { AbbaCodebaseContext } from ./AbbaCodebaseContext";
+import { AbbaThink } from ./AbbaThink";
 import { CodeHighlight } from "./CodeHighlight";
 import { useAtomValue } from "jotai";
 import { isStreamingAtom } from "@/atoms/chatAtoms";
 import { CustomTagState } from "./stateTypes";
-import { DyadOutput } from "./DyadOutput";
-import { DyadProblemSummary } from "./DyadProblemSummary";
+import { AbbaOutput } from ./AbbaOutput";
+import { AbbaProblemSummary } from ./AbbaProblemSummary";
 import { IpcClient } from "@/ipc/ipc_client";
 
-interface DyadMarkdownParserProps {
+interface AbbaMarkdownParserProps {
   content: string;
 }
 
@@ -69,7 +69,7 @@ export const VanillaMarkdownParser = ({ content }: { content: string }) => {
 /**
  * Custom component to parse markdown content with Dyad-specific tags
  */
-export const DyadMarkdownParser: React.FC<DyadMarkdownParserProps> = ({
+export const AbbaMarkdownParser: React.FC<AbbaMarkdownParserProps> = ({
   content,
 }) => {
   const isStreaming = useAtomValue(isStreamingAtom);
@@ -276,7 +276,7 @@ function renderCustomTag(
   switch (tag) {
     case "think":
       return (
-        <DyadThink
+        <AbbaThink
           node={{
             properties: {
               state: getState({ isStreaming, inProgress }),
@@ -284,11 +284,11 @@ function renderCustomTag(
           }}
         >
           {content}
-        </DyadThink>
+        </AbbaThink>
       );
     case "dyad-write":
       return (
-        <DyadWrite
+        <AbbaWrite
           node={{
             properties: {
               path: attributes.path || "",
@@ -298,12 +298,12 @@ function renderCustomTag(
           }}
         >
           {content}
-        </DyadWrite>
+        </AbbaWrite>
       );
 
     case "dyad-rename":
       return (
-        <DyadRename
+        <AbbaRename
           node={{
             properties: {
               from: attributes.from || "",
@@ -312,12 +312,12 @@ function renderCustomTag(
           }}
         >
           {content}
-        </DyadRename>
+        </AbbaRename>
       );
 
     case "dyad-delete":
       return (
-        <DyadDelete
+        <AbbaDelete
           node={{
             properties: {
               path: attributes.path || "",
@@ -325,12 +325,12 @@ function renderCustomTag(
           }}
         >
           {content}
-        </DyadDelete>
+        </AbbaDelete>
       );
 
     case "dyad-add-dependency":
       return (
-        <DyadAddDependency
+        <AbbaAddDependency
           node={{
             properties: {
               packages: attributes.packages || "",
@@ -338,12 +338,12 @@ function renderCustomTag(
           }}
         >
           {content}
-        </DyadAddDependency>
+        </AbbaAddDependency>
       );
 
     case "dyad-execute-sql":
       return (
-        <DyadExecuteSql
+        <AbbaExecuteSql
           node={{
             properties: {
               state: getState({ isStreaming, inProgress }),
@@ -352,12 +352,12 @@ function renderCustomTag(
           }}
         >
           {content}
-        </DyadExecuteSql>
+        </AbbaExecuteSql>
       );
 
     case "dyad-add-integration":
       return (
-        <DyadAddIntegration
+        <AbbaAddIntegration
           node={{
             properties: {
               provider: attributes.provider || "",
@@ -365,12 +365,12 @@ function renderCustomTag(
           }}
         >
           {content}
-        </DyadAddIntegration>
+        </AbbaAddIntegration>
       );
 
     case "dyad-edit":
       return (
-        <DyadEdit
+        <AbbaEdit
           node={{
             properties: {
               path: attributes.path || "",
@@ -380,12 +380,12 @@ function renderCustomTag(
           }}
         >
           {content}
-        </DyadEdit>
+        </AbbaEdit>
       );
 
     case "dyad-codebase-context":
       return (
-        <DyadCodebaseContext
+        <AbbaCodebaseContext
           node={{
             properties: {
               files: attributes.files || "",
@@ -394,24 +394,24 @@ function renderCustomTag(
           }}
         >
           {content}
-        </DyadCodebaseContext>
+        </AbbaCodebaseContext>
       );
 
     case "dyad-output":
       return (
-        <DyadOutput
+        <AbbaOutput
           type={attributes.type as "warning" | "error"}
           message={attributes.message}
         >
           {content}
-        </DyadOutput>
+        </AbbaOutput>
       );
 
     case "dyad-problem-report":
       return (
-        <DyadProblemSummary summary={attributes.summary}>
+        <AbbaProblemSummary summary={attributes.summary}>
           {content}
-        </DyadProblemSummary>
+        </AbbaProblemSummary>
       );
 
     case "dyad-chat-summary":
@@ -422,3 +422,8 @@ function renderCustomTag(
       return null;
   }
 }
+
+
+
+
+

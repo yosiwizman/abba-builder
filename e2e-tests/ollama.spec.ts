@@ -5,3 +5,4 @@ test("send message to ollama", async ({ po }) => {
   await po.sendPrompt("hi");
   await po.snapshotMessages();
 });
+

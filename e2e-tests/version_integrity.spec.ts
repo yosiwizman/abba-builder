@@ -51,3 +51,4 @@ testSkipIfWindows("version integrity (git isomorphic)", async ({ po }) => {
 testSkipIfWindows("version integrity (git native)", async ({ po }) => {
   await runVersionIntegrityTest(po, true);
 });
+

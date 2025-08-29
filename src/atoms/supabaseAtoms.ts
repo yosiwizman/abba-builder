@@ -11,3 +11,7 @@ export const supabaseErrorAtom = atom<Error | null>(null);
 
 // Define atom for storing the currently selected Supabase project
 export const selectedSupabaseProjectAtom = atom<string | null>(null);
+
+
+
+

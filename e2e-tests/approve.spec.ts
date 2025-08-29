@@ -16,3 +16,4 @@ testSkipIfWindows("write to index, approve, check preview", async ({ po }) => {
   });
   await po.snapshotPreview();
 });
+

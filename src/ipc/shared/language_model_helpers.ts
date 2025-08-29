@@ -254,8 +254,8 @@ export const CLOUD_PROVIDERS: Record<
     gatewayPrefix: "openrouter/",
   },
   auto: {
-    displayName: "Dyad",
-    websiteUrl: "https://academy.dyad.sh/settings",
+    displayName: "Abba AI Builder",
+    websiteUrl: "https://academy.abba-ai-builder.local/settings",
     gatewayPrefix: "dyad/",
   },
 };
@@ -450,3 +450,7 @@ export function isCustomProvider({ providerId }: { providerId: string }) {
 }
 
 export const CUSTOM_PROVIDER_PREFIX = "custom::";
+
+
+
+

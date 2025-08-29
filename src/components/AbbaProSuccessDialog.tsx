@@ -8,15 +8,15 @@ import {
 import { Button } from "@/components/ui/button";
 import { CheckCircle, Sparkles } from "lucide-react";
 
-interface DyadProSuccessDialogProps {
+interface AbbaProSuccessDialogProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-export function DyadProSuccessDialog({
+export function AbbaProSuccessDialog({
   isOpen,
   onClose,
-}: DyadProSuccessDialogProps) {
+}: AbbaProSuccessDialogProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-md">
@@ -50,3 +50,7 @@ export function DyadProSuccessDialog({
     </Dialog>
   );
 }
+
+
+
+

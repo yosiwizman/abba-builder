@@ -50,3 +50,4 @@ for (const { testName, newAppName, buttonName, expectedVersion } of tests) {
     await po.snapshotAppFiles({ name: "app" });
   });
 }
+
