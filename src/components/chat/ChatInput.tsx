@@ -395,7 +395,10 @@ function SummarizeInNewChatButton() {
     try {
       const newChatId = await IpcClient.getInstance().createChat(appId);
       // navigate to new chat
-      await navigate({ to: "/chat", search: (prev) => ({ ...prev,  id: newChatId } });
+      await navigate({
+        to: "/chat",
+        search: (prev) => ({ ...prev, id: newChatId }),
+      });
       await streamMessage({
         prompt: "Summarize from chat-id=" + chatId,
         chatId: newChatId,
