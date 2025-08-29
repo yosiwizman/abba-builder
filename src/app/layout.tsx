@@ -41,14 +41,18 @@ export default function RootLayout({
     <>
       <ThemeProvider>
         <DeepLinkProvider>
-          <SidebarProvider>
+          <div className="flex flex-col h-screen overflow-hidden">
             <TitleBar />
-            <AppSidebar />
-            <div className="flex h-screenish w-full overflow-x-hidden mt-12 mb-4 mr-4 border-t border-l border-border rounded-lg bg-background">
-              {children}
+            <div className="flex flex-1 overflow-hidden">
+              <SidebarProvider>
+                <AppSidebar />
+                <main className="flex-1 overflow-auto bg-background flex flex-col relative">
+                  {children}
+                </main>
+              </SidebarProvider>
             </div>
-            <Toaster richColors />
-          </SidebarProvider>
+          </div>
+          <Toaster richColors />
         </DeepLinkProvider>
       </ThemeProvider>
     </>

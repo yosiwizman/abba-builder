@@ -182,6 +182,8 @@ export default function HomePage() {
   // Main Home Page Content
   return (
     <div className="flex flex-col items-center justify-center max-w-3xl m-auto p-8">
+      <h1 className="text-4xl font-bold mb-8 text-center">Build your dream app</h1>
+      
       <SetupBanner />
 
       <div className="w-full">

@@ -1,0 +1,23 @@
+{
+  "results": [
+    {
+      "name": "Weather Widget",
+      "success": false
+    },
+    {
+      "name": "Electron Desktop App",
+      "success": false
+    },
+    {
+      "name": "Real-time Chat",
+      "success": false
+    }
+  ],
+  "summary": {
+    "total": 3,
+    "successes": 0,
+    "realClaude": 0,
+    "fallbacks": 0,
+    "errors": 0
+  }
+}

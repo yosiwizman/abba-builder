@@ -1,0 +1,26 @@
+{
+  "results": [
+    {
+      "name": "Weather Widget",
+      "success": true,
+      "type": "fallback_template"
+    },
+    {
+      "name": "Electron Desktop App",
+      "success": true,
+      "type": "fallback_template"
+    },
+    {
+      "name": "Real-time Chat",
+      "success": true,
+      "type": "fallback_template"
+    }
+  ],
+  "summary": {
+    "total": 3,
+    "successes": 3,
+    "realClaude": 0,
+    "fallbacks": 3,
+    "errors": 0
+  }
+}

@@ -119,7 +119,7 @@ const validInvokeChannels = [
   // We can't detect with IS_TEST_BUILD in the preload script because
   // it's a separate process from the main process.
   "supabase:fake-connect-and-set-project",
-];
+] as const;
 
 // Add valid receive channels
 const validReceiveChannels = [
@@ -140,44 +140,80 @@ const validReceiveChannels = [
 type ValidInvokeChannel = (typeof validInvokeChannels)[number];
 type ValidReceiveChannel = (typeof validReceiveChannels)[number];
 
-// Expose protected methods that allow the renderer process to use
-// the ipcRenderer without exposing the entire object
-contextBridge.exposeInMainWorld("electron", {
+// Helper wrappers that enforce channel allow-lists
+const safeInvoke = (channel: ValidInvokeChannel, ...args: unknown[]) => {
+  if (validInvokeChannels.includes(channel)) {
+    return ipcRenderer.invoke(channel, ...args);
+  }
+  throw new Error(`Invalid channel: ${channel}`);
+};
+
+const safeOn = (
+  channel: ValidReceiveChannel,
+  listener: (...args: unknown[]) => void,
+) => {
+  if (validReceiveChannels.includes(channel)) {
+    const subscription = (
+      _event: Electron.IpcRendererEvent,
+      ...args: unknown[]
+    ) => listener(...args);
+    ipcRenderer.on(channel, subscription);
+    return () => {
+      ipcRenderer.removeListener(channel, subscription);
+    };
+  }
+  throw new Error(`Invalid channel: ${channel}`);
+};
+
+const safeRemoveAll = (channel: ValidReceiveChannel) => {
+  if (validReceiveChannels.includes(channel)) {
+    ipcRenderer.removeAllListeners(channel);
+  }
+};
+
+const safeRemove = (
+  channel: ValidReceiveChannel,
+  listener: (...args: unknown[]) => void,
+) => {
+  if (validReceiveChannels.includes(channel)) {
+    ipcRenderer.removeListener(channel, listener);
+  }
+};
+
+// Expose protected methods in both shapes for backward compatibility
+// Allow-listed send-only channels from renderer to main
+const validSendChannels = [
+  "browser-error",
+  "debug-log",
+] as const;
+
+type ValidSendChannel = (typeof validSendChannels)[number];
+
+const safeSend = (channel: ValidSendChannel, ...args: unknown[]) => {
+  if (validSendChannels.includes(channel)) {
+    ipcRenderer.send(channel, ...args as any);
+    return;
+  }
+  throw new Error(`Invalid channel: ${channel}`);
+};
+
+const api = {
+  // Nested ipcRenderer API
   ipcRenderer: {
-    invoke: (channel: ValidInvokeChannel, ...args: unknown[]) => {
-      if (validInvokeChannels.includes(channel)) {
-        return ipcRenderer.invoke(channel, ...args);
-      }
-      throw new Error(`Invalid channel: ${channel}`);
-    },
-    on: (
-      channel: ValidReceiveChannel,
-      listener: (...args: unknown[]) => void,
-    ) => {
-      if (validReceiveChannels.includes(channel)) {
-        const subscription = (
-          _event: Electron.IpcRendererEvent,
-          ...args: unknown[]
-        ) => listener(...args);
-        ipcRenderer.on(channel, subscription);
-        return () => {
-          ipcRenderer.removeListener(channel, subscription);
-        };
-      }
-      throw new Error(`Invalid channel: ${channel}`);
-    },
-    removeAllListeners: (channel: ValidReceiveChannel) => {
-      if (validReceiveChannels.includes(channel)) {
-        ipcRenderer.removeAllListeners(channel);
-      }
-    },
-    removeListener: (
-      channel: ValidReceiveChannel,
-      listener: (...args: unknown[]) => void,
-    ) => {
-      if (validReceiveChannels.includes(channel)) {
-        ipcRenderer.removeListener(channel, listener);
-      }
-    },
+    invoke: safeInvoke,
+    on: safeOn,
+    removeAllListeners: safeRemoveAll,
+    removeListener: safeRemove,
+    send: safeSend,
   },
-});
+  // Top-level convenience methods (many components expect these)
+  invoke: safeInvoke,
+  on: safeOn,
+  removeAllListeners: safeRemoveAll,
+  removeListener: safeRemove,
+  send: safeSend,
+} as const;
+
+contextBridge.exposeInMainWorld("electron", api);
+// Legacy alias used by some components
+contextBridge.exposeInMainWorld("electronAPI", api);

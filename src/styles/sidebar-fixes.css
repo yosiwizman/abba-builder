@@ -1,0 +1,183 @@
+/* Clean Dyad-style Sidebar Layout */
+/* Restores the clean, professional interface with proper boundaries */
+
+/* Reset any conflicting styles */
+* {
+  box-sizing: border-box;
+}
+
+/* CRITICAL: Force all sidebar interactive elements to be clickable */
+aside a,
+aside button,
+[data-slot="sidebar"] a,
+[data-slot="sidebar"] button,
+[data-sidebar="trigger"],
+.sidebar-trigger,
+nav a,
+nav button {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  position: relative !important;
+  z-index: 100 !important;
+  user-select: none !important;
+}
+
+/* Ensure Links are clickable */
+a[href] {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+}
+
+/* Remove any blocking overlays */
+aside::before,
+aside::after,
+[data-slot="sidebar"]::before,
+[data-slot="sidebar"]::after {
+  pointer-events: none !important;
+}
+
+/* Main app container - proper flex layout */
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  height: 100vh;
+}
+
+/* Ensure sidebar stays fixed width */
+aside {
+  flex-shrink: 0 !important;
+}
+
+/* Clean vertical dividers */
+[style*="border-right"] {
+  border-right-color: var(--border) !important;
+  border-right-width: 1px !important;
+  border-right-style: solid !important;
+}
+
+[style*="border-bottom"] {
+  border-bottom-color: var(--border) !important;
+  border-bottom-width: 1px !important;
+  border-bottom-style: solid !important;
+}
+
+/* Ensure main content doesn't overflow */
+main {
+  min-width: 0;
+  overflow: auto;
+}
+
+/* Collapsed state button centering */
+[data-state="collapsed"] [data-slot="sidebar-menu-button"] {
+  padding-left: 0;
+  padding-right: 0;
+  justify-content: center;
+}
+
+/* Expanded state button alignment */
+[data-state="expanded"] [data-slot="sidebar-menu-button"] {
+  justify-content: flex-start;
+  padding-left: 0.75rem;
+}
+
+/* Fix icon sizing consistency */
+[data-slot="sidebar-menu-button"] svg {
+  flex-shrink: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* Ensure text doesn't overlap */
+[data-slot="sidebar-menu-button"] span {
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Fix two-column layout */
+.sidebar-two-column {
+  display: flex;
+  gap: 0.5rem;
+  height: 100%;
+  padding: 0.5rem;
+}
+
+.sidebar-icon-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 4rem;
+}
+
+.sidebar-content-column {
+  flex: 1;
+  overflow-y: auto;
+  min-width: 0;
+  padding-right: 0.5rem;
+}
+
+/* Smooth transitions */
+[data-slot="sidebar-container"] {
+  transition: width 200ms ease-in-out, transform 200ms ease-in-out;
+}
+
+/* Fix scrollbar in content areas */
+.sidebar-content-column::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar-content-column::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar-content-column::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+}
+
+.dark .sidebar-content-column::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Prevent layout shift on hover */
+[data-slot="sidebar-menu-item"] {
+  position: relative;
+  contain: layout;
+}
+
+/* Fix divider spacing */
+[data-slot="sidebar-separator"] {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  opacity: 0.5;
+}
+
+/* Ensure proper main content offset */
+main[data-slot="sidebar-inset"] {
+  margin-left: var(--sidebar-width);
+  transition: margin-left 200ms ease-in-out;
+}
+
+[data-state="collapsed"] ~ main[data-slot="sidebar-inset"] {
+  margin-left: var(--sidebar-width-icon);
+}
+
+/* Fix Electron title bar offset */
+.h-screenish {
+  height: calc(100vh - 48px); /* Adjust for title bar */
+  max-height: calc(100vh - 48px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  [data-slot="sidebar-container"] {
+    position: fixed;
+    z-index: 50;
+  }
+  
+  main[data-slot="sidebar-inset"] {
+    margin-left: 0;
+  }
+}

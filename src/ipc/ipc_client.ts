@@ -101,7 +101,7 @@ interface DeleteCustomModelParams {
 
 export class IpcClient {
   private static instance: IpcClient;
-  private ipcRenderer: IpcRenderer;
+  private ipcRenderer: IpcRenderer | null = null;
   private chatStreams: Map<number, ChatStreamCallbacks>;
   private appStreams: Map<number, AppStreamCallbacks>;
   private helpStreams: Map<
@@ -113,7 +113,25 @@ export class IpcClient {
     }
   >;
   private constructor() {
-    this.ipcRenderer = (window as any).electron.ipcRenderer as IpcRenderer;
+    // Try to get ipcRenderer with error handling
+    try {
+      if (typeof window !== "undefined" && window.electron && window.electron.ipcRenderer) {
+        this.ipcRenderer = window.electron.ipcRenderer as IpcRenderer;
+        console.log("[IpcClient] Successfully initialized with window.electron.ipcRenderer");
+      } else {
+        console.error("[IpcClient] window.electron.ipcRenderer not available!", {
+          windowExists: typeof window !== "undefined",
+          electronExists: typeof window !== "undefined" && !!(window as any).electron,
+          ipcRendererExists: typeof window !== "undefined" && !!(window as any).electron?.ipcRenderer
+        });
+        // Create a mock ipcRenderer that logs errors
+        this.ipcRenderer = this.createMockIpcRenderer();
+      }
+    } catch (error) {
+      console.error("[IpcClient] Error initializing IPC:", error);
+      this.ipcRenderer = this.createMockIpcRenderer();
+    }
+    
     this.chatStreams = new Map();
     this.appStreams = new Map();
     this.helpStreams = new Map();
@@ -233,11 +251,66 @@ export class IpcClient {
     });
   }
 
+  private createMockIpcRenderer(): IpcRenderer {
+    console.warn("[IpcClient] Using mock IPC renderer - running in browser test mode.");
+
+    const safeInvoke = async (channel: string, ...args: any[]) => {
+      switch (channel) {
+        case "get-env-vars":
+          return {};
+        case "get-user-settings":
+          return {
+            telemetryConsent: null,
+            telemetryUserId: null,
+            providerSettings: { auto: { apiKey: { value: "" } } },
+          } as any;
+        case "get-chats":
+          return [];
+        case "list-apps":
+          return { apps: [], appBasePath: "" } as any;
+        case "nodejs-status":
+          return { hasNode: true, nodeVersion: process.version, hasPnpm: true, pnpmVersion: "10.x" } as any;
+        case "get-language-model-providers":
+          return [
+            { id: "openai", name: "OpenAI", hasFreeTier: false, websiteUrl: "https://platform.openai.com/" },
+          ];
+        case "get-language-models-by-providers":
+          return { openai: [{ name: "gpt-5", displayName: "GPT 5", description: "OpenAI flagship", contextWindow: 200000 }] } as any;
+        default:
+          // Return a harmless default to avoid UI crashes
+          console.warn(`[MockIPC] Unhandled invoke '${channel}', returning null`);
+          return null as any;
+      }
+    };
+
+    const noop = () => {};
+
+    return {
+      invoke: safeInvoke,
+      on: (channel: string, listener: any) => {
+        console.warn(`[MockIPC] Listener registered for '${channel}' in browser mode.`);
+        return noop;
+      },
+      removeAllListeners: (channel: string) => {
+        // no-op
+      },
+      removeListener: (channel: string, listener: any) => {
+        // no-op
+      }
+    } as any;
+  }
+
   public static getInstance(): IpcClient {
     if (!IpcClient.instance) {
       IpcClient.instance = new IpcClient();
     }
     return IpcClient.instance;
+  }
+
+  // Generic invoke for components that call ipcClient.invoke(...)
+  public async invoke(channel: string, ...args: any[]): Promise<any> {
+    // We intentionally do not expose arbitrary channels beyond preload allow-list.
+    return (this.ipcRenderer as any).invoke(channel, ...args);
   }
 
   public async restartDyad(): Promise<void> {

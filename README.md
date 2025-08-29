@@ -11,3 +11,11 @@ Abba is a local, open-source AI app builder. It's fast, private, and fully under
 - 🖥️ **Cross-platform**: Easy to run on Mac or Windows.
 
 **Abba** (Apache 2.0 licensed).
+
+## Setup
+
+See docs/SETUP.md for platform setup, environment variables, and integration test instructions.
+
+## Python Validation Engine
+
+The orchestrator uses a lightweight Python validator for syntax/static checks. See docs/VALIDATION.md for extending it with Open Interpreter.

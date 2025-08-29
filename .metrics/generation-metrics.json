@@ -1,0 +1,220 @@
+{
+  "metrics": [
+    {
+      "id": "gen-1756389401793-obrqc7qsr",
+      "timestamp": 1756389401793,
+      "type": "web",
+      "complexity": "simple",
+      "success": true,
+      "generationType": "real_claude",
+      "modelUsed": "claude-3-5-sonnet-20241022",
+      "duration": 477793,
+      "tokensUsed": null,
+      "iterations": 1
+    },
+    {
+      "id": "gen-1756389879587-iztgluegp",
+      "timestamp": 1756389879587,
+      "type": "web",
+      "complexity": "simple",
+      "success": false,
+      "generationType": "real_claude",
+      "duration": 455757,
+      "iterations": 2
+    },
+    {
+      "id": "gen-1756390335344-9r0fhceuo",
+      "timestamp": 1756390335344,
+      "type": "web",
+      "complexity": "simple",
+      "success": false,
+      "generationType": "real_claude",
+      "duration": 501358,
+      "iterations": 2
+    },
+    {
+      "id": "gen-1756390836702-gwxjbcl6z",
+      "timestamp": 1756390836702,
+      "type": "web",
+      "complexity": "simple",
+      "success": false,
+      "generationType": "real_claude",
+      "duration": 483977,
+      "iterations": 2
+    },
+    {
+      "id": "gen-1756391320680-q1j7umogy",
+      "timestamp": 1756391320680,
+      "type": "web",
+      "complexity": "simple",
+      "success": false,
+      "generationType": "real_claude",
+      "duration": 259809,
+      "iterations": 2,
+      "error": "Refinement failed: 400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"prompt is too long: 204114 tokens > 200000 maximum\"},\"request_id\":\"req_011CSaGhxm5zofp8p85pYpQ5\"}"
+    },
+    {
+      "id": "gen-1756391580489-7s3oofrtb",
+      "timestamp": 1756391580489,
+      "type": "web",
+      "complexity": "simple",
+      "success": false,
+      "generationType": "real_claude",
+      "duration": 480685,
+      "iterations": 2
+    },
+    {
+      "id": "gen-1756392061174-9zf00uvdy",
+      "timestamp": 1756392061174,
+      "type": "web",
+      "complexity": "simple",
+      "success": true,
+      "generationType": "real_claude",
+      "modelUsed": "claude-3-5-sonnet-20241022",
+      "duration": 437594,
+      "tokensUsed": null,
+      "iterations": 1
+    },
+    {
+      "id": "gen-1756392498770-iehq3f6yj",
+      "timestamp": 1756392498770,
+      "type": "web",
+      "complexity": "simple",
+      "success": false,
+      "generationType": "real_claude",
+      "duration": 345054,
+      "iterations": 2
+    },
+    {
+      "id": "error-1756392864943",
+      "timestamp": 1756392864943,
+      "type": "desktop",
+      "complexity": "unknown",
+      "success": false,
+      "generationType": "error",
+      "error": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"prompt is too long: 200233 tokens > 200000 maximum\"},\"request_id\":\"req_011CSaJLenzmzsUPqL2nVMDX\"}"
+    },
+    {
+      "id": "gen-1756392843825-1uhtxm5k1",
+      "timestamp": 1756392843825,
+      "type": "desktop",
+      "complexity": "simple",
+      "success": false,
+      "generationType": "error",
+      "duration": 21118,
+      "iterations": 1,
+      "error": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"prompt is too long: 200233 tokens > 200000 maximum\"},\"request_id\":\"req_011CSaJLenzmzsUPqL2nVMDX\"}"
+    },
+    {
+      "id": "gen-1756394042731-9xkhpu5s0",
+      "timestamp": 1756394042731,
+      "type": "web",
+      "complexity": "simple",
+      "success": false,
+      "generationType": "real_claude",
+      "duration": 266619,
+      "iterations": 2
+    },
+    {
+      "id": "gen-1756394309351-6b0sk77g3",
+      "timestamp": 1756394309351,
+      "type": "desktop",
+      "complexity": "simple",
+      "success": false,
+      "generationType": "real_claude",
+      "duration": 277879,
+      "iterations": 2
+    },
+    {
+      "id": "gen-1756394587231-z3wep22dd",
+      "timestamp": 1756394587231,
+      "type": "web",
+      "complexity": "simple",
+      "success": false,
+      "generationType": "real_claude",
+      "duration": 307786,
+      "iterations": 2
+    },
+    {
+      "id": "error-1756397412860",
+      "timestamp": 1756397412860,
+      "type": "web",
+      "complexity": "unknown",
+      "success": false,
+      "generationType": "error",
+      "error": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CSaQ7uphyPyPPdUMTijtp\"}"
+    },
+    {
+      "id": "gen-1756397128171-z3i379vny",
+      "timestamp": 1756397128171,
+      "type": "web",
+      "complexity": "simple",
+      "success": false,
+      "generationType": "error",
+      "duration": 284689,
+      "iterations": 1,
+      "error": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CSaQ7uphyPyPPdUMTijtp\"}"
+    },
+    {
+      "id": "error-1756491355647",
+      "timestamp": 1756491355647,
+      "type": "web",
+      "complexity": "unknown",
+      "success": false,
+      "generationType": "error",
+      "error": "401 {\"type\":\"error\",\"error\":{\"type\":\"authentication_error\",\"message\":\"invalid x-api-key\"},\"request_id\":\"req_011CScTWvXNtagawPkmEUHT2\"}"
+    },
+    {
+      "id": "gen-1756491340802-at5etxavk",
+      "timestamp": 1756491340802,
+      "type": "web",
+      "complexity": "simple",
+      "success": false,
+      "generationType": "error",
+      "duration": 14845,
+      "iterations": 1,
+      "error": "401 {\"type\":\"error\",\"error\":{\"type\":\"authentication_error\",\"message\":\"invalid x-api-key\"},\"request_id\":\"req_011CScTWvXNtagawPkmEUHT2\"}"
+    },
+    {
+      "id": "error-1756491371028",
+      "timestamp": 1756491371028,
+      "type": "desktop",
+      "complexity": "unknown",
+      "success": false,
+      "generationType": "error",
+      "error": "401 {\"type\":\"error\",\"error\":{\"type\":\"authentication_error\",\"message\":\"invalid x-api-key\"},\"request_id\":\"req_011CScTY4JE66NJDQzUAYN2N\"}"
+    },
+    {
+      "id": "gen-1756491355648-n5awen9uw",
+      "timestamp": 1756491355648,
+      "type": "desktop",
+      "complexity": "simple",
+      "success": false,
+      "generationType": "error",
+      "duration": 15380,
+      "iterations": 1,
+      "error": "401 {\"type\":\"error\",\"error\":{\"type\":\"authentication_error\",\"message\":\"invalid x-api-key\"},\"request_id\":\"req_011CScTY4JE66NJDQzUAYN2N\"}"
+    },
+    {
+      "id": "error-1756491386088",
+      "timestamp": 1756491386088,
+      "type": "web",
+      "complexity": "unknown",
+      "success": false,
+      "generationType": "error",
+      "error": "401 {\"type\":\"error\",\"error\":{\"type\":\"authentication_error\",\"message\":\"invalid x-api-key\"},\"request_id\":\"req_011CScTZAc1ZJjRwj1Qa1A9x\"}"
+    },
+    {
+      "id": "gen-1756491371029-8ehjo7u0p",
+      "timestamp": 1756491371029,
+      "type": "web",
+      "complexity": "simple",
+      "success": false,
+      "generationType": "error",
+      "duration": 15059,
+      "iterations": 1,
+      "error": "401 {\"type\":\"error\",\"error\":{\"type\":\"authentication_error\",\"message\":\"invalid x-api-key\"},\"request_id\":\"req_011CScTZAc1ZJjRwj1Qa1A9x\"}"
+    }
+  ],
+  "lastUpdated": 1756492120794
+}

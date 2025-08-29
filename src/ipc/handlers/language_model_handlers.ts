@@ -13,6 +13,7 @@ import {
   getLanguageModelsByProviders,
 } from "../shared/language_model_helpers";
 import { db } from "@/db";
+import LanguageModelService from "@/services/language-model-service";
 import {
   language_models,
   language_model_providers as languageModelProvidersSchema,
@@ -28,7 +29,12 @@ export function registerLanguageModelHandlers() {
   handle(
     "get-language-model-providers",
     async (): Promise<LanguageModelProvider[]> => {
-      return getLanguageModelProviders();
+      try {
+        return await LanguageModelService.getProviders();
+      } catch (error) {
+        logger.error('Failed to get providers:', error);
+        return [];
+      }
     },
   );
 
@@ -287,25 +293,33 @@ export function registerLanguageModelHandlers() {
       event: IpcMainInvokeEvent,
       params: { providerId: string },
     ): Promise<LanguageModel[]> => {
-      if (!params || typeof params.providerId !== "string") {
-        throw new Error("Invalid parameters: providerId (string) is required.");
+      try {
+        if (!params || typeof params.providerId !== "string") {
+          logger.error('Invalid parameters to get-language-models');
+          return [];
+        }
+        const providers = await LanguageModelService.getProviders();
+        const provider = providers.find((p) => p.id === params.providerId);
+        if (!provider || provider.type === "local") {
+          return [];
+        }
+        return await LanguageModelService.getModels(params.providerId);
+      } catch (error) {
+        logger.error('Failed to get models:', error);
+        return [];
       }
-      const providers = await getLanguageModelProviders();
-      const provider = providers.find((p) => p.id === params.providerId);
-      if (!provider) {
-        throw new Error(`Provider with ID "${params.providerId}" not found`);
-      }
-      if (provider.type === "local") {
-        throw new Error("Local models cannot be fetched");
-      }
-      return getLanguageModels({ providerId: params.providerId });
     },
   );
 
   handle(
     "get-language-models-by-providers",
     async (): Promise<Record<string, LanguageModel[]>> => {
-      return getLanguageModelsByProviders();
+      try {
+        return await LanguageModelService.getModelsByProviders();
+      } catch (error) {
+        logger.error('Failed to get models by providers:', error);
+        return {};
+      }
     },
   );
 }
