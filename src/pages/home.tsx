@@ -107,7 +107,7 @@ export default function HomePage() {
   // Redirect to app details page if appId is present
   useEffect(() => {
     if (appId) {
-      navigate({ to: "/app-details", search: { appId } });
+      navigate({ to: "/app-details", search: (prev) => ({ ...prev,  appId } });
     }
   }, [appId, navigate]);
 
@@ -148,7 +148,7 @@ export default function HomePage() {
       await refreshApps(); // Ensure refreshApps is awaited if it's async
       await invalidateAppQuery(queryClient, { appId: result.app.id });
       posthog.capture("home:chat-submit");
-      navigate({ to: "/chat", search: { id: result.chatId } });
+      navigate({ to: "/chat", search: (prev) => ({ ...prev,  id: result.chatId } });
     } catch (error) {
       console.error("Failed to create chat:", error);
       showError("Failed to create app. " + (error as any).toString());
@@ -182,6 +182,8 @@ export default function HomePage() {
   // Main Home Page Content
   return (
     <div className="flex flex-col items-center justify-center max-w-3xl m-auto p-8">
+      <h1 className="text-4xl font-bold mb-8 text-center">Build your dream app</h1>
+      
       <SetupBanner />
 
       <div className="w-full">

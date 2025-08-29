@@ -1,9 +1,12 @@
 import { StrictMode, useEffect } from "react";
 import { createRoot } from "react-dom/client";
+import "./styles/globals.css";
+import "./styles/layout-fixes.css"; // Optimized layout fixes
+import "./utils/browser-error-capture";
 import { router } from "./router";
 import { RouterProvider } from "@tanstack/react-router";
 import { PostHogProvider } from "posthog-js/react";
-import posthog from "posthog-js";
+import { default as posthog } from "posthog-js";
 import { getTelemetryUserId, isTelemetryOptedIn } from "./hooks/useSettings";
 import {
   QueryCache,
@@ -13,7 +16,6 @@ import {
 } from "@tanstack/react-query";
 import { showError } from "./lib/toast";
 
-// @ts-ignore
 console.log("Running in mode:", import.meta.env.MODE);
 
 interface MyMeta extends Record<string, unknown> {
@@ -56,14 +58,18 @@ const posthogClient = posthog.init(
   "phc_5Vxx0XT8Ug3eWROhP6mm4D6D2DgIIKT232q4AKxC2ab",
   {
     api_host: "https://us.i.posthog.com",
-    // @ts-ignore
-    debug: import.meta.env.MODE === "development",
+    debug: false,  // Disable debug mode to reduce console spam
     autocapture: false,
     capture_exceptions: true,
     capture_pageview: false,
     before_send: (event) => {
+      // Skip all events in development mode
+      if (import.meta.env.MODE === "development") {
+        return null;  // Silently drop events in development
+      }
+      
       if (!isTelemetryOptedIn()) {
-        console.debug("Telemetry not opted in, skipping event");
+        // Remove console.debug to reduce noise
         return null;
       }
       const telemetryUserId = getTelemetryUserId();
@@ -75,12 +81,7 @@ const posthogClient = posthog.init(
         event.properties["$ip"] = null;
       }
 
-      console.debug(
-        "Telemetry opted in - UUID:",
-        telemetryUserId,
-        "sending event",
-        event,
-      );
+      // Remove console.debug to reduce noise
       return event;
     },
     persistence: "localStorage",
@@ -91,6 +92,11 @@ function App() {
   useEffect(() => {
     // Subscribe to navigation state changes
     const unsubscribe = router.subscribe("onResolved", (navigation) => {
+      // Skip tracking in development mode
+      if (import.meta.env.MODE === "development") {
+        return;
+      }
+      
       // Capture the navigation event in PostHog
       posthog.capture("navigation", {
         toPath: navigation.toLocation.pathname,
@@ -112,12 +118,17 @@ function App() {
   return <RouterProvider router={router} />;
 }
 
-createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <PostHogProvider client={posthogClient}>
-        <App />
-      </PostHogProvider>
-    </QueryClientProvider>
-  </StrictMode>,
-);
+const rootElement = document.getElementById("root");
+if (rootElement) {
+  createRoot(rootElement).render(
+    <StrictMode>
+      <QueryClientProvider client={queryClient}>
+        <PostHogProvider client={posthogClient}>
+          <App />
+        </PostHogProvider>
+      </QueryClientProvider>
+    </StrictMode>,
+  );
+} else {
+  console.error("Root element not found");
+}

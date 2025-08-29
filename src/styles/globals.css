@@ -1,6 +1,15 @@
-@import "tailwindcss";
-@import "tw-animate-css";
-@plugin "@tailwindcss/typography";
+/* Import sidebar layout fixes - must be before tailwind */
+@import "./sidebar-fixes.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .border-border {
+    border-color: hsl(var(--border));
+  }
+}
 
 /* Load Geist Font */
 
@@ -211,10 +220,12 @@
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    border-color: hsl(var(--border));
   }
   body {
-    @apply bg-background text-foreground;
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-family: var(--default-font-family);
   }
 }
 

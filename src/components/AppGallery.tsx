@@ -223,7 +223,7 @@ export function AppGallery() {
 
   const handleOpenApp = (appId: number) => {
     setSelectedAppId(appId);
-    navigate({ to: "/chat", search: {} });
+    navigate({ to: "/chat" });
   };
 
   const handleDeleteApp = async (appId: number) => {

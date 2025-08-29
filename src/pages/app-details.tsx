@@ -85,7 +85,7 @@ export default function AppDetailsPage() {
       await IpcClient.getInstance().deleteApp(appId);
       setIsDeleteDialogOpen(false);
       await refreshApps();
-      navigate({ to: "/", search: {} });
+      navigate({ to: "/", } });
     } catch (error) {
       setIsDeleteDialogOpen(false);
       showError(error);
@@ -193,7 +193,7 @@ export default function AppDetailsPage() {
       await refreshApps();
       await IpcClient.getInstance().createChat(appId);
       setIsCopyDialogOpen(false);
-      navigate({ to: "/app-details", search: { appId } });
+      navigate({ to: "/app-details", search: (prev) => ({ ...prev,  appId } });
     },
     onError: (error) => {
       showError(error);

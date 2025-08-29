@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 import started from "electron-squirrel-startup";
 import { updateElectronApp, UpdateSourceType } from "update-electron-app";
 import log from "electron-log";
+import fs from "node:fs";
 import {
   getSettingsFilePath,
   readSettings,
@@ -32,8 +33,6 @@ const logger = log.scope("main");
 // Load environment variables from .env file
 dotenv.config();
 
-// Register IPC handlers before app is ready
-registerIpcHandlers();
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -61,7 +60,11 @@ export async function onReady() {
   } catch (e) {
     logger.error("Error initializing backup manager", e);
   }
+  // Initialize core modules in strict order: DB -> IPC -> Window
   initializeDatabase();
+  // Register IPC only after DB is ready to avoid early calls before DB init
+  registerIpcHandlers();
+
   const settings = readSettings();
   await onFirstRunMaybe(settings);
   createWindow();
@@ -136,6 +139,42 @@ let mainWindow: BrowserWindow | null = null;
 // Track if app is quitting
 app.isQuitting = false;
 
+const resolvePreloadPath = () => {
+  // Check if running in packaged app
+  if (app.isPackaged) {
+    // In packaged app, preload should be next to main
+    const packagedPath = path.join(__dirname, "preload.js");
+    logger.info("[Preload] Packaged path:", packagedPath, "exists:", fs.existsSync(packagedPath));
+    if (fs.existsSync(packagedPath)) return packagedPath;
+    
+    // Try one level up (Electron-Forge sometimes puts it here)
+    const forgePackagedPath = path.join(__dirname, "../preload.js");
+    logger.info("[Preload] Forge packaged path:", forgePackagedPath, "exists:", fs.existsSync(forgePackagedPath));
+    if (fs.existsSync(forgePackagedPath)) return forgePackagedPath;
+  }
+  
+  // Development mode - Vite output location
+  const viteBuildPath = path.resolve(process.cwd(), ".vite/build/preload.js");
+  logger.info("[Preload] Vite build path:", viteBuildPath, "exists:", fs.existsSync(viteBuildPath));
+  if (fs.existsSync(viteBuildPath)) return viteBuildPath;
+  
+  // Default path relative to compiled main file (fallback for dev)
+  const devPath = path.join(__dirname, "preload.js");
+  logger.info("[Preload] Dev path:", devPath, "exists:", fs.existsSync(devPath));
+  if (fs.existsSync(devPath)) return devPath;
+  
+  // Last resort: throw error with helpful debugging
+  const errorMsg = `[Preload] ERROR: Could not find preload.js! Checked:\n` +
+    `  - Packaged: ${path.join(__dirname, "preload.js")}\n` +
+    `  - Forge: ${path.join(__dirname, "../preload.js")}\n` + 
+    `  - Vite: ${viteBuildPath}\n` +
+    `  - Dev: ${devPath}\n` +
+    `  - __dirname: ${__dirname}\n` +
+    `  - cwd: ${process.cwd()}`;
+  logger.error(errorMsg);
+  throw new Error(errorMsg);
+};
+
 const createWindow = () => {
   // Create the browser window.
   mainWindow = new BrowserWindow({
@@ -150,7 +189,7 @@ const createWindow = () => {
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
-      preload: path.join(__dirname, "preload.js"),
+preload: resolvePreloadPath(),
       // transparent: true,
     },
     show: false, // Don't show until ready
@@ -164,15 +203,9 @@ const createWindow = () => {
     mainWindow.focus();
   });
 
-  // Prevent window from closing the app
-  mainWindow.on("close", (event) => {
-    if (process.platform !== "darwin") {
-      // On Windows/Linux, hide instead of closing
-      if (!app.isQuitting) {
-        event.preventDefault();
-        mainWindow.hide();
-      }
-    }
+  // On Windows/Linux, close should quit the application
+  mainWindow.on("close", () => {
+    app.isQuitting = true;
   });
   // and load the index.html of the app.
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {

@@ -65,42 +65,41 @@ export function ModelPicker() {
     }
   }, [open, loadOllamaModels, loadLMStudioModels]);
 
-  // Get display name for the selected model
-  const getModelDisplayName = () => {
-    if (selectedModel.provider === "ollama") {
+  // Get display name for the selected model with full null safety
+  const getModelDisplayName = (model?: any): string => {
+    if (!model) return "No Model Selected";
+    // Provider string or object id/name could be missing; guard all reads
+    const providerId: string | undefined = typeof model.provider === "string" ? model.provider : model.provider?.id;
+    const modelName: string | undefined = model.name;
+
+    if (!providerId || !modelName) return "No Model Selected";
+
+    if (providerId === "ollama") {
       return (
-        ollamaModels.find(
-          (model: LocalModel) => model.modelName === selectedModel.name,
-        )?.displayName || selectedModel.name
+        ollamaModels.find((m: LocalModel) => m.modelName === modelName)?.displayName || modelName
       );
     }
-    if (selectedModel.provider === "lmstudio") {
+    if (providerId === "lmstudio") {
       return (
-        lmStudioModels.find(
-          (model: LocalModel) => model.modelName === selectedModel.name,
-        )?.displayName || selectedModel.name // Fallback to path if not found
+        lmStudioModels.find((m: LocalModel) => m.modelName === modelName)?.displayName || modelName
       );
     }
 
     // For cloud models, look up in the modelsByProviders data
-    if (modelsByProviders && modelsByProviders[selectedModel.provider]) {
-      const customFoundModel = modelsByProviders[selectedModel.provider].find(
-        (model) =>
-          model.type === "custom" && model.id === selectedModel.customModelId,
+    if (modelsByProviders && modelsByProviders[providerId]) {
+      const customFoundModel = modelsByProviders[providerId].find(
+        (m) => m.type === "custom" && m.id === model.customModelId,
       );
-      if (customFoundModel) {
-        return customFoundModel.displayName;
-      }
-      const foundModel = modelsByProviders[selectedModel.provider].find(
-        (model) => model.apiName === selectedModel.name,
+      if (customFoundModel) return customFoundModel.displayName;
+
+      const foundModel = modelsByProviders[providerId].find(
+        (m) => m.apiName === modelName,
       );
-      if (foundModel) {
-        return foundModel.displayName;
-      }
+      if (foundModel) return foundModel.displayName;
     }
 
     // Fallback if not found
-    return selectedModel.name;
+    return modelName || "No Model Selected";
   };
 
   // Get auto provider models (if any)
@@ -116,12 +115,17 @@ export function ModelPicker() {
     !lmStudioLoading && !lmStudioError && lmStudioModels.length > 0;
 
   if (!settings) {
-    return null;
+    return <div className="text-xs text-muted-foreground">Loading models...</div>;
   }
   const selectedModel = settings?.selectedModel;
+  if (!selectedModel) {
+    return (
+      <div className="text-xs text-muted-foreground">Loading models...</div>
+    );
+  }
   const isSmartAutoEnabled =
     settings.enableProSmartFilesContextMode && isDyadProEnabled(settings);
-  const modelDisplayName = getModelDisplayName();
+  const modelDisplayName = getModelDisplayName(selectedModel);
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>

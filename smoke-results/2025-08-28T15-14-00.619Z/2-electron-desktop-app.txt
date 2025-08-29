@@ -1,0 +1,6 @@
+project-root/
+├── package.json
+├── main.js
+├── index.html
+└── src/
+    └── renderer.js
