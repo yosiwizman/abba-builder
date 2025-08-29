@@ -1,0 +1,275 @@
+{
+  "desktop_apps": {
+    "electron": [
+      {
+        "name": "Electron React Boilerplate",
+        "url": "https://github.com/electron-react-boilerplate/electron-react-boilerplate",
+        "language": "JavaScript",
+        "stars": 23000,
+        "description": "Production-ready Electron app with React",
+        "complexity": "medium",
+        "features": ["hot-reload", "packaging", "auto-updater", "testing"],
+        "setupCommands": ["git clone", "npm install", "npm start"],
+        "customizationPoints": ["src/renderer", "src/main", "assets"]
+      },
+      {
+        "name": "Electron Forge",
+        "url": "https://github.com/electron/forge",
+        "language": "JavaScript",
+        "stars": 6300,
+        "description": "Complete tool for creating Electron apps",
+        "complexity": "easy-medium",
+        "features": ["cli", "packaging", "publishing", "templates"],
+        "setupCommands": ["npm create electron-app@latest my-app"],
+        "customizationPoints": ["src", "forge.config.js"]
+      },
+      {
+        "name": "Electron Quick Start",
+        "url": "https://github.com/electron/electron-quick-start",
+        "language": "JavaScript",
+        "stars": 11000,
+        "description": "Minimal Electron application",
+        "complexity": "easy",
+        "features": ["minimal", "beginner-friendly"],
+        "setupCommands": ["git clone", "npm install", "npm start"],
+        "customizationPoints": ["main.js", "index.html", "renderer.js"]
+      }
+    ],
+    "tauri": [
+      {
+        "name": "Tauri App Template",
+        "url": "https://github.com/tauri-apps/tauri",
+        "language": "Rust",
+        "stars": 84000,
+        "description": "Secure, fast, cross-platform desktop apps",
+        "complexity": "medium-hard",
+        "features": [
+          "rust-backend",
+          "web-frontend",
+          "security",
+          "small-bundle"
+        ],
+        "setupCommands": ["cargo install create-tauri-app", "cargo tauri dev"],
+        "customizationPoints": ["src-tauri/src", "src", "tauri.conf.json"]
+      },
+      {
+        "name": "Tauri + Vite + React",
+        "url": "https://github.com/tauri-apps/create-tauri-app",
+        "language": "Rust/TypeScript",
+        "stars": 1200,
+        "description": "Modern Tauri app with Vite and React",
+        "complexity": "medium",
+        "features": ["vite", "react", "typescript", "hot-reload"],
+        "setupCommands": [
+          "npm create tauri-app",
+          "npm install",
+          "npm run tauri dev"
+        ],
+        "customizationPoints": ["src", "src-tauri", "vite.config.ts"]
+      }
+    ],
+    "flutter": [
+      {
+        "name": "Flutter Desktop",
+        "url": "https://github.com/flutter/flutter",
+        "language": "Dart",
+        "stars": 165000,
+        "description": "Cross-platform desktop and mobile apps",
+        "complexity": "medium",
+        "features": ["cross-platform", "hot-reload", "widgets", "material"],
+        "setupCommands": [
+          "flutter create --platforms=windows,macos,linux myapp"
+        ],
+        "customizationPoints": ["lib", "pubspec.yaml"]
+      },
+      {
+        "name": "Fluent UI Flutter",
+        "url": "https://github.com/bdlukaa/fluent_ui",
+        "language": "Dart",
+        "stars": 2800,
+        "description": "Windows 11 style UI for Flutter desktop",
+        "complexity": "medium",
+        "features": ["windows-11-ui", "desktop-optimized", "fluent-design"],
+        "setupCommands": ["flutter pub add fluent_ui"],
+        "customizationPoints": ["lib/main.dart", "lib/screens"]
+      }
+    ],
+    "python_desktop": [
+      {
+        "name": "PyQt6 Template",
+        "url": "https://github.com/pyqt/examples",
+        "language": "Python",
+        "stars": 1200,
+        "description": "Professional desktop apps with PyQt6",
+        "complexity": "medium",
+        "features": ["native-look", "widgets", "database", "threading"],
+        "setupCommands": ["pip install PyQt6", "python main.py"],
+        "customizationPoints": ["ui", "logic", "resources"]
+      },
+      {
+        "name": "Tkinter Modern",
+        "url": "https://github.com/rdbende/tkinter-modern",
+        "language": "Python",
+        "stars": 800,
+        "description": "Modern themed Tkinter applications",
+        "complexity": "easy",
+        "features": ["modern-theme", "customtkinter", "responsive"],
+        "setupCommands": ["pip install customtkinter", "python app.py"],
+        "customizationPoints": ["app.py", "themes", "widgets"]
+      },
+      {
+        "name": "Kivy Desktop App",
+        "url": "https://github.com/kivy/kivy",
+        "language": "Python",
+        "stars": 17000,
+        "description": "Multi-touch desktop applications",
+        "complexity": "medium",
+        "features": ["multi-touch", "opengl", "cross-platform"],
+        "setupCommands": ["pip install kivy", "python main.py"],
+        "customizationPoints": ["main.py", "kv files", "assets"]
+      }
+    ],
+    "dotnet_desktop": [
+      {
+        "name": "WPF Modern UI",
+        "url": "https://github.com/Kinnara/ModernWpf",
+        "language": "C#",
+        "stars": 4000,
+        "description": "Modern styles for WPF applications",
+        "complexity": "medium",
+        "features": ["modern-ui", "fluent-design", "dark-theme"],
+        "setupCommands": ["dotnet new wpf", "dotnet add package ModernWpfUI"],
+        "customizationPoints": ["Views", "ViewModels", "Styles"]
+      },
+      {
+        "name": "WinUI 3 Template",
+        "url": "https://github.com/microsoft/WindowsAppSDK",
+        "language": "C#",
+        "stars": 3700,
+        "description": "Modern Windows desktop apps with WinUI 3",
+        "complexity": "medium-hard",
+        "features": ["winui3", "windows-11-design", "xaml"],
+        "setupCommands": ["dotnet new winui3"],
+        "customizationPoints": ["MainWindow.xaml", "App.xaml", "ViewModels"]
+      },
+      {
+        "name": ".NET MAUI Desktop",
+        "url": "https://github.com/dotnet/maui",
+        "language": "C#",
+        "stars": 22000,
+        "description": "Cross-platform desktop and mobile apps",
+        "complexity": "medium",
+        "features": ["cross-platform", "mvvm", "hot-reload"],
+        "setupCommands": ["dotnet new maui"],
+        "customizationPoints": ["Views", "ViewModels", "Resources"]
+      }
+    ]
+  },
+  "web_apps": [
+    {
+      "name": "Next.js Starter",
+      "url": "https://github.com/vercel/next.js",
+      "language": "JavaScript/TypeScript",
+      "stars": 125000,
+      "description": "Full-stack React framework",
+      "complexity": "medium",
+      "features": ["ssr", "api-routes", "image-optimization", "typescript"],
+      "setupCommands": ["npx create-next-app@latest"],
+      "customizationPoints": ["pages", "components", "api"]
+    },
+    {
+      "name": "Vite React",
+      "url": "https://github.com/vitejs/vite",
+      "language": "JavaScript/TypeScript",
+      "stars": 68000,
+      "description": "Fast modern web app bundler",
+      "complexity": "easy-medium",
+      "features": ["fast-hmr", "typescript", "jsx", "css-modules"],
+      "setupCommands": ["npm create vite@latest"],
+      "customizationPoints": ["src", "vite.config.js"]
+    },
+    {
+      "name": "SvelteKit",
+      "url": "https://github.com/sveltejs/kit",
+      "language": "JavaScript/TypeScript",
+      "stars": 18000,
+      "description": "Full-stack Svelte framework",
+      "complexity": "medium",
+      "features": ["ssr", "routing", "typescript", "fast"],
+      "setupCommands": ["npm create svelte@latest"],
+      "customizationPoints": ["routes", "lib", "app.html"]
+    }
+  ],
+  "mobile_apps": [
+    {
+      "name": "React Native",
+      "url": "https://github.com/facebook/react-native",
+      "language": "JavaScript/TypeScript",
+      "stars": 119000,
+      "description": "Cross-platform mobile apps with React",
+      "complexity": "medium",
+      "features": ["cross-platform", "hot-reload", "native-modules"],
+      "setupCommands": ["npx react-native init MyApp"],
+      "customizationPoints": ["src", "ios", "android"]
+    },
+    {
+      "name": "Flutter Mobile",
+      "url": "https://github.com/flutter/flutter",
+      "language": "Dart",
+      "stars": 165000,
+      "description": "Beautiful native mobile apps",
+      "complexity": "medium",
+      "features": ["cross-platform", "hot-reload", "widgets"],
+      "setupCommands": ["flutter create myapp"],
+      "customizationPoints": ["lib", "pubspec.yaml"]
+    }
+  ],
+  "cli_tools": [
+    {
+      "name": "Commander.js",
+      "url": "https://github.com/tj/commander.js",
+      "language": "JavaScript",
+      "stars": 26000,
+      "description": "Node.js command-line interfaces",
+      "complexity": "easy",
+      "features": ["commands", "options", "help"],
+      "setupCommands": ["npm init", "npm install commander"],
+      "customizationPoints": ["index.js", "commands"]
+    },
+    {
+      "name": "Cobra CLI",
+      "url": "https://github.com/spf13/cobra",
+      "language": "Go",
+      "stars": 37000,
+      "description": "Modern CLI library for Go",
+      "complexity": "medium",
+      "features": ["commands", "flags", "config"],
+      "setupCommands": ["go mod init", "go get github.com/spf13/cobra"],
+      "customizationPoints": ["cmd", "main.go"]
+    }
+  ],
+  "game_engines": [
+    {
+      "name": "Godot",
+      "url": "https://github.com/godotengine/godot",
+      "language": "GDScript/C++",
+      "stars": 89000,
+      "description": "Free and open source game engine",
+      "complexity": "medium",
+      "features": ["2d-3d", "cross-platform", "visual-editor"],
+      "setupCommands": ["download Godot", "create project"],
+      "customizationPoints": ["scenes", "scripts", "resources"]
+    },
+    {
+      "name": "Bevy",
+      "url": "https://github.com/bevyengine/bevy",
+      "language": "Rust",
+      "stars": 35000,
+      "description": "Data-driven game engine in Rust",
+      "complexity": "hard",
+      "features": ["ecs", "rust", "modular"],
+      "setupCommands": ["cargo new", "cargo add bevy"],
+      "customizationPoints": ["src/main.rs", "assets"]
+    }
+  ]
+}
