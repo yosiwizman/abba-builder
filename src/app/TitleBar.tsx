@@ -68,7 +68,7 @@ export const TitleBar = () => {
 
   const handleAppClick = () => {
     if (selectedApp) {
-      navigate({ to: "/app-details", search: { appId: selectedApp.id } });
+      navigate({ to: "/app-details", search: (prev) => ({ ...prev, appId: selectedApp.id }) });
     }
   };
 

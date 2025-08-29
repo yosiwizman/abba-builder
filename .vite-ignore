@@ -1,0 +1,25 @@
+# Directories to exclude from Vite scanning
+project-library-backup/**
+_project-library/**
+project-library/**
+e2e-tests/**
+test-apps/**
+build/**
+out/**
+.vite/**
+dist/**
+
+# Large backup directories
+**/backup/**
+**/backups/**
+**/.backup/**
+
+# Test and example directories
+**/examples/**
+**/fixtures/**
+**/snapshots/**
+
+# External libraries that shouldn't be scanned
+**/external/**
+**/third-party/**
+**/vendor/**

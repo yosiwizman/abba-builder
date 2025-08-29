@@ -386,7 +386,7 @@ export const ConfigurePanel = () => {
                 if (selectedAppId) {
                   navigate({
                     to: "/app-details",
-                    search: { appId: selectedAppId },
+                    search: (prev) => ({ ...prev,  appId: selectedAppId },
                   });
                 }
               }}

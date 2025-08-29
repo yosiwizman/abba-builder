@@ -28,7 +28,7 @@ export default function ChatPage() {
       // Not a real navigation, just a redirect, when the user navigates to /chat
       // without a chatId, we redirect to the first chat
       setSelectedAppId(chats[0].appId);
-      navigate({ to: "/chat", search: { id: chats[0].id }, replace: true });
+      navigate({ to: "/chat", search: (prev) => ({ ...prev,  id: chats[0].id }, replace: true });
     }
   }, [chatId, chats, loading, navigate]);
 

@@ -29,7 +29,7 @@ export function AppList({ show }: { show?: boolean }) {
     setSelectedChatId(null);
     navigate({
       to: "/",
-      search: { appId: id },
+      search: (prev) => ({ ...prev, appId: id }),
     });
   };
 

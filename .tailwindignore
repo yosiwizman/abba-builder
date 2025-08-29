@@ -1,0 +1,8 @@
+# Ignore project library with problematic Ruby files
+_project-library/
+project-library/
+test-apps/
+build/
+out/
+node_modules/
+*.rb
