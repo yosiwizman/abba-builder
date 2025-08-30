@@ -1,13 +1,14 @@
 /* Remove all borders from sidebar components */
 
-/* Main sidebar container */
+/* Main sidebar container with proper background */
 [data-slot="sidebar"],
 [data-slot="sidebar-container"],
 [data-slot="sidebar-inner"],
-.group\\/sidebar-wrapper {
+.group\/sidebar-wrapper {
   border: none !important;
   border-right: none !important;
   border-left: none !important;
+  background: var(--sidebar-background, hsl(var(--sidebar))) !important;
 }
 
 /* Sidebar sections */
@@ -84,8 +85,10 @@
 /* Ensure smooth backgrounds without lines */
 aside,
 nav {
-  background: var(--sidebar-background);
+  background: var(--sidebar-background, hsl(var(--sidebar))) !important;
   border: none !important;
+  width: var(--sidebar-width, 18rem) !important;
+  min-width: var(--sidebar-width, 18rem) !important;
 }
 
 /* Clean hover and active states */

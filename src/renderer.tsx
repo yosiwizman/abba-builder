@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import "./styles/globals.css";
 import "./styles/layout-fixes.css"; // Optimized layout fixes
 import "./styles/no-borders.css"; // Remove all sidebar borders
+import "./styles/sidebar-layout.css"; // Comprehensive sidebar layout fixes
 import "./utils/browser-error-capture";
 import { router } from "./router";
 import { RouterProvider } from "@tanstack/react-router";
