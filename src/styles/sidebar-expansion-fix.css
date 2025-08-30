@@ -1,0 +1,111 @@
+/* Force Sidebar Expansion Fix */
+
+/* Override collapsed state entirely */
+[data-state="collapsed"] {
+  --sidebar-width: 280px !important;
+}
+
+/* Force sidebar to always be expanded width */
+[data-slot="sidebar-container"] {
+  width: 280px !important;
+  min-width: 280px !important;
+}
+
+[data-slot="sidebar-gap"] {
+  width: 280px !important;
+  min-width: 280px !important;
+}
+
+/* Always show menu text */
+[data-slot="sidebar-menu-button"] span {
+  display: inline-block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  margin-left: 0.75rem !important;
+}
+
+/* Ensure icons and text are properly aligned */
+[data-slot="sidebar-menu-button"] {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 0.75rem !important;
+  padding: 0.5rem 1rem !important;
+  width: 100% !important;
+}
+
+/* Fix icon size */
+[data-slot="sidebar-menu-button"] svg {
+  width: 1.25rem !important;
+  height: 1.25rem !important;
+  flex-shrink: 0 !important;
+}
+
+/* Ensure proper app list display */
+.sidebar-group,
+[data-slot="sidebar-group"] {
+  padding: 0.5rem !important;
+}
+
+.sidebar-group-label,
+[data-slot="sidebar-group-label"] {
+  display: flex !important;
+  align-items: center !important;
+  padding: 0.5rem 1rem !important;
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+  opacity: 1 !important;
+}
+
+/* Fix the "Your Apps" section */
+.sidebar-group h3 {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Ensure app names are visible */
+.sidebar-group button span {
+  display: inline-block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Override any collapsed class behaviors */
+.group[data-collapsible="icon"] [data-slot="sidebar-menu-button"] span,
+[data-collapsible="icon"] [data-slot="sidebar-menu-button"] span {
+  display: inline-block !important;
+  opacity: 1 !important;
+}
+
+/* Fix hamburger menu button */
+[data-sidebar="trigger"] {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 2.5rem !important;
+  height: 2.5rem !important;
+}
+
+/* Ensure sidebar header is visible */
+[data-slot="sidebar-header"] {
+  display: flex !important;
+  align-items: center !important;
+  padding: 1rem !important;
+  gap: 0.5rem !important;
+}
+
+/* Fix "Dyad" text in header */
+[data-slot="sidebar-header"] span {
+  display: inline-block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  font-size: 1.125rem !important;
+  font-weight: 600 !important;
+}
+
+/* Fix chat list items */
+.chat-list-item span {
+  display: inline-block !important;
+  opacity: 1 !important;
+}
