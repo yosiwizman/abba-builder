@@ -2,6 +2,7 @@ import { StrictMode, useEffect } from "react";
 import { createRoot } from "react-dom/client";
 import "./styles/globals.css";
 import "./styles/layout-fixes.css"; // Optimized layout fixes
+import "./styles/no-borders.css"; // Remove all sidebar borders
 import "./utils/browser-error-capture";
 import { router } from "./router";
 import { RouterProvider } from "@tanstack/react-router";
@@ -58,16 +59,16 @@ const posthogClient = posthog.init(
   "phc_5Vxx0XT8Ug3eWROhP6mm4D6D2DgIIKT232q4AKxC2ab",
   {
     api_host: "https://us.i.posthog.com",
-    debug: false,  // Disable debug mode to reduce console spam
+    debug: false, // Disable debug mode to reduce console spam
     autocapture: false,
     capture_exceptions: true,
     capture_pageview: false,
     before_send: (event) => {
       // Skip all events in development mode
       if (import.meta.env.MODE === "development") {
-        return null;  // Silently drop events in development
+        return null; // Silently drop events in development
       }
-      
+
       if (!isTelemetryOptedIn()) {
         // Remove console.debug to reduce noise
         return null;
@@ -96,7 +97,7 @@ function App() {
       if (import.meta.env.MODE === "development") {
         return;
       }
-      
+
       // Capture the navigation event in PostHog
       posthog.capture("navigation", {
         toPath: navigation.toLocation.pathname,

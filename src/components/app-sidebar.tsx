@@ -65,10 +65,10 @@ export function AppSidebar() {
   ];
 
   return (
-    <Sidebar collapsible="icon">
-      <SidebarHeader>
+    <Sidebar collapsible="icon" className="border-0">
+      <SidebarHeader className="border-b-0">
         <div className="flex items-center gap-2 px-3 py-2">
-          <SidebarTrigger className="ml-1">
+          <SidebarTrigger className="ml-1 hover:bg-accent hover:text-accent-foreground data-[state=open]:bg-accent data-[state=open]:text-accent-foreground">
             <Menu className="h-5 w-5" />
           </SidebarTrigger>
           {state === "expanded" && (
@@ -76,8 +76,8 @@ export function AppSidebar() {
           )}
         </div>
       </SidebarHeader>
-      <SidebarContent>
-        <SidebarGroup>
+      <SidebarContent className="border-0">
+        <SidebarGroup className="border-b-0">
           <SidebarGroupContent>
             <SidebarMenu>
               {navigationItems.map((item) => (
@@ -86,6 +86,7 @@ export function AppSidebar() {
                     onClick={() => navigate({ to: item.path as any })}
                     isActive={item.isActive}
                     tooltip={item.label}
+                    className="hover:bg-accent hover:text-accent-foreground data-[active=true]:bg-accent data-[active=true]:text-accent-foreground"
                   >
                     <item.icon className="h-4 w-4" />
                     <span>{item.label}</span>
@@ -98,11 +99,17 @@ export function AppSidebar() {
 
         {/* Show AppList when on Apps section */}
         {(currentPath === "/" || currentPath === "/app-details") && (
-          <AppList show={true} />
+          <div className="border-t-0">
+            <AppList show={true} />
+          </div>
         )}
 
         {/* Show ChatList when on Chat section and an app is selected */}
-        {currentPath === "/chat" && selectedAppId && <ChatList show={true} />}
+        {currentPath === "/chat" && selectedAppId && (
+          <div className="border-t-0">
+            <ChatList show={true} />
+          </div>
+        )}
       </SidebarContent>
     </Sidebar>
   );
