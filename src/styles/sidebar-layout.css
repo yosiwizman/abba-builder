@@ -40,6 +40,15 @@
     width 0.2s ease-in-out;
 }
 
+/* Force expanded state by default */
+[data-slot="sidebar"] {
+  --sidebar-width: 280px !important;
+}
+
+[data-slot="sidebar"][data-state="expanded"] {
+  width: var(--sidebar-width) !important;
+}
+
 /* Sidebar inner content */
 [data-slot="sidebar-inner"] {
   display: flex;
@@ -191,6 +200,21 @@ main {
 
 [data-state="collapsed"] [data-slot="sidebar-menu-button"] span:not(.sr-only) {
   display: none;
+}
+
+/* Ensure text is visible in expanded state */
+[data-state="expanded"] [data-slot="sidebar-menu-button"] span {
+  display: inline-block !important;
+  margin-left: 0.75rem;
+}
+
+/* Fix menu button layout */
+[data-slot="sidebar-menu-button"] {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.75rem !important;
+  width: 100% !important;
+  padding: 0.5rem 0.75rem !important;
 }
 
 /* Fix overlapping content */
