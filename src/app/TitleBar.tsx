@@ -4,13 +4,10 @@ import { useLoadApps } from "@/hooks/useLoadApps";
 import { useRouter, useLocation } from "@tanstack/react-router";
 import { useSettings } from "@/hooks/useSettings";
 import { Button } from "@/components/ui/button";
-// @ts-ignore
-import logo from "../../assets/logo_transparent.png";
 import { providerSettingsRoute } from "@/routes/settings/providers/$provider";
 import { cn } from "@/lib/utils";
 import { useDeepLink } from "@/contexts/DeepLinkContext";
 import { useEffect, useState } from "react";
-import { DyadProSuccessDialog } from "@/components/DyadProSuccessDialog";
 import { useTheme } from "@/contexts/ThemeContext";
 import { IpcClient } from "@/ipc/ipc_client";
 import { useUserBudgetInfo } from "@/hooks/useUserBudgetInfo";
@@ -27,8 +24,7 @@ export const TitleBar = () => {
   const { apps } = useLoadApps();
   const { navigate } = useRouter();
   const location = useLocation();
-  const { settings, refreshSettings } = useSettings();
-  const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false);
+  const { refreshSettings } = useSettings();
   const [showWindowControls, setShowWindowControls] = useState(false);
 
   useEffect(() => {
@@ -45,20 +41,15 @@ export const TitleBar = () => {
     checkPlatform();
   }, []);
 
-  const showDyadProSuccessDialog = () => {
-    setIsSuccessDialogOpen(true);
-  };
-
   const { lastDeepLink } = useDeepLink();
   useEffect(() => {
     const handleDeepLink = async () => {
       if (lastDeepLink?.type === "dyad-pro-return") {
         await refreshSettings();
-        showDyadProSuccessDialog();
       }
     };
     handleDeepLink();
-  }, [lastDeepLink]);
+  }, [lastDeepLink, refreshSettings]);
 
   // Get selected app name
   const selectedApp = apps.find((app) => app.id === selectedAppId);
@@ -68,17 +59,19 @@ export const TitleBar = () => {
 
   const handleAppClick = () => {
     if (selectedApp) {
-      navigate({ to: "/app-details", search: (prev) => ({ ...prev, appId: selectedApp.id }) });
+      navigate({
+        to: "/app-details",
+        search: (prev) => ({ ...prev, appId: selectedApp.id }),
+      });
     }
   };
 
-  const isDyadPro = !!settings?.providerSettings?.auto?.apiKey?.value;
-  const isDyadProEnabled = Boolean(settings?.enableDyadPro);
-
   return (
     <>
-      <div className="@container z-11 w-full h-11 bg-(--sidebar) absolute top-0 left-0 app-region-drag flex items-center">
-        <div className={`${showWindowControls ? "pl-2" : "pl-18"}`}></div>
+      <div className="@container z-50 w-full h-11 bg-(--sidebar) absolute top-0 left-0 app-region-drag flex items-center">
+        <div
+          className={`${showWindowControls ? "pl-2" : "pl-18"} app-region-no-drag`}
+        ></div>
 
         <div className="w-6 h-6 mr-0.5 flex items-center justify-center bg-indigo-600 text-white font-bold rounded">
           A
@@ -128,11 +121,15 @@ function WindowsControls() {
   };
 
   return (
-    <div className="ml-auto flex no-app-region-drag">
+    <div
+      className="ml-auto flex app-region-no-drag"
+      style={{ WebkitAppRegion: "no-drag" } as any}
+    >
       <button
-        className="w-10 h-10 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+        className="w-10 h-10 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors app-region-no-drag"
         onClick={minimizeWindow}
         aria-label="Minimize"
+        style={{ WebkitAppRegion: "no-drag" } as any}
       >
         <svg
           width="12"
@@ -149,9 +146,10 @@ function WindowsControls() {
         </svg>
       </button>
       <button
-        className="w-10 h-10 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+        className="w-10 h-10 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors app-region-no-drag"
         onClick={maximizeWindow}
         aria-label="Maximize"
+        style={{ WebkitAppRegion: "no-drag" } as any}
       >
         <svg
           width="12"
@@ -170,9 +168,10 @@ function WindowsControls() {
         </svg>
       </button>
       <button
-        className="w-10 h-10 flex items-center justify-center hover:bg-red-500 transition-colors"
+        className="w-10 h-10 flex items-center justify-center hover:bg-red-500 transition-colors app-region-no-drag"
         onClick={closeWindow}
         aria-label="Close"
+        style={{ WebkitAppRegion: "no-drag" } as any}
       >
         <svg
           width="12"
