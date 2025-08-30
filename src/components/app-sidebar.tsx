@@ -15,17 +15,10 @@ import { ChatList } from "./ChatList";
 import { useNavigate, useRouterState } from "@tanstack/react-router";
 import { useAtom } from "jotai";
 import { selectedAppIdAtom } from "@/atoms/appAtoms";
-import {
-  Home,
-  MessageSquare,
-  Settings,
-  Library,
-  Database,
-  Menu,
-} from "lucide-react";
+import { Home, MessageSquare, Settings, Library, Database } from "lucide-react";
 
 export function AppSidebar() {
-  const { state } = useSidebar();
+  const { open } = useSidebar();
   const navigate = useNavigate();
   const routerState = useRouterState();
   const [selectedAppId] = useAtom(selectedAppIdAtom);
@@ -67,12 +60,12 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="icon" className="border-0">
       <SidebarHeader className="border-b-0">
-        <div className="flex items-center gap-2 px-3 py-2">
-          <SidebarTrigger className="ml-1 hover:bg-accent hover:text-accent-foreground data-[state=open]:bg-accent data-[state=open]:text-accent-foreground">
-            <Menu className="h-5 w-5" />
-          </SidebarTrigger>
-          {state === "expanded" && (
-            <span className="text-lg font-semibold">Dyad</span>
+        <div className="flex items-center gap-2 px-2 py-2">
+          <SidebarTrigger className="hover:bg-accent hover:text-accent-foreground" />
+          {open && (
+            <span className="text-lg font-semibold transition-opacity duration-200">
+              Dyad
+            </span>
           )}
         </div>
       </SidebarHeader>
@@ -85,11 +78,15 @@ export function AppSidebar() {
                   <SidebarMenuButton
                     onClick={() => navigate({ to: item.path as any })}
                     isActive={item.isActive}
-                    tooltip={item.label}
+                    tooltip={open ? undefined : item.label}
                     className="hover:bg-accent hover:text-accent-foreground data-[active=true]:bg-accent data-[active=true]:text-accent-foreground"
                   >
-                    <item.icon className="h-4 w-4" />
-                    <span>{item.label}</span>
+                    <item.icon className="h-4 w-4 shrink-0" />
+                    {open && (
+                      <span className="transition-opacity duration-200">
+                        {item.label}
+                      </span>
+                    )}
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
