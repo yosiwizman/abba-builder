@@ -1,0 +1,339 @@
+{
+  "version": "1.0.0",
+  "description": "Curated project templates and references for Abba AI Builder",
+  "lastUpdated": "2025-01-31",
+  "categories": {
+    "accounting": {
+      "description": "Financial and accounting applications",
+      "projects": [
+        {
+          "name": "OpenBB",
+          "repo": "OpenBB-finance/OpenBB",
+          "description": "Investment research terminal",
+          "stars": 25000,
+          "language": "Python"
+        },
+        {
+          "name": "akshare",
+          "repo": "akfamily/akshare",
+          "description": "Financial data interface library",
+          "stars": 8000,
+          "language": "Python"
+        },
+        {
+          "name": "hyperswitch",
+          "repo": "juspay/hyperswitch",
+          "description": "Open payments switch",
+          "stars": 10000,
+          "language": "Rust"
+        }
+      ]
+    },
+    "android": {
+      "description": "Android applications and tools",
+      "projects": [
+        {
+          "name": "Spotube",
+          "repo": "KRTirtho/spotube",
+          "description": "Open source Spotify client",
+          "stars": 25000,
+          "language": "Dart"
+        }
+      ]
+    },
+    "blog": {
+      "description": "Blog platforms and static site generators",
+      "projects": [
+        {
+          "name": "Jekyll",
+          "repo": "jekyll/jekyll",
+          "description": "Static site generator",
+          "stars": 48000,
+          "language": "Ruby"
+        }
+      ]
+    },
+    "chat": {
+      "description": "Chat and messaging applications",
+      "projects": [
+        {
+          "name": "JeecgBoot",
+          "repo": "jeecgboot/JeecgBoot",
+          "description": "Enterprise rapid development platform",
+          "stars": 38000,
+          "language": "Java"
+        }
+      ]
+    },
+    "crm": {
+      "description": "Customer relationship management systems",
+      "projects": [
+        {
+          "name": "Laravel CRM",
+          "repo": "krayin/laravel-crm",
+          "description": "Free & open source CRM solution",
+          "stars": 7000,
+          "language": "PHP"
+        }
+      ]
+    },
+    "database": {
+      "description": "Database tools and management systems",
+      "projects": [
+        {
+          "name": "Calibre-Web",
+          "repo": "janeczku/calibre-web",
+          "description": "Web app for browsing ebooks",
+          "stars": 11000,
+          "language": "Python"
+        },
+        {
+          "name": "Chinese Poetry",
+          "repo": "chinese-poetry/chinese-poetry",
+          "description": "Chinese poetry database",
+          "stars": 47000,
+          "language": "JavaScript"
+        },
+        {
+          "name": "Sherlock",
+          "repo": "sherlock-project/sherlock",
+          "description": "Hunt down social media accounts",
+          "stars": 52000,
+          "language": "Python"
+        }
+      ]
+    },
+    "devops": {
+      "description": "DevOps tools and infrastructure",
+      "projects": [
+        {
+          "name": "MinIO",
+          "repo": "minio/minio",
+          "description": "High performance object storage",
+          "stars": 45000,
+          "language": "Go"
+        },
+        {
+          "name": "DevOps Exercises",
+          "repo": "bregman-arie/devops-exercises",
+          "description": "DevOps exercises and questions",
+          "stars": 64000,
+          "language": "Python"
+        }
+      ]
+    },
+    "erp": {
+      "description": "Enterprise resource planning systems",
+      "projects": [
+        {
+          "name": "ERPNext",
+          "repo": "frappe/erpnext",
+          "description": "Free and open source ERP",
+          "stars": 17000,
+          "language": "Python"
+        },
+        {
+          "name": "Ant Design",
+          "repo": "ant-design/ant-design",
+          "description": "Enterprise UI design language",
+          "stars": 90000,
+          "language": "TypeScript"
+        },
+        {
+          "name": "Ant Design Pro",
+          "repo": "ant-design/ant-design-pro",
+          "description": "Enterprise application UI solution",
+          "stars": 36000,
+          "language": "TypeScript"
+        },
+        {
+          "name": "Apache Superset",
+          "repo": "apache/superset",
+          "description": "Data visualization platform",
+          "stars": 60000,
+          "language": "TypeScript"
+        },
+        {
+          "name": "Langflow",
+          "repo": "langflow-ai/langflow",
+          "description": "Visual framework for LLM apps",
+          "stars": 20000,
+          "language": "Python"
+        },
+        {
+          "name": "NestJS",
+          "repo": "nestjs/nest",
+          "description": "Progressive Node.js framework",
+          "stars": 65000,
+          "language": "TypeScript"
+        },
+        {
+          "name": "Nextcloud",
+          "repo": "nextcloud/server",
+          "description": "Self-hosted productivity platform",
+          "stars": 26000,
+          "language": "PHP"
+        },
+        {
+          "name": "Huly Platform",
+          "repo": "hcengineering/platform",
+          "description": "All-in-one project management",
+          "stars": 5000,
+          "language": "TypeScript"
+        }
+      ]
+    },
+    "framework": {
+      "description": "Development frameworks and libraries",
+      "projects": [
+        {
+          "name": "FoundationDB",
+          "repo": "apple/foundationdb",
+          "description": "Distributed database",
+          "stars": 14000,
+          "language": "C++"
+        },
+        {
+          "name": "Fabric",
+          "repo": "danielmiessler/fabric",
+          "description": "AI augmentation framework",
+          "stars": 18000,
+          "language": "Python"
+        },
+        {
+          "name": "Day.js",
+          "repo": "iamkun/dayjs",
+          "description": "Lightweight date library",
+          "stars": 46000,
+          "language": "JavaScript"
+        },
+        {
+          "name": "RocksDB",
+          "repo": "facebook/rocksdb",
+          "description": "Persistent key-value store",
+          "stars": 27000,
+          "language": "C++"
+        },
+        {
+          "name": "PostCSS",
+          "repo": "postcss/postcss",
+          "description": "Tool for transforming CSS",
+          "stars": 28000,
+          "language": "JavaScript"
+        }
+      ]
+    },
+    "ios": {
+      "description": "iOS development and frameworks",
+      "projects": [
+        {
+          "name": "Vue Element Admin",
+          "repo": "PanJiaChen/vue-element-admin",
+          "description": "Vue-based admin interface",
+          "stars": 86000,
+          "language": "Vue"
+        },
+        {
+          "name": "React Native",
+          "repo": "facebook/react-native",
+          "description": "Framework for building native apps",
+          "stars": 116000,
+          "language": "JavaScript"
+        }
+      ]
+    },
+    "ml-models": {
+      "description": "Machine learning models and tools",
+      "projects": [
+        {
+          "name": "Screenpipe",
+          "repo": "mediar-ai/screenpipe",
+          "description": "24/7 screen & audio capture",
+          "stars": 2000,
+          "language": "Rust"
+        },
+        {
+          "name": "ML For Beginners",
+          "repo": "microsoft/ML-For-Beginners",
+          "description": "Machine learning curriculum",
+          "stars": 67000,
+          "language": "Jupyter Notebook"
+        }
+      ]
+    },
+    "mobile-game": {
+      "description": "Mobile games and game development",
+      "projects": [
+        {
+          "name": "90DaysOfDevOps",
+          "repo": "MichaelCade/90DaysOfDevOps",
+          "description": "DevOps learning journey",
+          "stars": 26000,
+          "language": "Shell"
+        },
+        {
+          "name": "ILSpy",
+          "repo": "icsharpcode/ILSpy",
+          "description": ".NET assembly browser",
+          "stars": 20000,
+          "language": "C#"
+        },
+        {
+          "name": "Paperless-ngx",
+          "repo": "paperless-ngx/paperless-ngx",
+          "description": "Document management system",
+          "stars": 17000,
+          "language": "Python"
+        }
+      ]
+    },
+    "notes": {
+      "description": "Note-taking and documentation tools",
+      "projects": [
+        {
+          "name": "Mermaid",
+          "repo": "mermaid-js/mermaid",
+          "description": "Diagram and flowchart generator",
+          "stars": 68000,
+          "language": "JavaScript"
+        }
+      ]
+    },
+    "voip": {
+      "description": "Voice over IP and communication",
+      "projects": [
+        {
+          "name": "Rocket.Chat",
+          "repo": "RocketChat/Rocket.Chat",
+          "description": "Open source team communication",
+          "stars": 39000,
+          "language": "TypeScript"
+        }
+      ]
+    },
+    "web-game": {
+      "description": "Web-based games and game engines",
+      "projects": [
+        {
+          "name": "GDevelop",
+          "repo": "4ian/GDevelop",
+          "description": "Open source game engine",
+          "stars": 7000,
+          "language": "JavaScript"
+        }
+      ]
+    },
+    "webapp": {
+      "description": "Web applications",
+      "projects": [
+        {
+          "name": "Lobe Chat",
+          "repo": "lobehub/lobe-chat",
+          "description": "Open-source ChatGPT/LLM UI",
+          "stars": 35000,
+          "language": "TypeScript"
+        }
+      ]
+    }
+  }
+}
