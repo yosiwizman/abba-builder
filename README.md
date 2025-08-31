@@ -10,7 +10,9 @@ Abba is a local, open-source AI app builder. It's fast, private, and fully under
 - 🛠 **Bring your own keys**: Use your own AI API keys — no vendor lock-in.
 - 🖥️ **Cross-platform**: Easy to run on Mac or Windows.
 
-**Abba** (Apache 2.0 licensed).
+## License
+
+Abba is released under the MIT License. See [LICENSE](LICENSE) file for details.
 
 ## Setup
 

@@ -30,7 +30,7 @@ export const DyadAddIntegration: React.FC<DyadAddIntegrationProps> = ({
       showError("No app ID found");
       return;
     }
-    navigate({ to: "/app-details", search: (prev) => ({ ...prev,  appId } });
+    navigate({ to: "/app-details", search: (prev) => ({ ...prev, appId }) });
   };
 
   if (app?.supabaseProjectName) {

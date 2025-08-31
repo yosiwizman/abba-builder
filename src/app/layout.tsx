@@ -44,7 +44,7 @@ export default function RootLayout({
           <div className="flex flex-col h-screen overflow-hidden">
             <TitleBar />
             <div className="flex flex-1 overflow-hidden">
-              <SidebarProvider>
+              <SidebarProvider defaultOpen={true}>
                 <AppSidebar />
                 <main className="flex-1 overflow-auto bg-background flex flex-col relative">
                   {children}

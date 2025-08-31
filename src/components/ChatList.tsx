@@ -72,7 +72,7 @@ export function ChatList({ show }: { show?: boolean }) {
     setSelectedAppId(appId);
     navigate({
       to: "/chat",
-      search: (prev) => ({ ...prev,  id: chatId },
+      search: (prev) => ({ ...prev, id: chatId }),
     });
   };
 
@@ -87,7 +87,7 @@ export function ChatList({ show }: { show?: boolean }) {
         setSelectedChatId(chatId);
         navigate({
           to: "/chat",
-          search: (prev) => ({ ...prev,  id: chatId },
+          search: (prev) => ({ ...prev, id: chatId }),
         });
 
         // Refresh the chat list
@@ -151,8 +151,10 @@ export function ChatList({ show }: { show?: boolean }) {
 
   return (
     <>
-      <SidebarGroup className="overflow-y-auto h-[calc(100vh-112px)]">
-        <SidebarGroupLabel>Recent Chats</SidebarGroupLabel>
+      <SidebarGroup className="overflow-y-auto h-[calc(100vh-112px)] border-0">
+        <SidebarGroupLabel className="px-3 py-2">
+          Recent Chats
+        </SidebarGroupLabel>
         <SidebarGroupContent>
           <div className="flex flex-col space-y-4">
             <Button

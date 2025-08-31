@@ -39,8 +39,8 @@ export function AppList({ show }: { show?: boolean }) {
   };
 
   return (
-    <SidebarGroup className="overflow-y-auto h-[calc(100vh-112px)]">
-      <SidebarGroupLabel>Your Apps</SidebarGroupLabel>
+    <SidebarGroup className="overflow-y-auto h-[calc(100vh-112px)] border-0">
+      <SidebarGroupLabel className="px-3 py-2">Your Apps</SidebarGroupLabel>
       <SidebarGroupContent>
         <div className="flex flex-col space-y-2">
           <Button

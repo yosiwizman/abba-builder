@@ -12,18 +12,9 @@ import { useState, useEffect, useCallback } from "react";
 import { useStreamChat } from "@/hooks/useStreamChat";
 import { HomeChatInput } from "@/components/chat/HomeChatInput";
 import { usePostHog } from "posthog-js/react";
-import { PrivacyBanner } from "@/components/TelemetryBanner";
 import { INSPIRATION_PROMPTS } from "@/prompts/inspiration_prompts";
 import { useAppVersion } from "@/hooks/useAppVersion";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { useTheme } from "@/contexts/ThemeContext";
-import { Button } from "@/components/ui/button";
-import { ExternalLink } from "lucide-react";
 import { ImportAppButton } from "@/components/ImportAppButton";
 import { showError } from "@/lib/toast";
 import { invalidateAppQuery } from "@/hooks/useLoadApp";
@@ -50,8 +41,8 @@ export default function HomePage() {
   const { streamMessage } = useStreamChat({ hasChatId: false });
   const posthog = usePostHog();
   const appVersion = useAppVersion();
-  const [releaseNotesOpen, setReleaseNotesOpen] = useState(false);
-  const [releaseUrl, setReleaseUrl] = useState("");
+  const [, setReleaseNotesOpen] = useState(false);
+  const [, setReleaseUrl] = useState("");
   const { theme } = useTheme();
   const queryClient = useQueryClient();
   useEffect(() => {
@@ -107,7 +98,7 @@ export default function HomePage() {
   // Redirect to app details page if appId is present
   useEffect(() => {
     if (appId) {
-      navigate({ to: "/app-details", search: (prev) => ({ ...prev,  appId } });
+      navigate({ to: "/app-details", search: (prev) => ({ ...prev, appId }) });
     }
   }, [appId, navigate]);
 
@@ -148,7 +139,10 @@ export default function HomePage() {
       await refreshApps(); // Ensure refreshApps is awaited if it's async
       await invalidateAppQuery(queryClient, { appId: result.app.id });
       posthog.capture("home:chat-submit");
-      navigate({ to: "/chat", search: (prev) => ({ ...prev,  id: result.chatId } });
+      navigate({
+        to: "/chat",
+        search: (prev) => ({ ...prev, id: result.chatId }),
+      });
     } catch (error) {
       console.error("Failed to create chat:", error);
       showError("Failed to create app. " + (error as any).toString());
@@ -182,8 +176,10 @@ export default function HomePage() {
   // Main Home Page Content
   return (
     <div className="flex flex-col items-center justify-center max-w-3xl m-auto p-8">
-      <h1 className="text-4xl font-bold mb-8 text-center">Build your dream app</h1>
-      
+      <h1 className="text-4xl font-bold mb-8 text-center">
+        Build your dream app
+      </h1>
+
       <SetupBanner />
 
       <div className="w-full">
