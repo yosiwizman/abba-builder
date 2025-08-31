@@ -3,31 +3,33 @@
  * Full-page view for system monitoring
  */
 
-import React from 'react';
-import SystemHealthDashboard from '../components/SystemHealthDashboard';
-import { ArrowLeft, Settings, Download } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import SystemHealthDashboard from "../components/SystemHealthDashboard";
+import { ArrowLeft, Settings, Download } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export const HealthDashboardPage: React.FC = () => {
   const navigate = useNavigate();
-  
+
   const exportHealthReport = async () => {
     try {
       // Get current health data
-      const response = await fetch('/api/health');
+      const response = await fetch("/api/health");
       const data = await response.json();
-      
+
       // Create downloadable report
       const report = {
         timestamp: new Date().toISOString(),
-        system: 'Abba AI Builder',
-        version: '1.0.0',
-        ...data
+        system: "Abba AI Builder",
+        version: "1.0.0",
+        ...data,
       };
-      
-      const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
+
+      const blob = new Blob([JSON.stringify(report, null, 2)], {
+        type: "application/json",
+      });
       const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
+      const a = document.createElement("a");
       a.href = url;
       a.download = `health-report-${Date.now()}.json`;
       document.body.appendChild(a);
@@ -35,10 +37,10 @@ export const HealthDashboardPage: React.FC = () => {
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
     } catch (error) {
-      console.error('Failed to export report:', error);
+      console.error("Failed to export report:", error);
     }
   };
-  
+
   return (
     <div className="min-h-screen bg-background">
       {/* Top Navigation */}
@@ -55,10 +57,12 @@ export const HealthDashboardPage: React.FC = () => {
               </button>
               <div>
                 <h1 className="text-lg font-semibold">System Health Monitor</h1>
-                <p className="text-xs text-muted-foreground">Real-time enterprise monitoring</p>
+                <p className="text-xs text-muted-foreground">
+                  Real-time enterprise monitoring
+                </p>
               </div>
             </div>
-            
+
             <div className="flex items-center gap-2">
               <button
                 onClick={exportHealthReport}
@@ -68,7 +72,7 @@ export const HealthDashboardPage: React.FC = () => {
                 <Download className="w-5 h-5" />
               </button>
               <button
-                onClick={() => navigate('/settings')}
+                onClick={() => navigate("/settings")}
                 className="p-2 rounded-lg hover:bg-accent transition-colors"
                 aria-label="Settings"
               >
@@ -78,11 +82,11 @@ export const HealthDashboardPage: React.FC = () => {
           </div>
         </div>
       </div>
-      
+
       {/* Main Content */}
       <div className="container mx-auto px-4 py-8">
         <SystemHealthDashboard />
-        
+
         {/* Quick Actions */}
         <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="p-6 rounded-lg border bg-card">
@@ -99,7 +103,7 @@ export const HealthDashboardPage: React.FC = () => {
               </button>
             </div>
           </div>
-          
+
           <div className="p-6 rounded-lg border bg-card">
             <h3 className="font-semibold mb-2">System Info</h3>
             <div className="space-y-1 text-sm">
@@ -121,7 +125,7 @@ export const HealthDashboardPage: React.FC = () => {
               </div>
             </div>
           </div>
-          
+
           <div className="p-6 rounded-lg border bg-card">
             <h3 className="font-semibold mb-2">Resources</h3>
             <div className="space-y-2 text-sm">
