@@ -41,8 +41,6 @@ export default function HomePage() {
   const { streamMessage } = useStreamChat({ hasChatId: false });
   const posthog = usePostHog();
   const appVersion = useAppVersion();
-  const [, setReleaseNotesOpen] = useState(false);
-  const [, setReleaseUrl] = useState("");
   const { theme } = useTheme();
   const queryClient = useQueryClient();
   useEffect(() => {
@@ -56,21 +54,7 @@ export default function HomePage() {
           lastShownReleaseNotesVersion: appVersion,
         });
 
-        try {
-          const result = await IpcClient.getInstance().doesReleaseNoteExist({
-            version: appVersion,
-          });
-
-          if (result.exists && result.url) {
-            setReleaseUrl(result.url + "?hideHeader=true&theme=" + theme);
-            setReleaseNotesOpen(true);
-          }
-        } catch (err) {
-          console.warn(
-            "Unable to check if release note exists for: " + appVersion,
-            err,
-          );
-        }
+        // Release notes check disabled
       }
     };
     updateLastVersionLaunched();
