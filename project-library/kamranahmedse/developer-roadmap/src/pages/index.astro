@@ -1,0 +1,109 @@
+---
+import ChangelogBanner from '../components/ChangelogBanner.astro';
+import { FeaturedGuideList } from '../components/FeaturedGuides/FeaturedGuideList';
+import FeaturedItems from '../components/FeaturedItems/FeaturedItems.astro';
+import { FeaturedVideoList } from '../components/FeaturedVideos/FeaturedVideoList';
+import HeroSection from '../components/HeroSection/HeroSection.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getAllBestPractices } from '../lib/best-practice';
+import { getRoadmapsByTag } from '../lib/roadmap';
+import { getAllVideos } from '../lib/video';
+import { listOfficialGuides } from '../queries/official-guide';
+
+const roleRoadmaps = await getRoadmapsByTag('role-roadmap');
+const skillRoadmaps = await getRoadmapsByTag('skill-roadmap');
+const bestPractices = await getAllBestPractices();
+
+export const projectGroups = [
+  {
+    title: 'Frontend',
+    id: 'frontend',
+  },
+  {
+    title: 'Backend',
+    id: 'backend',
+  },
+  {
+    title: 'DevOps',
+    id: 'devops',
+  },
+];
+
+const guides = await listOfficialGuides();
+const questionGuides = guides.filter(
+  (guide) => guide.roadmapId === 'questions',
+);
+
+const videos = await getAllVideos();
+---
+
+<BaseLayout
+  title='Developer Roadmaps - roadmap.sh'
+  description={'Community driven roadmaps, articles and guides for developers to grow in their career.'}
+  permalink={'/'}
+>
+  <div class='bg-linear-to-b from-slate-900 to-black'>
+    <HeroSection />
+
+    <FeaturedItems
+      heading='Role-based Roadmaps'
+      featuredItems={roleRoadmaps
+        .filter((roadmapItem) => !roadmapItem.frontmatter.isHidden)
+        .map((roadmapItem) => ({
+          text: roadmapItem.frontmatter.briefTitle,
+          url: `/${roadmapItem.id}`,
+          isNew: roadmapItem.frontmatter.isNew,
+          isUpcoming: roadmapItem.frontmatter.isUpcoming,
+        }))}
+      showCreateRoadmap={true}
+    />
+
+    <FeaturedItems
+      heading='Skill-based Roadmaps'
+      featuredItems={skillRoadmaps
+        .filter((roadmapItem) => !roadmapItem.frontmatter.isHidden)
+        .map((roadmapItem) => ({
+          text:
+            roadmapItem.frontmatter.briefTitle === 'Go'
+              ? 'Go Roadmap'
+              : roadmapItem.frontmatter.briefTitle.replace(
+                  'Software Design',
+                  'Design',
+                ),
+          url: `/${roadmapItem.id}`,
+          isNew: roadmapItem.frontmatter.isNew,
+          isUpcoming: roadmapItem.frontmatter.isUpcoming,
+        }))}
+      showCreateRoadmap={true}
+    />
+
+    <FeaturedItems
+      heading='Project Ideas'
+      allowBookmark={false}
+      featuredItems={projectGroups.map((projectGroup) => ({
+        text: projectGroup.title,
+        url: `${projectGroup.id}/projects`,
+      }))}
+    />
+
+    <FeaturedItems
+      heading='Best Practices'
+      featuredItems={bestPractices.map((bestPractice) => ({
+        text: bestPractice.frontmatter.briefTitle,
+        url: `/best-practices/${bestPractice.id}`,
+        isNew: bestPractice.frontmatter.isNew,
+        isUpcoming: bestPractice.frontmatter.isUpcoming,
+      }))}
+    />
+
+    <div class='grid grid-cols-1 gap-7 bg-gray-50 py-7 sm:gap-16 sm:py-16'>
+      <FeaturedGuideList
+        heading='Guides'
+        guides={guides.slice(0, 7)}
+        questions={questionGuides.slice(0, 7)}
+      />
+      <FeaturedVideoList heading='Videos' videos={videos.slice(0, 7)} />
+    </div>
+  </div>
+  <ChangelogBanner slot='changelog-banner' />
+</BaseLayout>
