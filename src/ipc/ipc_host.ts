@@ -34,6 +34,7 @@ import { registerGitHubLauncherHandlers } from "./handlers/github_launcher_handl
 import { registerEnhancedHandlers } from "./handlers/enhanced_handlers";
 import { registerKnowledgeHubHandlers } from "./handlers/knowledge_hub_handlers";
 import { registerProjectLibraryHandlers } from "./handlers/project_library_handlers";
+import { registerLibraryUpdaterHandlers } from "./handlers/library_updater_handlers";
 import { registerRendererLogHandlers } from "./handlers/renderer_log_handlers";
 
 export function registerIpcHandlers() {
@@ -74,5 +75,6 @@ export function registerIpcHandlers() {
   registerEnhancedHandlers();
   registerKnowledgeHubHandlers();
   registerProjectLibraryHandlers();
+  registerLibraryUpdaterHandlers();
   registerRendererLogHandlers();
 }
