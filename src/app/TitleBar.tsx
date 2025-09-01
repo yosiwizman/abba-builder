@@ -68,7 +68,7 @@ export const TitleBar = () => {
 
   return (
     <>
-      <div className="@container z-50 w-full h-11 bg-(--sidebar) absolute top-0 left-0 app-region-drag flex items-center">
+      <div className="@container z-30 w-full h-11 bg-sidebar fixed top-0 left-0 app-region-drag flex items-center">
         <div
           className={`${showWindowControls ? "pl-2" : "pl-18"} app-region-no-drag`}
         ></div>
