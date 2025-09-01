@@ -13,20 +13,22 @@ On Windows, ensure Developer Mode is enabled (optional) and close any antivirus 
 
 ## Installation
 
-1) Install Node dependencies
+1. Install Node dependencies
 
 - Recommended clean install (keeps package-lock in place):
+
   - npm ci
 
 - If you need a full clean reinstall (removes node_modules, lockfile, and .vite cache):
   - npm run clean:full
 
 If you see EPERM unlink errors on Windows (e.g. tailwindcss-oxide.win32-x64-msvc.node locked):
+
 - Close any running Electron/Vite/Node processes
 - Restart your terminal/editor if it holds file handles
 - Temporarily pause antivirus for the project folder and retry
 
-2) Verify Python
+2. Verify Python
 
 - Run one of the following to confirm Python is available:
   - python --version
@@ -35,7 +37,7 @@ If you see EPERM unlink errors on Windows (e.g. tailwindcss-oxide.win32-x64-msvc
 
 The app will auto-detect Python by trying python3, python, then py.
 
-3) Environment variables
+3. Environment variables
 
 Create a .env file (or set environment variables via your shell/OS):
 
@@ -48,12 +50,15 @@ Important: Never hardcode secrets in code. Use environment variables or the in-a
 ## Running the App (Development)
 
 - Start Electron (with Vite):
+
   - npm start
 
 - Run type-check:
+
   - npm run ts:main
 
 - Run unit tests:
+
   - npm test
 
 - Build packages:
@@ -64,6 +69,7 @@ Important: Never hardcode secrets in code. Use environment variables or the in-a
 A high-level integration runner is included at test-integration.ts. It leverages the orchestrator to generate and (optionally) validate outputs.
 
 Run:
+
 - npm run test:integration
 
 Ensure ANTHROPIC_API_KEY is set to enable Claude-powered generation. Without it, the orchestrator will run in fallback mode.
@@ -79,4 +85,3 @@ If you want to extend validation using Open Interpreter or other tools, see docs
 - Stuck install on Windows (EPERM): Close all processes using the repo, end Node/Electron background tasks from Task Manager, pause antivirus temporarily, and retry npm ci.
 - Missing Python: Install Python 3 and add it to PATH. On Windows, you can install from Microsoft Store or python.org.
 - Anthropic errors: Validate ANTHROPIC_API_KEY and ensure your model name is correct. The app falls back to a supported Sonnet model if the preferred one fails.
-

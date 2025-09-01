@@ -1,0 +1,9 @@
+{
+  "enabled": true,
+  "intervalHours": 24,
+  "maxProjectsPerUpdate": 100,
+  "autoDownloadPopular": true,
+  "popularThreshold": 1000,
+  "categories": [],
+  "githubToken": "REMOVED"
+}

@@ -6,7 +6,7 @@ The default validation engine (src/services/enhanced/validation_engine.py) perfo
 
 If you want real execution validation and richer diagnostics, you can integrate [Open Interpreter](https://github.com/KillianLucas/open-interpreter) or your preferred tool.
 
-1) Install packages (suggested virtual environment):
+1. Install packages (suggested virtual environment):
 
 ```bash
 python -m venv .venv
@@ -15,12 +15,12 @@ python -m venv .venv
 pip install open-interpreter
 ```
 
-2) Add a new mode in validation_engine.py to spawn or call the interpreter for certain languages. For example, you could:
+2. Add a new mode in validation_engine.py to spawn or call the interpreter for certain languages. For example, you could:
+
 - Write the generated code to a temp file
 - Execute it under a sandboxed interpreter process
 - Capture stdout/stderr and return structured JSON
 
-3) Ensure the Node bridge (python-bridge.ts) passes code via a temp file (already implemented) and supports timeouts and large outputs.
+3. Ensure the Node bridge (python-bridge.ts) passes code via a temp file (already implemented) and supports timeouts and large outputs.
 
 Security note: Never run untrusted code outside a sandbox. Consider Docker, firejail, or restricted interpreters when executing code.
-

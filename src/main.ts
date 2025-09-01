@@ -33,7 +33,6 @@ const logger = log.scope("main");
 // Load environment variables from .env file
 dotenv.config();
 
-
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
   app.quit();
@@ -144,29 +143,50 @@ const resolvePreloadPath = () => {
   if (app.isPackaged) {
     // In packaged app, preload should be next to main
     const packagedPath = path.join(__dirname, "preload.js");
-    logger.info("[Preload] Packaged path:", packagedPath, "exists:", fs.existsSync(packagedPath));
+    logger.info(
+      "[Preload] Packaged path:",
+      packagedPath,
+      "exists:",
+      fs.existsSync(packagedPath),
+    );
     if (fs.existsSync(packagedPath)) return packagedPath;
-    
+
     // Try one level up (Electron-Forge sometimes puts it here)
     const forgePackagedPath = path.join(__dirname, "../preload.js");
-    logger.info("[Preload] Forge packaged path:", forgePackagedPath, "exists:", fs.existsSync(forgePackagedPath));
+    logger.info(
+      "[Preload] Forge packaged path:",
+      forgePackagedPath,
+      "exists:",
+      fs.existsSync(forgePackagedPath),
+    );
     if (fs.existsSync(forgePackagedPath)) return forgePackagedPath;
   }
-  
+
   // Development mode - Vite output location
   const viteBuildPath = path.resolve(process.cwd(), ".vite/build/preload.js");
-  logger.info("[Preload] Vite build path:", viteBuildPath, "exists:", fs.existsSync(viteBuildPath));
+  logger.info(
+    "[Preload] Vite build path:",
+    viteBuildPath,
+    "exists:",
+    fs.existsSync(viteBuildPath),
+  );
   if (fs.existsSync(viteBuildPath)) return viteBuildPath;
-  
+
   // Default path relative to compiled main file (fallback for dev)
   const devPath = path.join(__dirname, "preload.js");
-  logger.info("[Preload] Dev path:", devPath, "exists:", fs.existsSync(devPath));
+  logger.info(
+    "[Preload] Dev path:",
+    devPath,
+    "exists:",
+    fs.existsSync(devPath),
+  );
   if (fs.existsSync(devPath)) return devPath;
-  
+
   // Last resort: throw error with helpful debugging
-  const errorMsg = `[Preload] ERROR: Could not find preload.js! Checked:\n` +
+  const errorMsg =
+    `[Preload] ERROR: Could not find preload.js! Checked:\n` +
     `  - Packaged: ${path.join(__dirname, "preload.js")}\n` +
-    `  - Forge: ${path.join(__dirname, "../preload.js")}\n` + 
+    `  - Forge: ${path.join(__dirname, "../preload.js")}\n` +
     `  - Vite: ${viteBuildPath}\n` +
     `  - Dev: ${devPath}\n` +
     `  - __dirname: ${__dirname}\n` +
@@ -189,7 +209,7 @@ const createWindow = () => {
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
-preload: resolvePreloadPath(),
+      preload: resolvePreloadPath(),
       // transparent: true,
     },
     show: false, // Don't show until ready

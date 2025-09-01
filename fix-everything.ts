@@ -4,21 +4,21 @@
  * This will fix ALL issues and ensure the UI works perfectly
  */
 
-import * as fs from 'fs-extra';
-import * as path from 'path';
-import { exec } from 'child_process';
-import { promisify } from 'util';
+import * as fs from "fs-extra";
+import * as path from "path";
+import { exec } from "child_process";
+import { promisify } from "util";
 
 const execAsync = promisify(exec);
 
 const COLORS = {
-  red: '\x1b[31m',
-  green: '\x1b[32m',
-  yellow: '\x1b[33m',
-  blue: '\x1b[36m',
-  magenta: '\x1b[35m',
-  reset: '\x1b[0m',
-  bold: '\x1b[1m'
+  red: "\x1b[31m",
+  green: "\x1b[32m",
+  yellow: "\x1b[33m",
+  blue: "\x1b[36m",
+  magenta: "\x1b[35m",
+  reset: "\x1b[0m",
+  bold: "\x1b[1m",
 };
 
 async function fixEverything() {
@@ -40,10 +40,13 @@ ${COLORS.reset}`);
     await fixComponents();
     await installDependencies();
     await buildApp();
-    
-    console.log(`\n${COLORS.green}✅ ALL FIXES COMPLETE! Your app should work perfectly now.${COLORS.reset}`);
-    console.log(`\n${COLORS.yellow}Run 'npm start' to test the application.${COLORS.reset}`);
-    
+
+    console.log(
+      `\n${COLORS.green}✅ ALL FIXES COMPLETE! Your app should work perfectly now.${COLORS.reset}`,
+    );
+    console.log(
+      `\n${COLORS.yellow}Run 'npm start' to test the application.${COLORS.reset}`,
+    );
   } catch (error) {
     console.error(`${COLORS.red}Error during fix: ${error}${COLORS.reset}`);
   }
@@ -51,47 +54,47 @@ ${COLORS.reset}`);
 
 async function fixPackageJson() {
   console.log(`\n${COLORS.blue}📦 Fixing package.json...${COLORS.reset}`);
-  
-  const pkg = await fs.readJson('package.json');
-  
+
+  const pkg = await fs.readJson("package.json");
+
   // Ensure all critical dependencies
   const requiredDeps = {
-    "react": "^18.3.1",
+    react: "^18.3.1",
     "react-dom": "^18.3.1",
     "@tanstack/react-router": "^1.91.7",
     "@tanstack/react-query": "^5.74.4",
     "lucide-react": "^0.462.0",
-    "sonner": "^1.7.4",
+    sonner: "^1.7.4",
     "@radix-ui/react-slot": "^1.2.0",
     "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
+    clsx: "^2.1.1",
     "tailwind-merge": "^2.6.0",
-    "jotai": "^2.10.4",
-    "posthog-js": "^1.228.0"
+    jotai: "^2.10.4",
+    "posthog-js": "^1.228.0",
   };
-  
+
   const requiredDevDeps = {
     "@vitejs/plugin-react": "^4.3.4",
-    "tailwindcss": "^3.4.17",
-    "postcss": "^8.5.3",
+    tailwindcss: "^3.4.17",
+    postcss: "^8.5.3",
     "postcss-nesting": "^13.0.2",
-    "autoprefixer": "^10.4.21",
-    "typescript": "^5.8.3",
-    "vite": "^6.3.4",
+    autoprefixer: "^10.4.21",
+    typescript: "^5.8.3",
+    vite: "^6.3.4",
     "@types/react": "^18.3.20",
-    "@types/react-dom": "^18.3.6"
+    "@types/react-dom": "^18.3.6",
   };
-  
+
   pkg.dependencies = { ...pkg.dependencies, ...requiredDeps };
   pkg.devDependencies = { ...pkg.devDependencies, ...requiredDevDeps };
-  
-  await fs.writeJson('package.json', pkg, { spaces: 2 });
+
+  await fs.writeJson("package.json", pkg, { spaces: 2 });
   console.log(`${COLORS.green}✓ package.json fixed${COLORS.reset}`);
 }
 
 async function fixTailwindConfig() {
   console.log(`\n${COLORS.blue}🎨 Fixing Tailwind config...${COLORS.reset}`);
-  
+
   const config = `import type { Config } from 'tailwindcss';
 
 export default {
@@ -163,14 +166,14 @@ export default {
   plugins: [],
 } satisfies Config;
 `;
-  
-  await fs.writeFile('tailwind.config.ts', config);
+
+  await fs.writeFile("tailwind.config.ts", config);
   console.log(`${COLORS.green}✓ Tailwind config fixed${COLORS.reset}`);
 }
 
 async function fixPostCSS() {
   console.log(`\n${COLORS.blue}🔧 Fixing PostCSS config...${COLORS.reset}`);
-  
+
   const config = `module.exports = {
   plugins: {
     'tailwindcss/nesting': 'postcss-nesting',
@@ -179,14 +182,14 @@ async function fixPostCSS() {
   },
 };
 `;
-  
-  await fs.writeFile('postcss.config.js', config);
+
+  await fs.writeFile("postcss.config.js", config);
   console.log(`${COLORS.green}✓ PostCSS config fixed${COLORS.reset}`);
 }
 
 async function fixViteConfig() {
   console.log(`\n${COLORS.blue}⚡ Fixing Vite config...${COLORS.reset}`);
-  
+
   const config = `import path from "path";
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
@@ -238,25 +241,29 @@ export default defineConfig({
   }
 });
 `;
-  
-  await fs.writeFile('vite.renderer.config.mts', config);
+
+  await fs.writeFile("vite.renderer.config.mts", config);
   console.log(`${COLORS.green}✓ Vite config fixed${COLORS.reset}`);
 }
 
 async function fixGlobalCSS() {
-  console.log(`\n${COLORS.blue}🎨 Ensuring globals.css exists and is correct...${COLORS.reset}`);
-  
-  const cssPath = 'src/styles/globals.css';
-  
+  console.log(
+    `\n${COLORS.blue}🎨 Ensuring globals.css exists and is correct...${COLORS.reset}`,
+  );
+
+  const cssPath = "src/styles/globals.css";
+
   // Check if file exists and has content
   if (fs.existsSync(cssPath)) {
-    const content = await fs.readFile(cssPath, 'utf-8');
-    if (content.includes('@tailwind') && content.includes('border-border')) {
-      console.log(`${COLORS.green}✓ globals.css already correct${COLORS.reset}`);
+    const content = await fs.readFile(cssPath, "utf-8");
+    if (content.includes("@tailwind") && content.includes("border-border")) {
+      console.log(
+        `${COLORS.green}✓ globals.css already correct${COLORS.reset}`,
+      );
       return;
     }
   }
-  
+
   // If not, create a proper one
   const css = `@tailwind base;
 @tailwind components;
@@ -326,35 +333,43 @@ async function fixGlobalCSS() {
   }
 }
 `;
-  
+
   await fs.ensureDir(path.dirname(cssPath));
   await fs.writeFile(cssPath, css);
   console.log(`${COLORS.green}✓ globals.css created/fixed${COLORS.reset}`);
 }
 
 async function fixRenderer() {
-  console.log(`\n${COLORS.blue}⚛️ Ensuring renderer.tsx is correct...${COLORS.reset}`);
-  
-  const rendererPath = 'src/renderer.tsx';
-  const content = await fs.readFile(rendererPath, 'utf-8');
-  
+  console.log(
+    `\n${COLORS.blue}⚛️ Ensuring renderer.tsx is correct...${COLORS.reset}`,
+  );
+
+  const rendererPath = "src/renderer.tsx";
+  const content = await fs.readFile(rendererPath, "utf-8");
+
   // Check if CSS is imported
-  if (!content.includes('globals.css')) {
-    const lines = content.split('\n');
+  if (!content.includes("globals.css")) {
+    const lines = content.split("\n");
     lines.splice(2, 0, 'import "./styles/globals.css";');
-    await fs.writeFile(rendererPath, lines.join('\n'));
+    await fs.writeFile(rendererPath, lines.join("\n"));
     console.log(`${COLORS.green}✓ Added CSS import to renderer${COLORS.reset}`);
   } else {
-    console.log(`${COLORS.green}✓ renderer.tsx already has CSS import${COLORS.reset}`);
+    console.log(
+      `${COLORS.green}✓ renderer.tsx already has CSS import${COLORS.reset}`,
+    );
   }
 }
 
 async function fixRouter() {
-  console.log(`\n${COLORS.blue}🚦 Checking router configuration...${COLORS.reset}`);
-  
-  const routerPath = 'src/router.ts';
+  console.log(
+    `\n${COLORS.blue}🚦 Checking router configuration...${COLORS.reset}`,
+  );
+
+  const routerPath = "src/router.ts";
   if (!fs.existsSync(routerPath)) {
-    console.log(`${COLORS.yellow}⚠ Router file missing, this might be the issue${COLORS.reset}`);
+    console.log(
+      `${COLORS.yellow}⚠ Router file missing, this might be the issue${COLORS.reset}`,
+    );
     // Create a basic router
     const routerCode = `import { createRouter } from '@tanstack/react-router';
 import { rootRoute } from './routes/root';
@@ -373,11 +388,11 @@ export const router = createRouter({ routeTree });
 
 async function fixAppLayout() {
   console.log(`\n${COLORS.blue}📐 Checking app layout...${COLORS.reset}`);
-  
-  const layoutPath = 'src/app/layout.tsx';
+
+  const layoutPath = "src/app/layout.tsx";
   if (fs.existsSync(layoutPath)) {
-    const content = await fs.readFile(layoutPath, 'utf-8');
-    if (content.includes('border-border')) {
+    const content = await fs.readFile(layoutPath, "utf-8");
+    if (content.includes("border-border")) {
       console.log(`${COLORS.green}✓ App layout looks good${COLORS.reset}`);
     }
   } else {
@@ -386,14 +401,16 @@ async function fixAppLayout() {
 }
 
 async function fixComponents() {
-  console.log(`\n${COLORS.blue}🔍 Checking critical components...${COLORS.reset}`);
-  
+  console.log(
+    `\n${COLORS.blue}🔍 Checking critical components...${COLORS.reset}`,
+  );
+
   const criticalComponents = [
-    'src/components/ui/button.tsx',
-    'src/components/ui/sidebar.tsx',
-    'src/components/app-sidebar.tsx',
+    "src/components/ui/button.tsx",
+    "src/components/ui/sidebar.tsx",
+    "src/components/app-sidebar.tsx",
   ];
-  
+
   for (const comp of criticalComponents) {
     if (!fs.existsSync(comp)) {
       console.log(`${COLORS.yellow}⚠ Missing: ${comp}${COLORS.reset}`);
@@ -403,25 +420,29 @@ async function fixComponents() {
 
 async function installDependencies() {
   console.log(`\n${COLORS.blue}📦 Installing dependencies...${COLORS.reset}`);
-  
+
   try {
-    console.log('Running npm install...');
-    await execAsync('npm install');
+    console.log("Running npm install...");
+    await execAsync("npm install");
     console.log(`${COLORS.green}✓ Dependencies installed${COLORS.reset}`);
   } catch (error) {
-    console.log(`${COLORS.yellow}⚠ Some dependencies might have failed, but continuing...${COLORS.reset}`);
+    console.log(
+      `${COLORS.yellow}⚠ Some dependencies might have failed, but continuing...${COLORS.reset}`,
+    );
   }
 }
 
 async function buildApp() {
   console.log(`\n${COLORS.blue}🔨 Testing build...${COLORS.reset}`);
-  
+
   try {
-    console.log('Running TypeScript check...');
-    await execAsync('npx tsc --noEmit --skipLibCheck');
+    console.log("Running TypeScript check...");
+    await execAsync("npx tsc --noEmit --skipLibCheck");
     console.log(`${COLORS.green}✓ TypeScript check passed${COLORS.reset}`);
   } catch (error) {
-    console.log(`${COLORS.yellow}⚠ TypeScript has some errors, but app might still work${COLORS.reset}`);
+    console.log(
+      `${COLORS.yellow}⚠ TypeScript has some errors, but app might still work${COLORS.reset}`,
+    );
   }
 }
 
