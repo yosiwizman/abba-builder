@@ -137,12 +137,14 @@ export function AppSidebar() {
             />
             <AppIcons onHoverChange={setHoverState} />
           </div>
-          {/* Right Column: Chat List Section */}
-          <div className="w-[240px]">
-            <AppList show={selectedItem === "Apps"} />
-            <ChatList show={selectedItem === "Chat"} />
-            <SettingsList show={selectedItem === "Settings"} />
-          </div>
+          {/* Right Column: Chat List Section - only show when expanded */}
+          {state === "expanded" && (
+            <div className="w-[240px]">
+              <AppList show={selectedItem === "Apps"} />
+              <ChatList show={selectedItem === "Chat"} />
+              <SettingsList show={selectedItem === "Settings"} />
+            </div>
+          )}
         </div>
       </SidebarContent>
 
