@@ -549,6 +549,57 @@ export class IpcClient {
     await this.ipcRenderer.invoke("show-item-in-folder", fullPath);
   }
 
+  // CI/CD Dashboard methods (simplified)
+  public async getCIBuilds(): Promise<any[]> {
+    try {
+      return await this.ipcRenderer.invoke("ci:get-builds");
+    } catch (error) {
+      console.error("Failed to get CI builds:", error);
+      return [];
+    }
+  }
+
+  public async getCIDeployments(): Promise<any[]> {
+    try {
+      return await this.ipcRenderer.invoke("ci:get-deployments");
+    } catch (error) {
+      console.error("Failed to get CI deployments:", error);
+      return [];
+    }
+  }
+
+  public async getCIStatistics(): Promise<any> {
+    try {
+      return await this.ipcRenderer.invoke("ci:get-statistics");
+    } catch (error) {
+      console.error("Failed to get CI statistics:", error);
+      return { totalBuilds: 0, successRate: 0, averageBuildTime: 0 };
+    }
+  }
+
+  public async triggerCIBuild(project: string, branch: string): Promise<any> {
+    try {
+      return await this.ipcRenderer.invoke("ci:trigger-build", {
+        project,
+        branch,
+      });
+    } catch (error) {
+      console.error("Failed to trigger CI build:", error);
+      throw error;
+    }
+  }
+
+  public async getCIBuildDetails(
+    buildId: string,
+  ): Promise<{ build: any; logs: string[] }> {
+    try {
+      return await this.ipcRenderer.invoke("ci:get-build-details", buildId);
+    } catch (error) {
+      console.error("Failed to get build details:", error);
+      return { build: null, logs: [] };
+    }
+  }
+
   // Run an app
   public async runApp(
     appId: number,

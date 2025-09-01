@@ -114,6 +114,27 @@ const validInvokeChannels = [
   "prompts:create",
   "prompts:update",
   "prompts:delete",
+  // Knowledge Hub channels
+  "knowledge:get-patterns",
+  "knowledge:get-bugs",
+  "knowledge:get-bridges",
+  "knowledge:get-modules",
+  "knowledge:get-statistics",
+  "knowledge:refresh",
+  "knowledge:search",
+  "knowledge:record-bug",
+  "knowledge:record-pattern",
+  "knowledge:update-success-rate",
+  // CI/CD Dashboard channels
+  "ci:get-builds",
+  "ci:get-deployments",
+  "ci:get-pipelines",
+  "ci:get-tests",
+  "ci:get-statistics",
+  "ci:trigger-build",
+  "ci:cancel-build",
+  "ci:get-logs",
+  "ci:get-build-details",
   // Test-only channels
   // These should ALWAYS be guarded with IS_TEST_BUILD in the main process.
   // We can't detect with IS_TEST_BUILD in the preload script because
@@ -182,16 +203,13 @@ const safeRemove = (
 
 // Expose protected methods in both shapes for backward compatibility
 // Allow-listed send-only channels from renderer to main
-const validSendChannels = [
-  "browser-error",
-  "debug-log",
-] as const;
+const validSendChannels = ["browser-error", "debug-log"] as const;
 
 type ValidSendChannel = (typeof validSendChannels)[number];
 
 const safeSend = (channel: ValidSendChannel, ...args: unknown[]) => {
   if (validSendChannels.includes(channel)) {
-    ipcRenderer.send(channel, ...args as any);
+    ipcRenderer.send(channel, ...(args as any));
     return;
   }
   throw new Error(`Invalid channel: ${channel}`);
