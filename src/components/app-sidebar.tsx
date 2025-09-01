@@ -1,113 +1,231 @@
-import { useSidebar } from "@/components/ui/sidebar";
+import {
+  Home,
+  Inbox,
+  Settings,
+  HelpCircle,
+  Store,
+  BookOpen,
+} from "lucide-react";
+import { Link, useRouterState } from "@tanstack/react-router";
+import { useSidebar } from "@/components/ui/sidebar"; // import useSidebar hook
+import { useEffect, useState, useRef } from "react";
+import { useAtom } from "jotai";
+import { dropdownOpenAtom } from "@/atoms/uiAtoms";
+
 import {
   Sidebar,
   SidebarContent,
-  SidebarHeader,
-  SidebarTrigger,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarMenu,
-  SidebarMenuItem,
   SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarRail,
+  SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { AppList } from "./AppList";
 import { ChatList } from "./ChatList";
-import { useNavigate, useRouterState } from "@tanstack/react-router";
-import { useAtom } from "jotai";
-import { selectedAppIdAtom } from "@/atoms/appAtoms";
-import { Home, MessageSquare, Settings, Library, Database } from "lucide-react";
+import { AppList } from "./AppList";
+import { HelpDialog } from "./HelpDialog"; // Import the new dialog
+import { SettingsList } from "./SettingsList";
+
+// Menu items.
+const items = [
+  {
+    title: "Apps",
+    to: "/",
+    icon: Home,
+  },
+  {
+    title: "Chat",
+    to: "/chat",
+    icon: Inbox,
+  },
+  {
+    title: "Settings",
+    to: "/settings",
+    icon: Settings,
+  },
+  {
+    title: "Library",
+    to: "/library",
+    icon: BookOpen,
+  },
+  {
+    title: "Hub",
+    to: "/hub",
+    icon: Store,
+  },
+];
+
+// Hover state types
+type HoverState =
+  | "start-hover:app"
+  | "start-hover:chat"
+  | "start-hover:settings"
+  | "start-hover:library"
+  | "clear-hover"
+  | "no-hover";
 
 export function AppSidebar() {
-  const { open } = useSidebar();
-  const navigate = useNavigate();
-  const routerState = useRouterState();
-  const [selectedAppId] = useAtom(selectedAppIdAtom);
-  const currentPath = routerState.location.pathname;
+  const { state, toggleSidebar } = useSidebar(); // retrieve current sidebar state
+  const [hoverState, setHoverState] = useState<HoverState>("no-hover");
+  const expandedByHover = useRef(false);
+  const [isHelpDialogOpen, setIsHelpDialogOpen] = useState(false); // State for dialog
+  const [isDropdownOpen] = useAtom(dropdownOpenAtom);
 
-  const navigationItems = [
-    {
-      icon: Home,
-      label: "Apps",
-      path: "/",
-      isActive: currentPath === "/" || currentPath === "/app-details",
-    },
-    {
-      icon: MessageSquare,
-      label: "Chat",
-      path: "/chat",
-      isActive: currentPath === "/chat",
-    },
-    {
-      icon: Settings,
-      label: "Settings",
-      path: "/settings",
-      isActive: currentPath.startsWith("/settings"),
-    },
-    {
-      icon: Library,
-      label: "Library",
-      path: "/library",
-      isActive: currentPath === "/library",
-    },
-    {
-      icon: Database,
-      label: "Hub",
-      path: "/hub",
-      isActive: currentPath === "/hub",
-    },
-  ];
+  useEffect(() => {
+    if (hoverState.startsWith("start-hover") && state === "collapsed") {
+      expandedByHover.current = true;
+      toggleSidebar();
+    }
+    if (
+      hoverState === "clear-hover" &&
+      state === "expanded" &&
+      expandedByHover.current &&
+      !isDropdownOpen
+    ) {
+      toggleSidebar();
+      expandedByHover.current = false;
+      setHoverState("no-hover");
+    }
+  }, [hoverState, toggleSidebar, state, setHoverState, isDropdownOpen]);
+
+  const routerState = useRouterState();
+  const isAppRoute =
+    routerState.location.pathname === "/" ||
+    routerState.location.pathname.startsWith("/app-details");
+  const isChatRoute = routerState.location.pathname === "/chat";
+  const isSettingsRoute = routerState.location.pathname.startsWith("/settings");
+
+  let selectedItem: string | null = null;
+  if (hoverState === "start-hover:app") {
+    selectedItem = "Apps";
+  } else if (hoverState === "start-hover:chat") {
+    selectedItem = "Chat";
+  } else if (hoverState === "start-hover:settings") {
+    selectedItem = "Settings";
+  } else if (hoverState === "start-hover:library") {
+    selectedItem = "Library";
+  } else if (state === "expanded") {
+    if (isAppRoute) {
+      selectedItem = "Apps";
+    } else if (isChatRoute) {
+      selectedItem = "Chat";
+    } else if (isSettingsRoute) {
+      selectedItem = "Settings";
+    }
+  }
 
   return (
-    <Sidebar collapsible="icon" className="border-0">
-      <SidebarHeader className="border-b-0">
-        <div className="flex items-center gap-2 px-2 py-2">
-          <SidebarTrigger className="hover:bg-accent hover:text-accent-foreground" />
-          {open && (
-            <span className="text-lg font-semibold transition-opacity duration-200">
-              Dyad
-            </span>
-          )}
+    <Sidebar
+      collapsible="icon"
+      onMouseLeave={() => {
+        if (!isDropdownOpen) {
+          setHoverState("clear-hover");
+        }
+      }}
+    >
+      <SidebarContent className="overflow-hidden">
+        <div className="flex mt-8">
+          {/* Left Column: Menu items */}
+          <div className="">
+            <SidebarTrigger
+              onMouseEnter={() => {
+                setHoverState("clear-hover");
+              }}
+            />
+            <AppIcons onHoverChange={setHoverState} />
+          </div>
+          {/* Right Column: Chat List Section */}
+          <div className="w-[240px]">
+            <AppList show={selectedItem === "Apps"} />
+            <ChatList show={selectedItem === "Chat"} />
+            <SettingsList show={selectedItem === "Settings"} />
+          </div>
         </div>
-      </SidebarHeader>
-      <SidebarContent className="border-0">
-        <SidebarGroup className="border-b-0">
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {navigationItems.map((item) => (
-                <SidebarMenuItem key={item.path}>
-                  <SidebarMenuButton
-                    onClick={() => navigate({ to: item.path as any })}
-                    isActive={item.isActive}
-                    tooltip={open ? undefined : item.label}
-                    className="hover:bg-accent hover:text-accent-foreground data-[active=true]:bg-accent data-[active=true]:text-accent-foreground"
-                  >
-                    <item.icon className="h-4 w-4 shrink-0" />
-                    {open && (
-                      <span className="transition-opacity duration-200">
-                        {item.label}
-                      </span>
-                    )}
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-
-        {/* Show AppList when on Apps section */}
-        {(currentPath === "/" || currentPath === "/app-details") && (
-          <div className="border-t-0">
-            <AppList show={true} />
-          </div>
-        )}
-
-        {/* Show ChatList when on Chat section and an app is selected */}
-        {currentPath === "/chat" && selectedAppId && (
-          <div className="border-t-0">
-            <ChatList show={true} />
-          </div>
-        )}
       </SidebarContent>
+
+      <SidebarFooter>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            {/* Change button to open dialog instead of linking */}
+            <SidebarMenuButton
+              size="sm"
+              className="font-medium w-14 flex flex-col items-center gap-1 h-14 mb-2 rounded-2xl"
+              onClick={() => setIsHelpDialogOpen(true)} // Open dialog on click
+            >
+              <HelpCircle className="h-5 w-5" />
+              <span className={"text-xs"}>Help</span>
+            </SidebarMenuButton>
+            <HelpDialog
+              isOpen={isHelpDialogOpen}
+              onClose={() => setIsHelpDialogOpen(false)}
+            />
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
+
+      <SidebarRail />
     </Sidebar>
+  );
+}
+
+function AppIcons({
+  onHoverChange,
+}: {
+  onHoverChange: (state: HoverState) => void;
+}) {
+  const routerState = useRouterState();
+  const pathname = routerState.location.pathname;
+
+  return (
+    // When collapsed: only show the main menu
+    <SidebarGroup className="pr-0">
+      {/* <SidebarGroupLabel>Dyad</SidebarGroupLabel> */}
+
+      <SidebarGroupContent>
+        <SidebarMenu>
+          {items.map((item) => {
+            const isActive =
+              (item.to === "/" && pathname === "/") ||
+              (item.to !== "/" && pathname.startsWith(item.to));
+
+            return (
+              <SidebarMenuItem key={item.title}>
+                <SidebarMenuButton
+                  asChild
+                  size="sm"
+                  className="font-medium w-14"
+                >
+                  <Link
+                    to={item.to}
+                    className={`flex flex-col items-center gap-1 h-14 mb-2 rounded-2xl ${
+                      isActive ? "bg-sidebar-accent" : ""
+                    }`}
+                    onMouseEnter={() => {
+                      if (item.title === "Apps") {
+                        onHoverChange("start-hover:app");
+                      } else if (item.title === "Chat") {
+                        onHoverChange("start-hover:chat");
+                      } else if (item.title === "Settings") {
+                        onHoverChange("start-hover:settings");
+                      } else if (item.title === "Library") {
+                        onHoverChange("start-hover:library");
+                      }
+                    }}
+                  >
+                    <div className="flex flex-col items-center gap-1">
+                      <item.icon className="h-5 w-5" />
+                      <span className={"text-xs"}>{item.title}</span>
+                    </div>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            );
+          })}
+        </SidebarMenu>
+      </SidebarGroupContent>
+    </SidebarGroup>
   );
 }
