@@ -44,7 +44,7 @@ export default function RootLayout({
           <SidebarProvider>
             <TitleBar />
             <AppSidebar />
-            <div className="flex h-screenish w-full overflow-x-hidden mt-12 mb-4 mr-4 border-t border-l border-border rounded-lg bg-background">
+            <div className="flex h-screenish w-full overflow-x-hidden mt-12 mb-4 mr-4 border-t border-l border-border rounded-lg bg-background peer-data-[state=collapsed]:ml-[var(--sidebar-width-icon)] peer-data-[state=expanded]:ml-[var(--sidebar-width)] transition-[margin] duration-200 ease-linear">
               {children}
             </div>
             <Toaster richColors />
