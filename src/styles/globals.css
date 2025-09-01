@@ -1,6 +1,6 @@
 /* Import sidebar layout fixes - must be before tailwind */
 @import "./sidebar-fixes.css";
-@import "./dyad-theme-fixes.css";
+@import "./dyad-theme-exact.css";
 
 @tailwind base;
 @tailwind components;
