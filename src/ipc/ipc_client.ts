@@ -115,23 +115,35 @@ export class IpcClient {
   private constructor() {
     // Try to get ipcRenderer with error handling
     try {
-      if (typeof window !== "undefined" && window.electron && window.electron.ipcRenderer) {
+      if (
+        typeof window !== "undefined" &&
+        window.electron &&
+        window.electron.ipcRenderer
+      ) {
         this.ipcRenderer = window.electron.ipcRenderer as IpcRenderer;
-        console.log("[IpcClient] Successfully initialized with window.electron.ipcRenderer");
+        console.log(
+          "[IpcClient] Successfully initialized with window.electron.ipcRenderer",
+        );
+
+        // Test the connection immediately
+        this.testConnection();
       } else {
-        console.error("[IpcClient] window.electron.ipcRenderer not available!", {
+        console.warn("[IpcClient] window.electron.ipcRenderer not available!", {
           windowExists: typeof window !== "undefined",
-          electronExists: typeof window !== "undefined" && !!(window as any).electron,
-          ipcRendererExists: typeof window !== "undefined" && !!(window as any).electron?.ipcRenderer
+          electronExists:
+            typeof window !== "undefined" && !!(window as any).electron,
+          ipcRendererExists:
+            typeof window !== "undefined" &&
+            !!(window as any).electron?.ipcRenderer,
         });
-        // Create a mock ipcRenderer that logs errors
+        // Create a mock ipcRenderer for development/testing
         this.ipcRenderer = this.createMockIpcRenderer();
       }
     } catch (error) {
-      console.error("[IpcClient] Error initializing IPC:", error);
+      console.warn("[IpcClient] Error initializing IPC:", error);
       this.ipcRenderer = this.createMockIpcRenderer();
     }
-    
+
     this.chatStreams = new Map();
     this.appStreams = new Map();
     this.helpStreams = new Map();
@@ -252,9 +264,11 @@ export class IpcClient {
   }
 
   private createMockIpcRenderer(): IpcRenderer {
-    console.warn("[IpcClient] Using mock IPC renderer - running in browser test mode.");
+    console.warn(
+      "[IpcClient] Using mock IPC renderer - running in browser test mode.",
+    );
 
-    const safeInvoke = async (channel: string, ...args: any[]) => {
+    const safeInvoke = async (channel: string, ..._args: any[]) => {
       switch (channel) {
         case "get-env-vars":
           return {};
@@ -269,16 +283,37 @@ export class IpcClient {
         case "list-apps":
           return { apps: [], appBasePath: "" } as any;
         case "nodejs-status":
-          return { hasNode: true, nodeVersion: process.version, hasPnpm: true, pnpmVersion: "10.x" } as any;
+          return {
+            hasNode: true,
+            nodeVersion: process.version,
+            hasPnpm: true,
+            pnpmVersion: "10.x",
+          } as any;
         case "get-language-model-providers":
           return [
-            { id: "openai", name: "OpenAI", hasFreeTier: false, websiteUrl: "https://platform.openai.com/" },
+            {
+              id: "openai",
+              name: "OpenAI",
+              hasFreeTier: false,
+              websiteUrl: "https://platform.openai.com/",
+            },
           ];
         case "get-language-models-by-providers":
-          return { openai: [{ name: "gpt-5", displayName: "GPT 5", description: "OpenAI flagship", contextWindow: 200000 }] } as any;
+          return {
+            openai: [
+              {
+                name: "gpt-5",
+                displayName: "GPT 5",
+                description: "OpenAI flagship",
+                contextWindow: 200000,
+              },
+            ],
+          } as any;
         default:
           // Return a harmless default to avoid UI crashes
-          console.warn(`[MockIPC] Unhandled invoke '${channel}', returning null`);
+          console.warn(
+            `[MockIPC] Unhandled invoke '${channel}', returning null`,
+          );
           return null as any;
       }
     };
@@ -287,16 +322,18 @@ export class IpcClient {
 
     return {
       invoke: safeInvoke,
-      on: (channel: string, listener: any) => {
-        console.warn(`[MockIPC] Listener registered for '${channel}' in browser mode.`);
+      on: (channel: string, _listener: any) => {
+        console.warn(
+          `[MockIPC] Listener registered for '${channel}' in browser mode.`,
+        );
         return noop;
       },
-      removeAllListeners: (channel: string) => {
+      removeAllListeners: (_channel: string) => {
         // no-op
       },
-      removeListener: (channel: string, listener: any) => {
+      removeListener: (_channel: string, _listener: any) => {
         // no-op
-      }
+      },
     } as any;
   }
 
@@ -1236,5 +1273,27 @@ export class IpcClient {
 
   public cancelHelpChat(sessionId: string): void {
     this.ipcRenderer.invoke("help:chat:cancel", sessionId).catch(() => {});
+  }
+
+  // Test IPC connection
+  private async testConnection(): Promise<void> {
+    try {
+      const platform = await this.getSystemPlatform();
+      console.log(
+        `[IpcClient] Connection test successful. Platform: ${platform}`,
+      );
+    } catch (error) {
+      console.error("[IpcClient] Connection test failed:", error);
+    }
+  }
+
+  // Public method to verify IPC is working
+  public async verifyConnection(): Promise<boolean> {
+    try {
+      await this.getSystemPlatform();
+      return true;
+    } catch {
+      return false;
+    }
   }
 }
