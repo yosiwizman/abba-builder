@@ -10,20 +10,23 @@ export function useLoadApps() {
   const [error, setError] = useState<Error | null>(null);
 
   const refreshApps = useCallback(async () => {
+    console.log('[useLoadApps] Starting to refresh apps...');
     setLoading(true);
     try {
       const ipcClient = IpcClient.getInstance();
+      console.log('[useLoadApps] Calling listApps...');
       const appListResponse = await ipcClient.listApps();
+      console.log('[useLoadApps] Got response:', appListResponse);
       setApps(appListResponse.apps);
       setAppBasePath(appListResponse.appBasePath);
       setError(null);
     } catch (error) {
-      console.error("Error refreshing apps:", error);
+      console.error("[useLoadApps] Error refreshing apps:", error);
       setError(error instanceof Error ? error : new Error(String(error)));
     } finally {
       setLoading(false);
     }
-  }, [setApps, setError, setLoading]);
+  }, [setApps, setAppBasePath, setError, setLoading]);
 
   useEffect(() => {
     refreshApps();

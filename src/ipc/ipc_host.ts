@@ -37,8 +37,9 @@ import { registerProjectLibraryHandlers } from "./handlers/project_library_handl
 import { registerLibraryUpdaterHandlers } from "./handlers/library_updater_handlers";
 import { registerRendererLogHandlers } from "./handlers/renderer_log_handlers";
 import { registerCIHandlers } from "./handlers/ci_handlers";
+import { registerCIHandlersV2 } from "./handlers/ci_handlers_v2";
 
-export function registerIpcHandlers() {
+export async function setupApiEndpoints(userId?: string): Promise<void> {
   // Register all IPC handlers by category
   registerAppHandlers();
   registerChatHandlers();
@@ -78,5 +79,11 @@ export function registerIpcHandlers() {
   registerProjectLibraryHandlers();
   registerLibraryUpdaterHandlers();
   registerRendererLogHandlers();
-  registerCIHandlers();
+  // Use V2 handlers if available, fallback to V1
+  try {
+    registerCIHandlersV2();
+  } catch (error) {
+    console.warn('Failed to register V2 CI handlers, falling back to V1:', error);
+    registerCIHandlers();
+  }
 }

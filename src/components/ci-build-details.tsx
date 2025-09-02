@@ -85,13 +85,15 @@ export function BuildDetailsModal({
             Build Details
           </DialogTitle>
           {build && (
-            <DialogDescription className="flex items-center gap-2 mt-2">
-              {getStatusIcon(build.status)}
-              <span className="font-medium">{build.project}</span> •
-              <span>{build.branch}</span> •
-              <Badge variant={getStatusBadgeVariant(build.status)}>
-                {build.status}
-              </Badge>
+            <DialogDescription asChild>
+              <div className="flex items-center gap-2 mt-2">
+                {getStatusIcon(build.status)}
+                <span className="font-medium">{build.project}</span> •
+                <span>{build.branch}</span> •
+                <Badge variant={getStatusBadgeVariant(build.status)}>
+                  {build.status}
+                </Badge>
+              </div>
             </DialogDescription>
           )}
         </DialogHeader>

@@ -27,37 +27,21 @@ import {
   Plus,
   Eye,
   Play,
+  Settings,
 } from "lucide-react";
 import { IpcClient } from "@/ipc/ipc_client";
 import { BuildDetailsModal } from "./ci-build-details";
-
-interface Build {
-  id: string;
-  status: "success" | "failure" | "pending";
-  project: string;
-  branch: string;
-  timestamp: string;
-  duration?: number;
-}
-
-interface Deployment {
-  id: string;
-  environment: string;
-  status: "active" | "inactive";
-  version: string;
-  timestamp: string;
-}
-
-interface Statistics {
-  totalBuilds: number;
-  successRate: number;
-  averageBuildTime: number;
-}
+import { CIProviderConfig } from "./ci-provider-config";
+import type {
+  CIBuild,
+  CIDeployment,
+  CIStatistics,
+} from "@/types/ci-dashboard.types";
 
 export function CIDashboard() {
-  const [builds, setBuilds] = useState<Build[]>([]);
-  const [deployments, setDeployments] = useState<Deployment[]>([]);
-  const [statistics, setStatistics] = useState<Statistics | null>(null);
+  const [builds, setBuilds] = useState<CIBuild[]>([]);
+  const [deployments, setDeployments] = useState<CIDeployment[]>([]);
+  const [statistics, setStatistics] = useState<CIStatistics | null>(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -67,6 +51,7 @@ export function CIDashboard() {
   const [triggerProject, setTriggerProject] = useState("frontend-app");
   const [triggerBranch, setTriggerBranch] = useState("main");
   const [triggering, setTriggering] = useState(false);
+  const [showConfigDialog, setShowConfigDialog] = useState(false);
 
   useEffect(() => {
     loadDashboardData();
@@ -183,6 +168,14 @@ export function CIDashboard() {
           </p>
         </div>
         <div className="flex gap-2">
+          <Button
+            onClick={() => setShowConfigDialog(true)}
+            size="sm"
+            variant="outline"
+          >
+            <Settings className="h-4 w-4 mr-2" />
+            Configure
+          </Button>
           <Button
             onClick={() => setShowTriggerDialog(true)}
             size="sm"
@@ -397,6 +390,16 @@ export function CIDashboard() {
         onClose={() => {
           setShowBuildDetails(false);
           setSelectedBuildId(null);
+        }}
+      />
+
+      {/* Provider Configuration Dialog */}
+      <CIProviderConfig
+        open={showConfigDialog}
+        onClose={() => setShowConfigDialog(false)}
+        onConfigured={() => {
+          // Refresh data after configuration
+          loadDashboardData(true);
         }}
       />
     </div>

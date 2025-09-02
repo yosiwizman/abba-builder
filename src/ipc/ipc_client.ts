@@ -589,9 +589,7 @@ export class IpcClient {
     }
   }
 
-  public async getCIBuildDetails(
-    buildId: string,
-  ): Promise<{ build: any; logs: string[] }> {
+  public async getCIBuildDetails(buildId: string): Promise<{ build: any; logs: string[] }> {
     try {
       return await this.ipcRenderer.invoke("ci:get-build-details", buildId);
     } catch (error) {
@@ -599,6 +597,7 @@ export class IpcClient {
       return { build: null, logs: [] };
     }
   }
+
 
   // Run an app
   public async runApp(

@@ -1,6 +1,6 @@
 import { app, BrowserWindow, dialog } from "electron";
 import * as path from "node:path";
-import { registerIpcHandlers } from "./ipc/ipc_host";
+import { setupApiEndpoints } from "./ipc/ipc_host";
 import dotenv from "dotenv";
 // @ts-ignore
 import started from "electron-squirrel-startup";
@@ -62,7 +62,7 @@ export async function onReady() {
   // Initialize core modules in strict order: DB -> IPC -> Window
   initializeDatabase();
   // Register IPC only after DB is ready to avoid early calls before DB init
-  registerIpcHandlers();
+  setupApiEndpoints();
 
   const settings = readSettings();
   await onFirstRunMaybe(settings);
