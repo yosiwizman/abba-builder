@@ -17,6 +17,82 @@ interface BuildDetailsModalProps {
   onClose: () => void;
 }
 
+// Export as CIBuildDetails for backward compatibility
+export function CIBuildDetails() {
+  const [selectedBuildId, setSelectedBuildId] = React.useState<string | null>(
+    null,
+  );
+  const [isOpen, setIsOpen] = React.useState(false);
+
+  // Mock data for demonstration - replace with real data from IPC
+  const builds = [
+    {
+      id: "build-1",
+      project: "Main Application",
+      branch: "main",
+      status: "success",
+      timestamp: new Date().toISOString(),
+      duration: 120,
+    },
+    {
+      id: "build-2",
+      project: "Feature Branch",
+      branch: "feature/new-feature",
+      status: "pending",
+      timestamp: new Date().toISOString(),
+      duration: null,
+    },
+  ];
+
+  return (
+    <div className="space-y-4">
+      <div className="flex justify-between items-center">
+        <h2 className="text-2xl font-bold">Build History</h2>
+      </div>
+
+      <div className="grid gap-4">
+        {builds.map((build) => (
+          <div
+            key={build.id}
+            className="p-4 border rounded-lg hover:bg-accent cursor-pointer"
+            onClick={() => {
+              setSelectedBuildId(build.id);
+              setIsOpen(true);
+            }}
+          >
+            <div className="flex justify-between items-center">
+              <div>
+                <p className="font-medium">{build.project}</p>
+                <p className="text-sm text-muted-foreground">{build.branch}</p>
+              </div>
+              <Badge
+                variant={
+                  build.status === "success"
+                    ? "default"
+                    : build.status === "pending"
+                      ? "secondary"
+                      : "destructive"
+                }
+              >
+                {build.status}
+              </Badge>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <BuildDetailsModal
+        buildId={selectedBuildId}
+        isOpen={isOpen}
+        onClose={() => {
+          setIsOpen(false);
+          setSelectedBuildId(null);
+        }}
+      />
+    </div>
+  );
+}
+
 export function BuildDetailsModal({
   buildId,
   isOpen,

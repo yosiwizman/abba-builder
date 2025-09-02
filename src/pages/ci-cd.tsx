@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Settings, Activity, Rocket, Package } from "lucide-react";
 import { CIDashboard } from "@/components/ci-dashboard";
 import { CISettings } from "@/components/ci-settings";
-import { CIBuildDetails } from "@/components/ci-build-details";
 import { DeploymentManager } from "@/components/ci-deployment-manager";
-import { Settings, Activity, Rocket, Package } from "lucide-react";
+import { CIBuildDetails } from "@/components/ci-build-details";
 
 export default function CICDPage() {
   const [activeTab, setActiveTab] = useState("dashboard");
