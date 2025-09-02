@@ -504,6 +504,113 @@ export function registerCIHandlersV2() {
     }
   });
 
+  // Stream build logs (polling-based)
+  ipcMain.handle(
+    "ci:stream-build-logs",
+    async (
+      event,
+      { buildId, intervalMs }: { buildId: string; intervalMs?: number },
+    ) => {
+      try {
+        const provider = providerManager.getActiveProvider();
+        const poll = Math.max(1000, intervalMs || 2000);
+
+        (global as any).ciLogStreams = (global as any).ciLogStreams || {};
+        (global as any).ciLogStreamsState =
+          (global as any).ciLogStreamsState || {};
+
+        // Initialize state
+        (global as any).ciLogStreamsState[buildId] = {
+          lastCount: 0,
+          done: false,
+        };
+
+        const tick = async () => {
+          try {
+            // If stopped
+            const state = (global as any).ciLogStreamsState[buildId];
+            if (!state || state.done) {
+              clearInterval((global as any).ciLogStreams[buildId]);
+              delete (global as any).ciLogStreams[buildId];
+              return;
+            }
+
+            if (!provider || !provider.isAuthenticated()) {
+              // Simulate logs
+              const newLine = `Simulated log at ${new Date().toLocaleTimeString()}`;
+              event.sender.send("ci:build-logs", { buildId, lines: [newLine] });
+              return;
+            }
+
+            const details = await providerManager.getBuildDetails(buildId);
+            const allLines = (details.logs || "").split("\n");
+            const lastCount = state.lastCount || 0;
+
+            if (allLines.length > lastCount) {
+              const append = allLines.slice(lastCount);
+              event.sender.send("ci:build-logs", { buildId, lines: append });
+              state.lastCount = allLines.length;
+            }
+
+            // Stop if build finished
+            if (
+              details.status === ("success" as any) ||
+              details.status === ("failure" as any) ||
+              details.status === ("cancelled" as any) ||
+              details.completedAt
+            ) {
+              state.done = true;
+              clearInterval((global as any).ciLogStreams[buildId]);
+              delete (global as any).ciLogStreams[buildId];
+            }
+          } catch (err) {
+            logger.error(
+              `${LOG_PREFIX} Error streaming logs for ${buildId}:`,
+              err,
+            );
+          }
+        };
+
+        // Immediate tick and then interval
+        await tick();
+        (global as any).ciLogStreams[buildId] = setInterval(tick, poll);
+
+        logger.info(`${LOG_PREFIX} Started log streaming for build ${buildId}`);
+        return { success: true };
+      } catch (error) {
+        logger.error(`${LOG_PREFIX} Error starting log stream:`, error);
+        return { success: false };
+      }
+    },
+  );
+
+  // Stop build log streaming
+  ipcMain.handle(
+    "ci:stop-stream-build-logs",
+    async (_, { buildId }: { buildId: string }) => {
+      try {
+        if (
+          (global as any).ciLogStreams &&
+          (global as any).ciLogStreams[buildId]
+        ) {
+          clearInterval((global as any).ciLogStreams[buildId]);
+          delete (global as any).ciLogStreams[buildId];
+        }
+        if (
+          (global as any).ciLogStreamsState &&
+          (global as any).ciLogStreamsState[buildId]
+        ) {
+          (global as any).ciLogStreamsState[buildId].done = true;
+        }
+        logger.info(`${LOG_PREFIX} Stopped log streaming for build ${buildId}`);
+        return { success: true };
+      } catch (error) {
+        logger.error(`${LOG_PREFIX} Error stopping log stream:`, error);
+        return { success: false };
+      }
+    },
+  );
+
   logger.info(
     `${LOG_PREFIX} Enhanced CI/CD IPC handlers registered successfully`,
   );

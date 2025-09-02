@@ -103,9 +103,50 @@ export function BuildDetailsModal({
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (buildId && isOpen) {
-      loadBuildDetails();
-    }
+    let unsubscribeLogs: (() => void) | null = null;
+
+    const start = async () => {
+      if (!buildId || !isOpen) return;
+      await loadBuildDetails();
+      try {
+        // Start log streaming
+        await window.electron.invoke("ci:stream-build-logs", {
+          buildId,
+          intervalMs: 2000,
+        });
+
+        // Listen for log lines
+        const listener = (
+          _payload: any,
+          data: { buildId: string; lines: string[] },
+        ) => {
+          if (data.buildId === buildId) {
+            setLogs((prev) => [...prev, ...data.lines]);
+          }
+        };
+        unsubscribeLogs = window.electron.on("ci:build-logs", listener);
+      } catch (err) {
+        console.error("Failed to start log streaming:", err);
+      }
+    };
+
+    start();
+
+    return () => {
+      // Stop streaming and remove listeners
+      if (buildId) {
+        window.electron
+          .invoke("ci:stop-stream-build-logs", { buildId })
+          .catch(() => {});
+      }
+      if (unsubscribeLogs) {
+        try {
+          unsubscribeLogs();
+        } catch {}
+      } else {
+        window.electron.removeAllListeners("ci:build-logs");
+      }
+    };
   }, [buildId, isOpen]);
 
   const loadBuildDetails = async () => {
@@ -211,7 +252,9 @@ export function BuildDetailsModal({
                       logs={logs}
                       title="Build Logs"
                       buildId={build.id}
-                      isStreaming={build.status === "pending"}
+                      isStreaming={
+                        build.status === "pending" || build.status === "running"
+                      }
                       className="rounded-lg border"
                     />
                   </div>

@@ -141,6 +141,8 @@ const validInvokeChannels = [
   "ci:set-active-provider",
   "ci:subscribe-updates",
   "ci:unsubscribe-updates",
+  "ci:stream-build-logs",
+  "ci:stop-stream-build-logs",
   // Test-only channels
   // These should ALWAYS be guarded with IS_TEST_BUILD in the main process.
   // We can't detect with IS_TEST_BUILD in the preload script because
@@ -164,6 +166,7 @@ const validReceiveChannels = [
   "help:chat:response:error",
   // CI/CD real-time updates
   "ci:update",
+  "ci:build-logs",
 ] as const;
 
 type ValidInvokeChannel = (typeof validInvokeChannels)[number];
