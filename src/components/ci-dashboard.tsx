@@ -29,7 +29,7 @@ import {
   Play,
   Settings,
 } from "lucide-react";
-import { IpcClient } from "@/ipc/ipc_client";
+// IpcClient removed - using direct window.electron.invoke calls
 import { BuildDetailsModal } from "./ci-build-details";
 import { CIProviderConfig } from "./ci-provider-config";
 import type {
@@ -55,6 +55,14 @@ export function CIDashboard() {
 
   useEffect(() => {
     loadDashboardData();
+
+    // Subscribe to real-time updates
+    subscribeToUpdates();
+
+    // Cleanup on unmount
+    return () => {
+      unsubscribeFromUpdates();
+    };
   }, []);
 
   const loadDashboardData = async (isRefresh = false) => {
@@ -66,24 +74,60 @@ export function CIDashboard() {
       }
       setError(null);
 
-      const ipcClient = IpcClient.getInstance();
-
-      // Load all data in parallel
+      // Use the new IPC handlers directly
       const [buildsData, deploymentsData, statsData] = await Promise.all([
-        ipcClient.getCIBuilds(),
-        ipcClient.getCIDeployments(),
-        ipcClient.getCIStatistics(),
+        window.electron.invoke("ci:get-builds", { limit: 30 }),
+        window.electron.invoke("ci:get-deployments", { limit: 20 }),
+        window.electron.invoke("ci:get-statistics", { period: "week" }),
       ]);
 
-      setBuilds(buildsData);
-      setDeployments(deploymentsData);
-      setStatistics(statsData);
+      setBuilds(buildsData || []);
+      setDeployments(deploymentsData || []);
+      setStatistics(statsData || null);
     } catch (err) {
       console.error("Failed to load CI/CD dashboard data:", err);
-      setError("Failed to load dashboard data");
+
+      // Check if it's a provider configuration issue
+      if (err instanceof Error && err.message.includes("No active provider")) {
+        setError(
+          "No CI/CD provider configured. Please configure a provider in settings.",
+        );
+      } else {
+        setError(
+          "Failed to load dashboard data. Please check your configuration.",
+        );
+      }
     } finally {
       setLoading(false);
       setRefreshing(false);
+    }
+  };
+
+  const subscribeToUpdates = async () => {
+    try {
+      // Subscribe to real-time CI updates
+      await window.electron.invoke("ci:subscribe-updates");
+
+      // Listen for updates
+      window.electron.on("ci:update", (event: any, update: any) => {
+        console.log("Received CI update:", update);
+
+        // Refresh the relevant data based on update type
+        if (update.type === "build" || update.type === "deployment") {
+          loadDashboardData(true);
+        }
+      });
+    } catch (error) {
+      console.error("Failed to subscribe to updates:", error);
+    }
+  };
+
+  const unsubscribeFromUpdates = async () => {
+    try {
+      await window.electron.invoke("ci:unsubscribe-updates");
+      window.electron.removeAllListeners("ci:update");
+    } catch (error) {
+      console.error("Failed to unsubscribe from updates:", error);
     }
   };
 
@@ -94,13 +138,26 @@ export function CIDashboard() {
   const handleTriggerBuild = async () => {
     try {
       setTriggering(true);
-      const ipcClient = IpcClient.getInstance();
-      await ipcClient.triggerCIBuild(triggerProject, triggerBranch);
-      setShowTriggerDialog(false);
-      // Refresh data after a short delay to show the new build
-      setTimeout(() => loadDashboardData(true), 500);
+
+      // Use the new IPC handler to trigger build
+      const result = await window.electron.invoke("ci:trigger-build", {
+        branch: triggerBranch,
+      });
+
+      if (result.success) {
+        setShowTriggerDialog(false);
+        // Show success notification
+        console.log("Build triggered successfully:", result.buildId);
+
+        // Refresh data after a short delay to show the new build
+        setTimeout(() => loadDashboardData(true), 1000);
+      } else {
+        console.error("Failed to trigger build:", result.error);
+        setError(result.error || "Failed to trigger build");
+      }
     } catch (error) {
       console.error("Failed to trigger build:", error);
+      setError("Failed to trigger build. Please check your configuration.");
     } finally {
       setTriggering(false);
     }
