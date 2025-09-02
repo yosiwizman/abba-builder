@@ -25,7 +25,7 @@ import {
   Github,
   GitBranch,
 } from "lucide-react";
-import { useToast } from "@/components/ui/use-toast";
+// Removed useToast - not available
 
 enum CIProviderType {
   GITHUB_ACTIONS = "github-actions",
@@ -63,7 +63,7 @@ export function CISettings() {
     success: boolean;
     message: string;
   } | null>(null);
-  const { toast } = useToast();
+  // const { toast } = useToast();
 
   // Load existing providers on component mount
   useEffect(() => {
@@ -144,11 +144,10 @@ export function CISettings() {
 
   const saveConfiguration = async () => {
     if (!testResult?.success) {
-      toast({
-        title: "Configuration Not Tested",
-        description: "Please test the connection before saving.",
-        variant: "destructive",
-      });
+      console.error(
+        "Configuration Not Tested: Please test the connection before saving.",
+      );
+      alert("Please test the connection before saving.");
       return;
     }
 
@@ -177,10 +176,10 @@ export function CISettings() {
       // Set as active provider
       await window.electron.invoke("ci:set-active-provider", providerId);
 
-      toast({
-        title: "Configuration Saved",
-        description: "CI/CD provider has been configured successfully.",
-      });
+      console.log(
+        "Configuration Saved: CI/CD provider has been configured successfully.",
+      );
+      alert("CI/CD provider has been configured successfully.");
 
       await loadProviders();
 
@@ -188,14 +187,10 @@ export function CISettings() {
       setCredentials({});
       setTestResult(null);
     } catch (error) {
-      toast({
-        title: "Save Failed",
-        description:
-          error instanceof Error
-            ? error.message
-            : "Failed to save configuration",
-        variant: "destructive",
-      });
+      console.error("Save Failed:", error);
+      alert(
+        error instanceof Error ? error.message : "Failed to save configuration",
+      );
     } finally {
       setIsLoading(false);
     }

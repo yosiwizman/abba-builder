@@ -38,7 +38,7 @@ import {
   GitBranch,
   Server,
 } from "lucide-react";
-import { useToast } from "@/components/ui/use-toast";
+// Removed useToast - not available
 
 interface Deployment {
   id: string;
@@ -99,7 +99,7 @@ export function DeploymentManager() {
   const [showRollbackDialog, setShowRollbackDialog] = useState(false);
   const [rollbackTarget, setRollbackTarget] = useState<Deployment | null>(null);
 
-  const { toast } = useToast();
+  // const { toast } = useToast();
 
   useEffect(() => {
     loadDeployments();
@@ -114,11 +114,6 @@ export function DeploymentManager() {
       setDeployments(data || []);
     } catch (error) {
       console.error("Failed to load deployments:", error);
-      toast({
-        title: "Failed to Load Deployments",
-        description: error instanceof Error ? error.message : "Unknown error",
-        variant: "destructive",
-      });
     } finally {
       setLoading(false);
     }
@@ -126,11 +121,8 @@ export function DeploymentManager() {
 
   const handleDeploy = async () => {
     if (!deployVersion) {
-      toast({
-        title: "Version Required",
-        description: "Please enter a version number",
-        variant: "destructive",
-      });
+      console.error("Version Required: Please enter a version number");
+      alert("Please enter a version number");
       return;
     }
 
@@ -144,10 +136,9 @@ export function DeploymentManager() {
       });
 
       if (result.success) {
-        toast({
-          title: "Deployment Triggered",
-          description: `Deployment ${result.deploymentId} started for ${selectedEnvironment}`,
-        });
+        console.log(
+          `Deployment ${result.deploymentId} started for ${selectedEnvironment}`,
+        );
 
         setShowDeployDialog(false);
         setDeployVersion("");
@@ -159,14 +150,7 @@ export function DeploymentManager() {
         throw new Error(result.error || "Deployment failed");
       }
     } catch (error) {
-      toast({
-        title: "Deployment Failed",
-        description:
-          error instanceof Error
-            ? error.message
-            : "Failed to trigger deployment",
-        variant: "destructive",
-      });
+      console.error("Deployment Failed:", error);
     } finally {
       setDeploying(false);
     }
@@ -187,10 +171,9 @@ export function DeploymentManager() {
       });
 
       if (result.success) {
-        toast({
-          title: "Rollback Initiated",
-          description: `Rolling back ${rollbackTarget.environment} to v${rollbackTarget.version}`,
-        });
+        console.log(
+          `Rolling back ${rollbackTarget.environment} to v${rollbackTarget.version}`,
+        );
 
         setShowRollbackDialog(false);
         setRollbackTarget(null);
@@ -201,14 +184,7 @@ export function DeploymentManager() {
         throw new Error(result.error || "Rollback failed");
       }
     } catch (error) {
-      toast({
-        title: "Rollback Failed",
-        description:
-          error instanceof Error
-            ? error.message
-            : "Failed to initiate rollback",
-        variant: "destructive",
-      });
+      console.error("Rollback Failed:", error);
     } finally {
       setRollingBack(false);
     }

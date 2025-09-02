@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CIDashboard } from "@/components/ci-dashboard";
-import { CISettingsPanel } from "@/components/ci-settings-panel";
-import { BuildTrigger } from "@/components/ci-build-trigger";
+import { CISettings } from "@/components/ci-settings";
+import { CIBuildDetails } from "@/components/ci-build-details";
 import { DeploymentManager } from "@/components/ci-deployment-manager";
 import { Settings, Activity, Rocket, Package } from "lucide-react";
 
@@ -47,7 +47,7 @@ export default function CICDPage() {
         </TabsContent>
 
         <TabsContent value="builds" className="space-y-6">
-          <BuildTrigger />
+          <CIBuildDetails />
         </TabsContent>
 
         <TabsContent value="deployments" className="space-y-6">
@@ -55,7 +55,7 @@ export default function CICDPage() {
         </TabsContent>
 
         <TabsContent value="settings" className="space-y-6">
-          <CISettingsPanel />
+          <CISettings />
         </TabsContent>
       </Tabs>
     </div>
