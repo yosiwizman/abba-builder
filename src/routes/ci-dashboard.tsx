@@ -1,6 +1,6 @@
 import { createRoute } from "@tanstack/react-router";
 import { rootRoute } from "./root";
-import { CIDashboard } from "@/components/ci-dashboard";
+import CICDPage from "@/pages/ci-cd";
 
 export const ciDashboardRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -11,7 +11,7 @@ export const ciDashboardRoute = createRoute({
 function CIDashboardPage() {
   return (
     <div className="h-full overflow-auto">
-      <CIDashboard />
+      <CICDPage />
     </div>
   );
 }
