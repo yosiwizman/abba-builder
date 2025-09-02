@@ -27,9 +27,11 @@ import {
   Plus,
   Eye,
   Play,
+  Settings,
 } from "lucide-react";
 import { IpcClient } from "@/ipc/ipc_client";
 import { BuildDetailsModal } from "./ci-build-details";
+import { CIProviderConfig } from "./ci-provider-config";
 import type {
   CIBuild,
   CIDeployment,
@@ -49,6 +51,7 @@ export function CIDashboard() {
   const [triggerProject, setTriggerProject] = useState("frontend-app");
   const [triggerBranch, setTriggerBranch] = useState("main");
   const [triggering, setTriggering] = useState(false);
+  const [showConfigDialog, setShowConfigDialog] = useState(false);
 
   useEffect(() => {
     loadDashboardData();
@@ -165,6 +168,14 @@ export function CIDashboard() {
           </p>
         </div>
         <div className="flex gap-2">
+          <Button
+            onClick={() => setShowConfigDialog(true)}
+            size="sm"
+            variant="outline"
+          >
+            <Settings className="h-4 w-4 mr-2" />
+            Configure
+          </Button>
           <Button
             onClick={() => setShowTriggerDialog(true)}
             size="sm"
@@ -379,6 +390,16 @@ export function CIDashboard() {
         onClose={() => {
           setShowBuildDetails(false);
           setSelectedBuildId(null);
+        }}
+      />
+
+      {/* Provider Configuration Dialog */}
+      <CIProviderConfig
+        open={showConfigDialog}
+        onClose={() => setShowConfigDialog(false)}
+        onConfigured={() => {
+          // Refresh data after configuration
+          loadDashboardData(true);
         }}
       />
     </div>
