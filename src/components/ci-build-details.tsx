@@ -6,10 +6,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { Loader2, CheckCircle, XCircle, Clock, Terminal } from "lucide-react";
 import { IpcClient } from "@/ipc/ipc_client";
+import { CILogViewer } from "./ci-log-viewer";
 
 interface BuildDetailsModalProps {
   buildId: string | null;
@@ -207,37 +207,13 @@ export function BuildDetailsModal({
                   </div>
 
                   <div>
-                    <h3 className="text-sm font-medium mb-2">Build Logs</h3>
-                    <ScrollArea className="h-96 w-full rounded-lg border bg-black p-4">
-                      <div className="font-mono text-xs text-green-400 space-y-1">
-                        {logs.map((log, index) => (
-                          <div key={index} className="flex gap-2">
-                            <span className="text-gray-500 select-none">
-                              [{String(index + 1).padStart(3, "0")}]
-                            </span>
-                            <span
-                              className={
-                                log.includes("ERROR")
-                                  ? "text-red-400"
-                                  : log.includes("WARNING")
-                                    ? "text-yellow-400"
-                                    : ""
-                              }
-                            >
-                              {log}
-                            </span>
-                          </div>
-                        ))}
-                        {build.status === "pending" && (
-                          <div className="flex gap-2 items-center mt-2">
-                            <Loader2 className="h-3 w-3 animate-spin" />
-                            <span className="text-yellow-400">
-                              Build in progress...
-                            </span>
-                          </div>
-                        )}
-                      </div>
-                    </ScrollArea>
+                    <CILogViewer
+                      logs={logs}
+                      title="Build Logs"
+                      buildId={build.id}
+                      isStreaming={build.status === "pending"}
+                      className="rounded-lg border"
+                    />
                   </div>
                 </div>
               )}
