@@ -1209,7 +1209,4 @@ export const AISmartContractAssistant: React.FC = () => {
   );
 };
 
-// Import Rocket icon
-import { Rocket } from 'lucide-react';
-
 export default AISmartContractAssistant;

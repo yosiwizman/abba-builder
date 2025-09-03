@@ -1,8 +1,9 @@
 import { ethers } from 'ethers';
 import * as parser from '@solidity-parser/parser';
-import { ChatOpenAI } from '@langchain/openai';
-import { PromptTemplate } from 'langchain/prompts';
-import { LLMChain } from 'langchain/chains';
+// Langchain imports commented out until properly configured
+// import { ChatOpenAI } from '@langchain/openai';
+// import { PromptTemplate } from 'langchain/prompts';
+// import { LLMChain } from 'langchain/chains';
 
 // Import OpenZeppelin contract templates
 const OPENZEPPELIN_TEMPLATES = {
@@ -186,18 +187,18 @@ contract {{contractName}} {
 };
 
 export class EnhancedAIContractService {
-  private llm: ChatOpenAI | null = null;
+  private llm: any | null = null;
 
   constructor() {
-    // Initialize LLM if API key is available
-    const openaiApiKey = process.env.OPENAI_API_KEY;
-    if (openaiApiKey) {
-      this.llm = new ChatOpenAI({
-        openAIApiKey: openaiApiKey,
-        modelName: 'gpt-4',
-        temperature: 0.3,
-      });
-    }
+    // Initialize LLM if API key is available (disabled for now)
+    // const openaiApiKey = process.env.OPENAI_API_KEY;
+    // if (openaiApiKey) {
+    //   this.llm = new ChatOpenAI({
+    //     openAIApiKey: openaiApiKey,
+    //     modelName: 'gpt-4',
+    //     temperature: 0.3,
+    //   });
+    // }
   }
 
   async generateContract(params: {
@@ -213,24 +214,24 @@ export class EnhancedAIContractService {
         return { success: true, contract: filledContract };
       }
 
-      // Generate custom contract using AI if available
-      if (this.llm) {
-        const prompt = PromptTemplate.fromTemplate(`
-          Generate a secure Solidity smart contract based on the following requirements:
-          {requirements}
-          
-          Use OpenZeppelin contracts where appropriate.
-          Include proper security patterns and gas optimizations.
-          Add comprehensive comments.
-          
-          Contract:
-        `);
+      // Generate custom contract using AI if available (disabled for now)
+      // if (this.llm) {
+      //   const prompt = PromptTemplate.fromTemplate(`
+      //     Generate a secure Solidity smart contract based on the following requirements:
+      //     {requirements}
+      //     
+      //     Use OpenZeppelin contracts where appropriate.
+      //     Include proper security patterns and gas optimizations.
+      //     Add comprehensive comments.
+      //     
+      //     Contract:
+      //   `);
 
-        const chain = new LLMChain({ llm: this.llm, prompt });
-        const result = await chain.call({ requirements: params.prompt });
-        
-        return { success: true, contract: result.text };
-      }
+      //   const chain = new LLMChain({ llm: this.llm, prompt });
+      //   const result = await chain.call({ requirements: params.prompt });
+      //   
+      //   return { success: true, contract: result.text };
+      // }
 
       // Fallback to simple template
       return this.generateSimpleContract(params.prompt);
