@@ -13,8 +13,10 @@ import {
   Download,
   RefreshCw,
   Code2,
+  Shield,
 } from "lucide-react";
 import ProjectLibrary from "./ProjectLibrary";
+import BlockchainTokenGenerator from "./BlockchainTokenGenerator";
 
 const KnowledgeHub = () => {
   const [activeTab, setActiveTab] = useState("patterns");
@@ -215,12 +217,25 @@ const KnowledgeHub = () => {
             <Code2 className="w-4 h-4" />
             Project Library (1000+)
           </button>
+          <button
+            onClick={() => setActiveTab("blockchain")}
+            className={`px-4 py-2 rounded-lg flex items-center gap-2 transition-colors ${
+              activeTab === "blockchain"
+                ? "bg-purple-100 text-purple-700"
+                : "text-gray-600 hover:bg-gray-100"
+            }`}
+          >
+            <Shield className="w-4 h-4" />
+            Blockchain
+          </button>
         </div>
       </div>
 
       <div className="flex-1 overflow-y-auto p-6">
         {activeTab === "projects" ? (
           <ProjectLibrary />
+        ) : activeTab === "blockchain" ? (
+          <BlockchainTokenGenerator />
         ) : loading ? (
           <div className="flex items-center justify-center h-64">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
