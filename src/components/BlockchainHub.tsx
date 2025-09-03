@@ -6,7 +6,8 @@ import {
   BarChart3,
   Rocket,
   Shield,
-  Brain
+  Brain,
+  Image
 } from 'lucide-react';
 import BlockchainTokenGenerator from './BlockchainTokenGenerator';
 import DeFiProtocolBuilder from './DeFiProtocolBuilder';
@@ -14,6 +15,7 @@ import { BlockchainAnalyticsEnhanced } from './BlockchainAnalyticsEnhanced';
 import AISmartContractAssistant from './AISmartContractAssistant';
 import Web3AppGenerator from './Web3AppGenerator';
 import { DeFiDashboard } from './DeFiDashboard';
+import { NFTMarketplace } from './NFTMarketplace';
 
 const BlockchainHub: React.FC = () => {
   const [activeTab, setActiveTab] = useState('tokens');
@@ -31,7 +33,7 @@ const BlockchainHub: React.FC = () => {
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
-        <TabsList className="mx-6 mt-4 grid grid-cols-6 w-fit">
+        <TabsList className="mx-6 mt-4 grid grid-cols-7 w-fit">
           <TabsTrigger value="tokens" className="flex items-center gap-2">
             <Coins className="h-4 w-4" />
             Token Generator
@@ -55,6 +57,10 @@ const BlockchainHub: React.FC = () => {
           <TabsTrigger value="defi-dashboard" className="flex items-center gap-2">
             <TrendingUp className="h-4 w-4" />
             DeFi Dashboard
+          </TabsTrigger>
+          <TabsTrigger value="nft" className="flex items-center gap-2">
+            <Image className="h-4 w-4" />
+            NFT Market
           </TabsTrigger>
         </TabsList>
 
@@ -81,6 +87,10 @@ const BlockchainHub: React.FC = () => {
 
           <TabsContent value="defi-dashboard" className="h-full m-0">
             <DeFiDashboard />
+          </TabsContent>
+
+          <TabsContent value="nft" className="h-full m-0">
+            <NFTMarketplace />
           </TabsContent>
         </div>
       </Tabs>
