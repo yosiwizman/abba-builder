@@ -5,14 +5,14 @@ import { existsSync } from 'fs';
 import GitHubAPIService from '../../services/github-api';
 import StackOverflowAPIService from '../../services/stackoverflow-api';
 import cacheService from '../../services/cache-service';
+import LearningSystem from '../../services/learning-system';
 
 const logger = log.scope('knowledge_hub_handlers');
 
 // Lazy load the real backend systems
-let knowledgeBase: any = null;
+let learningSystem: LearningSystem | null = null;
 let githubAPI: GitHubAPIService | null = null;
 let stackoverflowAPI: StackOverflowAPIService | null = null;
-let learningSystem: any = null;
 
 // Initialize API services
 async function initializeServices() {
@@ -24,6 +24,18 @@ async function initializeServices() {
   
   if (!stackoverflowAPI) {
     stackoverflowAPI = new StackOverflowAPIService();
+  }
+  
+  if (!learningSystem) {
+    learningSystem = new LearningSystem();
+    await learningSystem.initialize();
+    
+    // Scan project library for templates on startup
+    const projectLibraryPath = path.join(process.cwd(), 'project-library');
+    if (existsSync(projectLibraryPath)) {
+      logger.info('Scanning project library for templates...');
+      await learningSystem.scanTemplatesFromProjectLibrary(projectLibraryPath);
+    }
   }
   
   // Initialize cache service
@@ -159,19 +171,23 @@ export async function registerKnowledgeHubHandlers() {
   // Initialize services
   await initializeServices();
 
-  // Get REAL patterns from database
+  // Get REAL patterns from learning system
   ipcMain.handle('knowledge:get-patterns', async () => {
     try {
-      const { knowledgeBase } = await getBackendSystems();
-      const patterns = await knowledgeBase.getSuccessfulPatterns();
+      if (!learningSystem) await initializeServices();
+      
+      const patterns = await learningSystem!.getSuccessfulPatterns();
       return {
         success: true,
         data: patterns.map((p: any) => ({
           id: p.id,
           name: p.name,
           successRate: p.successRate,
-          usage: p.usageCount,
-          category: p.category || 'General'
+          usage: p.usageCount || p.usageCount,
+          category: p.category || 'General',
+          cognitiveLoad: p.cognitiveLoad,
+          description: p.description,
+          tags: p.tags
         }))
       };
     } catch (error: any) {
@@ -276,11 +292,12 @@ export async function registerKnowledgeHubHandlers() {
     }
   });
 
-  // Get REAL templates from database
+  // Get REAL templates from learning system
   ipcMain.handle('knowledge:get-templates', async () => {
     try {
-      const { knowledgeBase } = await getBackendSystems();
-      const templates = await knowledgeBase.getTemplates();
+      if (!learningSystem) await initializeServices();
+      
+      const templates = await learningSystem!.getTemplates();
       return {
         success: true,
         data: templates.map((t: any) => ({
@@ -288,7 +305,11 @@ export async function registerKnowledgeHubHandlers() {
           name: t.name,
           framework: t.framework,
           components: t.componentCount || 0,
-          rating: t.successRate / 20 || 4.5  // Convert success rate to 5-star rating
+          rating: Math.min(5, (t.successRate / 20) || 4.5),  // Convert success rate to 5-star rating
+          cognitiveLoadScore: t.cognitiveLoadScore,
+          productionReady: t.productionReady,
+          category: t.category,
+          complexity: t.complexity
         }))
       };
     } catch (error: any) {
