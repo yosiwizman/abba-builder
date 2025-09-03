@@ -40,7 +40,8 @@ import { registerRendererLogHandlers } from "./handlers/renderer_log_handlers";
 import { registerCIHandlers } from "./handlers/ci_handlers";
 import { registerCIHandlersV2 } from "./handlers/ci_handlers_v2";
 import { registerMessageStreamingHandlers } from "./handlers/message_streaming_handler";
-import { registerBlockchainHandlers } from "./handlers/blockchain_handlers";
+import { registerBlockchainHandlers } from './handlers/blockchain_handlers';
+import { registerAIContractHandlers } from './handlers/ai_contract_handlers';
 
 export async function setupApiEndpoints(_userId?: string): Promise<void> {
   // Register all IPC handlers by category
@@ -84,6 +85,7 @@ export async function setupApiEndpoints(_userId?: string): Promise<void> {
   registerLibraryUpdaterHandlers();
   registerBackgroundProcessingHandlers();
   registerBlockchainHandlers();
+  registerAIContractHandlers();
   registerRendererLogHandlers();
   // Use V2 handlers if available, fallback to V1
   try {

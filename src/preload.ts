@@ -173,6 +173,29 @@ const validInvokeChannels = [
   "ci:unsubscribe-updates",
   "ci:stream-build-logs",
   "ci:stop-stream-build-logs",
+  // AI Contract channels
+  "ai-contract:generate",
+  "ai-contract:analyze",
+  "ai-contract:optimize",
+  "ai-contract:compile",
+  "ai-contract:deploy",
+  "ai-contract:get-templates",
+  "ai-contract:save-template",
+  "ai-contract:get-history",
+  // Blockchain channels
+  "blockchain:get-networks",
+  "blockchain:get-balance",
+  "blockchain:estimate-gas",
+  "blockchain:send-transaction",
+  "blockchain:get-transaction",
+  "blockchain:get-block",
+  "blockchain:deploy-contract",
+  "blockchain:call-contract",
+  "blockchain:get-gas-price",
+  "blockchain:get-nft-metadata",
+  "blockchain:get-token-info",
+  "blockchain:watch-address",
+  "blockchain:stop-watching",
   // Test-only channels
   // These should ALWAYS be guarded with IS_TEST_BUILD in the main process.
   // We can't detect with IS_TEST_BUILD in the preload script because
@@ -197,6 +220,14 @@ const validReceiveChannels = [
   // CI/CD real-time updates
   "ci:update",
   "ci:build-logs",
+  // AI Contract updates
+  "ai-contract:generation-progress",
+  "ai-contract:analysis-complete",
+  "ai-contract:deployment-status",
+  // Blockchain real-time updates
+  "blockchain:transaction-update",
+  "blockchain:block-update",
+  "blockchain:balance-update",
 ] as const;
 
 type ValidInvokeChannel = (typeof validInvokeChannels)[number];

@@ -10,6 +10,9 @@ import {
 } from 'lucide-react';
 import BlockchainTokenGenerator from './BlockchainTokenGenerator';
 import DeFiProtocolBuilder from './DeFiProtocolBuilder';
+import { BlockchainAnalyticsEnhanced } from './BlockchainAnalyticsEnhanced';
+import AISmartContractAssistant from './AISmartContractAssistant';
+import Web3AppGenerator from './Web3AppGenerator';
 
 const BlockchainHub: React.FC = () => {
   const [activeTab, setActiveTab] = useState('tokens');
@@ -60,42 +63,15 @@ const BlockchainHub: React.FC = () => {
           </TabsContent>
 
           <TabsContent value="ai" className="h-full m-0">
-            <div className="p-6">
-              <div className="flex flex-col items-center justify-center h-96 text-center">
-                <Brain className="h-16 w-16 text-purple-600 mb-4" />
-                <h3 className="text-xl font-semibold mb-2">AI Smart Contract Assistant</h3>
-                <p className="text-muted-foreground max-w-md">
-                  Describe your blockchain project in natural language and let AI generate optimized smart contracts with security analysis
-                </p>
-                <p className="text-sm text-muted-foreground mt-4">Coming soon...</p>
-              </div>
-            </div>
+            <AISmartContractAssistant />
           </TabsContent>
 
           <TabsContent value="analytics" className="h-full m-0">
-            <div className="p-6">
-              <div className="flex flex-col items-center justify-center h-96 text-center">
-                <BarChart3 className="h-16 w-16 text-purple-600 mb-4" />
-                <h3 className="text-xl font-semibold mb-2">Blockchain Analytics Dashboard</h3>
-                <p className="text-muted-foreground max-w-md">
-                  Monitor deployed contracts, track gas prices, analyze token metrics, and integrate with blockchain explorers
-                </p>
-                <p className="text-sm text-muted-foreground mt-4">Coming soon...</p>
-              </div>
-            </div>
+            <BlockchainAnalyticsEnhanced />
           </TabsContent>
 
           <TabsContent value="web3" className="h-full m-0">
-            <div className="p-6">
-              <div className="flex flex-col items-center justify-center h-96 text-center">
-                <Rocket className="h-16 w-16 text-purple-600 mb-4" />
-                <h3 className="text-xl font-semibold mb-2">Web3 App Generator</h3>
-                <p className="text-muted-foreground max-w-md">
-                  Generate full-stack Web3 applications with wallet integration, IPFS storage, and pre-built UI components
-                </p>
-                <p className="text-sm text-muted-foreground mt-4">Coming soon...</p>
-              </div>
-            </div>
+            <Web3AppGenerator />
           </TabsContent>
         </div>
       </Tabs>

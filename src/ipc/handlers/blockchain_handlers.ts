@@ -7,6 +7,7 @@ import { ipcMain } from 'electron';
 import log from 'electron-log';
 import { createLoggedHandler } from './safe_handle';
 import BlockchainGenerator, { TokenParams, GeneratedContract, DeploymentResult } from '../../services/blockchain-generator';
+import blockchainAPIService from '../../services/blockchain-api-service';
 import * as path from 'path';
 import * as fs from 'fs-extra';
 
@@ -271,29 +272,27 @@ export function registerBlockchainHandlers() {
     }
   });
   
-  // Get gas prices
-  handle('blockchain:get-gas-prices', async (): Promise<{
+  // Get gas prices with real blockchain data
+  handle('blockchain:get-gas-prices', async (_event, network = 'ethereum'): Promise<{
     success: boolean;
-    data?: {
-      slow: string;
-      standard: string;
-      fast: string;
-      instant: string;
-    };
+    data?: any;
     error?: string;
   }> => {
     try {
-      // In production, this would fetch from gas oracle
+      const gasPrice = await blockchainAPIService.getGasPrice(network);
       return {
         success: true,
         data: {
-          slow: '10 gwei',
-          standard: '20 gwei',
-          fast: '30 gwei',
-          instant: '50 gwei'
+          slow: `${gasPrice.slow} gwei`,
+          standard: `${gasPrice.standard} gwei`,
+          fast: `${gasPrice.fast} gwei`,
+          instant: `${gasPrice.instant || gasPrice.fast} gwei`,
+          baseFee: gasPrice.baseFee ? `${gasPrice.baseFee} gwei` : undefined,
+          priority: gasPrice.priority ? `${gasPrice.priority} gwei` : undefined
         }
       };
     } catch (error: any) {
+      logger.error(`Failed to get gas prices for ${network}:`, error);
       return {
         success: false,
         error: error.message
@@ -340,5 +339,267 @@ export function registerBlockchainHandlers() {
     }
   });
   
-  logger.info('Blockchain IPC handlers registered successfully');
+  // Estimate gas for transactions
+  handle('blockchain:estimate-gas', async (_event, params: {
+    network: string;
+    transaction?: {
+      from?: string;
+      to?: string;
+      value?: string;
+      data?: string;
+    };
+  }): Promise<{
+    success: boolean;
+    data?: any;
+    error?: string;
+  }> => {
+    try {
+      logger.info(`Estimating gas for network: ${params.network}`);
+      
+      // Get current gas prices
+      const gasPrice = await blockchainAPIService.getGasPrice(params.network);
+      
+      // Estimate gas for transaction if provided
+      let estimatedGas = '21000'; // Default for simple transfer
+      if (params.transaction) {
+        estimatedGas = await blockchainAPIService.estimateGas(
+          params.network,
+          params.transaction
+        );
+      }
+      
+      return {
+        success: true,
+        data: {
+          gasPrice: gasPrice.standard,
+          estimatedGas,
+          maxFeePerGas: gasPrice.fast,
+          maxPriorityFeePerGas: gasPrice.priority || '2',
+          baseFee: gasPrice.baseFee,
+          network: params.network,
+          timestamp: Date.now()
+        }
+      };
+    } catch (error: any) {
+      logger.error('Failed to estimate gas:', error);
+      return {
+        success: false,
+        error: error.message || 'Failed to estimate gas'
+      };
+    }
+  });
+
+  // Get blockchain statistics
+  handle('blockchain:get-stats', async (_event, network = 'ethereum'): Promise<{
+    success: boolean;
+    data?: any;
+    error?: string;
+  }> => {
+    try {
+      const stats = await blockchainAPIService.getBlockchainStats(network);
+      return {
+        success: true,
+        data: stats
+      };
+    } catch (error: any) {
+      logger.error(`Failed to get blockchain stats for ${network}:`, error);
+      return {
+        success: false,
+        error: error.message
+      };
+    }
+  });
+
+  // Get token metrics
+  handle('blockchain:get-token-metrics', async (_event, params: {
+    network: string;
+    addresses: string[];
+  }): Promise<{
+    success: boolean;
+    data?: any;
+    error?: string;
+  }> => {
+    try {
+      const metrics = await blockchainAPIService.getTokenMetrics(
+        params.network,
+        params.addresses
+      );
+      return {
+        success: true,
+        data: metrics
+      };
+    } catch (error: any) {
+      logger.error('Failed to get token metrics:', error);
+      return {
+        success: false,
+        error: error.message
+      };
+    }
+  });
+
+  // Get contract activity
+  handle('blockchain:get-contract-activity', async (_event, params: {
+    network: string;
+    limit?: number;
+  }): Promise<{
+    success: boolean;
+    data?: any;
+    error?: string;
+  }> => {
+    try {
+      const activity = await blockchainAPIService.getContractActivity(
+        params.network,
+        params.limit
+      );
+      return {
+        success: true,
+        data: activity
+      };
+    } catch (error: any) {
+      logger.error('Failed to get contract activity:', error);
+      return {
+        success: false,
+        error: error.message
+      };
+    }
+  });
+
+  // Get whale transactions
+  handle('blockchain:get-whale-transactions', async (_event, params: {
+    network: string;
+    minValue?: number;
+  }): Promise<{
+    success: boolean;
+    data?: any;
+    error?: string;
+  }> => {
+    try {
+      const whales = await blockchainAPIService.getWhaleTransactions(
+        params.network,
+        params.minValue
+      );
+      return {
+        success: true,
+        data: whales
+      };
+    } catch (error: any) {
+      logger.error('Failed to get whale transactions:', error);
+      return {
+        success: false,
+        error: error.message
+      };
+    }
+  });
+
+  // Get DeFi metrics
+  handle('blockchain:get-defi-metrics', async (_event, network = 'ethereum'): Promise<{
+    success: boolean;
+    data?: any;
+    error?: string;
+  }> => {
+    try {
+      const metrics = await blockchainAPIService.getDeFiMetrics(network);
+      return {
+        success: true,
+        data: metrics
+      };
+    } catch (error: any) {
+      logger.error('Failed to get DeFi metrics:', error);
+      return {
+        success: false,
+        error: error.message
+      };
+    }
+  });
+
+  // Get MEV data
+  handle('blockchain:get-mev-data', async (_event, params: {
+    network: string;
+    blockRange?: { start: number; end: number };
+  }): Promise<{
+    success: boolean;
+    data?: any;
+    error?: string;
+  }> => {
+    try {
+      const mevData = await blockchainAPIService.getMEVData(
+        params.network,
+        params.blockRange
+      );
+      return {
+        success: true,
+        data: mevData
+      };
+    } catch (error: any) {
+      logger.error('Failed to get MEV data:', error);
+      return {
+        success: false,
+        error: error.message
+      };
+    }
+  });
+
+  // Get historical data
+  handle('blockchain:get-historical-data', async (_event, params: {
+    network: string;
+    metric: 'gasPrice' | 'tps' | 'tvl' | 'volume';
+    timeRange: { start: string; end: string; interval: 'hour' | 'day' | 'week' };
+  }): Promise<{
+    success: boolean;
+    data?: any;
+    error?: string;
+  }> => {
+    try {
+      const data = await blockchainAPIService.getHistoricalData(
+        params.network,
+        params.metric,
+        {
+          start: new Date(params.timeRange.start),
+          end: new Date(params.timeRange.end),
+          interval: params.timeRange.interval
+        }
+      );
+      return {
+        success: true,
+        data
+      };
+    } catch (error: any) {
+      logger.error('Failed to get historical data:', error);
+      return {
+        success: false,
+        error: error.message
+      };
+    }
+  });
+
+  // Export analytics data
+  handle('blockchain:export-data', async (_event, params: {
+    data: any;
+    format: 'csv' | 'json';
+    filename: string;
+  }): Promise<{
+    success: boolean;
+    content?: string;
+    error?: string;
+  }> => {
+    try {
+      const content = await blockchainAPIService.exportData(
+        params.data,
+        params.format,
+        params.filename
+      );
+      return {
+        success: true,
+        content
+      };
+    } catch (error: any) {
+      logger.error('Failed to export data:', error);
+      return {
+        success: false,
+        error: error.message
+      };
+    }
+  });
+
+  logger.info('Blockchain IPC handlers registered successfully with real API connections');
 }
