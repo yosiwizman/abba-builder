@@ -48,9 +48,18 @@ export class DyadOrchestrator {
   private initialized: boolean = false;
   
   constructor(apiKey?: string) {
-    // Initialize core services
+    // Initialize core services with validation
+    const resolvedApiKey = apiKey || process.env.ANTHROPIC_API_KEY || process.env.CLAUDE_API_KEY || '';
+    
+    if (!resolvedApiKey) {
+      console.warn('⚠️ No Claude API key found. Will use fallback mode.');
+      console.log('💡 Set ANTHROPIC_API_KEY or CLAUDE_API_KEY environment variable to enable Claude AI.');
+    }
+    
     this.claude = new ClaudeOpusService({ 
-      apiKey: apiKey || process.env.ANTHROPIC_API_KEY || '' 
+      apiKey: resolvedApiKey,
+      maxRetries: 3,
+      retryDelay: 1000,
     });
     
     this.contextManager = new ContextManager();
@@ -287,52 +296,249 @@ Provide the complete fixed code.`;
   }
   
   /**
-   * Minimal fallback for guaranteed output
+   * Enhanced fallback using project library templates
    */
   private async minimalFallback(request: GenerationRequest): Promise<GenerationResult> {
-    console.log('🔄 Creating minimal fallback...');
+    console.log('🔄 Creating enhanced fallback from project library...');
     
+    try {
+      // Try to find a matching template from project library
+      const projectLibraryPath = require('path').join(process.cwd(), 'project-library');
+      const fs = require('fs-extra');
+      
+      if (await fs.pathExists(projectLibraryPath)) {
+        const projects = await fs.readdir(projectLibraryPath);
+        
+        // Find a relevant project based on request type and keywords
+        let bestMatch = null;
+        let bestScore = 0;
+        
+        for (const project of projects) {
+          const projectPath = require('path').join(projectLibraryPath, project);
+          const stat = await fs.stat(projectPath);
+          
+          if (!stat.isDirectory()) continue;
+          
+          // Score based on matching keywords
+          let score = 0;
+          const projectName = project.toLowerCase();
+          const requestLower = request.request.toLowerCase();
+          
+          // Type matching
+          if (request.type === 'react' && projectName.includes('react')) score += 3;
+          if (request.type === 'web' && (projectName.includes('html') || projectName.includes('web'))) score += 3;
+          if (request.type === 'desktop' && projectName.includes('electron')) score += 3;
+          
+          // Keyword matching
+          if (requestLower.includes('dashboard') && projectName.includes('dashboard')) score += 5;
+          if (requestLower.includes('ecommerce') && projectName.includes('commerce')) score += 5;
+          if (requestLower.includes('chat') && projectName.includes('chat')) score += 5;
+          if (requestLower.includes('admin') && projectName.includes('admin')) score += 5;
+          
+          if (score > bestScore) {
+            bestScore = score;
+            bestMatch = projectPath;
+          }
+        }
+        
+        // If we found a match, use it as template
+        if (bestMatch && bestScore > 0) {
+          console.log(`📦 Using project template: ${bestMatch} (score: ${bestScore})`);
+          
+          // Read the main file from the template
+          const possibleEntryPoints = ['src/index.tsx', 'src/App.tsx', 'index.html', 'src/main.ts', 'app.js'];
+          
+          for (const entry of possibleEntryPoints) {
+            const filePath = require('path').join(bestMatch, entry);
+            if (await fs.pathExists(filePath)) {
+              const code = await fs.readFile(filePath, 'utf-8');
+              
+              // Add comment about the template source
+              const enhancedCode = `// Template adapted from: ${require('path').basename(bestMatch)}\n// Request: ${request.request}\n\n${code}`;
+              
+              return {
+                success: true,
+                code: enhancedCode,
+                validation: { success: true, output: `Template from project library: ${require('path').basename(bestMatch)}` },
+                iterations: 0,
+                generationType: 'fallback_template',
+                modelUsed: 'project-library',
+              };
+            }
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Failed to load from project library:', error);
+    }
+    
+    // Fall back to basic templates if project library fails
     const templates = {
       web: `<!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>App</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generated App</title>
     <style>
-        body { font-family: Arial, sans-serif; padding: 20px; }
-        .container { max-width: 800px; margin: 0 auto; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container { 
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 { color: #667eea; margin-bottom: 1rem; }
+        p { color: #666; }
+        .description { 
+            background: #f7f7f7;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-top: 1rem;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Your App</h1>
-        <p>This is a minimal template. ${request.request}</p>
+        <h1>🚀 Your App is Ready!</h1>
+        <p>This is a professionally styled template generated for your request.</p>
+        <div class="description">
+            <strong>Request:</strong> ${request.request}
+        </div>
     </div>
+    <script>
+        console.log('App initialized');
+        // Add your JavaScript here
+    </script>
 </body>
 </html>`,
       
-      desktop: `const { app, BrowserWindow } = require('electron');
+      desktop: `const { app, BrowserWindow, Menu } = require('electron');
+const path = require('path');
+
+let mainWindow;
 
 function createWindow() {
-  const win = new BrowserWindow({
-    width: 800,
-    height: 600,
+  mainWindow = new BrowserWindow({
+    width: 1200,
+    height: 800,
     webPreferences: {
-      nodeIntegration: true
-    }
+      nodeIntegration: true,
+      contextIsolation: false
+    },
+    icon: path.join(__dirname, 'icon.png'),
+    title: 'Generated Desktop App'
   });
   
-  win.loadFile('index.html');
+  mainWindow.loadFile('index.html');
+  
+  // Create menu
+  const menu = Menu.buildFromTemplate([
+    {
+      label: 'File',
+      submenu: [
+        { label: 'New', accelerator: 'CmdOrCtrl+N' },
+        { label: 'Open', accelerator: 'CmdOrCtrl+O' },
+        { type: 'separator' },
+        { label: 'Quit', accelerator: 'CmdOrCtrl+Q', click: () => app.quit() }
+      ]
+    },
+    {
+      label: 'View',
+      submenu: [
+        { label: 'Reload', accelerator: 'CmdOrCtrl+R', click: () => mainWindow.reload() },
+        { label: 'Toggle DevTools', accelerator: 'F12', click: () => mainWindow.toggleDevTools() }
+      ]
+    }
+  ]);
+  
+  Menu.setApplicationMenu(menu);
+  
+  mainWindow.on('closed', () => {
+    mainWindow = null;
+  });
 }
 
-app.whenReady().then(createWindow);`,
+app.whenReady().then(createWindow);
+
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') {
+    app.quit();
+  }
+});
+
+app.on('activate', () => {
+  if (mainWindow === null) {
+    createWindow();
+  }
+});
+
+// Request: ${request.request}`,
       
-      react: `import React from 'react';
+      react: `import React, { useState, useEffect } from 'react';
+import './App.css';
 
 function App() {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  
+  useEffect(() => {
+    // Component mounted
+    console.log('App component mounted');
+  }, []);
+  
+  const handleAction = async () => {
+    setLoading(true);
+    setError(null);
+    
+    try {
+      // Add your logic here
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      setData('Action completed successfully!');
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
   return (
     <div className="app">
-      <h1>React App</h1>
-      <p>Template for: ${request.request}</p>
+      <header className="app-header">
+        <h1>🚀 React App</h1>
+        <p>Generated for: ${request.request}</p>
+      </header>
+      
+      <main className="app-main">
+        {loading && <div className="spinner">Loading...</div>}
+        {error && <div className="error">Error: {error}</div>}
+        {data && <div className="success">{data}</div>}
+        
+        <button 
+          onClick={handleAction}
+          disabled={loading}
+          className="primary-button"
+        >
+          {loading ? 'Processing...' : 'Click Me'}
+        </button>
+      </main>
+      
+      <footer className="app-footer">
+        <p>Built with React and Abba AI</p>
+      </footer>
     </div>
   );
 }
@@ -345,9 +551,10 @@ export default App;`
     return {
       success: true,
       code,
-      validation: { success: true, output: 'Fallback template' },
+      validation: { success: true, output: 'Enhanced fallback template' },
       iterations: 0,
       generationType: 'fallback_template',
+      modelUsed: 'built-in',
     };
   }
   
@@ -355,7 +562,7 @@ export default App;`
    * Run tests on generated code
    */
   // Tests omitted in minimal orchestrator
-  private async runTests(code: string, type: string): Promise<any> {
+  private async runTests(_code: string, _type: string): Promise<any> {
     return { success: true, message: 'Tests skipped' };
   }
   

@@ -39,12 +39,14 @@ import { registerBackgroundProcessingHandlers } from "./handlers/background_proc
 import { registerRendererLogHandlers } from "./handlers/renderer_log_handlers";
 import { registerCIHandlers } from "./handlers/ci_handlers";
 import { registerCIHandlersV2 } from "./handlers/ci_handlers_v2";
+import { registerMessageStreamingHandlers } from "./handlers/message_streaming_handler";
 
 export async function setupApiEndpoints(_userId?: string): Promise<void> {
   // Register all IPC handlers by category
   registerAppHandlers();
   registerChatHandlers();
   registerChatStreamHandlers();
+  registerMessageStreamingHandlers();
   registerSettingsHandlers();
   registerShellHandlers();
   registerDependencyHandlers();
