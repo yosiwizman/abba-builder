@@ -34,7 +34,11 @@ interface GeneratedContract {
   gasEstimate?: number;
 }
 
-export const BlockchainTokenGenerator: React.FC = () => {
+interface BlockchainTokenGeneratorProps {
+  embedded?: boolean;
+}
+
+export const BlockchainTokenGenerator: React.FC<BlockchainTokenGeneratorProps> = ({ embedded = false }) => {
   const [loading, setLoading] = useState(false);
   const [deploying, setDeploying] = useState(false);
   const [generatedContract, setGeneratedContract] = useState<GeneratedContract | null>(null);
@@ -142,7 +146,7 @@ export const BlockchainTokenGenerator: React.FC = () => {
   };
 
   return (
-    <div className="p-6 max-w-7xl mx-auto relative">
+    <div className={embedded ? "" : "p-6 max-w-7xl mx-auto relative"}>
       {/* Notification */}
       {notification && (
         <div className={`fixed top-4 right-4 z-50 px-4 py-3 rounded-lg shadow-lg transition-opacity ${

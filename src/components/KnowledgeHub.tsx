@@ -16,7 +16,7 @@ import {
   Shield,
 } from "lucide-react";
 import ProjectLibrary from "./ProjectLibrary";
-import BlockchainTokenGenerator from "./BlockchainTokenGenerator";
+import BlockchainHub from "./BlockchainHub";
 
 const KnowledgeHub = () => {
   const [activeTab, setActiveTab] = useState("patterns");
@@ -235,7 +235,7 @@ const KnowledgeHub = () => {
         {activeTab === "projects" ? (
           <ProjectLibrary />
         ) : activeTab === "blockchain" ? (
-          <BlockchainTokenGenerator />
+          <BlockchainHub />
         ) : loading ? (
           <div className="flex items-center justify-center h-64">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
