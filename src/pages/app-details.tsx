@@ -40,6 +40,7 @@ import { invalidateAppQuery } from "@/hooks/useLoadApp";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useCheckName } from "@/hooks/useCheckName";
 import { AppUpgrades } from "@/components/AppUpgrades";
+import BugsTracker from "@/components/bugs-tracker";
 
 export default function AppDetailsPage() {
   const navigate = useNavigate();
@@ -336,6 +337,18 @@ export default function AppDetailsPage() {
         <div className="border rounded-lg p-6">
           <h2 className="font-semibold mb-4">Connect to GitHub</h2>
           <GitHubConnector appId={appId} folderName={selectedApp.path} />
+        </div>
+
+        {/* Bugs Tracker Section */}
+        <div className="border rounded-lg p-6">
+          <h2 className="font-semibold mb-4">Bugs Tracker</h2>
+          {selectedApp.githubOrg && selectedApp.githubRepo ? (
+            <BugsTracker owner={selectedApp.githubOrg} projectName={selectedApp.githubRepo} />
+          ) : (
+            <div className="text-sm text-muted-foreground">
+              Link this app to a GitHub repository to view open issues, good-first issues, and help-wanted items.
+            </div>
+          )}
         </div>
 
         <div className="border rounded-lg p-6">

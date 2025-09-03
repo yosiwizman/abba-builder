@@ -56,6 +56,7 @@ const validInvokeChannels = [
   "github:connect-existing-repo",
   "github:push",
   "github:disconnect",
+  "github:fetch-issues",
   "neon:create-project",
   "neon:get-project",
   "neon:delete-branch",
@@ -241,6 +242,17 @@ const api = {
   removeAllListeners: safeRemoveAll,
   removeListener: safeRemove,
   send: safeSend,
+  // Convenience wrapper for Bugs Tracker component
+  fetchProjectBugs: (args: {
+    owner: string;
+    repo: string;
+    state?: "open" | "closed" | "all";
+    labels?: string[];
+    perPage?: number;
+    page?: number;
+    includePRs?: boolean;
+    search?: string;
+  }) => safeInvoke("github:fetch-issues", args),
 } as const;
 
 contextBridge.exposeInMainWorld("electron", api);

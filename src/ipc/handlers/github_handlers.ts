@@ -628,7 +628,97 @@ async function handleDisconnectGithubRepo(
     .where(eq(apps.id, appId));
 }
 
-// --- Registration ---
+// --- Issues / Bugs Handlers ---
+async function handleFetchIssues(
+  event: IpcMainInvokeEvent,
+  args: {
+    owner: string;
+    repo: string;
+    state?: "open" | "closed" | "all";
+    labels?: string[];
+    perPage?: number;
+    page?: number;
+    includePRs?: boolean;
+    search?: string;
+    sort?: "created" | "updated" | "comments";
+    direction?: "asc" | "desc";
+  },
+): Promise<any[]> {
+  try {
+    const {
+      owner,
+      repo,
+      state = "open",
+      labels = [],
+      perPage = 50,
+      page = 1,
+      includePRs = false,
+      search = "",
+      sort = "updated",
+      direction = "desc",
+    } = (args || {}) as any;
+
+    if (!owner || !repo) {
+      throw new Error("owner and repo are required");
+    }
+
+    const settings = readSettings();
+    const accessToken = settings.githubAccessToken?.value;
+
+    const params = new URLSearchParams();
+    params.set("state", state);
+    if (labels.length > 0) {
+      params.set("labels", labels.join(","));
+    }
+    params.set("per_page", String(Math.min(Math.max(perPage, 1), 100)));
+    params.set("page", String(Math.max(page, 1)));
+    if (sort) params.set("sort", sort);
+    if (direction) params.set("direction", direction);
+
+    const url = `${GITHUB_API_BASE}/repos/${owner}/${repo}/issues?${params.toString()}`;
+
+    const headers: Record<string, string> = {
+      Accept: "application/vnd.github+json",
+    };
+    if (accessToken) {
+      headers.Authorization = `Bearer ${accessToken}`;
+    }
+
+    const res = await fetch(url, { headers });
+    if (!res.ok) {
+      let msg: string;
+      try {
+        const errData = await res.json();
+        msg = errData.message || res.statusText;
+      } catch {
+        msg = res.statusText;
+      }
+      throw new Error(`GitHub API error: ${res.status} ${msg}`);
+    }
+
+    const raw = await res.json();
+
+    let items = Array.isArray(raw) ? raw : [];
+    if (!includePRs) {
+      items = items.filter((it) => !it.pull_request);
+    }
+
+    if (search && search.trim().length > 0) {
+      const q = search.trim().toLowerCase();
+      items = items.filter((it) => {
+        const title = (it.title || "").toLowerCase();
+        const body = (it.body || "").toLowerCase();
+        return title.includes(q) || body.includes(q);
+      });
+    }
+
+    return items;
+  } catch (err: any) {
+    logger.error("[GitHub Handler] Failed to fetch issues:", err);
+    throw new Error(err.message || "Failed to fetch issues from GitHub.");
+  }
+}
+
 export function registerGithubHandlers() {
   ipcMain.handle("github:start-flow", handleStartGithubFlow);
   ipcMain.handle("github:list-repos", handleListGithubRepos);
@@ -647,8 +737,13 @@ export function registerGithubHandlers() {
     ) => handleConnectToExistingRepo(event, args),
   );
   ipcMain.handle("github:push", handlePushToGithub);
-  ipcMain.handle("github:disconnect", (event, args: { appId: number }) =>
-    handleDisconnectGithubRepo(event, args),
+  ipcMain.handle(
+    "github:disconnect",
+    (event, args: { appId: number }) => handleDisconnectGithubRepo(event, args),
+  );
+  ipcMain.handle(
+    "github:fetch-issues",
+    (event, args) => handleFetchIssues(event, args),
   );
 }
 
