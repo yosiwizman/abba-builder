@@ -1,0 +1,24 @@
+{
+  "stars": 127443,
+  "forks": 11944,
+  "open_issues": 2522,
+  "description": "Display and control your Android device",
+  "language": "C",
+  "topics": [
+    "android",
+    "c",
+    "ffmpeg",
+    "libav",
+    "mirroring",
+    "recording",
+    "screen",
+    "sdl2"
+  ],
+  "license": "Apache-2.0",
+  "created_at": "2017-11-21T18:00:27Z",
+  "updated_at": "2025-09-03T11:54:24Z",
+  "homepage": "",
+  "size": 7586,
+  "watchers": 127443,
+  "_fetched_at": "2025-09-03T12:32:57.506Z"
+}

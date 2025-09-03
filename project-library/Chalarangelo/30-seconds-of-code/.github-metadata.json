@@ -1,0 +1,29 @@
+{
+  "stars": 125192,
+  "forks": 12311,
+  "open_issues": 0,
+  "description": "Coding articles to level up your development skills",
+  "language": "JavaScript",
+  "topics": [
+    "astro",
+    "awesome-list",
+    "css",
+    "education",
+    "es6-javascript",
+    "git",
+    "html",
+    "javascript",
+    "learn-to-code",
+    "learning-resources",
+    "nodejs",
+    "programming",
+    "snippets"
+  ],
+  "license": "CC-BY-4.0",
+  "created_at": "2017-11-29T17:35:03Z",
+  "updated_at": "2025-09-03T12:29:52Z",
+  "homepage": "https://30secondsofcode.org/",
+  "size": 742426,
+  "watchers": 125192,
+  "_fetched_at": "2025-09-03T12:32:56.226Z"
+}

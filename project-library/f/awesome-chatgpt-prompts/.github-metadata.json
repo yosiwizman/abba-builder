@@ -1,0 +1,21 @@
+{
+  "stars": 133548,
+  "forks": 17739,
+  "open_issues": 282,
+  "description": "This repo includes ChatGPT prompt curation to use ChatGPT and other LLM tools better.",
+  "language": "JavaScript",
+  "topics": [
+    "bots",
+    "chatbot",
+    "chatgpt",
+    "chatgpt-api",
+    "language"
+  ],
+  "license": "CC0-1.0",
+  "created_at": "2022-12-05T13:54:13Z",
+  "updated_at": "2025-09-03T11:53:30Z",
+  "homepage": "https://prompts.chat",
+  "size": 1737,
+  "watchers": 133548,
+  "_fetched_at": "2025-09-03T12:33:13.206Z"
+}

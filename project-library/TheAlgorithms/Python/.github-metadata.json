@@ -1,0 +1,30 @@
+{
+  "stars": 206460,
+  "forks": 47707,
+  "open_issues": 395,
+  "description": "All Algorithms implemented in Python",
+  "language": "Python",
+  "topics": [
+    "algorithm",
+    "algorithm-competitions",
+    "algorithms-implemented",
+    "algos",
+    "community-driven",
+    "education",
+    "hacktoberfest",
+    "interview",
+    "learn",
+    "practice",
+    "python",
+    "searches",
+    "sorting-algorithms",
+    "sorts"
+  ],
+  "license": "MIT",
+  "created_at": "2016-07-16T09:44:01Z",
+  "updated_at": "2025-09-03T12:29:14Z",
+  "homepage": "https://thealgorithms.github.io/Python/",
+  "size": 15479,
+  "watchers": 206460,
+  "_fetched_at": "2025-09-03T12:32:58.762Z"
+}

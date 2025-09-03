@@ -1,0 +1,28 @@
+{
+  "stars": 326285,
+  "forks": 80162,
+  "open_issues": 80,
+  "description": "A complete computer science study plan to become a software engineer.",
+  "language": null,
+  "topics": [
+    "algorithm",
+    "algorithms",
+    "coding-interview",
+    "coding-interviews",
+    "computer-science",
+    "data-structures",
+    "interview",
+    "interview-prep",
+    "interview-preparation",
+    "programming-interviews",
+    "software-engineering",
+    "study-plan"
+  ],
+  "license": "CC-BY-SA-4.0",
+  "created_at": "2016-06-06T02:34:12Z",
+  "updated_at": "2025-09-03T12:31:36Z",
+  "homepage": "",
+  "size": 22700,
+  "watchers": 326285,
+  "_fetched_at": "2025-09-03T12:33:17.121Z"
+}

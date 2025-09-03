@@ -1,0 +1,29 @@
+{
+  "stars": 183146,
+  "forks": 33657,
+  "open_issues": 125,
+  "description": "A book series (2 published editions) on the JS language.",
+  "language": null,
+  "topics": [
+    "async",
+    "book",
+    "book-series",
+    "closures",
+    "education",
+    "es2015",
+    "es6",
+    "javascript",
+    "learn-to-code",
+    "programming",
+    "prototypes",
+    "training-materials",
+    "training-providers"
+  ],
+  "license": "NOASSERTION",
+  "created_at": "2013-11-16T02:37:24Z",
+  "updated_at": "2025-09-03T12:18:30Z",
+  "homepage": "",
+  "size": 15060,
+  "watchers": 183146,
+  "_fetched_at": "2025-09-03T12:33:15.106Z"
+}

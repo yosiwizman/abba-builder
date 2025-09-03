@@ -1,0 +1,30 @@
+{
+  "stars": 115113,
+  "forks": 28352,
+  "open_issues": 31,
+  "description": ":books: 免费的计算机编程类中文书籍，欢迎投稿",
+  "language": null,
+  "topics": [
+    "android",
+    "angular",
+    "books",
+    "free",
+    "ios",
+    "javascript",
+    "kotlin",
+    "pdf",
+    "programming",
+    "python",
+    "react",
+    "react-native",
+    "swift",
+    "vue"
+  ],
+  "license": "GPL-3.0",
+  "created_at": "2013-11-04T01:59:19Z",
+  "updated_at": "2025-09-03T10:50:43Z",
+  "homepage": "http://weibo.com/justjavac",
+  "size": 1059,
+  "watchers": 115113,
+  "_fetched_at": "2025-09-03T12:33:16.778Z"
+}

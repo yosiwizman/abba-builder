@@ -1,0 +1,20 @@
+{
+  "stars": 129703,
+  "forks": 18369,
+  "open_issues": 9547,
+  "description": "The Go programming language",
+  "language": "Go",
+  "topics": [
+    "go",
+    "golang",
+    "language",
+    "programming-language"
+  ],
+  "license": "BSD-3-Clause",
+  "created_at": "2014-08-19T04:33:40Z",
+  "updated_at": "2025-09-03T10:41:36Z",
+  "homepage": "https://go.dev",
+  "size": 408599,
+  "watchers": 129703,
+  "_fetched_at": "2025-09-03T12:33:16.078Z"
+}

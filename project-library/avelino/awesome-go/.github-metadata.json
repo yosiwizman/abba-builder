@@ -1,0 +1,22 @@
+{
+  "stars": 151438,
+  "forks": 12540,
+  "open_issues": 152,
+  "description": "A curated list of awesome Go frameworks, libraries and software",
+  "language": "Go",
+  "topics": [
+    "awesome",
+    "awesome-list",
+    "go",
+    "golang",
+    "golang-library",
+    "hacktoberfest"
+  ],
+  "license": "MIT",
+  "created_at": "2014-07-06T13:42:15Z",
+  "updated_at": "2025-09-03T12:15:32Z",
+  "homepage": "https://awesome-go.com",
+  "size": 10490,
+  "watchers": 151438,
+  "_fetched_at": "2025-09-03T12:32:59.490Z"
+}

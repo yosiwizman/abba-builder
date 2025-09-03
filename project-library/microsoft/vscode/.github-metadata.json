@@ -1,0 +1,21 @@
+{
+  "stars": 176353,
+  "forks": 34767,
+  "open_issues": 13303,
+  "description": "Visual Studio Code",
+  "language": "TypeScript",
+  "topics": [
+    "editor",
+    "electron",
+    "microsoft",
+    "typescript",
+    "visual-studio-code"
+  ],
+  "license": "MIT",
+  "created_at": "2015-09-03T20:23:38Z",
+  "updated_at": "2025-09-03T12:31:34Z",
+  "homepage": "https://code.visualstudio.com",
+  "size": 1062487,
+  "watchers": 176353,
+  "_fetched_at": "2025-09-03T12:33:20.169Z"
+}

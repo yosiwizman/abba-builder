@@ -8,6 +8,7 @@ import { DeleteConfirmationDialog } from "@/components/DeleteConfirmationDialog"
 import { GitHubLauncher } from "@/components/GitHubLauncher";
 import { AppGallery } from "@/components/AppGallery";
 import KnowledgeHub from "@/components/KnowledgeHub";
+import ProjectLibrary from "@/components/ProjectLibrary";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function LibraryPage() {
@@ -23,6 +24,7 @@ export default function LibraryPage() {
 
           <Tabs value={activeTab} onValueChange={setActiveTab}>
             <TabsList className="mb-4">
+              <TabsTrigger value="projects">Project Library</TabsTrigger>
               <TabsTrigger value="knowledge">Knowledge Hub</TabsTrigger>
               <TabsTrigger value="apps">App Gallery</TabsTrigger>
               <TabsTrigger value="prompts">Prompts</TabsTrigger>
@@ -65,6 +67,10 @@ export default function LibraryPage() {
 
             <TabsContent value="knowledge" className="h-full">
               <KnowledgeHub />
+            </TabsContent>
+
+            <TabsContent value="projects" className="h-full">
+              <ProjectLibrary />
             </TabsContent>
           </Tabs>
         </div>

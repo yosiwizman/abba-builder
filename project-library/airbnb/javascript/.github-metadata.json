@@ -1,0 +1,30 @@
+{
+  "stars": 147336,
+  "forks": 26780,
+  "open_issues": 177,
+  "description": "JavaScript Style Guide",
+  "language": "JavaScript",
+  "topics": [
+    "arrow-functions",
+    "es2015",
+    "es2016",
+    "es2017",
+    "es2018",
+    "es6",
+    "eslint",
+    "javascript",
+    "linting",
+    "naming-conventions",
+    "style-guide",
+    "style-linter",
+    "styleguide",
+    "tc39"
+  ],
+  "license": "MIT",
+  "created_at": "2012-11-01T23:13:50Z",
+  "updated_at": "2025-09-03T11:16:18Z",
+  "homepage": null,
+  "size": 3689,
+  "watchers": 147336,
+  "_fetched_at": "2025-09-03T12:32:59.147Z"
+}

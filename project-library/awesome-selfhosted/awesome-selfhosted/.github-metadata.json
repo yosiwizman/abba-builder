@@ -1,0 +1,24 @@
+{
+  "stars": 245022,
+  "forks": 11334,
+  "open_issues": 0,
+  "description": "A list of Free Software network services and web applications which can be hosted on your own servers",
+  "language": null,
+  "topics": [
+    "awesome",
+    "awesome-list",
+    "cloud",
+    "free-software",
+    "hosting",
+    "privacy",
+    "self-hosted",
+    "selfhosted"
+  ],
+  "license": "NOASSERTION",
+  "created_at": "2015-06-01T02:33:17Z",
+  "updated_at": "2025-09-03T12:29:35Z",
+  "homepage": "https://awesome-selfhosted.net/",
+  "size": 16602,
+  "watchers": 245022,
+  "_fetched_at": "2025-09-03T12:32:59.845Z"
+}
