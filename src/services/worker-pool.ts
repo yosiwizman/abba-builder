@@ -2,6 +2,7 @@ import Piscina from "piscina";
 import path from "path";
 import os from "os";
 import log from "electron-log";
+import { app } from "electron";
 
 const logger = log.scope("worker-pool");
 
@@ -52,8 +53,32 @@ export class WorkerPoolService {
     if (this.isInitialized) return;
 
     try {
-      // Create worker script path
-      const workerPath = path.join(__dirname, "workers", "pool-worker.js");
+      // Create worker script path - resolve relative to app path
+      const appPath = app.getAppPath();
+      const workerPath = path.join(
+        appPath,
+        "src",
+        "services",
+        "workers",
+        "pool-worker.js",
+      );
+
+      // Check if worker file exists
+      const fs = require("fs");
+      if (!fs.existsSync(workerPath)) {
+        // Try alternative path for packaged app
+        const altPath = path.join(__dirname, "workers", "pool-worker.js");
+        if (fs.existsSync(altPath)) {
+          logger.info(`Using alternative worker path: ${altPath}`);
+        } else {
+          logger.warn(
+            `Worker file not found at ${workerPath} or ${altPath}, worker pool disabled`,
+          );
+          // Set initialized to true to prevent repeated initialization attempts
+          this.isInitialized = true;
+          return;
+        }
+      }
 
       this.pool = new Piscina({
         filename: workerPath,
@@ -69,7 +94,9 @@ export class WorkerPoolService {
       );
     } catch (error) {
       logger.error("Failed to initialize worker pool:", error);
-      throw error;
+      // Mark as initialized to prevent repeated attempts
+      this.isInitialized = true;
+      // Don't throw - allow app to continue without worker pool
     }
   }
 
@@ -81,11 +108,23 @@ export class WorkerPoolService {
       await this.initialize();
     }
 
+    // If pool is not available (initialization failed), return mock result
+    if (!this.pool) {
+      logger.warn(
+        `Worker pool not available, returning mock result for task: ${task.type}`,
+      );
+      return {
+        success: false,
+        error: "Worker pool not initialized",
+        data: null,
+      } as any;
+    }
+
     const startTime = Date.now();
 
     try {
       logger.debug(`Executing task: ${task.type}`);
-      const result = await this.pool!.run(task);
+      const result = await this.pool.run(task);
 
       const duration = Date.now() - startTime;
       logger.debug(`Task ${task.type} completed in ${duration}ms`);
