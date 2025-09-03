@@ -13,6 +13,7 @@ import DeFiProtocolBuilder from './DeFiProtocolBuilder';
 import { BlockchainAnalyticsEnhanced } from './BlockchainAnalyticsEnhanced';
 import AISmartContractAssistant from './AISmartContractAssistant';
 import Web3AppGenerator from './Web3AppGenerator';
+import { DeFiDashboard } from './DeFiDashboard';
 
 const BlockchainHub: React.FC = () => {
   const [activeTab, setActiveTab] = useState('tokens');
@@ -30,7 +31,7 @@ const BlockchainHub: React.FC = () => {
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
-        <TabsList className="mx-6 mt-4 grid grid-cols-5 w-fit">
+        <TabsList className="mx-6 mt-4 grid grid-cols-6 w-fit">
           <TabsTrigger value="tokens" className="flex items-center gap-2">
             <Coins className="h-4 w-4" />
             Token Generator
@@ -50,6 +51,10 @@ const BlockchainHub: React.FC = () => {
           <TabsTrigger value="web3" className="flex items-center gap-2">
             <Rocket className="h-4 w-4" />
             Web3 Apps
+          </TabsTrigger>
+          <TabsTrigger value="defi-dashboard" className="flex items-center gap-2">
+            <TrendingUp className="h-4 w-4" />
+            DeFi Dashboard
           </TabsTrigger>
         </TabsList>
 
@@ -72,6 +77,10 @@ const BlockchainHub: React.FC = () => {
 
           <TabsContent value="web3" className="h-full m-0">
             <Web3AppGenerator />
+          </TabsContent>
+
+          <TabsContent value="defi-dashboard" className="h-full m-0">
+            <DeFiDashboard />
           </TabsContent>
         </div>
       </Tabs>
