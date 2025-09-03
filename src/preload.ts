@@ -142,6 +142,19 @@ const validInvokeChannels = [
   "project-library:init-proven",
   "project-library:refresh",
   "project-library:add-github",
+  // Worker Pool channels
+  "worker:analyze-code",
+  "worker:compile-typescript",
+  "worker:transform-code",
+  "worker:get-stats",
+  "worker:batch-analyze",
+  // Job Queue channels
+  "job:analyze-project",
+  "job:sync-github",
+  "job:build-template",
+  "job:schedule-cleanup",
+  "job:get-status",
+  "job:get-queue-stats",
   // CI/CD Dashboard channels
   "ci:get-builds",
   "ci:get-deployments",

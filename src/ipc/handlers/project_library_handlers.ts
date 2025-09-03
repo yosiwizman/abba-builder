@@ -21,7 +21,7 @@ function withProjectLibraryLogging<T extends any[], R>(
     log.info(`[${correlationId}] ${handlerName} started`, {
       handler: handlerName,
       correlationId,
-      input: input ? JSON.stringify(input).substring(0, 200) : 'no input', // Truncate for logging
+      input: input ? JSON.stringify(input).substring(0, 200) : "no input", // Truncate for logging
     });
 
     // Validate input if validator provided
@@ -500,194 +500,248 @@ export function registerProjectLibraryHandlers() {
   // Get all projects - enhanced to read from real project-library folder with pagination
   ipcMain.handle(
     "project-library:get-all",
-    withProjectLibraryLogging("project-library:get-all", async (_event, params: { offset?: number; limit?: number; sortBy?: string; filterLanguage?: string; searchTerm?: string } = {}) => {
-      try {
-        const projects: any[] = [];
-        // Use process.cwd() or app.getAppPath() to get the correct base path
-        const { app } = require('electron');
-        const libraryPath = path.join(process.cwd(), 'project-library');
-        
-        log.info(`Reading projects from: ${libraryPath}`);
-        
-        if (await fs.pathExists(libraryPath)) {
-          // Read all owner directories
-          const owners = await fs.readdir(libraryPath);
-          
-          // Process pagination parameters
-          const offset = params.offset || 0;
-          const limit = params.limit || 50;
-          const searchTerm = params.searchTerm?.toLowerCase();
-          const filterLanguage = params.filterLanguage;
-          
-          // Get all projects but apply offset and limit
-          let projectCount = 0;
-          let skippedCount = 0;
-          const maxProjects = 1000; // Higher limit for full library
-          
-          ownerLoop: for (const owner of owners) {
-            const ownerPath = path.join(libraryPath, owner);
-            const ownerStat = await fs.stat(ownerPath);
-            
-            if (ownerStat.isDirectory()) {
-              const repos = await fs.readdir(ownerPath);
-              
-              for (const repo of repos) {
-                const repoPath = path.join(ownerPath, repo);
-                const repoStat = await fs.stat(repoPath);
-                
-                if (repoStat.isDirectory()) {
-                  const projectData: any = {
-                    id: `${owner}-${repo}`,
-                    owner: owner,
-                    name: repo,
-                    fullName: `${owner}/${repo}`,
-                    localPath: repoPath,
-                    hasReadme: await fs.pathExists(path.join(repoPath, 'README.md')),
-                    lastUpdated: repoStat.mtime.toISOString()
-                  };
-                  
-                  // Try to read package.json for more info
-                  const packageJsonPath = path.join(repoPath, 'package.json');
-                  if (await fs.pathExists(packageJsonPath)) {
-                    try {
-                      const pkg = await fs.readJson(packageJsonPath);
-                      projectData.description = pkg.description || `${repo} project`;
-                      projectData.license = pkg.license;
-                      projectData.topics = pkg.keywords || [];
-                    } catch (e) {
+    withProjectLibraryLogging(
+      "project-library:get-all",
+      async (
+        _event,
+        params: {
+          offset?: number;
+          limit?: number;
+          sortBy?: string;
+          filterLanguage?: string;
+          searchTerm?: string;
+        } = {},
+      ) => {
+        try {
+          const projects: any[] = [];
+          // Use process.cwd() to get the correct base path
+          const libraryPath = path.join(process.cwd(), "project-library");
+
+          log.info(`Reading projects from: ${libraryPath}`);
+
+          if (await fs.pathExists(libraryPath)) {
+            // Read all owner directories
+            const owners = await fs.readdir(libraryPath);
+
+            // Process pagination parameters
+            const offset = params.offset || 0;
+            const limit = params.limit || 50;
+            const searchTerm = params.searchTerm?.toLowerCase();
+            const filterLanguage = params.filterLanguage;
+
+            // Get all projects but apply offset and limit
+            let projectCount = 0;
+            let skippedCount = 0;
+            const maxProjects = 1000; // Higher limit for full library
+
+            ownerLoop: for (const owner of owners) {
+              const ownerPath = path.join(libraryPath, owner);
+              const ownerStat = await fs.stat(ownerPath);
+
+              if (ownerStat.isDirectory()) {
+                const repos = await fs.readdir(ownerPath);
+
+                for (const repo of repos) {
+                  const repoPath = path.join(ownerPath, repo);
+                  const repoStat = await fs.stat(repoPath);
+
+                  if (repoStat.isDirectory()) {
+                    const projectData: any = {
+                      id: `${owner}-${repo}`,
+                      owner: owner,
+                      name: repo,
+                      fullName: `${owner}/${repo}`,
+                      localPath: repoPath,
+                      hasReadme: await fs.pathExists(
+                        path.join(repoPath, "README.md"),
+                      ),
+                      lastUpdated: repoStat.mtime.toISOString(),
+                    };
+
+                    // Try to read package.json for more info
+                    const packageJsonPath = path.join(repoPath, "package.json");
+                    if (await fs.pathExists(packageJsonPath)) {
+                      try {
+                        const pkg = await fs.readJson(packageJsonPath);
+                        projectData.description =
+                          pkg.description || `${repo} project`;
+                        projectData.license = pkg.license;
+                        projectData.topics = pkg.keywords || [];
+                      } catch {
+                        projectData.description = `${repo} project`;
+                      }
+                    } else {
                       projectData.description = `${repo} project`;
                     }
-                  } else {
-                    projectData.description = `${repo} project`;
-                  }
-                  
-                  // Detect language
-                  if (await fs.pathExists(path.join(repoPath, 'tsconfig.json'))) {
-                    projectData.language = 'TypeScript';
-                  } else if (await fs.pathExists(packageJsonPath)) {
-                    projectData.language = 'JavaScript';
-                  } else if (await fs.pathExists(path.join(repoPath, 'requirements.txt'))) {
-                    projectData.language = 'Python';
-                  } else if (await fs.pathExists(path.join(repoPath, 'go.mod'))) {
-                    projectData.language = 'Go';
-                  } else if (await fs.pathExists(path.join(repoPath, 'Cargo.toml'))) {
-                    projectData.language = 'Rust';
-                  } else if (await fs.pathExists(path.join(repoPath, 'pom.xml'))) {
-                    projectData.language = 'Java';
-                  } else {
-                    projectData.language = 'Unknown';
-                  }
-                  
-                  // Try to read GitHub stats from a metadata file if it exists
-                  const metadataPath = path.join(repoPath, '.github-metadata.json');
-                  if (await fs.pathExists(metadataPath)) {
-                    try {
-                      const metadata = await fs.readJson(metadataPath);
-                      projectData.stars = metadata.stars || 0;
-                      projectData.forks = metadata.forks || 0;
-                      projectData.openIssues = metadata.open_issues || 0;
-                    } catch (e) {
-                      // Use realistic defaults based on project name patterns
-                      projectData.stars = Math.floor(Math.random() * 10000) + 100;
+
+                    // Detect language
+                    if (
+                      await fs.pathExists(path.join(repoPath, "tsconfig.json"))
+                    ) {
+                      projectData.language = "TypeScript";
+                    } else if (await fs.pathExists(packageJsonPath)) {
+                      projectData.language = "JavaScript";
+                    } else if (
+                      await fs.pathExists(
+                        path.join(repoPath, "requirements.txt"),
+                      )
+                    ) {
+                      projectData.language = "Python";
+                    } else if (
+                      await fs.pathExists(path.join(repoPath, "go.mod"))
+                    ) {
+                      projectData.language = "Go";
+                    } else if (
+                      await fs.pathExists(path.join(repoPath, "Cargo.toml"))
+                    ) {
+                      projectData.language = "Rust";
+                    } else if (
+                      await fs.pathExists(path.join(repoPath, "pom.xml"))
+                    ) {
+                      projectData.language = "Java";
+                    } else {
+                      projectData.language = "Unknown";
+                    }
+
+                    // Try to read GitHub stats from a metadata file if it exists
+                    const metadataPath = path.join(
+                      repoPath,
+                      ".github-metadata.json",
+                    );
+                    if (await fs.pathExists(metadataPath)) {
+                      try {
+                        const metadata = await fs.readJson(metadataPath);
+                        projectData.stars = metadata.stars || 0;
+                        projectData.forks = metadata.forks || 0;
+                        projectData.openIssues = metadata.open_issues || 0;
+                      } catch {
+                        // Use realistic defaults based on project name patterns
+                        projectData.stars =
+                          Math.floor(Math.random() * 10000) + 100;
+                        projectData.forks = Math.floor(
+                          projectData.stars * 0.15,
+                        );
+                      }
+                    } else {
+                      // Use realistic defaults
+                      projectData.stars =
+                        Math.floor(Math.random() * 10000) + 100;
                       projectData.forks = Math.floor(projectData.stars * 0.15);
                     }
-                  } else {
-                    // Use realistic defaults
-                    projectData.stars = Math.floor(Math.random() * 10000) + 100;
-                    projectData.forks = Math.floor(projectData.stars * 0.15);
-                  }
-                  
-                  projectData.topics = projectData.topics || [];
-                  
-                  // Apply filters before adding to result
-                  let includeProject = true;
-                  
-                  if (searchTerm) {
-                    includeProject = 
-                      projectData.name.toLowerCase().includes(searchTerm) ||
-                      (projectData.description && projectData.description.toLowerCase().includes(searchTerm)) ||
-                      (projectData.topics && projectData.topics.some((t: string) => t.toLowerCase().includes(searchTerm)));
-                  }
-                  
-                  if (includeProject && filterLanguage && filterLanguage !== 'all') {
-                    includeProject = projectData.language === filterLanguage;
-                  }
-                  
-                  if (includeProject) {
-                    // Apply pagination
-                    if (skippedCount < offset) {
-                      skippedCount++;
-                    } else if (projects.length < limit) {
-                      projects.push(projectData);
+
+                    projectData.topics = projectData.topics || [];
+
+                    // Apply filters before adding to result
+                    let includeProject = true;
+
+                    if (searchTerm) {
+                      includeProject =
+                        projectData.name.toLowerCase().includes(searchTerm) ||
+                        (projectData.description &&
+                          projectData.description
+                            .toLowerCase()
+                            .includes(searchTerm)) ||
+                        (projectData.topics &&
+                          projectData.topics.some((t: string) =>
+                            t.toLowerCase().includes(searchTerm),
+                          ));
                     }
-                    projectCount++;
-                  }
-                  
-                  // Stop when we've found enough projects
-                  if (projects.length >= limit && projectCount >= offset + limit) {
-                    break ownerLoop;
-                  }
-                  
-                  // Safety limit to prevent infinite processing
-                  if (projectCount >= maxProjects) {
-                    break ownerLoop;
+
+                    if (
+                      includeProject &&
+                      filterLanguage &&
+                      filterLanguage !== "all"
+                    ) {
+                      includeProject = projectData.language === filterLanguage;
+                    }
+
+                    if (includeProject) {
+                      // Apply pagination
+                      if (skippedCount < offset) {
+                        skippedCount++;
+                      } else if (projects.length < limit) {
+                        projects.push(projectData);
+                      }
+                      projectCount++;
+                    }
+
+                    // Stop when we've found enough projects
+                    if (
+                      projects.length >= limit &&
+                      projectCount >= offset + limit
+                    ) {
+                      break ownerLoop;
+                    }
+
+                    // Safety limit to prevent infinite processing
+                    if (projectCount >= maxProjects) {
+                      break ownerLoop;
+                    }
                   }
                 }
               }
             }
           }
-        }
-        
-        // Calculate stats
-        const stats = {
-          totalProjects: projects.length,
-          totalStars: projects.reduce((sum, p) => sum + (p.stars || 0), 0),
-          languages: {} as Record<string, number>,
-          topProjects: projects
-            .sort((a, b) => (b.stars || 0) - (a.stars || 0))
-            .slice(0, 10)
-        };
-        
-        // Count languages
-        projects.forEach(p => {
-          if (p.language) {
-            stats.languages[p.language] = (stats.languages[p.language] || 0) + 1;
+
+          // Calculate stats
+          const stats = {
+            totalProjects: projects.length,
+            totalStars: projects.reduce((sum, p) => sum + (p.stars || 0), 0),
+            languages: {} as Record<string, number>,
+            topProjects: projects
+              .sort((a, b) => (b.stars || 0) - (a.stars || 0))
+              .slice(0, 10),
+          };
+
+          // Count languages
+          projects.forEach((p) => {
+            if (p.language) {
+              stats.languages[p.language] =
+                (stats.languages[p.language] || 0) + 1;
+            }
+          });
+
+          // Apply sorting
+          if (params.sortBy) {
+            switch (params.sortBy) {
+              case "stars":
+                projects.sort((a, b) => (b.stars || 0) - (a.stars || 0));
+                break;
+              case "name":
+                projects.sort((a, b) => a.name.localeCompare(b.name));
+                break;
+              case "updated":
+                projects.sort(
+                  (a, b) =>
+                    new Date(b.lastUpdated).getTime() -
+                    new Date(a.lastUpdated).getTime(),
+                );
+                break;
+            }
           }
-        });
-        
-        // Apply sorting
-        if (params.sortBy) {
-          switch (params.sortBy) {
-            case 'stars':
-              projects.sort((a, b) => (b.stars || 0) - (a.stars || 0));
-              break;
-            case 'name':
-              projects.sort((a, b) => a.name.localeCompare(b.name));
-              break;
-            case 'updated':
-              projects.sort((a, b) => 
-                new Date(b.lastUpdated).getTime() - new Date(a.lastUpdated).getTime()
-              );
-              break;
-          }
+
+          log.info(
+            `Loaded ${projects.length} real projects from library (offset: ${params.offset || 0}, limit: ${params.limit || 50})`,
+          );
+          return {
+            success: true,
+            data: {
+              projects,
+              stats,
+            },
+          };
+        } catch (error: any) {
+          log.error(
+            "Failed to read real projects, falling back to mock:",
+            error,
+          );
+          // Fallback to mock
+          const projectLibrary = await getProjectLibrary();
+          const projects = await projectLibrary.getAllProjects();
+          return { success: true, data: projects };
         }
-        
-        log.info(`Loaded ${projects.length} real projects from library (offset: ${params.offset || 0}, limit: ${params.limit || 50})`);
-        return { 
-          success: true,
-          data: { 
-            projects, 
-            stats 
-          } 
-        };
-      } catch (error: any) {
-        log.error('Failed to read real projects, falling back to mock:', error);
-        // Fallback to mock
-        const projectLibrary = await getProjectLibrary();
-        const projects = await projectLibrary.getAllProjects();
-        return { success: true, data: projects };
-      }
-    }),
+      },
+    ),
   );
 
   // Get projects by category
@@ -747,55 +801,70 @@ export function registerProjectLibraryHandlers() {
     "project-library:use-template",
     withProjectLibraryLogging(
       "project-library:use-template",
-      async (_event, params: { projectId: string; projectPath?: string; targetDir?: string; projectName?: string }) => {
+      async (
+        _event,
+        params: {
+          projectId: string;
+          projectPath?: string;
+          targetDir?: string;
+          projectName?: string;
+        },
+      ) => {
         try {
           // Import template initializer
-          const templateInitializer = (await import('../../services/template-initializer')).default;
-          const { app, dialog } = require('electron');
-          
+          const templateInitializer = (
+            await import("../../services/template-initializer")
+          ).default;
+          const { app, dialog } = require("electron");
+
           // If no project path provided, try to construct it from projectId
           let templatePath = params.projectPath;
           if (!templatePath && params.projectId) {
             // Parse projectId format: "owner-repo"
-            const [owner, repo] = params.projectId.split('-');
+            const [owner, repo] = params.projectId.split("-");
             if (owner && repo) {
-              templatePath = path.join(process.cwd(), 'project-library', owner, repo);
+              templatePath = path.join(
+                process.cwd(),
+                "project-library",
+                owner,
+                repo,
+              );
             }
           }
-          
-          if (!templatePath || !await fs.pathExists(templatePath)) {
-            return { 
-              success: false, 
-              error: 'Template project not found',
-              data: null 
+
+          if (!templatePath || !(await fs.pathExists(templatePath))) {
+            return {
+              success: false,
+              error: "Template project not found",
+              data: null,
             };
           }
-          
+
           // Get target directory from user if not provided
           let targetDir = params.targetDir;
           if (!targetDir) {
             const result = await dialog.showOpenDialog({
-              properties: ['openDirectory', 'createDirectory'],
-              title: 'Select directory for new project',
-              defaultPath: app.getPath('documents')
+              properties: ["openDirectory", "createDirectory"],
+              title: "Select directory for new project",
+              defaultPath: app.getPath("documents"),
             });
-            
+
             if (result.canceled || !result.filePaths.length) {
-              return { 
-                success: false, 
-                error: 'No directory selected',
-                data: null 
+              return {
+                success: false,
+                error: "No directory selected",
+                data: null,
               };
             }
             targetDir = result.filePaths[0];
           }
-          
+
           // Get project name if not provided
           let projectName = params.projectName;
           if (!projectName) {
             projectName = `my-${path.basename(templatePath)}-project`;
           }
-          
+
           // Initialize from template
           const initResult = await templateInitializer.initializeFromTemplate({
             templatePath,
@@ -803,36 +872,37 @@ export function registerProjectLibraryHandlers() {
             projectName,
             description: `Project created from ${path.basename(templatePath)} template`,
             initGit: true,
-            installDependencies: false // Let user install manually to avoid blocking
+            installDependencies: false, // Let user install manually to avoid blocking
           });
-          
+
           if (initResult.success) {
             // Open the project folder in explorer/finder
-            const { shell } = require('electron');
+            const { shell } = require("electron");
             shell.showItemInFolder(initResult.projectPath!);
-            
+
             return {
               success: true,
               data: {
                 projectPath: initResult.projectPath,
                 projectName,
                 warnings: initResult.warnings,
-                message: `Project created successfully at ${initResult.projectPath}`
-              }
+                message: `Project created successfully at ${initResult.projectPath}`,
+              },
             };
           } else {
             return {
               success: false,
-              error: initResult.error || 'Failed to create project from template',
-              data: null
+              error:
+                initResult.error || "Failed to create project from template",
+              data: null,
             };
           }
         } catch (error: any) {
-          log.error('Failed to use template:', error);
-          return { 
-            success: false, 
-            error: error.message || 'Failed to use template',
-            data: null 
+          log.error("Failed to use template:", error);
+          return {
+            success: false,
+            error: error.message || "Failed to use template",
+            data: null,
           };
         }
       },
@@ -856,42 +926,48 @@ export function registerProjectLibraryHandlers() {
   // Add GitHub repository to project library
   ipcMain.handle(
     "project-library:add-github",
-    withProjectLibraryLogging("project-library:add-github", async (_event, params: { url: string }) => {
-      try {
-        if (!params.url) {
-          return { success: false, error: 'GitHub URL is required' };
-        }
-        
-        // Parse GitHub URL to extract owner and repo
-        const urlMatch = params.url.match(/github\.com\/([^\/]+)\/([^\/]+)/);
-        if (!urlMatch) {
-          return { success: false, error: 'Invalid GitHub URL format' };
-        }
-        
-        const owner = urlMatch[1];
-        const repo = urlMatch[2].replace(/\.git$/, '');
-        
-        log.info(`Adding GitHub repository: ${owner}/${repo}`);
-        
-        // For now, return success with the parsed info
-        // In a real implementation, this would:
-        // 1. Fetch repo data from GitHub API
-        // 2. Download/clone the repository
-        // 3. Add to project library database
-        return { 
-          success: true, 
-          data: {
-            owner,
-            repo,
-            fullName: `${owner}/${repo}`,
-            message: `Repository ${owner}/${repo} added to library`
+    withProjectLibraryLogging(
+      "project-library:add-github",
+      async (_event, params: { url: string }) => {
+        try {
+          if (!params.url) {
+            return { success: false, error: "GitHub URL is required" };
           }
-        };
-      } catch (error: any) {
-        log.error('Failed to add GitHub repository:', error);
-        return { success: false, error: error.message || 'Failed to add repository' };
-      }
-    }),
+
+          // Parse GitHub URL to extract owner and repo
+          const urlMatch = params.url.match(/github\.com\/([^/]+)\/([^/]+)/);
+          if (!urlMatch) {
+            return { success: false, error: "Invalid GitHub URL format" };
+          }
+
+          const owner = urlMatch[1];
+          const repo = urlMatch[2].replace(/\.git$/, "");
+
+          log.info(`Adding GitHub repository: ${owner}/${repo}`);
+
+          // For now, return success with the parsed info
+          // In a real implementation, this would:
+          // 1. Fetch repo data from GitHub API
+          // 2. Download/clone the repository
+          // 3. Add to project library database
+          return {
+            success: true,
+            data: {
+              owner,
+              repo,
+              fullName: `${owner}/${repo}`,
+              message: `Repository ${owner}/${repo} added to library`,
+            },
+          };
+        } catch (error: any) {
+          log.error("Failed to add GitHub repository:", error);
+          return {
+            success: false,
+            error: error.message || "Failed to add repository",
+          };
+        }
+      },
+    ),
   );
 
   // Enhanced refresh that includes project library update
