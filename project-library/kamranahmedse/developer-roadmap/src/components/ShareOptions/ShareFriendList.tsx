@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useToast } from '../../hooks/use-toast';
 import { UserItem } from './UserItem';
-import { Check, Copy, Group, UserPlus2, Users2 } from 'lucide-react';
+import { Check, Copy, UserPlus2, Users2 } from 'lucide-react';
 import { httpGet } from '../../lib/http';
 import { getUser } from '../../lib/jwt.ts';
 import { useCopyText } from '../../hooks/use-copy-text.ts';
@@ -44,7 +44,7 @@ type ShareFriendListProps = {
 };
 
 export function ShareFriendList(props: ShareFriendListProps) {
-  const userId = getUser()?.id!;
+  const userId = getUser()?.id;
   const { setFriends, friends, sharedFriendIds, setSharedFriendIds } = props;
   const toast = useToast();
 

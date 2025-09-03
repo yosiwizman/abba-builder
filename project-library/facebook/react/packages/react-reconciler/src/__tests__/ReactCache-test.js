@@ -251,8 +251,8 @@ describe('ReactCache', () => {
     expect(renderedCacheSignal).not.toBe(controller.signal); // In the future we might make these the same
     expect(renderedCacheSignal.aborted).toBe(false);
     await resolve();
-    await 0;
-    await 0;
+    0;
+    0;
 
     expect(await ReactNoopFlightClient.read(result)).toBe('Hi');
 

@@ -11,7 +11,7 @@ const {printOwnersList} = require('../devtools/utils');
 const {getVersionedRenderImplementation} = require('./utils');
 
 describe('Store owners list', () => {
-  let React;
+  let _React;
   let act;
   let store;
 
@@ -19,7 +19,7 @@ describe('Store owners list', () => {
     store = global.store;
     store.collapseNodesByDefault = false;
 
-    React = require('react');
+    _React = require('react');
 
     const utils = require('./utils');
     act = utils.act;

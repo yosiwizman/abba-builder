@@ -1,6 +1,6 @@
 import { TeamDropdown } from './TeamDropdown/TeamDropdown';
 import { useTeamId } from '../hooks/use-team-id';
-import ChatIcon from '../icons/chat.svg';
+
 import type { ReactNode } from 'react';
 import { useState } from 'react';
 import { useStore } from '@nanostores/react';

@@ -12,14 +12,14 @@
 
 const ReactDOMServerIntegrationUtils = require('./utils/ReactDOMServerIntegrationTestUtils');
 
-let React;
+let _React;
 let ReactDOMClient;
 let ReactDOMServer;
 
 function initModules() {
   // Reset warning cache.
   jest.resetModules();
-  React = require('react');
+  _React = require('react');
   ReactDOMClient = require('react-dom/client');
   ReactDOMServer = require('react-dom/server');
 

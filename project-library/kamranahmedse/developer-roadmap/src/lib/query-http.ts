@@ -56,7 +56,7 @@ export async function httpCall<ResponseType = AppResponse>(
       Accept: 'application/json',
       Authorization: `Bearer ${Cookies.get(TOKEN_COOKIE_NAME)}`,
       ...(visitorId ? { fp: visitorId } : {}),
-      ...(options?.headers ?? {}),
+      ...options?.headers,
     });
 
     if (!isMultiPartFormData) {

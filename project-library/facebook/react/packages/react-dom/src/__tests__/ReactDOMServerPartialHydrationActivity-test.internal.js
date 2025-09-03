@@ -632,7 +632,7 @@ describe('ReactDOMServerPartialHydrationActivity', () => {
     container.innerHTML = finalHTML;
     assertLog(['Component', 'Hello']);
 
-    const div = container.getElementsByTagName('div')[0];
+    
 
     expect(container.innerHTML).toBe(
       '<!--$--><!--&--><div><div>Component</div><div></div></div><!--/&--><!--/$-->',

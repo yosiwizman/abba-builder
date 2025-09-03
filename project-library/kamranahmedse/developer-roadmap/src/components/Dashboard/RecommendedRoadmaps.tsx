@@ -1,5 +1,5 @@
 import type { BuiltInRoadmap } from './PersonalDashboard';
-import { ArrowUpRight } from 'lucide-react';
+
 import { MarkFavorite } from '../FeaturedItems/MarkFavorite.tsx';
 
 type RecommendedRoadmapsProps = {
@@ -52,7 +52,7 @@ type RecommendedRoadmapCardProps = {
 
 export function RecommendedRoadmapCard(props: RecommendedRoadmapCardProps) {
   const { roadmap } = props;
-  const { title, url, description } = roadmap;
+  const { title, url, } = roadmap;
 
   return (
     <a

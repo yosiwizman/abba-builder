@@ -105,7 +105,7 @@ new Error(\`Expected \${foo} target to \` + \`be an array; got \${bar}\`);
   it('handles escaped backticks in template string', () => {
     expect(
       transform(`
-new Error(\`Expected \\\`\$\{listener\}\\\` listener to be a function, instead got a value of \\\`\$\{type\}\\\` type.\`);
+new Error(\`Expected \\\`$\{listener}\\\` listener to be a function, instead got a value of \\\`$\{type}\\\` type.\`);
 `)
     ).toMatchSnapshot();
   });

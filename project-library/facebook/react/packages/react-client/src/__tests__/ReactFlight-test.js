@@ -69,7 +69,7 @@ function getErrorForJestMatcher(error) {
 
 function normalizeComponentInfo(debugInfo) {
   if (Array.isArray(debugInfo.stack)) {
-    const {debugTask, debugStack, debugLocation, ...copy} = debugInfo;
+    const {...copy} = debugInfo;
     copy.stack = formatV8Stack(debugInfo.stack);
     if (debugInfo.owner) {
       copy.owner = normalizeComponentInfo(debugInfo.owner);
@@ -2811,7 +2811,7 @@ describe('ReactFlight', () => {
     );
 
     // Wait for the lazy component to initialize
-    await 0;
+    0;
 
     const transport = ReactNoopFlightServer.render(
       <ServerComponent transport={thirdPartyTransport} />,
@@ -2936,7 +2936,7 @@ describe('ReactFlight', () => {
     // Wait for the iterator to finish
     await iteratorPromise;
 
-    await 0; // One more tick for the return value / closing.
+    0; // One more tick for the return value / closing.
 
     const transport = ReactNoopFlightServer.render(
       <ServerComponent transport={thirdPartyTransport} />,
@@ -3152,9 +3152,9 @@ describe('ReactFlight', () => {
       },
     );
 
-    await 0;
-    await 0;
-    await 0;
+    0;
+    0;
+    0;
 
     const expectedErrorStack = originalError.stack
       // Test only the first rows since there's a lot of noise after that is eliminated.
@@ -3321,9 +3321,9 @@ describe('ReactFlight', () => {
     ownerStacks = [];
 
     // Let the Promises resolve.
-    await 0;
-    await 0;
-    await 0;
+    0;
+    0;
+    0;
 
     // The error should not actually get logged because we're not awaiting the root
     // so it's not thrown but the server log also shouldn't be replayed.
@@ -3359,9 +3359,9 @@ describe('ReactFlight', () => {
         resolved = true;
       },
     );
-    await 0;
-    await 0;
-    await 0;
+    0;
+    0;
+    0;
     // This should not reject upon aborting the stream.
     expect(resolved).toBe(false);
 

@@ -26,7 +26,6 @@ export function TransferToTeamList(props: TransferToTeamListProps) {
     setSelectedTeamId,
     isTeamMembersLoading,
     currentTeamId,
-    setIsTeamMembersLoading,
     onTeamChange,
   } = props;
 

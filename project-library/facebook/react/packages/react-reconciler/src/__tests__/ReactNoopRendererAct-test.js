@@ -44,9 +44,9 @@ describe('internal act()', () => {
       const [ctr, setCtr] = React.useState(0);
       async function someAsyncFunction() {
         Scheduler.log('stage 1');
-        await null;
+        null;
         Scheduler.log('stage 2');
-        await null;
+        null;
         setCtr(1);
       }
       React.useEffect(() => {

@@ -87,7 +87,7 @@ describe('ReactFragment', () => {
   function normalizeCodeLocInfo(str) {
     return (
       str &&
-      str.replace(/\n +(?:at|in) ([^\(]+) [^\n]*/g, function (m, name) {
+      str.replace(/\n +(?:at|in) ([^(]+) [^\n]*/g, function (m, name) {
         return '\n    in ' + name + ' (at **)';
       })
     );

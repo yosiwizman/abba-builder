@@ -9,7 +9,7 @@
 
 'use strict';
 
-let React;
+let _React;
 let ReactDOMClient;
 let act;
 
@@ -81,7 +81,7 @@ describe('BeforeInputEventPlugin', () => {
   }
 
   beforeEach(() => {
-    React = require('react');
+    _React = require('react');
     container = document.createElement('div');
     document.body.appendChild(container);
   });

@@ -83,7 +83,7 @@ export const GET: APIRoute = async function ({ params, request, props }) {
 
   // Read and parse the markdown file
   const fileContent = fs.readFileSync(roadmapFilePath, 'utf-8');
-  const { data: frontmatter, content } = matter(fileContent);
+  const { data: frontmatter, } = matter(fileContent);
 
   if (frontmatter.renderer !== 'editor') {
     const roadmapJson = JSON.parse(fs.readFileSync(roadmapJsonPath, 'utf-8'));

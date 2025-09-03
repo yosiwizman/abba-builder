@@ -111,7 +111,7 @@ export function ImportAppDialog({ isOpen, onClose }: ImportAppDialogProps) {
 
       navigate({
         to: "/chat",
-        search: (prev) => ({ ...prev, id: result.chatId }),
+        search: { id: result.chatId },
       });
       if (!hasAiRules) {
         streamMessage({

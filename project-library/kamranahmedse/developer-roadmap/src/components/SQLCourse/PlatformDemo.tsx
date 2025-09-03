@@ -1,4 +1,4 @@
-import { SectionHeader } from './SectionHeader';
+
 import { useState } from 'react';
 import { Play } from 'lucide-react';
 import { VideoModal } from '../VideoModal';

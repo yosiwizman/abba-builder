@@ -6,7 +6,7 @@ import {
   Sparkles,
   ThumbsUp,
 } from 'lucide-react';
-import type { QuestionProgressType } from './QuestionsList';
+
 
 type ProgressStatButtonProps = {
   isDisabled?: boolean;

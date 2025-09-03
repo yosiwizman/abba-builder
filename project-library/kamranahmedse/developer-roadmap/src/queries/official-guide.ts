@@ -88,9 +88,7 @@ export async function getOfficialGuide(slug: string, roadmapId?: string) {
   try {
     const guide = await httpGet<OfficialGuideResponse>(
       `/v1-official-guide/${slug}`,
-      {
-        ...(roadmapId ? { roadmapId } : {}),
-      },
+      (roadmapId ? { roadmapId } : {}),
     );
 
     return guide;

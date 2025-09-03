@@ -1,8 +1,6 @@
 import {
   ChevronDown,
   ChevronUp,
-  CircleHelp,
-  GraduationCap,
   Info,
 } from 'lucide-react';
 import { useRef, useState } from 'react';
@@ -18,7 +16,7 @@ type RoadmapTitleQuestionProps = {
 };
 
 export function RoadmapTitleQuestion(props: RoadmapTitleQuestionProps) {
-  const { question, answer, roadmapId } = props;
+  const { question, answer, } = props;
 
   const [isAnswerVisible, setIsAnswerVisible] = useState(false);
   const ref = useRef<HTMLDivElement>(null);

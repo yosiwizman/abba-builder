@@ -1,4 +1,4 @@
-import { BadgeCheck, Bot, Telescope, Wand } from 'lucide-react';
+import { Bot, } from 'lucide-react';
 import { RoadmapAlert } from '../RoadmapAlert';
 
 type AIRoadmapAlertProps = {

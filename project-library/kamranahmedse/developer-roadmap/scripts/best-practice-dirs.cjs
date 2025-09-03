@@ -31,10 +31,7 @@ if (!bestPracticeDirName) {
   process.exit(1);
 }
 
-const bestPracticeDirPath = path.join(
-  BEST_PRACTICE_CONTENT_DIR,
-  bestPracticeDirName,
-);
+
 const bestPracticeContentDirPath = path.join(
   BEST_PRACTICE_CONTENT_DIR,
   bestPracticeDirName,

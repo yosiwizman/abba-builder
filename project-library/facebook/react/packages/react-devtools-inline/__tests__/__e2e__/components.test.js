@@ -135,7 +135,7 @@ test.describe('Components', () => {
 
     // If React version is specified, the e2e-regression.html page will be used
     // If not, then e2e.html, see playwright.config.js, how url is constructed
-    expect(sourceText).toMatch(/e2e-app[\-a-zA-Z]*\.js/);
+    expect(sourceText).toMatch(/e2e-app[-a-zA-Z]*\.js/);
   });
 
   test('should allow props to be edited', async () => {

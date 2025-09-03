@@ -29,7 +29,6 @@ type AICourseModuleListProps = {
 export function AICourseSidebarModuleList(props: AICourseModuleListProps) {
   const {
     course,
-    courseSlug,
     activeModuleIndex,
     setActiveModuleIndex,
     activeLessonIndex,
@@ -120,7 +119,7 @@ export function AICourseSidebarModuleList(props: AICourseModuleListProps) {
                   </CircularProgress>
                 </div>
                 <span className="flex flex-1 items-center break-words text-left text-sm leading-relaxed">
-                  {courseModule.title?.replace(/^Module\s*?\d+[\.:]\s*/, '')}
+                  {courseModule.title?.replace(/^Module\s*?\d+[.:]\s*/, '')}
                 </span>
               </div>
               <div className="ml-auto self-center">
@@ -190,7 +189,7 @@ export function AICourseSidebarModuleList(props: AICourseModuleListProps) {
                         </span>
                       )}
                       <span className="break-words">
-                        {lesson?.replace(/^Lesson\s*?\d+[\.:]\s*/, '')}
+                        {lesson?.replace(/^Lesson\s*?\d+[.:]\s*/, '')}
                       </span>
                     </button>
                   );

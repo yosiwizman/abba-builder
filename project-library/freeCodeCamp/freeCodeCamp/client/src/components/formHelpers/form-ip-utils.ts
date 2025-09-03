@@ -17,7 +17,7 @@ export function isPrivate(address: string) {
   let addr = address.replace(/^https?:\/\//, '');
 
   // Check if localhost
-  if (/^localhost:/.test(addr)) {
+  if (addr.startsWith('localhost:')) {
     return true;
   }
   // Check loopback addresses first
@@ -58,11 +58,11 @@ function isLoopback(addr: string) {
 
   return (
     /^(::f{4}:)?127\.([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})/.test(addr) ||
-    /^0177\./.test(addr) ||
+    addr.startsWith('0177.') ||
     /^0x7f\./i.test(addr) ||
     /^fe80::1$/i.test(addr) ||
     /^::1$/.test(addr) ||
-    /^\[::1\]/.test(addr) ||
+    addr.startsWith('[::1]') ||
     /^::$/.test(addr)
   );
 }

@@ -11,10 +11,7 @@ import { TeamEmptyStream } from './TeamEmptyStream';
 import { Pagination } from '../Pagination/Pagination';
 import {
   ChartNoAxesGantt,
-  CircleDashed,
-  Flag,
-  LoaderCircle,
-} from 'lucide-react';
+  } from 'lucide-react';
 
 export type TeamStreamActivity = {
   _id?: string;

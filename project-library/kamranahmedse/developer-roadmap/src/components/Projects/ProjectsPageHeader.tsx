@@ -1,5 +1,5 @@
-import { isLoggedIn } from '../../lib/jwt.ts';
-import { showLoginPopup } from '../../lib/popup.ts';
+
+
 
 export function ProjectsPageHeader() {
   return (

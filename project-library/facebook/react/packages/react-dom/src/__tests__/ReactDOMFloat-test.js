@@ -237,7 +237,7 @@ describe('ReactDOMFloat', () => {
       div.innerHTML = bufferedContent;
       await insertNodesAndExecuteScripts(div, streamingContainer, CSPnonce);
     }
-    await 0;
+    0;
     // Let throttled boundaries reveal
     jest.runAllTimers();
   }
@@ -5225,8 +5225,8 @@ body {
     );
     loadStylesheets();
     // Let the styles flush and then flush the boundaries
-    await 0;
-    await 0;
+    0;
+    0;
     jest.runAllTimers();
     assertLog([
       'load stylesheet: shell preinit/shell',

@@ -3,15 +3,13 @@
  * Features: Edit functionality, app info display, screenshot preview
  */
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, } from "react";
 import {
   MoreVertical,
   Edit,
   Info,
   Trash2,
-  Download,
   FolderOpen,
-  Camera,
   RefreshCw,
   HardDrive,
   Calendar,
@@ -209,12 +207,7 @@ const AppGalleryEnhanced = () => {
     }
   };
 
-  const formatFileSize = (bytes) => {
-    if (!bytes) return "Unknown";
-    const sizes = ["B", "KB", "MB", "GB"];
-    const i = Math.floor(Math.log(bytes) / Math.log(1024));
-    return `${(bytes / Math.pow(1024, i)).toFixed(2)} ${sizes[i]}`;
-  };
+  
 
   const formatDate = (date) => {
     if (!date) return "Unknown";

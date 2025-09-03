@@ -1,6 +1,6 @@
-import { ArrowUpRight, X } from 'lucide-react';
+import { ArrowUpRight, } from 'lucide-react';
 import { Modal } from '../Modal';
-import { SubmissionRequirement } from './SubmissionRequirement.tsx';
+
 
 type LeavingRoadmapWarningModalProps = {
   onClose: () => void;

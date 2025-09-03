@@ -156,7 +156,7 @@ export function ProjectSolutionModal(props: ProjectSolutionModalProps) {
               </h2>
               <p className="text-sm text-gray-600">
                 Submitted their solution{' '}
-                {getRelativeTimeString(solution?.submittedAt!)}
+                {getRelativeTimeString(solution?.submittedAt)}
               </p>
             </div>
           </div>
@@ -178,14 +178,14 @@ export function ProjectSolutionModal(props: ProjectSolutionModalProps) {
               icon={ThumbsUp}
               isActive={solution?.voteType === 'upvote'}
               count={solution?.upvotes || 0}
-              onClick={() => handleSubmitVote(solution?.id!, 'upvote')}
+              onClick={() => handleSubmitVote(solution?.id, 'upvote')}
             />
             <VoteButton
               icon={ThumbsDown}
               isActive={solution?.voteType === 'downvote'}
               count={solution?.downvotes || 0}
               hideCount={true}
-              onClick={() => handleSubmitVote(solution?.id!, 'downvote')}
+              onClick={() => handleSubmitVote(solution?.id, 'downvote')}
             />
           </div>
         </div>

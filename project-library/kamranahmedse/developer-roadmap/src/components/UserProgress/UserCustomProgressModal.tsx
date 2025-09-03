@@ -39,8 +39,7 @@ export function UserCustomProgressModal(props: ProgressMapProps) {
     resourceType,
     userId: propUserId,
     onClose: onModalClose,
-    isCustomResource,
-  } = props;
+    } = props;
 
   const { s: userId = propUserId } = getUrlParams();
   if (!userId) {
@@ -181,7 +180,7 @@ export function UserCustomProgressModal(props: ProgressMapProps) {
                 } = progressResponse?.progress || {};
 
                 done?.forEach((topicId: string) => {
-                  topicSelectorAll(topicId, wrapperRef?.current!).forEach(
+                  topicSelectorAll(topicId, wrapperRef?.current).forEach(
                     (el) => {
                       el.classList.add('done');
                     },
@@ -189,7 +188,7 @@ export function UserCustomProgressModal(props: ProgressMapProps) {
                 });
 
                 learning?.forEach((topicId: string) => {
-                  topicSelectorAll(topicId, wrapperRef?.current!).forEach(
+                  topicSelectorAll(topicId, wrapperRef?.current).forEach(
                     (el) => {
                       el.classList.add('learning');
                     },
@@ -197,7 +196,7 @@ export function UserCustomProgressModal(props: ProgressMapProps) {
                 });
 
                 skipped?.forEach((topicId: string) => {
-                  topicSelectorAll(topicId, wrapperRef?.current!).forEach(
+                  topicSelectorAll(topicId, wrapperRef?.current).forEach(
                     (el) => {
                       el.classList.add('skipped');
                     },

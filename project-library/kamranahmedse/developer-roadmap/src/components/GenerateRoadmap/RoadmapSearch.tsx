@@ -31,11 +31,11 @@ export function RoadmapSearch(props: RoadmapSearchProps) {
     isKeyOnly,
   } = props;
 
-  const { isPaidUser, isLoading } = useIsPaidUser();
+  const { isPaidUser, } = useIsPaidUser();
   const canGenerateMore = limitUsed < limit;
   const [isConfiguring, setIsConfiguring] = useState(false);
   const [isAuthenticatedUser, setIsAuthenticatedUser] = useState(false);
-  const [isLoadingResults, setIsLoadingResults] = useState(false);
+  const [isLoadingResults] = useState(false);
 
   useEffect(() => {
     setIsAuthenticatedUser(isLoggedIn());

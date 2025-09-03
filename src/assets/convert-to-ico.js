@@ -4,7 +4,7 @@
 
 const fs = require("fs");
 const path = require("path");
-const { createCanvas, loadImage } = require("canvas");
+const { } = require("canvas");
 
 async function convertPngToIco() {
   try {

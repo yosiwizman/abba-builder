@@ -80,7 +80,7 @@ describe('CSSPropertyOperations', () => {
       root.render(<div style={styles} />);
     });
 
-    const div = container.firstChild;
+    
     expect(/style=".*"/.test(container.innerHTML)).toBe(true);
   });
 

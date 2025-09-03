@@ -1,6 +1,6 @@
-import { test, expect } from '@playwright/test';
+import { test, } from '@playwright/test';
 import { _electron as electron, ElectronApplication, Page } from 'playwright';
-import path from 'path';
+
 
 /**
  * Electron smoke screenshot test

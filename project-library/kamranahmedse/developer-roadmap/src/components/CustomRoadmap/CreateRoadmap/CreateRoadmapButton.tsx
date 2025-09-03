@@ -25,7 +25,7 @@ export function CreateRoadmapButton(props: CreateRoadmapButtonProps) {
 
   const [isCreatingRoadmap, setIsCreatingRoadmap] = useState(false);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
-  const { isPaidUser, isLoading: isPaidUserLoading } = useIsPaidUser();
+  const { isPaidUser, } = useIsPaidUser();
 
   function toggleCreateRoadmapHandler() {
     if (!isLoggedIn()) {

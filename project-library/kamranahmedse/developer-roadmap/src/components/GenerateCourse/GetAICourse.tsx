@@ -3,7 +3,7 @@ import { getAiCourseOptions } from '../../queries/ai-course';
 import { queryClient } from '../../stores/query-client';
 import { useEffect, useState } from 'react';
 import { AICourseContent } from './AICourseContent';
-import { isLoggedIn } from '../../lib/jwt';
+
 import { generateCourse } from '../../helper/generate-ai-course';
 
 type GetAICourseProps = {

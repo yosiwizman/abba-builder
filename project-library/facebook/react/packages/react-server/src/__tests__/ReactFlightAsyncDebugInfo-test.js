@@ -7,7 +7,7 @@ const path = require('path');
 
 import {patchSetImmediate} from '../../../../scripts/jest/patchSetImmediate';
 
-let React;
+let _React;
 let ReactServer;
 let cache;
 let ReactServerDOMServer;
@@ -145,7 +145,7 @@ describe('ReactFlightAsyncDebugInfo', () => {
       require('react-server-dom-webpack/client.node'),
     );
 
-    React = require('react');
+    _React = require('react');
     ReactServerDOMClient = require('react-server-dom-webpack/client');
     Stream = require('stream');
   });
@@ -192,7 +192,7 @@ describe('ReactFlightAsyncDebugInfo', () => {
     async function getData(text) {
       await delay(1);
       const promise = delay(2);
-      await Promise.all([promise]);
+      await promise;
       return text.toUpperCase();
     }
 

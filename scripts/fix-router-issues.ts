@@ -94,7 +94,7 @@ function fixNavigateCalls() {
   files.forEach(file => {
     try {
       let content = fs.readFileSync(file, 'utf-8');
-      let modified = false;
+      
       
       // Fix patterns like: navigate() where navigate should be called with object
       content = content.replace(
@@ -135,7 +135,7 @@ function fixErrorRendering() {
   files.forEach(file => {
     try {
       let content = fs.readFileSync(file, 'utf-8');
-      let modified = false;
+      
       
       // Fix Error objects being rendered directly
       content = content.replace(

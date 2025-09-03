@@ -50,7 +50,7 @@ const run = async ({cwd, packages, version, ci}, versionsMap) => {
           // since "next" releases are all locked to the version (e.g. 0.0.0-0e526bcec-20210202).
           if (
             sourceDependencyVersion ===
-            sourceDependencyConstraint.replace(/^[\^\~]/, '')
+            sourceDependencyConstraint.replace(/^[\^~]/, '')
           ) {
             targetDependencies[dependencyName] =
               sourceDependencyConstraint.replace(

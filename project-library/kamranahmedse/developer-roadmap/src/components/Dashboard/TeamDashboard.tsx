@@ -9,7 +9,7 @@ import { Tooltip } from '../Tooltip';
 import { DashboardTeamRoadmaps } from './DashboardTeamRoadmaps';
 import type { BuiltInRoadmap } from './PersonalDashboard';
 import { InviteMemberPopup } from '../TeamMembers/InviteMemberPopup';
-import { Users, Users2 } from 'lucide-react';
+import { Users2 } from 'lucide-react';
 
 type TeamDashboardProps = {
   builtInRoleRoadmaps: BuiltInRoadmap[];
@@ -81,7 +81,7 @@ export function TeamDashboard(props: TeamDashboardProps) {
   });
 
   const canManageCurrentTeam = ['admin', 'manager'].includes(
-    currentMember?.role!,
+    currentMember?.role,
   );
 
   return (

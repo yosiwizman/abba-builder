@@ -103,7 +103,7 @@ export function AICourseOutlineView(props: AICourseOutlineViewProps) {
                         )}
 
                         <p className="flex-1 truncate text-base text-gray-800 max-lg:text-sm">
-                          {lesson.replace(/^Lesson\s*?\d+[\.:]\s*/, '')}
+                          {lesson.replace(/^Lesson\s*?\d+[.:]\s*/, '')}
                         </p>
                         <span className="text-sm font-medium text-gray-700 max-lg:hidden">
                           {isCompleted ? 'View' : 'Start'} →

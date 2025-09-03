@@ -62,7 +62,7 @@ export async function parseMessageParts(
   }
 
   const tagPattern = tagNames.join('|');
-  const regex = new RegExp(`<(${tagPattern})>(.*?)<\/\\1>`, 'gs');
+  const regex = new RegExp(`<(${tagPattern})>(.*?)</\\1>`, 'gs');
 
   let lastIndex = 0;
   let match;

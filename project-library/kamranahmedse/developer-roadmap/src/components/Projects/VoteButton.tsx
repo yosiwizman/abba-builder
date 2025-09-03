@@ -1,5 +1,5 @@
 import { cn } from '../../lib/classname.ts';
-import { type LucideIcon, ThumbsUp } from 'lucide-react';
+import { type LucideIcon, } from 'lucide-react';
 
 type VoteButtonProps = {
   icon: LucideIcon;

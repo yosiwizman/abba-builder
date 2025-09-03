@@ -14,10 +14,10 @@ type ShareRoadmapModalProps = {
 export function EmbedRoadmapModal(props: ShareRoadmapModalProps) {
   const { onClose } = props;
 
-  const toast = useToast();
+  
   const $currentRoadmap = useStore(currentRoadmap);
-  const $isCurrentRoadmapPersonal = useStore(isCurrentRoadmapPersonal);
-  const roadmapId = $currentRoadmap?._id!;
+  
+  const roadmapId = $currentRoadmap?._id;
 
   const { copyText, isCopied } = useCopyText();
 

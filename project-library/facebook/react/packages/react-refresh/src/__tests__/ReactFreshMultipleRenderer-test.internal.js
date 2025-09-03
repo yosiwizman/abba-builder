@@ -10,7 +10,7 @@
 'use strict';
 
 jest.resetModules();
-const React = require('react');
+
 let ReactFreshRuntime;
 if (__DEV__) {
   ReactFreshRuntime = require('react-refresh/runtime');

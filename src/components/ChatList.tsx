@@ -72,7 +72,7 @@ export function ChatList({ show }: { show?: boolean }) {
     setSelectedAppId(appId);
     navigate({
       to: "/chat",
-      search: (prev) => ({ ...prev, id: chatId }),
+      search: { id: chatId },
     });
   };
 
@@ -87,7 +87,7 @@ export function ChatList({ show }: { show?: boolean }) {
         setSelectedChatId(chatId);
         navigate({
           to: "/chat",
-          search: (prev) => ({ ...prev, id: chatId }),
+          search: { id: chatId },
         });
 
         // Refresh the chat list

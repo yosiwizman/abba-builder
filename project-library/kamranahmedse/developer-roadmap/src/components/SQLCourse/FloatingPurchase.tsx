@@ -1,4 +1,4 @@
-import { ArrowRightIcon } from 'lucide-react';
+
 import { useEffect, useState } from 'react';
 import { cn } from '../../lib/classname';
 import { BuyButton } from './BuyButton';

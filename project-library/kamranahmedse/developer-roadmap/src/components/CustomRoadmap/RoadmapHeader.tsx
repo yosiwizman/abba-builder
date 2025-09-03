@@ -27,7 +27,6 @@ export function RoadmapHeader(props: RoadmapHeaderProps) {
     slug: roadmapSlug,
     creator,
     team,
-    visibility,
     ratings,
     unseenRatingCount,
     showcaseStatus,
@@ -142,7 +141,7 @@ export function RoadmapHeader(props: RoadmapHeaderProps) {
                       description={$currentRoadmap?.description}
                       visibility={$currentRoadmap?.visibility}
                       teamId={$currentRoadmap?.teamId}
-                      roadmapId={$currentRoadmap?._id!}
+                      roadmapId={$currentRoadmap?._id}
                       sharedFriendIds={$currentRoadmap?.sharedFriendIds || []}
                       sharedTeamMemberIds={
                         $currentRoadmap?.sharedTeamMemberIds || []

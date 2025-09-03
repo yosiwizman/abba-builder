@@ -369,7 +369,7 @@ class NeverFailStack {
 
   hasBasicElements(code, options) {
     // Check for basic required elements
-    const requirements = options.requirements || "";
+    
     const hasContent = code.length > 100;
     const hasFunction = code.includes("function") || code.includes("=>");
     const hasStructure = code.includes("<") || code.includes("{");

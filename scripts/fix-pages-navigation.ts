@@ -4,7 +4,7 @@
  */
 
 import fs from "fs/promises";
-import path from "path";
+
 
 const files = [
   "src/pages/app-details.tsx",

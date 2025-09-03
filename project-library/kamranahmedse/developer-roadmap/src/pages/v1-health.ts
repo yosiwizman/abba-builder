@@ -1,4 +1,4 @@
-import { execSync } from 'child_process';
+
 
 export const prerender = false;
 

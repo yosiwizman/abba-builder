@@ -34,7 +34,7 @@ function formatV8Stack(stack) {
 
 function normalizeComponentInfo(debugInfo) {
   if (Array.isArray(debugInfo.stack)) {
-    const {debugTask, debugStack, ...copy} = debugInfo;
+    const {...copy} = debugInfo;
     copy.stack = formatV8Stack(debugInfo.stack);
     if (debugInfo.owner) {
       copy.owner = normalizeComponentInfo(debugInfo.owner);
@@ -58,7 +58,7 @@ function getDebugInfo(obj) {
 }
 
 let act;
-let React;
+let _React;
 let ReactNoop;
 let ReactNoopFlightServer;
 let ReactNoopFlightClient;
@@ -87,7 +87,7 @@ describe('ReactFlight', () => {
     jest.resetModules();
     __unmockReact();
     jest.mock('react-noop-renderer/flight-modules', () => flightModules);
-    React = require('react');
+    _React = require('react');
     ReactNoop = require('react-noop-renderer');
     ReactNoopFlightClient = require('react-noop-renderer/flight-client');
     act = require('internal-test-utils').act;

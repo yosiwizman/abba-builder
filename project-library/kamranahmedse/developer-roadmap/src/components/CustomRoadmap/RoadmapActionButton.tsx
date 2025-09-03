@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { useOutsideClick } from '../../hooks/use-outside-click';
-import { Lock, MoreVertical, PenSquare, Shapes, Trash2 } from 'lucide-react';
+import { Lock, MoreVertical, PenSquare, Trash2 } from 'lucide-react';
 
 type RoadmapActionButtonProps = {
   onDelete?: () => void;

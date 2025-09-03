@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { Modal } from '../Modal';
-import { roadmapTreeMappingOptions } from '../../queries/roadmap-tree';
+
 import { queryClient } from '../../stores/query-client';
 import { roadmapContentOptions } from '../../queries/roadmap';
-import { ModalLoader } from '../UserProgress/ModalLoader';
+
 import { TopicDetailLink } from '../TopicDetail/TopicDetailLink';
 import { Spinner } from '../ReactIcons/Spinner';
 import { ErrorIcon } from '../ReactIcons/ErrorIcon';

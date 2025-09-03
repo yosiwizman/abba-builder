@@ -1,4 +1,4 @@
-import { MoreVertical, X } from 'lucide-react';
+import { MoreVertical, } from 'lucide-react';
 import { useRef, useState } from 'react';
 import { useOutsideClick } from '../../hooks/use-outside-click';
 import { useKeydown } from '../../hooks/use-keydown';

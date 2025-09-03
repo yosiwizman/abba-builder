@@ -61,7 +61,7 @@ export const TitleBar = () => {
     if (selectedApp) {
       navigate({
         to: "/app-details",
-        search: (prev) => ({ ...prev, appId: selectedApp.id }),
+        search: { appId: selectedApp.id },
       });
     }
   };

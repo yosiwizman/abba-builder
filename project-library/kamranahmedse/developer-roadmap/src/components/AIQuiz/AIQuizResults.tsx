@@ -431,7 +431,7 @@ type ResourceCardProps = {
 };
 
 function ResourceCard(props: ResourceCardProps) {
-  const { icon, title, type, href } = props;
+  const { icon, title, href } = props;
 
   return (
     <a

@@ -440,7 +440,7 @@ export function RoadmapAIChat(props: RoadmapAIChatProps) {
                         <RoadmapAIChatCard
                           role="assistant"
                           jsx={
-                            <TutorIntroMessage roadmap={roadmapDetail?.json!} />
+                            <TutorIntroMessage roadmap={roadmapDetail?.json} />
                           }
                           isIntro
                         />

@@ -1,18 +1,14 @@
 import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query';
 import { httpGet } from '../lib/query-http';
 import { isLoggedIn } from '../lib/jwt';
-import { markdownToHtml } from '../lib/markdown';
-import { aiChatRenderer } from '../components/AIChat/AIChat';
+
+
 import {
-  type MessagePartRenderer,
-  renderMessage,
-} from '../lib/render-chat-message';
+  } from '../lib/render-chat-message';
 import {
-  htmlFromTiptapJSON,
-  type RoadmapAIChatHistoryType,
-} from '../hooks/use-roadmap-ai-chat';
+  } from '../hooks/use-roadmap-ai-chat';
 import type { JSONContent } from '@tiptap/core';
-import type { UIMessage } from 'ai';
+
 import type { ChatUIMessage } from '../lib/ai';
 
 export type ChatHistoryMessage = {

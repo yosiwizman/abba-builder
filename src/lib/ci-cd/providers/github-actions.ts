@@ -20,7 +20,6 @@ import {
   Statistics,
   StatisticsOptions,
   UpdateCallback,
-  ProviderUpdate,
   Artifact
 } from '../types';
 

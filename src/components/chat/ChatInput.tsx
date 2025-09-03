@@ -397,7 +397,7 @@ function SummarizeInNewChatButton() {
       // navigate to new chat
       await navigate({
         to: "/chat",
-        search: (prev) => ({ ...prev, id: newChatId }),
+        search: { id: newChatId },
       });
       await streamMessage({
         prompt: "Summarize from chat-id=" + chatId,

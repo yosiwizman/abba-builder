@@ -102,7 +102,7 @@ export function GenerateRoadmap(props: GenerateRoadmapProps) {
 
   const roadmapContainerRef = useRef<HTMLDivElement>(null);
 
-  const { isPaidUser, isLoading: isLoadingPaidUser } = useIsPaidUser();
+  const { isPaidUser, } = useIsPaidUser();
   const { rc: referralCode } = getUrlParams() as {
     rc?: string;
   };
@@ -116,7 +116,7 @@ export function GenerateRoadmap(props: GenerateRoadmapProps) {
   );
   const [hasSubmitted, setHasSubmitted] = useState<boolean>(Boolean(roadmapId));
   const [isLoading, setIsLoading] = useState(false);
-  const [isLoadingResults, setIsLoadingResults] = useState(false);
+  const [isLoadingResults] = useState(false);
   const [roadmapTerm, setRoadmapTerm] = useState('');
   const [currentRoadmap, setCurrentRoadmap] =
     useState<GetAIRoadmapResponse | null>(null);

@@ -11,10 +11,10 @@ type GetAIGuideProps = {
 export function GetAIGuide(props: GetAIGuideProps) {
   const { slug: documentSlug } = props;
 
-  const [isLoading, setIsLoading] = useState(true);
-  const [isRegenerating, setIsRegenerating] = useState(false);
+  const [,setIsLoading] = useState(true);
+  const [,setIsRegenerating] = useState(false);
 
-  const [error, setError] = useState('');
+  const [,setError] = useState('');
   const { data: aiGuide, error: queryError } = useQuery(
     {
       ...getAiGuideOptions(documentSlug),
@@ -40,45 +40,7 @@ export function GetAIGuide(props: GetAIGuideProps) {
     setError(queryError.message);
   }, [queryError]);
 
-  const handleRegenerateDocument = async (prompt?: string) => {
-    // if (!aiDocument) {
-    //   return;
-    // }
-    // queryClient.setQueryData(
-    //   getAiDocumentOptions({ documentSlug: documentSlug }).queryKey,
-    //   {
-    //     ...aiDocument,
-    //     title: '',
-    //     difficulty: '',
-    //     modules: [],
-    //   },
-    // );
-    // await generateDocument({
-    //   term: aiDocument.keyword,
-    //   difficulty: aiDocument.difficulty,
-    //   slug: documentSlug,
-    //   prompt,
-    //   onDocumentChange: (document) => {
-    //     queryClient.setQueryData(
-    //       getAiDocumentOptions({ documentSlug: documentSlug }).queryKey,
-    //       {
-    //         ...aiDocument,
-    //         title: aiDocument.title,
-    //         difficulty: aiDocument.difficulty,
-    //         content: document,
-    //       },
-    //     );
-    //   },
-    //   onLoadingChange: (isNewLoading) => {
-    //     setIsRegenerating(isNewLoading);
-    //     if (!isNewLoading) {
-    //       // TODO: Update progress
-    //     }
-    //   },
-    //   onError: setError,
-    //   isForce: true,
-    // });
-  };
+  
 
   return <AIGuideContent html={aiGuide?.html || ''} />;
 }

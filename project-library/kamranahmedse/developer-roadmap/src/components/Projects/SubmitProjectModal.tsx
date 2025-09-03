@@ -1,4 +1,4 @@
-import { CheckIcon, CopyIcon, X } from 'lucide-react';
+import { CheckIcon, CopyIcon, } from 'lucide-react';
 import { Modal } from '../Modal';
 import { type FormEvent, useState } from 'react';
 import { httpPost } from '../../lib/http';

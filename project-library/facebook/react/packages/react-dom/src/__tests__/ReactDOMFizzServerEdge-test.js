@@ -45,8 +45,8 @@ describe('ReactDOMFizzServerEdge', () => {
   // https://github.com/facebook/react/issues/27540
   it('does not try to write to the stream after it has been closed', async () => {
     async function preloadLate() {
-      await 1;
-      await 1;
+      1;
+      1;
       // need to wait a few microtasks to get the stream to close before this is called
       ReactDOM.preconnect('foo');
     }

@@ -44,7 +44,7 @@ roadmapDirs.forEach((roadmapDir) => {
 
           contentDirContent.forEach((contentDir) => {
             const contentDirPath2 = path.join(contentDirPath, contentDir);
-            const contentDirStats2 = fs.statSync(contentDirPath2);
+            
 
             const oldName2 = path.basename(contentDirPath2);
             const newName2 = oldName2.replace(/^(\d+)-/, '');

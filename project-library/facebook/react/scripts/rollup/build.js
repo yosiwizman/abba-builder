@@ -341,7 +341,7 @@ function forbidFBJSImports() {
   return {
     name: 'forbidFBJSImports',
     resolveId(importee, importer) {
-      if (/^fbjs\//.test(importee)) {
+      if (importee.startsWith('fbjs/')) {
         throw new Error(
           `Don't import ${importee} (found in ${importer}). ` +
             `Use the utilities in packages/shared/ instead.`

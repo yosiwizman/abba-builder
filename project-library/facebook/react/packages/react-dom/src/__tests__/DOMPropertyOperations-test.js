@@ -13,14 +13,14 @@
 const {disableInputAttributeSyncing} = require('shared/ReactFeatureFlags');
 
 describe('DOMPropertyOperations', () => {
-  let React;
+  let _React;
   let ReactDOMClient;
   let act;
   let assertConsoleErrorDev;
 
   beforeEach(() => {
     jest.resetModules();
-    React = require('react');
+    _React = require('react');
     ReactDOMClient = require('react-dom/client');
     ({act, assertConsoleErrorDev} = require('internal-test-utils'));
   });

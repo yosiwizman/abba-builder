@@ -5,7 +5,7 @@ import { Rating } from '../Rating/Rating';
 import { httpGet, httpPost } from '../../lib/http';
 import { useToast } from '../../hooks/use-toast';
 import { isLoggedIn } from '../../lib/jwt';
-import { Loader2, Star } from 'lucide-react';
+import { Loader2, } from 'lucide-react';
 import { cn } from '../../lib/classname';
 import { showLoginPopup } from '../../lib/popup';
 import { Spinner } from '../ReactIcons/Spinner.tsx';

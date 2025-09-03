@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { IpcClient } from "@/ipc/ipc_client";
+
 import { toast } from "sonner";
 
 export function useAppScreenshot() {

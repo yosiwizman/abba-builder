@@ -87,7 +87,7 @@ export function ChatHeader({
         setSelectedChatId(chatId);
         navigate({
           to: "/chat",
-          search: (prev) => ({ ...prev, id: chatId }),
+          search: { id: chatId },
         });
         await refreshChats();
       } catch (error) {

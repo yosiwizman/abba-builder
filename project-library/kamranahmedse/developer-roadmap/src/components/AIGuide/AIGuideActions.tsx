@@ -1,4 +1,4 @@
-import { ArrowUpRightIcon, MoreVertical, Play, Trash2 } from 'lucide-react';
+import { ArrowUpRightIcon, MoreVertical, Trash2 } from 'lucide-react';
 import { useRef, useState } from 'react';
 import { useOutsideClick } from '../../hooks/use-outside-click';
 import { useKeydown } from '../../hooks/use-keydown';

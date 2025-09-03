@@ -97,7 +97,7 @@ export function AIChat(props: AIChatProps) {
     userResumeOptions(),
     queryClient,
   );
-  const { mutate: deleteChatMessage, isPending: isDeletingChatMessage } =
+  const { mutate: deleteChatMessage, } =
     useMutation(
       {
         mutationFn: (messages: RoadmapAIChatHistoryType[]) => {

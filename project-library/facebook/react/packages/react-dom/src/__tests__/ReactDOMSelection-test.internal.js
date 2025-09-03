@@ -9,7 +9,7 @@
 
 'use strict';
 
-let React;
+let _React;
 let ReactDOMClient;
 let ReactDOMSelection;
 let act;
@@ -18,7 +18,7 @@ let getModernOffsetsFromPoints;
 
 describe('ReactDOMSelection', () => {
   beforeEach(() => {
-    React = require('react');
+    _React = require('react');
     ReactDOMClient = require('react-dom/client');
     ReactDOMSelection = require('react-dom-bindings/src/client/ReactDOMSelection');
     act = require('internal-test-utils').act;

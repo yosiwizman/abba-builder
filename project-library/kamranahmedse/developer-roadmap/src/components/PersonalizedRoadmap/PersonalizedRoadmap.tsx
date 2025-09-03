@@ -37,7 +37,6 @@ export function PersonalizedRoadmap(props: PersonalizedRoadmapProps) {
 
   const {
     data: userProgress,
-    isLoading: isUserProgressLoading,
     refetch: refetchUserProgress,
   } = useQuery(userResourceProgressOptions('roadmap', roadmapId), queryClient);
 

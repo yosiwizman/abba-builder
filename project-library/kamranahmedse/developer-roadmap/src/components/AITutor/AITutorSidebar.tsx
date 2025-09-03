@@ -111,7 +111,7 @@ export function AITutorSidebar(props: AITutorSidebarProps) {
   const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false);
   const { isPaidUser, isLoading: isPaidUserLoading } = useIsPaidUser();
 
-  const { data: limits, isLoading: isLimitsLoading } = useQuery(
+  const { isLoading: isLimitsLoading } = useQuery(
     aiLimitOptions(),
     queryClient,
   );

@@ -74,9 +74,9 @@ export function ProjectSolutionRow(props: ProjectSolutionRowProps) {
             </span>
             <span
               className="text-xs text-gray-400"
-              title={new Date(solution?.submittedAt!).toLocaleString()}
+              title={new Date(solution?.submittedAt).toLocaleString()}
             >
-              · {getRelativeTimeString(solution?.submittedAt!)}
+              · {getRelativeTimeString(solution?.submittedAt)}
             </span>
           </div>
 

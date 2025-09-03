@@ -354,7 +354,7 @@ describe('ReactDOMFizzSuspenseList', () => {
 
     const {pipe} = ReactDOMFizzServer.renderToPipeableStream(<Foo />);
     pipe(writable);
-    await 0;
+    0;
     const bufferedContent = buffer;
     buffer = '';
 

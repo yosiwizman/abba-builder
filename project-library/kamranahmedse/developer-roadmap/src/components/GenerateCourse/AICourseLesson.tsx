@@ -5,7 +5,6 @@ import {
   ChevronRight,
   GitForkIcon,
   Loader2Icon,
-  LockIcon,
   MessageCircleIcon,
   MessageCircleOffIcon,
   XIcon,
@@ -80,8 +79,6 @@ export function AICourseLesson(props: AICourseLessonProps) {
   const {
     courseSlug,
     progress = [],
-    creatorId,
-
     activeModuleIndex,
     totalModules,
     currentModuleTitle,
@@ -387,7 +384,7 @@ export function AICourseLesson(props: AICourseLessonProps) {
               </div>
 
               <h1 className="mb-6 text-3xl font-semibold text-balance max-lg:mb-3 max-lg:text-xl">
-                {currentLessonTitle?.replace(/^Lesson\s*?\d+[\.:]\s*/, '')}
+                {currentLessonTitle?.replace(/^Lesson\s*?\d+[.:]\s*/, '')}
               </h1>
 
               {!error && isLoggedIn() && (

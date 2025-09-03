@@ -5,16 +5,13 @@
 
 const {
   app,
-  BrowserWindow,
   desktopCapturer,
-  screen,
-  shell,
-} = require("electron");
+  } = require("electron");
 const path = require("path");
 const fs = require("fs").promises;
 const { exec } = require("child_process");
 const util = require("util");
-const execPromise = util.promisify(exec);
+
 
 class ScreenshotService {
   constructor() {
@@ -107,7 +104,7 @@ class ScreenshotService {
       return null;
     }
 
-    let appWindow = null;
+    
     let appProcess = null;
 
     try {

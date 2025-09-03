@@ -16,8 +16,7 @@ export function DashboardProgressCard(props: DashboardProgressCardProps) {
     skipped: skippedCount,
     roadmapSlug,
     isCustomResource,
-    updatedAt,
-  } = progress;
+    } = progress;
 
   let url =
     resourceType === 'roadmap'

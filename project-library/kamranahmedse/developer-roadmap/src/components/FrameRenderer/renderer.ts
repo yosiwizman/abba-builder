@@ -57,7 +57,7 @@ export class Renderer {
     }
 
     // Clone it so we can use it later
-    this.loaderHTML = this.loaderEl?.innerHTML!;
+    this.loaderHTML = this.loaderEl?.innerHTML;
     const dataset = this.containerEl.dataset;
 
     this.resourceType = dataset.resourceType!;
@@ -148,7 +148,7 @@ export class Renderer {
       return;
     }
 
-    if (/^check:/.test(topicId)) {
+    if (topicId.startsWith('check:')) {
       topicId = topicId.replace('check:', '');
     }
 
@@ -215,7 +215,7 @@ export class Renderer {
       return;
     }
 
-    if (/^ext_link/.test(groupId)) {
+    if (groupId.startsWith('ext_link')) {
       const externalLink = groupId.replace('ext_link:', '');
 
       if (!externalLink.startsWith('roadmap.sh')) {
@@ -233,7 +233,7 @@ export class Renderer {
       return;
     }
 
-    if (/^json:/.test(groupId)) {
+    if (groupId.startsWith('json:')) {
       // e.g. /roadmaps/frontend-beginner.json
       const newJsonUrl = groupId.replace('json:', '');
 
@@ -241,7 +241,7 @@ export class Renderer {
       return;
     }
 
-    if (/^check:/.test(groupId)) {
+    if (groupId.startsWith('check:')) {
       window.dispatchEvent(
         new CustomEvent(`${this.resourceType}.topic.toggle`, {
           detail: {

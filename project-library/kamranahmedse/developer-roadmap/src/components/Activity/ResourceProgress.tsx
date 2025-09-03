@@ -31,12 +31,10 @@ export function ResourceProgress(props: ResourceProgressType) {
   const userId = getUser()?.id;
 
   const {
-    updatedAt,
     resourceType,
     resourceId,
     title,
     totalCount,
-    learningCount,
     doneCount,
     skippedCount,
     onCleared,

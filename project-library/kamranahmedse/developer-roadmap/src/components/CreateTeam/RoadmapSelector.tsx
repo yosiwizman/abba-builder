@@ -44,7 +44,7 @@ export function RoadmapSelector(props: RoadmapSelectorProps) {
   const [changingRoadmapId, setChangingRoadmapId] = useState<string>('');
   const [isCreatingRoadmap, setIsCreatingRoadmap] = useState<boolean>(false);
 
-  const [error, setError] = useState<string>('');
+  const [,setError] = useState<string>('');
   const [confirmationContentId, setConfirmationContentId] = useState<string>();
 
   async function loadAllRoadmaps() {

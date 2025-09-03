@@ -6350,7 +6350,7 @@ const tests = {
           message:
             `The 'increment' function makes the dependencies of useEffect Hook ` +
             `(at line 14) change on every render. Move it inside the useEffect callback. ` +
-            `Alternatively, wrap the definition of \'increment\' in its own ` +
+            `Alternatively, wrap the definition of 'increment' in its own ` +
             `useCallback() Hook.`,
           suggestions: undefined,
         },

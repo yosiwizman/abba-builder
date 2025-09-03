@@ -91,7 +91,7 @@ class MetricsTrackingSystem {
 
   categorizeTestType(testResult) {
     const scenario = testResult.scenario?.toLowerCase() || "";
-    const test = testResult.test?.toLowerCase() || "";
+    
 
     if (
       scenario.includes("ui") ||
@@ -1188,7 +1188,7 @@ class MetricsTrackingSystem {
     // Generate dashboard for filtered data
     const originalMetrics = this.metrics;
     this.metrics = filteredMetrics;
-    const dashboard = this.generateDashboard();
+    
     this.metrics = originalMetrics;
 
     return this.exportMetrics(format);

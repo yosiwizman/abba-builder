@@ -5,7 +5,7 @@ type TeamActivityItemProps = {
 };
 
 export function TeamEmptyStream(props: TeamActivityItemProps) {
-  const { teamId } = props;
+  
 
   return (
     <div className="rounded-md">

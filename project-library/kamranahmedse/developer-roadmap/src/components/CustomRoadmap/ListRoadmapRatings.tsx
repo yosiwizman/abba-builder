@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { httpGet } from '../../lib/http';
-import { useToast } from '../../hooks/use-toast';
+
 import { isLoggedIn } from '../../lib/jwt';
-import { Loader2, MessageCircle, ServerCrash } from 'lucide-react';
+import { MessageCircle, ServerCrash } from 'lucide-react';
 import { Rating } from '../Rating/Rating';
 import { Spinner } from '../ReactIcons/Spinner.tsx';
 import { getRelativeTimeString } from '../../lib/date.ts';

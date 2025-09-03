@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { httpGet, httpPatch, httpPost } from '../lib/http';
+import { httpGet, httpPatch, } from '../lib/http';
 import { sponsorHidden } from '../stores/page';
 import { useStore } from '@nanostores/react';
 import { X } from 'lucide-react';

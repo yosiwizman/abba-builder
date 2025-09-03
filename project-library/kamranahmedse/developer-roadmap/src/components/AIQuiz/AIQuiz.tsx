@@ -7,7 +7,7 @@ import { aiLimitOptions } from '../../queries/ai-course';
 import { billingDetailsOptions } from '../../queries/billing';
 import { AIQuizLayout } from './AIQuizLayout';
 import { GenerateAIQuiz } from './GenerateAIQuiz';
-import { aiQuizOptions, generateAIQuiz } from '../../queries/ai-quiz';
+import { aiQuizOptions, } from '../../queries/ai-quiz';
 import { AIQuizContent } from './AIQuizContent';
 import { LoadingChip } from '../LoadingChip';
 
@@ -20,7 +20,7 @@ export function AIQuiz(props: AIQuizProps) {
   const [quizSlug, setQuizSlug] = useState(defaultQuizSlug);
 
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
-  const [isRegenerating, setIsRegenerating] = useState(false);
+  const [isRegenerating] = useState(false);
 
   // only fetch the guide if the guideSlug is provided
   // otherwise we are still generating the guide
@@ -31,12 +31,10 @@ export function AIQuiz(props: AIQuizProps) {
   } = useQuery(aiQuizOptions(quizSlug), queryClient);
 
   const {
-    data: tokenUsage,
     isLoading: isTokenUsageLoading,
-    refetch: refetchTokenUsage,
-  } = useQuery(aiLimitOptions(), queryClient);
+    } = useQuery(aiLimitOptions(), queryClient);
 
-  const { data: userBillingDetails, isLoading: isBillingDetailsLoading } =
+  const { isLoading: isBillingDetailsLoading } =
     useQuery(billingDetailsOptions(), queryClient);
 
   const isLoading =

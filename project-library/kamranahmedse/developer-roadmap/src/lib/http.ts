@@ -48,7 +48,7 @@ export async function httpCall<
         Accept: 'application/json',
         Authorization: `Bearer ${Cookies.get(TOKEN_COOKIE_NAME)}`,
         fp: fingerprint.visitorId,
-        ...(options?.headers ?? {}),
+        ...options?.headers,
       }),
     });
     statusCode = response.status;

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type RefObject } from 'react';
+import { useEffect, useRef, useState, } from 'react';
 import '../FrameRenderer/FrameRenderer.css';
 import { Spinner } from '../ReactIcons/Spinner';
 import {
@@ -98,7 +98,7 @@ export function UserProfileRoadmapRenderer(
             className="min-h-[1000px]"
             onRendered={(wrapperRef) => {
               done?.forEach((topicId: string) => {
-                topicSelectorAll(topicId, wrapperRef?.current!).forEach(
+                topicSelectorAll(topicId, wrapperRef?.current).forEach(
                   (el) => {
                     el.classList.add('done');
                   },
@@ -106,7 +106,7 @@ export function UserProfileRoadmapRenderer(
               });
 
               learning?.forEach((topicId: string) => {
-                topicSelectorAll(topicId, wrapperRef?.current!).forEach(
+                topicSelectorAll(topicId, wrapperRef?.current).forEach(
                   (el) => {
                     el.classList.add('learning');
                   },
@@ -114,7 +114,7 @@ export function UserProfileRoadmapRenderer(
               });
 
               skipped?.forEach((topicId: string) => {
-                topicSelectorAll(topicId, wrapperRef?.current!).forEach(
+                topicSelectorAll(topicId, wrapperRef?.current).forEach(
                   (el) => {
                     el.classList.add('skipped');
                   },

@@ -11,7 +11,6 @@ type UserPublicProgressesProps = {
 export function UserPublicProgresses(props: UserPublicProgressesProps) {
   const {
     roadmaps: roadmapProgresses = [],
-    username,
     publicConfig,
     userId,
   } = props;
@@ -38,7 +37,7 @@ export function UserPublicProgresses(props: UserPublicProgressesProps) {
               const totalCount = roadmap.total;
 
               const totalMarked = doneCount + skippedCount;
-              const progressPercentage = getPercentage(totalMarked, totalCount);
+              
 
               return (
                 <a

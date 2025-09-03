@@ -156,14 +156,14 @@ function normalizeCodeLocInfo(str) {
   //  at Component (/path/filename.js:123:45)
   // React format:
   //    in Component (at filename.js:123)
-  return str.replace(/\n +(?:at|in) ([^(\[\n]+)[^\n]*/g, function (m, name) {
+  return str.replace(/\n +(?:at|in) ([^([\n]+)[^\n]*/g, function (m, name) {
     name = name.trim();
     if (name.endsWith('.render')) {
       // Class components will have the `render` method as part of their stack trace.
       // We strip that out in our normalization to make it look more like component stacks.
       name = name.slice(0, name.length - 7);
     }
-    name = name.replace(/.*\/([^\/]+):\d+:\d+/, '**/$1:**:**');
+    name = name.replace(/.*\/([^/]+):\d+:\d+/, '**/$1:**:**');
     return '\n    in ' + name + ' (at **)';
   });
 }

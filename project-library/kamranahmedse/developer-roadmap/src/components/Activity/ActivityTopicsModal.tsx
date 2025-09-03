@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
+import { } from 'react';
 import type { ResourceType } from '../../lib/resource-progress';
 import type { AllowedActivityActionType } from './ActivityStream';
-import { httpPost } from '../../lib/http';
+
 import { Modal } from '../Modal.tsx';
-import { ModalLoader } from '../UserProgress/ModalLoader.tsx';
+
 import { ArrowUpRight, BookOpen, Check } from 'lucide-react';
 
 type ActivityTopicDetailsProps = {
@@ -23,7 +23,6 @@ export function ActivityTopicsModal(props: ActivityTopicDetailsProps) {
     resourceType,
     isCustomResource,
     topicTitles = [],
-    topicCount,
     actionType,
     onClose,
   } = props;

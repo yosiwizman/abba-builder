@@ -12,12 +12,12 @@ type AITutorHeaderProps = {
 };
 
 export function AITutorHeader(props: AITutorHeaderProps) {
-  const { title, subtitle, onUpgradeClick, children } = props;
+  const { title, subtitle, } = props;
 
   const { data: limits } = useQuery(aiLimitOptions(), queryClient);
-  const { isPaidUser, isLoading: isPaidUserLoading } = useIsPaidUser();
+  const { } = useIsPaidUser();
 
-  const { used, limit } = limits ?? { used: 0, limit: 0 };
+  const { } = limits ?? { used: 0, limit: 0 };
 
   return (
     <div className="mb-3 flex min-h-[35px] items-center justify-between max-sm:mb-1">

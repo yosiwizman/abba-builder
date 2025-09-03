@@ -36,7 +36,7 @@ export function api(context: APIContext) {
           'Content-Type': 'application/json',
           Accept: 'application/json',
           ...(token ? { Authorization: `Bearer ${token}` } : {}),
-          ...(options?.headers ?? {}),
+          ...options?.headers,
         }),
       });
 

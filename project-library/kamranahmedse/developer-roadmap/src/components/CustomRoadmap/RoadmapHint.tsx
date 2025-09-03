@@ -7,7 +7,7 @@ type RoadmapHintProps = {
 };
 
 export function RoadmapHint(props: RoadmapHintProps) {
-  const { roadmapTitle, roadmapId } = props;
+  const { roadmapId } = props;
 
   return (
     <div

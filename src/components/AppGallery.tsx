@@ -17,7 +17,6 @@ import {
   Code2,
   Calendar,
   FileText,
-  ExternalLink,
   Play,
   Trash2,
   Camera,
@@ -205,7 +204,7 @@ function AppCard({ app, onDelete, onOpen, onCapture }: AppCardProps) {
 
 export function AppGallery() {
   const { apps, loading, error, refreshApps } = useLoadApps();
-  const [selectedAppId, setSelectedAppId] = useAtom(selectedAppIdAtom);
+  const [,setSelectedAppId] = useAtom(selectedAppIdAtom);
   const navigate = useNavigate();
   const { getStoredScreenshot, captureAndSaveScreenshot } = useAppScreenshot();
   const [appsWithScreenshots, setAppsWithScreenshots] = useState<any[]>([]);

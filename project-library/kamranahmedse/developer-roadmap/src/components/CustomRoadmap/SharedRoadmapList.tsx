@@ -1,5 +1,5 @@
-import { ExternalLinkIcon, Map, Plus } from 'lucide-react';
-import RoadmapIcon from '../../icons/roadmap.svg';
+import { ExternalLinkIcon, Map, } from 'lucide-react';
+
 import type { GetRoadmapListResponse } from './RoadmapListPage';
 
 type GroupByCreator = {

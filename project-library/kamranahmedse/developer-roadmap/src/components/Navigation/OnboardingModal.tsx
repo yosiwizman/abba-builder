@@ -8,7 +8,7 @@ import { httpPatch } from '../../lib/http';
 import { useToast } from '../../hooks/use-toast';
 import type { OnboardingConfig } from './AccountDropdown';
 import { setAuthToken } from '../../lib/jwt';
-import { NUDGE_ONBOARDING_KEY } from '../OnboardingNudge.tsx';
+
 
 type Task = {
   id: string;

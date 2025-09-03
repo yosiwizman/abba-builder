@@ -9,14 +9,14 @@
 
 'use strict';
 
-let React;
+let _React;
 let ReactDOMClient;
 let ReactDOMServer;
 let act;
 
 describe('ReactDOMTextComponent', () => {
   beforeEach(() => {
-    React = require('react');
+    _React = require('react');
     ReactDOMClient = require('react-dom/client');
     ReactDOMServer = require('react-dom/server');
     act = require('internal-test-utils').act;

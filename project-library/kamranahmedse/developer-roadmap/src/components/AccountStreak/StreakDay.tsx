@@ -16,7 +16,6 @@ export function StreakDay(props: StreakDayProps) {
   const {
     isCurrentStreakDay,
     isPreviousStreakDay,
-    isBrokenStreakDay,
     isRemainingStreakDay,
     dayCount,
     icon,

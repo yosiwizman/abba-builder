@@ -6,7 +6,7 @@ import { ErrorIcon } from './ReactIcons/ErrorIcon';
 import { WarningIcon } from './ReactIcons/WarningIcon';
 import { InfoIcon } from './ReactIcons/InfoIcon';
 import { Spinner } from './ReactIcons/Spinner';
-import { deleteUrlParam, getUrlParams, setUrlParams } from '../lib/browser';
+import { deleteUrlParam, getUrlParams, } from '../lib/browser';
 
 const messageCodes: Record<string, string> = {
   tl: 'Successfully left the team',

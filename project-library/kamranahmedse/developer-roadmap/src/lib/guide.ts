@@ -87,7 +87,7 @@ export async function getAllGuides(): Promise<GuideFileType[]> {
         title: replaceVariables(guideFile.frontmatter.title),
         description: replaceVariables(guideFile.frontmatter.description),
         seo: {
-          ...(guideFile.frontmatter?.seo || {}),
+          ...guideFile.frontmatter?.seo,
           title: replaceVariables(guideFile.frontmatter.seo?.title || ''),
           description: replaceVariables(guideFile.frontmatter.seo?.description || ''),
         },

@@ -8,14 +8,14 @@
 'use strict';
 
 describe('SyntheticFocusEvent', () => {
-  let React;
+  let _React;
   let ReactDOMClient;
   let act;
   let container;
 
   beforeEach(() => {
     jest.resetModules();
-    React = require('react');
+    _React = require('react');
     ReactDOMClient = require('react-dom/client');
     act = require('internal-test-utils').act;
 

@@ -12,7 +12,7 @@
 'use strict';
 
 let useSyncExternalStore;
-let React;
+let _React;
 let ReactDOM;
 let ReactDOMServer;
 let Scheduler;
@@ -39,7 +39,7 @@ describe('useSyncExternalStore (userspace shim, server rendering)', () => {
       return otherExports;
     });
 
-    React = require('react');
+    _React = require('react');
     ReactDOM = require('react-dom');
     ReactDOMServer = require('react-dom/server');
     Scheduler = require('scheduler');

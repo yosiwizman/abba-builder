@@ -1,6 +1,6 @@
 import { AITutorLayout } from '../AITutor/AITutorLayout';
 import { CheckSubscriptionVerification } from '../Billing/CheckSubscriptionVerification';
-import { Loader2Icon } from 'lucide-react';
+
 
 type AIChatLayoutProps = {
   children: React.ReactNode;

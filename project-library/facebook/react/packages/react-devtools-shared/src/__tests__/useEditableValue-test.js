@@ -11,14 +11,14 @@ import {getVersionedRenderImplementation} from './utils';
 
 describe('useEditableValue', () => {
   let act;
-  let React;
+  let _React;
   let useEditableValue;
 
   beforeEach(() => {
     const utils = require('./utils');
     act = utils.act;
 
-    React = require('react');
+    _React = require('react');
 
     useEditableValue = require('../devtools/views/hooks').useEditableValue;
   });

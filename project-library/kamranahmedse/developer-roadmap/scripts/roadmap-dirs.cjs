@@ -28,7 +28,7 @@ if (!roadmapDirName) {
   process.exit(1);
 }
 
-const roadmapDirPath = path.join(ROADMAP_CONTENT_DIR, roadmapDirName);
+
 const roadmapContentDirPath = path.join(
   ROADMAP_CONTENT_DIR,
   roadmapDirName,
@@ -127,7 +127,7 @@ function createDirTree(parentDir, dirTree, sortOrders, filePaths = {}) {
   // e.g. /roadmaps/100-frontend/content/internet
   // ———> /roadmaps/100-frontend/content/103-internet
   if (sortOrder) {
-    parentDir = parentDir.replace(/(.+?)([^\/]+)?$/, `$1${sortOrder}-$2`);
+    parentDir = parentDir.replace(/(.+?)([^/]+)?$/, `$1${sortOrder}-$2`);
   }
 
   // If no children, create a file for this under the parent directory

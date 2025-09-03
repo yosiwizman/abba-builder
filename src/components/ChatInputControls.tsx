@@ -1,6 +1,6 @@
 import { ContextFilesPicker } from "./ContextFilesPicker";
 import { ModelPicker } from "./ModelPicker";
-import { ProModeSelector } from "./ProModeSelector";
+
 import { ChatModeSelector } from "./ChatModeSelector";
 
 export function ChatInputControls({

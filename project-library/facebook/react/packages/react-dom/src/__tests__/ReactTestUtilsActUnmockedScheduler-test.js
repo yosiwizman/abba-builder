@@ -148,7 +148,7 @@ test('can handle cascading promises', async () => {
   function App() {
     const [state, setState] = React.useState(0);
     async function ticker() {
-      await null;
+      null;
       await act(() => {
         setState(x => x + 1);
       });

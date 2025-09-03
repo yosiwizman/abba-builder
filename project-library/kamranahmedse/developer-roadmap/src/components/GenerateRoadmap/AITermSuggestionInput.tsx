@@ -56,44 +56,14 @@ export function AITermSuggestionInput(props: AITermSuggestionInputProps) {
   const isFirstRender = useRef(true);
 
   const [isActive, setIsActive] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading] = useState(false);
   const [searchResults, setSearchResults] =
     useState<GetTopAIRoadmapTermResponse>([]);
   const [searchedText, setSearchedText] = useState(defaultValue);
   const [activeCounter, setActiveCounter] = useState(0);
   const debouncedSearchValue = useDebounceValue(searchedText, 300);
 
-  const loadTopAIRoadmapTerm = async () => {
-    const trimmedValue = debouncedSearchValue.trim();
-    if (trimmedValue.length === 0) {
-      return [];
-    }
-
-    if (trimmedValue.length < 3) {
-      return [];
-    }
-
-    if (termCache.has(trimmedValue)) {
-      const cachedData = termCache.get(trimmedValue);
-      return cachedData || [];
-    }
-
-    const { response, error } = await httpGet<GetTopAIRoadmapTermResponse>(
-      `${import.meta.env.PUBLIC_API_URL}/v1-get-top-ai-roadmap-term`,
-      {
-        term: trimmedValue,
-      },
-    );
-
-    if (error || !response) {
-      toast.error(error?.message || 'Something went wrong');
-      setSearchResults([]);
-      return [];
-    }
-
-    termCache.set(trimmedValue, response);
-    return response;
-  };
+  
 
   const loadOfficialRoadmaps = async () => {
     if (officialRoadmaps.length > 0) {

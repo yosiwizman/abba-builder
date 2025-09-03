@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
-import Cookies from 'js-cookie';
+
 import { httpPost } from '../../lib/http';
 import {
   FIRST_LOGIN_PARAM,
-  TOKEN_COOKIE_NAME,
   setAuthToken,
 } from '../../lib/jwt';
 import { Spinner } from '../ReactIcons/Spinner';

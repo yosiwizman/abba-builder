@@ -23,12 +23,10 @@ export function UserPublicProgressStats(props: UserPublicProgressStats) {
     resourceId,
     title,
     totalCount,
-    learningCount,
     doneCount,
     skippedCount,
     roadmapSlug,
     isCustomResource = false,
-    username,
     userId,
   } = props;
 

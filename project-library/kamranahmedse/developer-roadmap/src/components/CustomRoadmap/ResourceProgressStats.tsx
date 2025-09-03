@@ -29,7 +29,7 @@ export function ResourceProgressStats(props: ResourceProgressStatsProps) {
           description={$currentRoadmap?.description}
           visibility={$currentRoadmap?.visibility}
           teamId={$currentRoadmap?.teamId}
-          roadmapId={$currentRoadmap?._id!}
+          roadmapId={$currentRoadmap?._id}
           sharedFriendIds={$currentRoadmap?.sharedFriendIds || []}
           sharedTeamMemberIds={$currentRoadmap?.sharedTeamMemberIds || []}
           onClose={() => setIsSharing(false)}

@@ -383,7 +383,7 @@ function runActTests(render, unmount, rerender) {
           function App() {
             const [state, setState] = React.useState(0);
             async function ticker() {
-              await null;
+              null;
               setState(x => x + 1);
             }
             React.useEffect(() => {
@@ -465,9 +465,9 @@ function runActTests(render, unmount, rerender) {
           const [ctr, setCtr] = React.useState(0);
           async function someAsyncFunction() {
             // queue a bunch of promises to be sure they all flush
-            await null;
-            await null;
-            await null;
+            null;
+            null;
+            null;
             setCtr(1);
           }
           React.useEffect(() => {
@@ -490,9 +490,9 @@ function runActTests(render, unmount, rerender) {
           const [ctr, setCtr] = React.useState(0);
           async function someAsyncFunction() {
             // queue a bunch of promises to be sure they all flush
-            await null;
-            await null;
-            await null;
+            null;
+            null;
+            null;
             setCtr(1);
           }
           React.useEffect(() => {
@@ -551,7 +551,7 @@ function runActTests(render, unmount, rerender) {
         function App() {
           const [state, setState] = React.useState(0);
           async function something() {
-            await null;
+            null;
             setState(1);
           }
           React.useEffect(() => {
@@ -579,7 +579,7 @@ function runActTests(render, unmount, rerender) {
         function App() {
           const [state, setState] = React.useState(0);
           async function ticker() {
-            await null;
+            null;
             setState(x => x + 1);
           }
           React.useEffect(() => {
@@ -682,7 +682,7 @@ function runActTests(render, unmount, rerender) {
       it('should cleanup after errors - async', async () => {
         function App() {
           async function somethingAsync() {
-            await null;
+            null;
             Scheduler.log('oh yes');
           }
           React.useEffect(() => {

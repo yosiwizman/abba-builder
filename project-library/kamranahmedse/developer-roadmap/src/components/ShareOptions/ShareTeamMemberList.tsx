@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, } from 'react';
 import { useToast } from '../../hooks/use-toast';
 import { UserItem } from './UserItem';
 import { Users } from 'lucide-react';
@@ -129,7 +129,7 @@ export function ShareTeamMemberList(props: ShareTeamMemberListProps) {
         <ul className="mt-2 grid grid-cols-3 gap-2.5">
           {members?.map((member) => {
             const isSelected = sharedTeamMemberIds?.includes(
-              member._id?.toString()!
+              member._id?.toString()
             );
             return (
               <li key={member.userId}>
@@ -144,13 +144,13 @@ export function ShareTeamMemberList(props: ShareTeamMemberListProps) {
                     if (isSelected) {
                       setSharedTeamMemberIds(
                         sharedTeamMemberIds.filter(
-                          (id) => id !== member._id?.toString()!
+                          (id) => id !== member._id?.toString()
                         )
                       );
                     } else {
                       setSharedTeamMemberIds([
                         ...sharedTeamMemberIds,
-                        member._id?.toString()!,
+                        member._id?.toString(),
                       ]);
                     }
                   }}

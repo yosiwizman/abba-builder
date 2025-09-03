@@ -100,21 +100,12 @@ export function RoadmapAIChatHeader(props: RoadmapAIChatHeaderProps) {
 
   useKeydown('Escape', onCloseChat);
 
-  const isLimitExceeded = (tokenUsage?.used || 0) >= (tokenUsage?.limit || 0);
+  
   const isPaidUser = userBillingDetails?.status === 'active';
 
-  const usagePercentage = getPercentage(
-    tokenUsage?.used || 0,
-    tokenUsage?.limit || 0,
-  );
+  
 
-  const handleCreditsClick = () => {
-    if (!isLoggedIn()) {
-      onLogin();
-      return;
-    }
-    setShowAILimitsPopup(true);
-  };
+  
 
   const handleUpgradeClick = () => {
     if (!isLoggedIn()) {

@@ -10,7 +10,7 @@
 
 'use strict';
 
-let React;
+let _React;
 let ReactNoop;
 let waitForAll;
 
@@ -19,7 +19,7 @@ let waitForAll;
 describe('ReactTopLevelText', () => {
   beforeEach(() => {
     jest.resetModules();
-    React = require('react');
+    _React = require('react');
     ReactNoop = require('react-noop-renderer');
 
     const InternalTestUtils = require('internal-test-utils');

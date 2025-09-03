@@ -54,7 +54,7 @@ export function GroupRoadmapItem(props: GroupRoadmapItemProps) {
                 onClick={() => {
                   onShowResourceProgress(
                     member.member,
-                    member.progress?.resourceId!,
+                    member.progress?.resourceId,
                   );
                 }}
               >

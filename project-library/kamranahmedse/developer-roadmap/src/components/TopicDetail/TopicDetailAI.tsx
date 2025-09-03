@@ -132,7 +132,7 @@ export function TopicDetailAI(props: TopicDetailAIProps) {
     }, 0);
   };
 
-  const { scrollToBottom, scrollableContainerRef, showScrollToBottomButton } =
+  const { scrollToBottom, scrollableContainerRef, } =
     useAIChatScroll({
       messages,
     });

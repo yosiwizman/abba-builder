@@ -24,7 +24,7 @@ if (!fs.existsSync(guideTempDir)) {
   fs.mkdirSync(guideTempDir, { recursive: true });
 }
 
-const { data, content } = matter(guideContent);
+const { content } = matter(guideContent);
 
 // Find all base64 image references in the content
 const images = content.match(/\[(.+?)\]:\s+?<data:image\/([^;]+);base64,([^\s]+)/g);

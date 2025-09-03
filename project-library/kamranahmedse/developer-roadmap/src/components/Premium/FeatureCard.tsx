@@ -16,7 +16,6 @@ export function FeatureCard(props: FeatureCardProps) {
     title,
     description,
     duration = '2:30',
-    videoId,
     thumbnail,
     onClick,
     isComingSoon = false,

@@ -9,9 +9,7 @@ import log from "electron-log";
 import {
   CUSTOM_PROVIDER_PREFIX,
   getLanguageModelProviders,
-  getLanguageModels,
-  getLanguageModelsByProviders,
-} from "../shared/language_model_helpers";
+  } from "../shared/language_model_helpers";
 import { db } from "@/db";
 import LanguageModelService from "@/services/language-model-service";
 import {

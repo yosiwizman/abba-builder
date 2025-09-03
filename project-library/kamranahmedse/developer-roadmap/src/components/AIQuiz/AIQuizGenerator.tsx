@@ -45,8 +45,7 @@ export function AIQuizGenerator() {
   const {
     data: tokenUsage,
     isLoading: isTokenUsageLoading,
-    refetch: refetchTokenUsage,
-  } = useQuery(aiLimitOptions(), queryClient);
+    } = useQuery(aiLimitOptions(), queryClient);
 
   const { data: userBillingDetails, isLoading: isBillingDetailsLoading } =
     useQuery(billingDetailsOptions(), queryClient);

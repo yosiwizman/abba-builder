@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon';
 import { Modal } from '../Modal';
-import { ChevronRight, type LucideIcon, X } from 'lucide-react';
+import { ChevronRight, type LucideIcon, } from 'lucide-react';
 import { useState, type ReactNode, type SVGProps } from 'react';
 import { GoogleCalendarIcon } from '../ReactIcons/GoogleCalendarIcon';
 import { OutlookCalendarIcon } from '../ReactIcons/OutlookCalendarIcon';

@@ -66,7 +66,7 @@ export function AICourseRoadmapView(props: AICourseRoadmapViewProps) {
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const { data: userBillingDetails, isLoading: isBillingDetailsLoading } =
+  const { data: userBillingDetails, } =
     useQuery(billingDetailsOptions(), queryClient);
 
   const isPaidUser = userBillingDetails?.status === 'active';

@@ -1,5 +1,5 @@
 import { cn } from '../lib/classname.ts';
-import { memo, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useScrollPosition } from '../hooks/use-scroll-position.ts';
 import { X } from 'lucide-react';
 import { isOnboardingStripHidden } from '../stores/page.ts';

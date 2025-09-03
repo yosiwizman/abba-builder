@@ -110,7 +110,7 @@ fs.createReadStream(csvFilePath)
             .toLowerCase();
 
           const result = rawPageResult[csvHeaderItem || csvHeaderItemAlt] || {};
-          const views = result.views || 0;
+          
           const users = result.users || 0;
 
           pageResultCsvRow.push(users);

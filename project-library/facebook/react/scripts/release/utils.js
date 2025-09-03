@@ -50,7 +50,7 @@ const execRead = async (command, options) => {
 const extractCommitFromVersionNumber = version => {
   // Support stable version format e.g. "0.0.0-0e526bcec-20210202"
   // and experimental version format e.g. "0.0.0-experimental-0e526bcec-20210202"
-  const match = version.match(/0\.0\.0\-([a-z]+\-){0,1}([^-]+).+/);
+  const match = version.match(/0\.0\.0-([a-z]+-){0,1}([^-]+).+/);
   if (match === null) {
     throw Error(`Could not extra commit from version "${version}"`);
   }

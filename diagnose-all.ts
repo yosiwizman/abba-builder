@@ -158,7 +158,7 @@ ${COLORS.reset}`);
       };
 
       // Check main dependencies
-      for (const [dep, version] of Object.entries(requiredDeps)) {
+      for (const [dep, _version] of Object.entries(requiredDeps)) {
         if (!pkg.dependencies?.[dep]) {
           this.errors.push(`Missing dependency: ${dep}`);
           this.fixes.push(`npm install ${dep}`);
@@ -166,7 +166,7 @@ ${COLORS.reset}`);
       }
 
       // Check dev dependencies
-      for (const [dep, version] of Object.entries(requiredDevDeps)) {
+      for (const [dep, _version] of Object.entries(requiredDevDeps)) {
         if (!pkg.devDependencies?.[dep]) {
           this.warnings.push(`Missing dev dependency: ${dep}`);
           this.fixes.push(`npm install -D ${dep}`);

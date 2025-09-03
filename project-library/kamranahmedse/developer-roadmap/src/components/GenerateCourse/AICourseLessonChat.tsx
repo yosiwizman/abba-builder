@@ -79,8 +79,6 @@ export function AICourseLessonChat(props: AICourseLessonChatProps) {
     onClose,
 
     isAIChatsOpen,
-    setIsAIChatsOpen,
-
     isGeneratingLesson,
   } = props;
 
@@ -97,7 +95,7 @@ export function AICourseLessonChat(props: AICourseLessonChatProps) {
     queryClient,
   );
 
-  const { data: userBillingDetails, isLoading: isBillingDetailsLoading } =
+  const { data: userBillingDetails, } =
     useQuery(billingDetailsOptions(), queryClient);
 
   const isLimitExceeded = (tokenUsage?.used || 0) >= (tokenUsage?.limit || 0);
@@ -473,34 +471,4 @@ function CapabilityCard({
   );
 }
 
-const capabilities = [
-  {
-    icon: (
-      <HelpCircle
-        className="size-4 shrink-0 text-yellow-600"
-        strokeWidth={2.5}
-      />
-    ),
-    title: 'Clarify Concepts',
-    description: "If you don't understand a concept, ask me to clarify it",
-  },
-  {
-    icon: (
-      <BookOpen className="size-4 shrink-0 text-yellow-600" strokeWidth={2.5} />
-    ),
-    title: 'More Details',
-    description: 'Get deeper insights about topics covered in the lesson',
-  },
-  {
-    icon: (
-      <Hammer className="size-4 shrink-0 text-yellow-600" strokeWidth={2.5} />
-    ),
-    title: 'Real-world Examples',
-    description: 'Ask for real-world examples to understand better',
-  },
-  {
-    icon: <Bot className="size-4 shrink-0 text-yellow-600" strokeWidth={2.5} />,
-    title: 'Best Practices',
-    description: 'Learn about best practices and common pitfalls',
-  },
-] as const;
+

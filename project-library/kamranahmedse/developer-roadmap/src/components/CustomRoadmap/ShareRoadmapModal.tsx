@@ -42,7 +42,7 @@ export function ShareRoadmapModal(props: ShareRoadmapModalProps) {
   const toast = useToast();
   const $currentRoadmap = useStore(currentRoadmap);
   const $isCurrentRoadmapPersonal = useStore(isCurrentRoadmapPersonal);
-  const roadmapId = $currentRoadmap?._id!;
+  const roadmapId = $currentRoadmap?._id;
 
   const { copyText, isCopied } = useCopyText();
   const [visibility, setVisibility] = useState($currentRoadmap?.visibility);

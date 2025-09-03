@@ -28,8 +28,7 @@ export function AIExploreCourseListing() {
   const {
     data: exploreAiCourses,
     isFetching: isExploreAiCoursesLoading,
-    isRefetching: isExploreAiCoursesRefetching,
-  } = useQuery(listExploreAiCoursesOptions(pageState), queryClient);
+    } = useQuery(listExploreAiCoursesOptions(pageState), queryClient);
 
   useEffect(() => {
     setIsInitialLoading(false);

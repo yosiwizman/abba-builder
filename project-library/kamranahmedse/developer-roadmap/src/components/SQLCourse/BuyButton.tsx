@@ -47,7 +47,7 @@ export function BuyButton(props: BuyButtonProps) {
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const toast = useToast();
 
-  const { copyText, isCopied } = useCopyText();
+  const { } = useCopyText();
 
   const { data: coursePricing, isLoading: isLoadingPrice } = useQuery(
     coursePriceOptions({ courseSlug: SQL_COURSE_SLUG }),

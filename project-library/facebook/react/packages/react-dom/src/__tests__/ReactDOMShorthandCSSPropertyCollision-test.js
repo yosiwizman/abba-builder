@@ -12,7 +12,7 @@
 describe('ReactDOMShorthandCSSPropertyCollision', () => {
   let act;
 
-  let React;
+  let _React;
   let ReactDOMClient;
   let assertConsoleErrorDev;
 
@@ -20,7 +20,7 @@ describe('ReactDOMShorthandCSSPropertyCollision', () => {
     jest.resetModules();
 
     act = require('internal-test-utils').act;
-    React = require('react');
+    _React = require('react');
     ReactDOMClient = require('react-dom/client');
     assertConsoleErrorDev =
       require('internal-test-utils').assertConsoleErrorDev;

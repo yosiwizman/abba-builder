@@ -379,7 +379,7 @@ export function CIDashboard() {
                   <div>
                     <p className="font-medium">{deployment.environment}</p>
                     <p className="text-sm text-muted-foreground">
-                      v{deployment.version} • {deployment.timestamp}
+                      v{deployment.version} • {deployment.deployedAt}
                     </p>
                   </div>
                   <Badge variant={getStatusBadgeVariant(deployment.status)}>

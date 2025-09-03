@@ -191,7 +191,7 @@ export function RoadmapFloatingChat(props: RoadmapChatProps) {
 
   const isAuthenticatedUser = isLoggedIn();
 
-  const { data: tokenUsage, isLoading: isTokenUsageLoading } = useQuery(
+  const { data: tokenUsage, } = useQuery(
     aiLimitOptions(),
     queryClient,
   );
@@ -201,18 +201,11 @@ export function RoadmapFloatingChat(props: RoadmapChatProps) {
     ((tokenUsage?.used || 0) / (tokenUsage?.limit || 0)) * 100,
   );
 
-  const { data: userBillingDetails, isLoading: isBillingDetailsLoading } =
+  const { data: userBillingDetails, } =
     useQuery(billingDetailsOptions(), queryClient);
   const isPaidUser = userBillingDetails?.status === 'active';
 
-  const totalTopicCount = useMemo(() => {
-    const allowedTypes = ['topic', 'subtopic', 'todo'];
-    return (
-      roadmapDetail?.json?.nodes.filter((node) =>
-        allowedTypes.includes(node.type || ''),
-      ).length ?? 0
-    );
-  }, [roadmapDetail]);
+  
 
   const onSelectTopic = (topicId: string, topicTitle: string) => {
     // For now just scroll to bottom and close overlay

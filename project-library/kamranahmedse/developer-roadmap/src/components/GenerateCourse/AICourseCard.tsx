@@ -32,7 +32,7 @@ export function AICourseCard(props: AICourseCardProps) {
   const completedTopics = course.done?.length || 0;
   const progressPercentage =
     totalTopics > 0 ? Math.round((completedTopics / totalTopics) * 100) : 0;
-  const updatedAgo = getRelativeTimeString(course?.updatedAt);
+  
 
   return (
     <div className="relative flex flex-grow">

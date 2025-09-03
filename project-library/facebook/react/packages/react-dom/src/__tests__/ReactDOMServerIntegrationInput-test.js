@@ -14,14 +14,14 @@ const ReactDOMServerIntegrationUtils = require('./utils/ReactDOMServerIntegratio
 // Set by `yarn test-fire`.
 const {disableInputAttributeSyncing} = require('shared/ReactFeatureFlags');
 
-let React;
+let _React;
 let ReactDOMClient;
 let ReactDOMServer;
 
 function initModules() {
   // Reset warning cache.
   jest.resetModules();
-  React = require('react');
+  _React = require('react');
   ReactDOMClient = require('react-dom/client');
   ReactDOMServer = require('react-dom/server');
 

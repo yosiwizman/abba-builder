@@ -9,7 +9,7 @@
 
 'use strict';
 
-const React = require('react');
+
 const ReactDOM = require('react-dom');
 const ReactDOMClient = require('react-dom/client');
 const assertConsoleErrorDev =

@@ -8,7 +8,7 @@ import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 import dotenv from "dotenv";
 import VisualTestingIntegration from "../src/services/enhanced/visual-testing-integration.js";
-import fs from "fs";
+
 
 // Load environment variables
 dotenv.config();

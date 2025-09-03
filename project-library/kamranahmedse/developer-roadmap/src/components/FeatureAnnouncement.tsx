@@ -1,7 +1,7 @@
-import { useState } from 'react';
-import { Modal } from './Modal.tsx';
-import {PartyPopper, Play, PlayCircle} from 'lucide-react';
-import { isMobileScreen } from '../lib/is-mobile.ts';
+
+
+import {PartyPopper, } from 'lucide-react';
+
 
 type FeatureAnnouncementProps = {};
 

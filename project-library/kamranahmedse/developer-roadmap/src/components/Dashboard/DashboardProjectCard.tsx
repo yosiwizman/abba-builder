@@ -1,4 +1,4 @@
-import { Check, CircleCheck, CircleDashed } from 'lucide-react';
+import { Check, } from 'lucide-react';
 import type { ProjectStatusDocument } from '../Projects/ListProjectSolutions';
 import { cn } from '../../lib/classname.ts';
 import { getRelativeTimeString } from '../../lib/date.ts';

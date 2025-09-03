@@ -1,5 +1,5 @@
 import { Calendar } from 'lucide-react';
-import { cn } from '../../lib/classname';
+
 import type { ResourceType } from '../../lib/resource-progress';
 import { ScheduleEventModal } from './ScheduleEventModal';
 import { useState } from 'react';
@@ -11,7 +11,7 @@ type ScheduleButtonProps = {
 };
 
 export function ScheduleButton(props: ScheduleButtonProps) {
-  const { resourceId, resourceType, resourceTitle } = props;
+  const { resourceId, } = props;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 

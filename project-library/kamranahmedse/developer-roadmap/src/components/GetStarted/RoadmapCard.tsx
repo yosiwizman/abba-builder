@@ -1,4 +1,4 @@
-import { ExternalLink, Globe2, type LucideIcon } from 'lucide-react';
+import { ExternalLink, type LucideIcon } from 'lucide-react';
 
 type RoadmapCardProps = {
   title: string;

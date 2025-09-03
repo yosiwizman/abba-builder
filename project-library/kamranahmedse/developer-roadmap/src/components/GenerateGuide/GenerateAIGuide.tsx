@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { generateGuide } from '../../helper/generate-ai-guide';
-import { getCourseFineTuneData } from '../../lib/ai';
+
 import { getUrlParams } from '../../lib/browser';
 import { isLoggedIn } from '../../lib/jwt';
 import { AIGuideContent } from './AIGuideContent';
@@ -22,11 +22,11 @@ export function GenerateAIGuide(props: GenerateAIGuideProps) {
   const { onGuideSlugChange } = props;
 
   const [isLoading, setIsLoading] = useState(true);
-  const [isStreaming, setIsStreaming] = useState(false);
+  const [,setIsStreaming] = useState(false);
   const [error, setError] = useState('');
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
 
-  const [content, setContent] = useState('');
+  const [content] = useState('');
   const [html, setHtml] = useState('');
   const htmlRef = useRef<string>('');
 

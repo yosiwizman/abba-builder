@@ -9,7 +9,7 @@ import { dirname, join } from "path";
 import dotenv from "dotenv";
 import VisualTestingIntegration from "../src/services/enhanced/visual-testing-integration.js";
 import fs from "fs";
-import path from "path";
+
 
 // Load environment variables
 dotenv.config();

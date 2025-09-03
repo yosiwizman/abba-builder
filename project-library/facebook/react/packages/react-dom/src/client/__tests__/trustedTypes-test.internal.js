@@ -10,7 +10,7 @@
 'use strict';
 
 describe('when Trusted Types are available in global object', () => {
-  let React;
+  let _React;
   let ReactDOMClient;
   let ReactFeatureFlags;
   let act;
@@ -35,7 +35,7 @@ describe('when Trusted Types are available in global object', () => {
     };
     ReactFeatureFlags = require('shared/ReactFeatureFlags');
     ReactFeatureFlags.enableTrustedTypesIntegration = true;
-    React = require('react');
+    _React = require('react');
     ReactDOMClient = require('react-dom/client');
     ({act, assertConsoleErrorDev} = require('internal-test-utils'));
     ttObject1 = {

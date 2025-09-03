@@ -19,7 +19,7 @@ export type Bridge = {
   removeListener(event: string, listener: Function): void;
   shutdown: () => void;
 };
-export type Store = Object;
+export type Store = object;
 export type BrowserTheme = 'dark' | 'light';
 export type Config = {
   supportsReloadAndProfile?: boolean,

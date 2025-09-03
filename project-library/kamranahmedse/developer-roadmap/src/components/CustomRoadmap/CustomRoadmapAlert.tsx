@@ -1,13 +1,8 @@
 import {
-  BadgeCheck,
-  Heart,
-  HeartHandshake,
   MessageCircleHeart,
-  PencilRuler,
-  Search,
-} from 'lucide-react';
-import { showLoginPopup } from '../../lib/popup.ts';
-import { isLoggedIn } from '../../lib/jwt.ts';
+  } from 'lucide-react';
+
+
 import { useState } from 'react';
 import { CreateRoadmapModal } from './CreateRoadmap/CreateRoadmapModal.tsx';
 import { RoadmapAlert } from '../RoadmapAlert.tsx';

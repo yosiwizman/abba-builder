@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { cn } from '../../lib/classname.ts';
-import { Box, Filter, Group, X } from 'lucide-react';
+import { Box, Filter, X } from 'lucide-react';
 import {
   deleteUrlParam,
   getUrlParams,

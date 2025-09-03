@@ -26,7 +26,7 @@ export function UpgradeSidebarCard(props: UpgradeSidebarCardProps) {
     showLimit = true,
   } = props;
 
-  const { data: limits, isLoading: isLimitsLoading } = useQuery(
+  const { data: limits, } = useQuery(
     aiLimitOptions(),
     queryClient,
   );

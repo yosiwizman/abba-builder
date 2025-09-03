@@ -12,7 +12,7 @@
 jest.mock('react-dom-bindings/src/events/isEventSupported');
 
 describe('InvalidEventListeners', () => {
-  let React;
+  let _React;
   let ReactDOMClient;
   let act;
   let assertConsoleErrorDev;
@@ -20,7 +20,7 @@ describe('InvalidEventListeners', () => {
 
   beforeEach(() => {
     jest.resetModules();
-    React = require('react');
+    _React = require('react');
     ReactDOMClient = require('react-dom/client');
     ({act, assertConsoleErrorDev} = require('internal-test-utils'));
 

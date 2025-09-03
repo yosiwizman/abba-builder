@@ -983,8 +983,8 @@ describe('ReactDOMFizzStaticBrowser', () => {
     link.dispatchEvent(event);
 
     // Wait for the instruction microtasks to flush.
-    await 0;
-    await 0;
+    0;
+    0;
     jest.runAllTimers();
 
     expect(getVisibleChildren(container)).toEqual([
@@ -1083,7 +1083,7 @@ describe('ReactDOMFizzStaticBrowser', () => {
     }
 
     const Lazy = React.lazy(async () => {
-      await 0;
+      0;
       return {default: Postpone};
     });
 
@@ -1138,7 +1138,7 @@ describe('ReactDOMFizzStaticBrowser', () => {
     }
 
     const lazyText = React.lazy(async () => {
-      await 0; // causes the fallback to start work
+      0; // causes the fallback to start work
       return {default: 'Hello'};
     });
 
@@ -1191,7 +1191,7 @@ describe('ReactDOMFizzStaticBrowser', () => {
     }
 
     const lazySpan = React.lazy(async () => {
-      await 0;
+      0;
       return {default: <span />};
     });
 
@@ -1504,7 +1504,7 @@ describe('ReactDOMFizzStaticBrowser', () => {
     }
 
     const Lazy = React.lazy(async () => {
-      await 0;
+      0;
       return {default: Postpone};
     });
 
@@ -1627,7 +1627,7 @@ describe('ReactDOMFizzStaticBrowser', () => {
         '<body>hello<!--$?--><template id="B:0"></template><!--/$--><script id="_R_">requestAnimationFrame(function(){$RT=performance.now()});</script>',
     );
 
-    await 1;
+    1;
     hasLoaded = true;
     await serverAct(resolve);
 

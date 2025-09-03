@@ -11,7 +11,7 @@
 
 'use strict';
 
-let React;
+let _React;
 let ReactNoop;
 let Scheduler;
 let useSyncExternalStore;
@@ -44,7 +44,7 @@ describe('useSyncExternalStore (userspace shim, server rendering)', () => {
       jest.requireActual('use-sync-external-store/shim/index.native'),
     );
 
-    React = require('react');
+    _React = require('react');
     ReactNoop = require('react-noop-renderer');
     Scheduler = require('scheduler');
     act = require('internal-test-utils').act;

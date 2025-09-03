@@ -1,11 +1,11 @@
-import { ChevronLeft, Loader2, Plus, Users } from 'lucide-react';
+import { ChevronLeft, Plus, Users } from 'lucide-react';
 import { $teamList } from '../../stores/team';
 import { httpGet } from '../../lib/http';
 import type { TeamListResponse } from '../TeamDropdown/TeamDropdown';
 import { useToast } from '../../hooks/use-toast';
 import { useStore } from '@nanostores/react';
 import { useEffect, useState } from 'react';
-import { Spinner } from '../ReactIcons/Spinner';
+
 
 type DropdownTeamListProps = {
   setIsTeamsOpen: (isOpen: boolean) => void;

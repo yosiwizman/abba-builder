@@ -43,7 +43,7 @@ function cleanNodeOrArray(node) {
     node.instance = null;
   }
   if (node && node.props && node.props.children) {
-    const {children, ...props} = node.props;
+    const {...props} = node.props;
     node.props = props;
   }
   if (Array.isArray(node.rendered)) {

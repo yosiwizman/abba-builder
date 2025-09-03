@@ -82,7 +82,7 @@ export function GenerateAIQuiz(props: GenerateAIQuizProps) {
     src?: string;
     questionAndAnswers?: QuestionAnswerChatMessage[];
   }) => {
-    const { term, format, isForce, prompt, src, questionAndAnswers } = options;
+    const { term, format, isForce, prompt, questionAndAnswers } = options;
 
     if (!isLoggedIn()) {
       window.location.href = '/ai';

@@ -41,14 +41,7 @@ export const SystemHealthDashboard: React.FC = () => {
     }
   };
   
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'pass': return 'text-green-500';
-      case 'warning': return 'text-yellow-500';
-      case 'fail': return 'text-red-500';
-      default: return 'text-gray-500';
-    }
-  };
+  
   
   const getStatusIcon = (status: string) => {
     switch (status) {

@@ -22,7 +22,6 @@ export function QuizTopNavigation(props: QuizTopNavigationProps) {
     totalQuestions,
     progressPercentage,
     onPrevious,
-    onNext,
     onSkip,
     isStreaming = false,
   } = props;

@@ -8,7 +8,7 @@ type ActivityTopicTitlesProps = {
 };
 
 export function ActivityTopicTitles(props: ActivityTopicTitlesProps) {
-  const { topicTitles, onSelectActivity, className } = props;
+  const { topicTitles, className } = props;
 
   const [showAll, setShowAll] = useState(false);
   const filteredTopicTitles = topicTitles.slice(

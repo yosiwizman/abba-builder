@@ -20,12 +20,12 @@ export function GenerateAIRoadmap(props: GenerateAIRoadmapProps) {
   const { onRoadmapSlugChange } = props;
 
   const [isLoading, setIsLoading] = useState(true);
-  const [isStreaming, setIsStreaming] = useState(false);
+  const [,setIsStreaming] = useState(false);
   const [error, setError] = useState('');
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
 
   const [svgHtml, setSvgHtml] = useState('');
-  const [content, setContent] = useState('');
+  const [content] = useState('');
   const svgRef = useRef<string | null>(null);
 
   const { isPaidUser, isLoading: isPaidUserLoading } = useIsPaidUser();
@@ -79,7 +79,7 @@ export function GenerateAIRoadmap(props: GenerateAIRoadmapProps) {
     src?: string;
     questionAndAnswers?: QuestionAnswerChatMessage[];
   }) => {
-    const { term, isForce, prompt, src, questionAndAnswers } = options;
+    const { term, isForce, prompt, questionAndAnswers } = options;
 
     if (!isLoggedIn()) {
       window.location.href = '/ai';

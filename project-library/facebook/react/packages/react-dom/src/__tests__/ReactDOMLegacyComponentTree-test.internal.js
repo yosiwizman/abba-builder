@@ -10,13 +10,13 @@
 'use strict';
 
 describe('ReactDOMComponentTree', () => {
-  let React;
+  let _React;
   let ReactDOM;
   let container;
   let assertConsoleErrorDev;
 
   beforeEach(() => {
-    React = require('react');
+    _React = require('react');
     ReactDOM = require('react-dom');
     assertConsoleErrorDev =
       require('internal-test-utils').assertConsoleErrorDev;

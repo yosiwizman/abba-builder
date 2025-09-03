@@ -14,11 +14,11 @@ type AILimitsPopupProps = {
 export function AILimitsPopup(props: AILimitsPopupProps) {
   const { onClose, onUpgrade } = props;
 
-  const { data: limits, isLoading } = useQuery(aiLimitOptions(), queryClient);
+  const { data: limits, } = useQuery(aiLimitOptions(), queryClient);
 
   const { used, limit } = limits ?? { used: 0, limit: 0 };
 
-  const { data: userBillingDetails, isLoading: isBillingDetailsLoading } =
+  const { data: userBillingDetails, } =
     useQuery(billingDetailsOptions(), queryClient);
 
   const isPaidUser = userBillingDetails?.status === 'active';

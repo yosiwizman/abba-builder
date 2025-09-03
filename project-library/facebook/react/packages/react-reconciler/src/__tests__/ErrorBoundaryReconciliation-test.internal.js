@@ -4,7 +4,7 @@ describe('ErrorBoundaryReconciliation', () => {
   let GetDerivedErrorBoundary;
   let React;
   let ReactTestRenderer;
-  let span;
+  
   let act;
 
   beforeEach(() => {

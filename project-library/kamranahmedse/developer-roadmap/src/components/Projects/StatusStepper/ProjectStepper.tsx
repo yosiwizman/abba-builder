@@ -1,4 +1,4 @@
-import { Flag, Play, Send, Share, Square, StopCircle, X } from 'lucide-react';
+import { Flag, Play, Send, Share, Square, } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { cn } from '../../../lib/classname';
 import { useStickyStuck } from '../../../hooks/use-sticky-stuck';

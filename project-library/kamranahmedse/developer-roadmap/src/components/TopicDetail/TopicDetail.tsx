@@ -121,7 +121,7 @@ export function TopicDetail(props: TopicDetailProps) {
     defaultActiveTab = 'content',
   } = props;
 
-  const [hasEnoughLinks, setHasEnoughLinks] = useState(false);
+  const [,setHasEnoughLinks] = useState(false);
   const [contributionUrl, setContributionUrl] = useState('');
   const [isActive, setIsActive] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -130,7 +130,7 @@ export function TopicDetail(props: TopicDetailProps) {
   const [topicHtml, setTopicHtml] = useState('');
   const [hasContent, setHasContent] = useState(false);
   const [topicTitle, setTopicTitle] = useState('');
-  const [topicHtmlTitle, setTopicHtmlTitle] = useState('');
+  const [,setTopicHtmlTitle] = useState('');
   const [links, setLinks] = useState<RoadmapContentDocument['links']>([]);
   const [activeTab, setActiveTab] =
     useState<AllowedTopicDetailsTabs>(defaultActiveTab);
@@ -391,8 +391,7 @@ export function TopicDetail(props: TopicDetailProps) {
     return null;
   }
 
-  const tnsLink =
-    'https://thenewstack.io/devops/?utm_source=roadmap.sh&utm_medium=Referral&utm_campaign=Topic';
+  
 
   const paidResourcesForTopic = paidResources.filter((resource) => {
     const normalizedTopicId =

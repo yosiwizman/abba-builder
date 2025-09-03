@@ -18,23 +18,11 @@ export function CustomRoadmapRatingsModal(
 ) {
   const { onClose, ratings, roadmapSlug, canManage = false } = props;
 
-  const [activeTab, setActiveTab] = useState<ActiveTab>(
+  const [activeTab] = useState<ActiveTab>(
     canManage ? 'feedback' : 'ratings',
   );
 
-  const tabs: {
-    id: ActiveTab;
-    label: string;
-  }[] = [
-    {
-      id: 'ratings',
-      label: 'Ratings',
-    },
-    {
-      id: 'feedback',
-      label: 'Feedback',
-    },
-  ];
+  
 
   return (
     <Modal

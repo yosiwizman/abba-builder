@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useKeydown } from '../../hooks/use-keydown';
 import { useOutsideClick } from '../../hooks/use-outside-click';
 import type { PageType } from '../CommandMenu/CommandMenu';
-import type { TeamResourceConfig } from './RoadmapSelector';
+
 import { SelectRoadmapModalItem } from './SelectRoadmapModalItem';
 import { XIcon } from 'lucide-react';
 

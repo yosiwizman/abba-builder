@@ -5,7 +5,7 @@
  */
 
 import { fileURLToPath } from "url";
-import { dirname, join } from "path";
+import { dirname, } from "path";
 import fs from "fs";
 import VisualRegressionTester from "./src/services/enhanced/visual-regression.js";
 import VisualTestingIntegration from "./src/services/enhanced/visual-testing-integration.js";
@@ -29,10 +29,10 @@ async function runIntegrationTest() {
     // Test 1: Module Loading
     console.log("\n1️⃣ Testing module loading...");
     try {
-      const tester = new VisualRegressionTester();
+      
       console.log("   ✅ VisualRegressionTester loaded successfully");
 
-      const integration = new VisualTestingIntegration();
+      
       console.log("   ✅ VisualTestingIntegration loaded successfully");
 
       results.moduleLoading = true;
@@ -48,7 +48,7 @@ async function runIntegrationTest() {
         resultsPath: "./test-visual-results",
       };
 
-      const tester = new VisualRegressionTester(testConfig);
+      
 
       if (
         fs.existsSync(testConfig.basePath) &&

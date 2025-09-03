@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { ChevronDown, User } from 'lucide-react';
+import { ChevronDown, } from 'lucide-react';
 import { getUser, isLoggedIn } from '../../lib/jwt';
 import { AccountDropdownList } from './AccountDropdownList';
 import { DropdownTeamList } from './DropdownTeamList';

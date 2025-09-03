@@ -6,7 +6,7 @@ import type {
 import { Users } from 'lucide-react';
 import { formatCommaNumber } from '../../lib/number.ts';
 import { cn } from '../../lib/classname.ts';
-import { isLoggedIn } from '../../lib/jwt.ts';
+
 
 type ProjectCardProps = {
   project: ProjectFileType;

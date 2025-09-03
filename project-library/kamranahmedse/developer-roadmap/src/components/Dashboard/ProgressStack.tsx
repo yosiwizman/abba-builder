@@ -12,8 +12,8 @@ import { DashboardProjectCard } from './DashboardProjectCard';
 import { useState } from 'react';
 import { cn } from '../../lib/classname';
 import { DashboardProgressCard } from './DashboardProgressCard';
-import { useStore } from '@nanostores/react';
-import { $accountStreak, type StreakResponse } from '../../stores/streak';
+
+import { type StreakResponse } from '../../stores/streak';
 import { EmptyStackMessage } from './EmptyStackMessage.tsx';
 
 type ProgressStackProps = {

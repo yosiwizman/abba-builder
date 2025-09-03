@@ -130,7 +130,7 @@ describe('ReactHooks', () => {
 
     // prepare to check SameValue
     await act(() => {
-      setCounter1(0 / -1);
+      setCounter1(0);
       setCounter2(NaN);
     });
 
@@ -138,7 +138,7 @@ describe('ReactHooks', () => {
 
     // check if re-setting to negative 0 / NaN still bails out
     await act(() => {
-      setCounter1(0 / -1);
+      setCounter1(0);
       setCounter2(NaN);
       setCounter2(Infinity);
       setCounter2(NaN);
@@ -447,7 +447,7 @@ describe('ReactHooks', () => {
 
     // Update to a different state (positive 0 to negative 0)
     await act(() => {
-      setCounter(0 / -1);
+      setCounter(0);
     });
     assertLog(['Parent: 0', 'Child: 0', 'Effect: 0']);
     expect(root).toMatchRenderedOutput('0');

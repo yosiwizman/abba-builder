@@ -1,4 +1,4 @@
-import { Blocks, CodeXml } from 'lucide-react';
+import { Blocks, } from 'lucide-react';
 
 type EmptySolutionsProps = {
   projectId: string;

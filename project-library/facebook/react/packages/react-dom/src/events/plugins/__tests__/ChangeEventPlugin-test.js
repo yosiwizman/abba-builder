@@ -360,7 +360,7 @@ describe('ChangeEventPlugin', () => {
       root.render(<input />);
     });
 
-    const input = container.firstChild;
+    
 
     await act(() => {
       root.unmount();

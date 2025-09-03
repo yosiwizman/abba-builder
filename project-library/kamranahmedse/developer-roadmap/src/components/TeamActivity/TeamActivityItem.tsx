@@ -21,7 +21,7 @@ type TeamActivityItemProps = {
 };
 
 export function TeamActivityItem(props: TeamActivityItemProps) {
-  const { user, onTopicClick, teamId } = props;
+  const { user, teamId } = props;
   const { activities } = user;
 
   const currentTeam = useStore($currentTeam);

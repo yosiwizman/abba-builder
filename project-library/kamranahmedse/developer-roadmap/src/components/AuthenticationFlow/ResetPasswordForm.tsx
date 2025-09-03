@@ -1,7 +1,7 @@
 import { type FormEvent, useEffect, useState } from 'react';
 import { httpPost } from '../../lib/http';
-import Cookies from 'js-cookie';
-import { TOKEN_COOKIE_NAME, setAuthToken } from '../../lib/jwt';
+
+import { setAuthToken } from '../../lib/jwt';
 
 export function ResetPasswordForm() {
   const [code, setCode] = useState('');
@@ -52,7 +52,7 @@ export function ResetPasswordForm() {
       return;
     }
 
-    const token = response.token;
+    
     setAuthToken(response.token);
     window.location.href = '/';
   };

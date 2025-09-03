@@ -11,7 +11,7 @@ import { httpGet } from '../../lib/http';
 import { useToast } from '../../hooks/use-toast';
 import { DiscoverRoadmapSorting } from './DiscoverRoadmapSorting';
 import { CreateRoadmapModal } from '../CustomRoadmap/CreateRoadmap/CreateRoadmapModal.tsx';
-import { Tooltip } from '../Tooltip.tsx';
+
 
 type DiscoverRoadmapsProps = {};
 

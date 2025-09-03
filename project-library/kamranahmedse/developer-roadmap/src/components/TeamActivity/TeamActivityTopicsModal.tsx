@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
-import { httpPost } from '../../lib/http';
+import { } from 'react';
+
 import { Modal } from '../Modal.tsx';
-import { ModalLoader } from '../UserProgress/ModalLoader.tsx';
+
 import { ArrowUpRight, BookOpen, Check } from 'lucide-react';
 import type { TeamStreamActivity } from './TeamActivityPage.tsx';
 

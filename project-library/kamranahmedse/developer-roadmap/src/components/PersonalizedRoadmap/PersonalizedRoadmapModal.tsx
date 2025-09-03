@@ -24,7 +24,7 @@ export function PersonalizedRoadmapModal(props: PersonalizedRoadmapModalProps) {
   const [info, setInfo] = useState(infoProp);
   const infoFieldId = useId();
 
-  const { data: limits, isLoading: isLimitLoading } = useQuery(
+  const { data: limits, } = useQuery(
     aiLimitOptions(),
     queryClient,
   );

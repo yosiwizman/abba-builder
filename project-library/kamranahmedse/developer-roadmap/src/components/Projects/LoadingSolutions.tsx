@@ -1,7 +1,7 @@
 import { isMobileScreen } from '../../lib/is-mobile.ts';
 
 export function LoadingSolutions() {
-  const totalCount = isMobileScreen() ? 3 : 11;
+  
 
   const loadingRow = (
     <li className="flex min-h-[78px] animate-pulse flex-wrap items-center justify-between overflow-hidden rounded-md bg-gray-200 sm:min-h-[44px] sm:animate-none sm:rounded-none sm:bg-transparent">

@@ -160,7 +160,7 @@ describe('isomorphic act()', () => {
       root.render(<Text text="A" />);
       root.render(<Text text="B" />);
 
-      await null;
+      null;
       assertLog([
         // A and B should render in a single batch _before_ the microtask queue
         // has run. This replicates the behavior of the original `act`
@@ -198,7 +198,7 @@ describe('isomorphic act()', () => {
         root.render(<Text text="B" />);
       });
 
-      await null;
+      null;
       assertLog([
         // A and B should render in a single batch _before_ the microtask queue
         // has run. This replicates the behavior of the original `act`

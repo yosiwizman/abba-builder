@@ -55,7 +55,7 @@ export function MemberProgressModal(props: ProgressMapProps) {
   const containerEl = useRef<HTMLDivElement>(null);
   const popupBodyEl = useRef<HTMLDivElement>(null);
 
-  const [showProgressHint, setShowProgressHint] = useState(false);
+  const [showProgressHint] = useState(false);
   const [memberProgress, setMemberProgress] =
     useState<MemberProgressResponse>();
   const [isLoading, setIsLoading] = useState(true);

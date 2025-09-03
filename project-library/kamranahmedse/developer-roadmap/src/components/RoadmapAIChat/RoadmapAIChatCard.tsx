@@ -7,7 +7,7 @@ type RoadmapAIChatCardProps = RoadmapAIChatHistoryType & {
 };
 
 export function RoadmapAIChatCard(props: RoadmapAIChatCardProps) {
-  const { role, html, jsx, isIntro = false } = props;
+  const { role, html, jsx, } = props;
 
   return (
     <div

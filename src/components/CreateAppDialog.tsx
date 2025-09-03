@@ -63,7 +63,7 @@ export function CreateAppDialog({
       // Navigate to the new app's first chat
       router.navigate({
         to: "/chat",
-        search: (prev) => ({ ...prev, id: result.chatId }),
+        search: { id: result.chatId },
       });
       setAppName("");
       onOpenChange(false);

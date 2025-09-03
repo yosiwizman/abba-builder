@@ -10,14 +10,14 @@
 
 'use strict';
 
-let React;
+let _React;
 let ReactDOMFizzServer;
 
 describe('ReactDOMFloat', () => {
   beforeEach(() => {
     jest.resetModules();
 
-    React = require('react');
+    _React = require('react');
     ReactDOMFizzServer = require('react-dom/server');
   });
 

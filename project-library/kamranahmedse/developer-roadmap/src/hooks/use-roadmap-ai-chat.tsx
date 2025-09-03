@@ -2,7 +2,7 @@ import { useCallback, useMemo, useRef, useState, useEffect } from 'react';
 import type { JSONContent } from '@tiptap/core';
 import { flushSync } from 'react-dom';
 import { removeAuthToken } from '../lib/jwt';
-import { readStream } from '../lib/ai';
+
 import { useToast } from './use-toast';
 import { aiLimitOptions } from '../queries/ai-course';
 import { queryClient } from '../stores/query-client';

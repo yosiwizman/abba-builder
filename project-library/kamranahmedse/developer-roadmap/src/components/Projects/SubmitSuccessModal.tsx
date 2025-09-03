@@ -1,4 +1,4 @@
-import { CheckCircle, CheckCircle2, Clipboard, Copy } from 'lucide-react';
+import { CheckCircle, Copy } from 'lucide-react';
 import { getUser } from '../../lib/jwt.ts';
 import { Modal } from '../Modal';
 import { CheckIcon as ReactCheckIcon } from '../ReactIcons/CheckIcon.tsx';

@@ -1579,7 +1579,7 @@ describe('ReactDOMComponent', () => {
 
   describe('createOpenTagMarkup', () => {
     function quoteRegexp(str) {
-      return String(str).replace(/([.?*+\^$\[\]\\(){}|-])/g, '\\$1');
+      return String(str).replace(/([.?*+^$[\]\\(){}|-])/g, '\\$1');
     }
 
     function expectToHaveAttribute(actual, expected) {
@@ -1613,7 +1613,7 @@ describe('ReactDOMComponent', () => {
 
   describe('createContentMarkup', () => {
     function quoteRegexp(str) {
-      return String(str).replace(/([.?*+\^$\[\]\\(){}|-])/g, '\\$1');
+      return String(str).replace(/([.?*+^$[\]\\(){}|-])/g, '\\$1');
     }
 
     function genMarkup(props) {

@@ -9,7 +9,7 @@
 
 'use strict';
 
-const React = require('react');
+
 const ReactDOMClient = require('react-dom/client');
 const act = require('internal-test-utils').act;
 

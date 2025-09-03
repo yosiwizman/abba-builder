@@ -11,7 +11,7 @@
 'use strict';
 
 let createReactNativeComponentClass;
-let React;
+let _React;
 let ReactNative;
 
 describe('createReactNativeComponentClass', () => {
@@ -21,7 +21,7 @@ describe('createReactNativeComponentClass', () => {
     createReactNativeComponentClass =
       require('react-native/Libraries/ReactPrivate/ReactNativePrivateInterface')
         .ReactNativeViewConfigRegistry.register;
-    React = require('react');
+    _React = require('react');
     ReactNative = require('react-native-renderer');
   });
 
