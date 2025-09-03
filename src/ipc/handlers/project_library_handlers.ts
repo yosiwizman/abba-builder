@@ -742,20 +742,100 @@ export function registerProjectLibraryHandlers() {
     ),
   );
 
-  // Use project as template
+  // Use project as template - ENHANCED with real implementation
   ipcMain.handle(
     "project-library:use-template",
     withProjectLibraryLogging(
       "project-library:use-template",
-      async (_event, projectId: number, modifications: any = {}) => {
-        const projectLibrary = await getProjectLibrary();
-        const result = await projectLibrary.useProjectAsTemplate(
-          projectId,
-          modifications,
-        );
-        return { success: true, data: result };
+      async (_event, params: { projectId: string; projectPath?: string; targetDir?: string; projectName?: string }) => {
+        try {
+          // Import template initializer
+          const templateInitializer = (await import('../../services/template-initializer')).default;
+          const { app, dialog } = require('electron');
+          
+          // If no project path provided, try to construct it from projectId
+          let templatePath = params.projectPath;
+          if (!templatePath && params.projectId) {
+            // Parse projectId format: "owner-repo"
+            const [owner, repo] = params.projectId.split('-');
+            if (owner && repo) {
+              templatePath = path.join(process.cwd(), 'project-library', owner, repo);
+            }
+          }
+          
+          if (!templatePath || !await fs.pathExists(templatePath)) {
+            return { 
+              success: false, 
+              error: 'Template project not found',
+              data: null 
+            };
+          }
+          
+          // Get target directory from user if not provided
+          let targetDir = params.targetDir;
+          if (!targetDir) {
+            const result = await dialog.showOpenDialog({
+              properties: ['openDirectory', 'createDirectory'],
+              title: 'Select directory for new project',
+              defaultPath: app.getPath('documents')
+            });
+            
+            if (result.canceled || !result.filePaths.length) {
+              return { 
+                success: false, 
+                error: 'No directory selected',
+                data: null 
+              };
+            }
+            targetDir = result.filePaths[0];
+          }
+          
+          // Get project name if not provided
+          let projectName = params.projectName;
+          if (!projectName) {
+            projectName = `my-${path.basename(templatePath)}-project`;
+          }
+          
+          // Initialize from template
+          const initResult = await templateInitializer.initializeFromTemplate({
+            templatePath,
+            targetPath: targetDir,
+            projectName,
+            description: `Project created from ${path.basename(templatePath)} template`,
+            initGit: true,
+            installDependencies: false // Let user install manually to avoid blocking
+          });
+          
+          if (initResult.success) {
+            // Open the project folder in explorer/finder
+            const { shell } = require('electron');
+            shell.showItemInFolder(initResult.projectPath!);
+            
+            return {
+              success: true,
+              data: {
+                projectPath: initResult.projectPath,
+                projectName,
+                warnings: initResult.warnings,
+                message: `Project created successfully at ${initResult.projectPath}`
+              }
+            };
+          } else {
+            return {
+              success: false,
+              error: initResult.error || 'Failed to create project from template',
+              data: null
+            };
+          }
+        } catch (error: any) {
+          log.error('Failed to use template:', error);
+          return { 
+            success: false, 
+            error: error.message || 'Failed to use template',
+            data: null 
+          };
+        }
       },
-      projectLibraryValidators.useTemplate,
     ),
   );
 

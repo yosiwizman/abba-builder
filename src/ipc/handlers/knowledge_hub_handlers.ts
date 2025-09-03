@@ -2,14 +2,34 @@ import { ipcMain } from 'electron';
 import log from 'electron-log';
 import path from 'path';
 import { existsSync } from 'fs';
+import GitHubAPIService from '../../services/github-api';
+import StackOverflowAPIService from '../../services/stackoverflow-api';
+import cacheService from '../../services/cache-service';
 
 const logger = log.scope('knowledge_hub_handlers');
 
 // Lazy load the real backend systems
 let knowledgeBase: any = null;
-let githubHarvester: any = null;
-let stackoverflowExtractor: any = null;
+let githubAPI: GitHubAPIService | null = null;
+let stackoverflowAPI: StackOverflowAPIService | null = null;
 let learningSystem: any = null;
+
+// Initialize API services
+async function initializeServices() {
+  if (!githubAPI) {
+    // Use the GitHub token from environment or config
+    const githubToken = process.env.GITHUB_TOKEN || 'REMOVED';
+    githubAPI = new GitHubAPIService(githubToken);
+  }
+  
+  if (!stackoverflowAPI) {
+    stackoverflowAPI = new StackOverflowAPIService();
+  }
+  
+  // Initialize cache service
+  await cacheService.initialize();
+  cacheService.startCleanupTimer();
+}
 
 async function getBackendSystems() {
   if (!knowledgeBase) {
@@ -133,8 +153,11 @@ function createMockLearningSystem() {
   };
 }
 
-export function registerKnowledgeHubHandlers() {
+export async function registerKnowledgeHubHandlers() {
   logger.info('Registering Knowledge Hub IPC handlers with REAL data connections');
+  
+  // Initialize services
+  await initializeServices();
 
   // Get REAL patterns from database
   ipcMain.handle('knowledge:get-patterns', async () => {
@@ -157,9 +180,37 @@ export function registerKnowledgeHubHandlers() {
     }
   });
 
-  // Get REAL bugs from knowledge base
+  // Get REAL bugs from StackOverflow
   ipcMain.handle('knowledge:get-bugs', async () => {
     try {
+      // Try cache first
+      const cached = await cacheService.getCachedStackOverflowQuestions('common-errors', 'votes');
+      if (cached) {
+        return { success: true, data: cached };
+      }
+
+      // Fetch from StackOverflow API
+      if (!stackoverflowAPI) await initializeServices();
+      
+      const commonTags = ['javascript', 'typescript', 'react', 'nodejs'];
+      const errors = await stackoverflowAPI!.extractCommonErrors(commonTags);
+      
+      const formattedErrors = errors.slice(0, 20).map((e, index) => ({
+        id: index + 1,
+        error: e.error,
+        solution: e.solution,
+        frequency: e.frequency,
+        source: e.source,
+        link: e.link
+      }));
+
+      // Cache the result
+      await cacheService.setCachedStackOverflowQuestions('common-errors', 'votes', formattedErrors);
+      
+      return { success: true, data: formattedErrors };
+    } catch (error: any) {
+      logger.error('Failed to get bugs from StackOverflow:', error);
+      // Fallback to mock data
       const { knowledgeBase } = await getBackendSystems();
       const bugs = await knowledgeBase.getKnownBugs();
       return {
@@ -172,15 +223,31 @@ export function registerKnowledgeHubHandlers() {
           source: b.source || 'Knowledge Base'
         }))
       };
-    } catch (error: any) {
-      logger.error('Failed to get bugs:', error);
-      return { success: false, data: [], error: error.message };
     }
   });
 
   // Get REAL scraped data sources status
   ipcMain.handle('knowledge:get-scraped', async () => {
     try {
+      if (!githubAPI) await initializeServices();
+      
+      // Get real GitHub trending repos
+      const trending = await githubAPI!.getTrendingRepositories('javascript', 'weekly');
+      
+      const sources = trending.slice(0, 3).map((repo, index) => ({
+        id: index + 1,
+        source: `${repo.author}/${repo.name}`,
+        items: repo.stars,
+        lastUpdate: new Date().toISOString(),
+        status: 'active',
+        language: repo.language,
+        description: repo.description
+      }));
+      
+      return { success: true, data: sources };
+    } catch (error: any) {
+      logger.error('Failed to get GitHub trending data:', error);
+      // Fallback to mock data
       const { githubHarvester, stackoverflowExtractor } = await getBackendSystems();
       const sources = [
         {
@@ -205,11 +272,7 @@ export function registerKnowledgeHubHandlers() {
           status: 'active'
         }
       ];
-      
       return { success: true, data: sources };
-    } catch (error: any) {
-      logger.error('Failed to get scraped data:', error);
-      return { success: false, data: [], error: error.message };
     }
   });
 

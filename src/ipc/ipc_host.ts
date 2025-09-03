@@ -75,7 +75,7 @@ export async function setupApiEndpoints(userId?: string): Promise<void> {
   registerHelpBotHandlers();
   registerGitHubLauncherHandlers();
   registerEnhancedHandlers();
-  registerKnowledgeHubHandlers();
+  await registerKnowledgeHubHandlers();
   registerProjectLibraryHandlers();
   registerLibraryUpdaterHandlers();
   registerRendererLogHandlers();
