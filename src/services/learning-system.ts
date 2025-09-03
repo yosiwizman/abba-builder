@@ -426,31 +426,6 @@ class LearningSystem {
     }
   }
 
-  async scanTemplatesFromProjectLibrary(libraryPath: string): Promise<Template[]> {
-    const templates: Template[] = [];
-
-    try {
-      const projects = await fs.readdir(libraryPath);
-      
-      for (const project of projects) {
-        const projectPath = path.join(libraryPath, project);
-        const stats = await fs.stat(projectPath);
-        
-        if (stats.isDirectory()) {
-          const template = await this.analyzeProjectAsTemplate(projectPath);
-          if (template) {
-            templates.push(template);
-            await this.saveTemplate(template);
-          }
-        }
-      }
-
-      return templates;
-    } catch (error: any) {
-      logger.error('Failed to scan templates:', error);
-      return templates;
-    }
-  }
 
   private async analyzeProjectAsTemplate(projectPath: string): Promise<Template | null> {
     try {
@@ -536,7 +511,7 @@ class LearningSystem {
       
       // Limit score to 1-10 range
       return Math.max(1, Math.min(10, score));
-    } catch (error) {
+    } catch (_error) {
       return 5;
     }
   }
@@ -557,7 +532,7 @@ class LearningSystem {
     return 'JavaScript';
   }
 
-  private categorizeProject(packageJson: any, files: string[]): string {
+  private categorizeProject(packageJson: any, _files: string[]): string {
     const keywords = packageJson.keywords || [];
     const description = (packageJson.description || '').toLowerCase();
     
@@ -767,6 +742,122 @@ class LearningSystem {
     } catch (error: any) {
       logger.error('Failed to clear database:', error);
       return false;
+    }
+  }
+
+  async scanTemplatesFromProjectLibrary(libraryPath: string): Promise<void> {
+    try {
+      logger.info(`Scanning project library for templates at: ${libraryPath}`);
+      
+      // Check if the project library exists
+      if (!await fs.pathExists(libraryPath)) {
+        logger.warn(`Project library path does not exist: ${libraryPath}`);
+        return;
+      }
+
+      // Read all directories in the project library
+      const projectDirs = await fs.readdir(libraryPath);
+      let templatesAdded = 0;
+
+      for (const dir of projectDirs) {
+        const projectPath = path.join(libraryPath, dir);
+        const stat = await fs.stat(projectPath);
+        
+        if (!stat.isDirectory()) continue;
+
+        // Look for package.json or project metadata
+        const packageJsonPath = path.join(projectPath, 'package.json');
+        const projectMetaPath = path.join(projectPath, 'project.meta.json');
+        
+        let projectInfo: any = {};
+        let framework = 'Unknown';
+        let category = 'General';
+        let complexity: 'beginner' | 'intermediate' | 'advanced' = 'intermediate';
+        
+        // Try to read package.json
+        if (await fs.pathExists(packageJsonPath)) {
+          try {
+            const packageJson = await fs.readJson(packageJsonPath);
+            projectInfo.name = packageJson.name || dir;
+            
+            // Detect framework from dependencies
+            const deps = { ...packageJson.dependencies, ...packageJson.devDependencies };
+            if (deps['react']) framework = 'React';
+            else if (deps['vue']) framework = 'Vue';
+            else if (deps['@angular/core']) framework = 'Angular';
+            else if (deps['next']) framework = 'Next.js';
+            else if (deps['express']) framework = 'Express';
+            else if (deps['svelte']) framework = 'Svelte';
+            else framework = 'JavaScript';
+            
+            // Categorize based on keywords or description
+            const keywords = packageJson.keywords || [];
+            if (keywords.includes('dashboard') || projectInfo.name.includes('dashboard')) category = 'Dashboard';
+            else if (keywords.includes('ecommerce') || keywords.includes('shop')) category = 'E-commerce';
+            else if (keywords.includes('admin')) category = 'Admin';
+            else if (keywords.includes('blog')) category = 'Blog';
+            else if (keywords.includes('landing')) category = 'Landing Page';
+            else if (keywords.includes('portfolio')) category = 'Portfolio';
+            else if (keywords.includes('game')) category = 'Game';
+            else if (keywords.includes('tool') || keywords.includes('utility')) category = 'Tool';
+            else category = 'Application';
+            
+          } catch (error) {
+            logger.warn(`Failed to read package.json for ${dir}:`, error);
+          }
+        }
+        
+        // Try to read project metadata if it exists
+        if (await fs.pathExists(projectMetaPath)) {
+          try {
+            const metadata = await fs.readJson(projectMetaPath);
+            framework = metadata.framework || framework;
+            category = metadata.category || category;
+            complexity = metadata.complexity || complexity;
+            projectInfo = { ...projectInfo, ...metadata };
+          } catch (error) {
+            logger.warn(`Failed to read project metadata for ${dir}:`, error);
+          }
+        }
+
+        // Count components/files
+        let componentCount = 0;
+        try {
+          const srcPath = path.join(projectPath, 'src');
+          if (await fs.pathExists(srcPath)) {
+            const files = await this.scanProjectFiles(srcPath);
+            componentCount = files.filter(f => 
+              f.endsWith('.tsx') || f.endsWith('.jsx') || 
+              f.endsWith('.vue') || f.endsWith('.svelte')
+            ).length;
+          }
+        } catch (_error) {
+          componentCount = 5; // Default if can't scan
+        }
+
+        // Create template entry
+        const template: Template = {
+          id: `template-${dir}`,
+          name: projectInfo.name || dir,
+          framework,
+          category,
+          complexity,
+          componentCount,
+          successRate: projectInfo.successRate || 85,
+          cognitiveLoadScore: projectInfo.cognitiveLoadScore || 5,
+          productionReady: projectInfo.productionReady !== false,
+          testCoverage: projectInfo.testCoverage || 0,
+          documentationScore: projectInfo.documentationScore || 70,
+          maintainabilityIndex: projectInfo.maintainabilityIndex || 75
+        };
+
+        await this.saveTemplate(template);
+        templatesAdded++;
+      }
+
+      logger.info(`Scanned project library: Added ${templatesAdded} templates`);
+    } catch (error: any) {
+      logger.error('Failed to scan project library for templates:', error);
     }
   }
 }

@@ -145,16 +145,16 @@ function createMockKnowledgeBase() {
 
 function createMockGitHubHarvester() {
   return {
-    getScrapedCount: async (repo: string) => Math.floor(Math.random() * 1000) + 100,
-    getLastUpdateTime: async (repo: string) => new Date().toISOString(),
+    getScrapedCount: async (_repo: string) => Math.floor(Math.random() * 1000) + 100,
+    getLastUpdateTime: async (_repo: string) => new Date().toISOString(),
     harvestIssues: async () => ({ harvested: 25, new: 5 })
   };
 }
 
 function createMockStackOverflowExtractor() {
   return {
-    getExtractedCount: async (tag: string) => Math.floor(Math.random() * 500) + 50,
-    getLastUpdateTime: async (tag: string) => new Date(Date.now() - 3600000).toISOString(),
+    getExtractedCount: async (_tag: string) => Math.floor(Math.random() * 500) + 50,
+    getLastUpdateTime: async (_tag: string) => new Date(Date.now() - 3600000).toISOString(),
     extractCommonErrors: async () => ({ extracted: 15, new: 3 })
   };
 }
@@ -183,7 +183,7 @@ export async function registerKnowledgeHubHandlers() {
           id: p.id,
           name: p.name,
           successRate: p.successRate,
-          usage: p.usageCount || p.usageCount,
+          usage: p.usageCount || 0,
           category: p.category || 'General',
           cognitiveLoad: p.cognitiveLoad,
           description: p.description,
@@ -297,7 +297,18 @@ export async function registerKnowledgeHubHandlers() {
     try {
       if (!learningSystem) await initializeServices();
       
-      const templates = await learningSystem!.getTemplates();
+      let templates = await learningSystem!.getTemplates();
+      
+      // If no templates, try scanning project library again
+      if (templates.length === 0) {
+        logger.info('No templates found, rescanning project library...');
+        const projectLibraryPath = path.join(process.cwd(), 'project-library');
+        if (existsSync(projectLibraryPath)) {
+          await learningSystem!.scanTemplatesFromProjectLibrary(projectLibraryPath);
+          templates = await learningSystem!.getTemplates();
+        }
+      }
+      
       return {
         success: true,
         data: templates.map((t: any) => ({
@@ -315,6 +326,25 @@ export async function registerKnowledgeHubHandlers() {
     } catch (error: any) {
       logger.error('Failed to get templates:', error);
       return { success: false, data: [], error: error.message };
+    }
+  });
+
+  // Rescan project library for templates
+  ipcMain.handle('knowledge:rescan-templates', async () => {
+    try {
+      if (!learningSystem) await initializeServices();
+      
+      const projectLibraryPath = path.join(process.cwd(), 'project-library');
+      if (existsSync(projectLibraryPath)) {
+        await learningSystem!.scanTemplatesFromProjectLibrary(projectLibraryPath);
+        const templates = await learningSystem!.getTemplates();
+        return { success: true, message: `Scanned and loaded ${templates.length} templates` };
+      } else {
+        return { success: false, error: 'Project library path not found' };
+      }
+    } catch (error: any) {
+      logger.error('Failed to rescan templates:', error);
+      return { success: false, error: error.message };
     }
   });
 

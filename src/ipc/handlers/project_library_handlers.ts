@@ -945,20 +945,127 @@ export function registerProjectLibraryHandlers() {
 
           log.info(`Adding GitHub repository: ${owner}/${repo}`);
 
-          // For now, return success with the parsed info
-          // In a real implementation, this would:
-          // 1. Fetch repo data from GitHub API
-          // 2. Download/clone the repository
-          // 3. Add to project library database
-          return {
-            success: true,
-            data: {
-              owner,
-              repo,
-              fullName: `${owner}/${repo}`,
-              message: `Repository ${owner}/${repo} added to library`,
-            },
-          };
+          // Use the GitHub API service to fetch real repository data
+          const GitHubAPIService = (await import('../../services/github-api')).default;
+          const githubToken = process.env.GITHUB_TOKEN || 'REMOVED';
+          const githubAPI = new GitHubAPIService(githubToken);
+
+          try {
+            // Fetch repository details from GitHub
+            const repoData = await githubAPI.getRepository(owner, repo);
+            
+            // Get languages used in the repository
+            const languages = await githubAPI.getRepositoryLanguages(owner, repo);
+            
+            // Get recent releases if any
+            const releases = await githubAPI.getRepositoryReleases(owner, repo);
+            
+            // Prepare project data
+            const projectData = {
+              name: repoData.name,
+              owner: repoData.owner.login,
+              url: repoData.html_url,
+              description: repoData.description || 'No description',
+              stars: repoData.stargazers_count,
+              forks: repoData.forks_count,
+              watchers: repoData.watchers_count,
+              language: repoData.language,
+              languages: Object.keys(languages),
+              topics: repoData.topics || [],
+              license: repoData.license?.name || 'Unknown',
+              isPrivate: repoData.private,
+              defaultBranch: repoData.default_branch,
+              createdAt: repoData.created_at,
+              updatedAt: repoData.updated_at,
+              lastPush: repoData.pushed_at,
+              hasIssues: repoData.has_issues,
+              hasWiki: repoData.has_wiki,
+              hasPages: repoData.has_pages,
+              openIssuesCount: repoData.open_issues_count,
+              latestRelease: releases[0] || null,
+              size: repoData.size,
+              cloneUrl: repoData.clone_url,
+            };
+
+            // Determine the project-library path
+            const projectLibraryPath = path.join(process.cwd(), 'project-library');
+            const projectPath = path.join(projectLibraryPath, `${owner}-${repo}`);
+            
+            // Check if project already exists
+            if (await fs.pathExists(projectPath)) {
+              log.info(`Project ${owner}/${repo} already exists in library`);
+              return {
+                success: true,
+                data: {
+                  ...projectData,
+                  localPath: projectPath,
+                  alreadyExists: true,
+                  message: `Repository ${owner}/${repo} already exists in library`,
+                },
+              };
+            }
+
+            // Clone the repository using git command
+            log.info(`Cloning repository ${owner}/${repo} to ${projectPath}`);
+            const { exec } = require('child_process');
+            const { promisify } = require('util');
+            const execAsync = promisify(exec);
+            
+            try {
+              // Use sparse checkout for large repos to save space
+              await execAsync(`git clone --depth 1 --single-branch ${repoData.clone_url} "${projectPath}"`);
+              log.info(`Successfully cloned ${owner}/${repo}`);
+              
+              // Save project metadata
+              const metadataPath = path.join(projectPath, 'project.meta.json');
+              await fs.writeJson(metadataPath, {
+                ...projectData,
+                downloadedAt: new Date().toISOString(),
+                libraryVersion: '1.0.0',
+              }, { spaces: 2 });
+              
+              // Also update the learning system if available
+              const LearningSystem = (await import('../../services/learning-system')).default;
+              const learningSystem = new LearningSystem();
+              await learningSystem.initialize();
+              await learningSystem.scanTemplatesFromProjectLibrary(projectLibraryPath);
+              
+              return {
+                success: true,
+                data: {
+                  ...projectData,
+                  localPath: projectPath,
+                  message: `Successfully added ${owner}/${repo} to library`,
+                },
+              };
+            } catch (cloneError: any) {
+              log.error(`Failed to clone repository: ${cloneError.message}`);
+              // Even if clone fails, save the metadata for reference
+              const metadataOnlyPath = path.join(projectLibraryPath, `${owner}-${repo}.meta.json`);
+              await fs.writeJson(metadataOnlyPath, projectData, { spaces: 2 });
+              
+              return {
+                success: true,
+                data: {
+                  ...projectData,
+                  metadataOnly: true,
+                  message: `Added metadata for ${owner}/${repo} (clone failed: ${cloneError.message})`,
+                },
+              };
+            }
+          } catch (apiError: any) {
+            log.error(`GitHub API error: ${apiError.message}`);
+            // Fallback to basic info if API fails
+            return {
+              success: true,
+              data: {
+                owner,
+                repo,
+                fullName: `${owner}/${repo}`,
+                message: `Added basic info for ${owner}/${repo} (API error: ${apiError.message})`,
+              },
+            };
+          }
         } catch (error: any) {
           log.error("Failed to add GitHub repository:", error);
           return {
