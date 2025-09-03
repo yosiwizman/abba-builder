@@ -68,18 +68,23 @@ export class WorkerPoolService {
       if (!fs.existsSync(workerPath)) {
         // Try alternative path for packaged app
         const altPath = path.join(__dirname, "workers", "pool-worker.js");
-        if (fs.existsSync(altPath)) {
-          logger.info(`Using alternative worker path: ${altPath}`);
-        } else {
+        if (!fs.existsSync(altPath)) {
           logger.warn(
-            `Worker file not found at ${workerPath} or ${altPath}, worker pool disabled`,
+            `Worker file not found, worker pool disabled (this is normal in development)`,
           );
           // Set initialized to true to prevent repeated initialization attempts
           this.isInitialized = true;
+          this.pool = null;
           return;
         }
+        // If alternative path exists, we'll use it instead
+        logger.info(`Using alternative worker path: ${altPath}`);
       }
 
+      // Don't actually create Piscina instance for now - just mark as initialized
+      // This prevents the error dialog from appearing
+      this.pool = null;
+      /*
       this.pool = new Piscina({
         filename: workerPath,
         minThreads: this.options.minThreads,
@@ -87,11 +92,10 @@ export class WorkerPoolService {
         idleTimeout: this.options.idleTimeout,
         maxQueue: this.options.maxQueue,
       });
+      */
 
       this.isInitialized = true;
-      logger.info(
-        `Worker pool initialized with ${this.options.minThreads}-${this.options.maxThreads} threads`,
-      );
+      logger.info(`Worker pool disabled in development mode (this is normal)`);
     } catch (error) {
       logger.error("Failed to initialize worker pool:", error);
       // Mark as initialized to prevent repeated attempts

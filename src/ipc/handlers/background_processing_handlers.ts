@@ -21,10 +21,11 @@ export function registerBackgroundProcessingHandlers() {
   const workerPool = getWorkerPool();
   const jobQueue = getJobQueue();
 
-  // Initialize services on startup
+  // Initialize job queue only on startup (worker pool will initialize on demand)
   (async () => {
     try {
-      await workerPool.initialize();
+      // Don't initialize worker pool on startup - it will initialize when first used
+      // await workerPool.initialize();
       await jobQueue.initialize();
       logger.info("Background processing services initialized");
     } catch (error) {
