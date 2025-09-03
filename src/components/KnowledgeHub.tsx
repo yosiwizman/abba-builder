@@ -13,10 +13,8 @@ import {
   Download,
   RefreshCw,
   Code2,
-  Tool,
 } from "lucide-react";
 import ProjectLibrary from "./ProjectLibrary";
-import ToolRecommendations from "./ToolRecommendations";
 
 const KnowledgeHub = () => {
   const [activeTab, setActiveTab] = useState("patterns");
@@ -217,25 +215,12 @@ const KnowledgeHub = () => {
             <Code2 className="w-4 h-4" />
             Project Library (1000+)
           </button>
-          <button
-            onClick={() => setActiveTab("tools")}
-            className={`px-4 py-2 rounded-lg flex items-center gap-2 transition-colors ${
-              activeTab === "tools"
-                ? "bg-purple-100 text-purple-700"
-                : "text-gray-600 hover:bg-gray-100"
-            }`}
-          >
-            <Tool className="w-4 h-4" />
-            Essential Tools (30+)
-          </button>
         </div>
       </div>
 
       <div className="flex-1 overflow-y-auto p-6">
         {activeTab === "projects" ? (
           <ProjectLibrary />
-        ) : activeTab === "tools" ? (
-          <ToolRecommendations />
         ) : loading ? (
           <div className="flex items-center justify-center h-64">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
