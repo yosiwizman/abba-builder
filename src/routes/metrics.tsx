@@ -55,7 +55,7 @@ const generateMockMetrics = (): MetricData[] => {
 
 export default function MetricsPage() {
   const navigate = useNavigate();
-  const [metrics, setMetrics] = useState<MetricData[]>(generateMockMetrics());
+  const [metrics, setMetrics] = useState<MetricData[]>([]);
   const [systemHealth, setSystemHealth] = useState<SystemHealth>({
     orchestrator: 'operational',
     claude: 'fallback',
@@ -63,29 +63,32 @@ export default function MetricsPage() {
     testing: 'idle',
     knowledge: 'synced',
   });
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     loadMetrics();
-    const interval = setInterval(loadMetrics, 5000); // Refresh every 5 seconds
+    const interval = setInterval(loadMetrics, 30000); // Refresh every 30 seconds
     return () => clearInterval(interval);
   }, []);
 
   const loadMetrics = async () => {
     try {
-      // TODO: Wire up IPC handler for real metrics
-      // const data = await window.api.invoke('enhanced:get-metrics');
-      // if (data?.metrics) {
-      //   setMetrics(data.metrics.slice(-50)); // Last 50 data points
-      // }
-      // if (data?.health) {
-      //   setSystemHealth(data.health);
-      // }
-      
-      // For now, update with new mock data to simulate real-time updates
-      setMetrics(generateMockMetrics());
+      setLoading(true);
+      // Use window.electronAPI which is the standard way to access IPC in the renderer
+      if (window.electronAPI) {
+        const response = await window.electronAPI.invoke('enhanced:get-metrics', { timeRange: '24h' });
+        if (response?.success && response?.data) {
+          setMetrics(response.data.metrics || []);
+          setSystemHealth(response.data.health || systemHealth);
+        }
+      } else {
+        // Fallback to mock data if IPC is not available
+        setMetrics(generateMockMetrics());
+      }
     } catch (error) {
       console.error('Failed to load metrics:', error);
+      // Use mock data as fallback
+      setMetrics(generateMockMetrics());
     } finally {
       setLoading(false);
     }
