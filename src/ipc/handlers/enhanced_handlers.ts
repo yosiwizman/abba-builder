@@ -446,6 +446,54 @@ export function registerEnhancedHandlers() {
     ),
   );
 
+  // Metrics handler for the dashboard
+  ipcMain.handle(
+    "enhanced:get-metrics",
+    withLogging("enhanced:get-metrics", async (_event, { timeRange } = {}) => {
+      try {
+        // For now, return mock data
+        const now = Date.now();
+        const mockMetrics = Array.from({ length: 20 }, (_, i) => ({
+          timestamp: new Date(now - (20 - i) * 60000).toISOString(),
+          successRate: 92 + Math.random() * 5,
+          iterations: Math.floor(100 + Math.random() * 50),
+          tokensUsed: Math.floor(5000 + Math.random() * 2000),
+          executionTime: 2.5 + Math.random() * 2,
+          selfHealingActivations: Math.floor(Math.random() * 3),
+          knowledgeBaseHits: Math.floor(10 + Math.random() * 20),
+        }));
+        
+        return {
+          success: true,
+          data: {
+            metrics: mockMetrics,
+            health: {
+              orchestrator: 'operational',
+              claude: 'fallback',
+              python: 'available',
+              testing: 'idle',
+              knowledge: 'synced',
+            },
+            summary: {
+              totalGenerations: 1247,
+              successRate: 94.3,
+              realClaudeRate: 0,
+              averageDuration: 3.2,
+              averageTokens: 6500,
+            },
+          },
+        };
+      } catch (error: any) {
+        logger.warn("Failed to get metrics:", error);
+        return {
+          success: false,
+          error: error.message || "Failed to get metrics",
+          data: null,
+        };
+      }
+    }),
+  );
+
   logger.info(
     "Enhanced IPC handlers registered successfully with structured logging",
   );
