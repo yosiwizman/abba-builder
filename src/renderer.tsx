@@ -133,15 +133,24 @@ function App() {
 
 const rootElement = document.getElementById("root");
 if (rootElement) {
-  createRoot(rootElement).render(
+  // Conditionally wrap with PostHogProvider only if we have a real client
+  const AppWithProviders = ANALYTICS_ENABLED && posthogClient ? (
     <StrictMode>
       <QueryClientProvider client={queryClient}>
         <PostHogProvider client={posthogClient}>
           <App />
         </PostHogProvider>
       </QueryClientProvider>
-    </StrictMode>,
+    </StrictMode>
+  ) : (
+    <StrictMode>
+      <QueryClientProvider client={queryClient}>
+        <App />
+      </QueryClientProvider>
+    </StrictMode>
   );
+  
+  createRoot(rootElement).render(AppWithProviders);
 } else {
   console.error("Root element not found");
 }
