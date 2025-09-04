@@ -35,6 +35,7 @@ import {
 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { cn } from '@/lib/utils';
+import { IpcClient } from '@/ipc/ipc_client';
 
 interface GitHubIssue {
   id: number;
@@ -115,7 +116,8 @@ const BugsTracker: React.FC<BugsTrackerProps> = ({
     setError(null);
 
     try {
-      const response = await window.electronAPI?.fetchProjectBugs?.({
+      const ipcClient = IpcClient.getInstance();
+      const response = await ipcClient.invoke('fetchProjectBugs', {
         projectName,
         owner,
         includeClosedIssues: stateFilter !== 'open',

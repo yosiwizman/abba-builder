@@ -13,6 +13,7 @@ import {
   BarChart3, PieChart as PieChartIcon, Clock,
   FileDown, Filter, ChevronDown, Search
 } from 'lucide-react';
+import { IpcClient } from '@/ipc/ipc_client';
 
 interface NetworkStats {
   blockHeight: number;
@@ -118,8 +119,9 @@ export const BlockchainAnalyticsEnhanced: React.FC = () => {
   // Fetch network statistics
   const fetchNetworkStats = useCallback(async () => {
     try {
-      const result = await window.api.invoke('blockchain:get-stats', selectedNetwork);
-      if (result.success) {
+      const ipcClient = IpcClient.getInstance();
+      const result = await ipcClient.invoke('blockchain:get-stats', selectedNetwork);
+      if (result?.success) {
         setNetworkStats(result.data);
       }
     } catch (err) {
@@ -131,12 +133,13 @@ export const BlockchainAnalyticsEnhanced: React.FC = () => {
   const fetchGasPriceHistory = useCallback(async () => {
     try {
       const timeRange = getTimeRange();
-      const result = await window.api.invoke('blockchain:get-historical-data', {
+      const ipcClient = IpcClient.getInstance();
+      const result = await ipcClient.invoke('blockchain:get-historical-data', {
         network: selectedNetwork,
         metric: 'gasPrice',
         timeRange
       });
-      if (result.success) {
+      if (result?.success) {
         setGasPriceHistory(result.data.map((d: any) => ({
           time: new Date(d.timestamp).toLocaleTimeString(),
           value: d.value
@@ -151,12 +154,13 @@ export const BlockchainAnalyticsEnhanced: React.FC = () => {
   const fetchTpsHistory = useCallback(async () => {
     try {
       const timeRange = getTimeRange();
-      const result = await window.api.invoke('blockchain:get-historical-data', {
+      const ipcClient = IpcClient.getInstance();
+      const result = await ipcClient.invoke('blockchain:get-historical-data', {
         network: selectedNetwork,
         metric: 'tps',
         timeRange
       });
-      if (result.success) {
+      if (result?.success) {
         setTpsHistory(result.data.map((d: any) => ({
           time: new Date(d.timestamp).toLocaleTimeString(),
           value: d.value
@@ -175,11 +179,12 @@ export const BlockchainAnalyticsEnhanced: React.FC = () => {
         '0xdac17f958d2ee523a2206206994597c13d831ec7', // USDT
         '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599'  // WBTC
       ];
-      const result = await window.api.invoke('blockchain:get-token-metrics', {
+      const ipcClient = IpcClient.getInstance();
+      const result = await ipcClient.invoke('blockchain:get-token-metrics', {
         network: selectedNetwork,
         addresses
       });
-      if (result.success) {
+      if (result?.success) {
         setTokenMetrics(result.data);
       }
     } catch (err) {
@@ -190,13 +195,13 @@ export const BlockchainAnalyticsEnhanced: React.FC = () => {
   // Fetch whale transactions
   const fetchWhaleTransactions = useCallback(async () => {
     try {
-      const result = await window.api.invoke('blockchain:get-whale-transactions', {
+      const ipcClient = IpcClient.getInstance();
+      const result = await ipcClient.invoke('blockchain:get-whale-transactions', {
         network: selectedNetwork,
         minValue: 1000000
       });
-      if (result.success) {
+      if (result?.success) {
         setWhaleTransactions(result.data);
-      }
     } catch (err) {
       console.error('Failed to fetch whale transactions:', err);
     }
@@ -205,7 +210,8 @@ export const BlockchainAnalyticsEnhanced: React.FC = () => {
   // Fetch DeFi protocols
   const fetchDeFiProtocols = useCallback(async () => {
     try {
-      const result = await window.api.invoke('blockchain:get-defi-metrics', selectedNetwork);
+      const ipcClient = IpcClient.getInstance();
+      const result = await ipcClient.invoke('blockchain:get-defi-metrics', selectedNetwork);
       if (result.success) {
         setDefiProtocols(result.data);
       }
@@ -217,7 +223,8 @@ export const BlockchainAnalyticsEnhanced: React.FC = () => {
   // Fetch MEV data
   const fetchMEVData = useCallback(async () => {
     try {
-      const result = await window.api.invoke('blockchain:get-mev-data', {
+      const ipcClient = IpcClient.getInstance();
+      const result = await ipcClient.invoke('blockchain:get-mev-data', {
         network: selectedNetwork
       });
       if (result.success) {
@@ -231,7 +238,8 @@ export const BlockchainAnalyticsEnhanced: React.FC = () => {
   // Fetch contract activity
   const fetchContractActivity = useCallback(async () => {
     try {
-      const result = await window.api.invoke('blockchain:get-contract-activity', {
+      const ipcClient = IpcClient.getInstance();
+      const result = await ipcClient.invoke('blockchain:get-contract-activity', {
         network: selectedNetwork,
         limit: 10
       });
@@ -317,7 +325,8 @@ export const BlockchainAnalyticsEnhanced: React.FC = () => {
         }
       };
 
-      const result = await window.api.invoke('blockchain:export-data', {
+      const ipcClient = IpcClient.getInstance();
+      const result = await ipcClient.invoke('blockchain:export-data', {
         data: dataToExport,
         format,
         filename: `blockchain-analytics-${selectedNetwork}-${Date.now()}.${format}`
