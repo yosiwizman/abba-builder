@@ -1,0 +1,235 @@
+{
+  "project": {
+    "name": "Dyad Enhanced (Abba)",
+    "type": "AI App Builder",
+    "repo": "C:\\Users\\yosiw\\dyad-enhanced",
+    "primary_language": "TypeScript",
+    "monorepo": false,
+    "package_managers": ["npm", "pnpm"],
+    "frameworks": ["React", "Electron", "Vite", "TailwindCSS", "Tanstack Router", "Drizzle ORM"],
+    "model_and_agent_stack": {
+      "orchestrator": ["Custom"],
+      "agents": ["Custom"],
+      "model_runtimes": ["OpenAI", "Anthropic", "OpenRouter", "Ollama", "LM Studio", "Google AI"],
+      "embedding_store": ["None"]
+    },
+    "services": {
+      "db": ["SQLite", "Supabase", "Neon", "Postgres"],
+      "cache": ["Redis", "In-memory"],
+      "queue": ["Bull"],
+      "file_storage": ["Local", "Supabase"],
+      "auth": ["Custom", "Clerk", "Supabase"]
+    }
+  },
+  "codebase": {
+    "tree": "src/\n├── api/\n├── app/\n├── assets/\n├── atoms/\n├── client_logic/\n├── components/\n│   ├── ui/\n│   ├── chat/\n│   ├── preview_panel/\n│   ├── settings/\n│   └── auth/\n├── config/\n├── constants/\n├── contexts/\n├── data/\n├── db/\n├── electron/\n├── handlers/\n├── hooks/\n├── ipc/\n│   ├── handlers/\n│   ├── processors/\n│   ├── security/\n│   ├── shared/\n│   └── utils/\n├── lib/\n├── main/\n├── pages/\n├── paths/\n├── prompts/\n├── routes/\n├── services/\n│   ├── enhanced/\n│   └── integrations/\n├── shared/\n├── store/\n├── styles/\n├── types/\n├── utils/\n└── __tests__/",
+    "modules": [
+      {"path":"src/ipc", "purpose":"Electron IPC communication layer", "status":"complete", "owners":["team"]},
+      {"path":"src/services/integrations", "purpose":"Third-party service integrations", "status":"partial", "owners":["agent"]},
+      {"path":"src/components", "purpose":"React UI components", "status":"complete", "owners":["team"]},
+      {"path":"src/services/enhanced", "purpose":"AI orchestration and app generation", "status":"complete", "owners":["team"]},
+      {"path":"src/pages", "purpose":"Application pages", "status":"complete", "owners":["team"]},
+      {"path":"src/db", "purpose":"Database layer with Drizzle ORM", "status":"complete", "owners":["team"]}
+    ],
+    "entrypoints": ["src/main.ts", "src/renderer.tsx", "src/preload.ts"],
+    "config_files": ["package.json", "tsconfig.json", "vite.config.mjs", "drizzle.config.ts", "tailwind.config.js", "forge.config.js", ".prettierrc", ".eslintrc.json", "vitest.config.mjs", "playwright.config.ts"]
+  },
+  "build_and_run": {
+    "prereqs": ["Node v20+", "pnpm v10.15+", "Git", "Windows/Mac/Linux"],
+    "setup_steps": [
+      "git clone <repo>",
+      "cd dyad-enhanced",
+      "npm install --legacy-peer-deps",
+      "npm run db:generate",
+      "Copy .env.example to .env and configure"
+    ],
+    "dev_run_cmd": ["npm start"],
+    "prod_build_cmd": ["npm run build", "npm run make"],
+    "docker": {
+      "has_dockerfile": false,
+      "images": [],
+      "compose": false
+    },
+    "env_vars": {
+      "required": [
+        "OPENAI_API_KEY",
+        "ANTHROPIC_API_KEY",
+        "GITHUB_TOKEN",
+        "VERCEL_TOKEN",
+        "SUPABASE_URL",
+        "SUPABASE_ANON_KEY"
+      ],
+      "generated_example": {
+        "OPENAI_API_KEY": "sk-proj-xxxxx",
+        "ANTHROPIC_API_KEY": "sk-ant-xxxxx",
+        "GITHUB_TOKEN": "ghp_xxxxx",
+        "VERCEL_TOKEN": "Bearer xxxxx",
+        "SUPABASE_URL": "https://xxx.supabase.co",
+        "SUPABASE_ANON_KEY": "eyJxxxxx",
+        "NODE_ENV": "development",
+        "DYAD_ENGINE_URL": "http://localhost:8080/v1"
+      }
+    }
+  },
+  "quality": {
+    "lint": {"tool":"oxlint", "status":"passing"},
+    "tests": {"framework":"vitest", "count":174, "coverage_percent":0, "status":"green"},
+    "typechecking": {"tool":"tsc", "status":"clean"},
+    "security": {
+      "sbom_available": false,
+      "deps_vulns": [],
+      "secrets_in_repo": [
+        {"path":"src/library-auto-updater.ts", "detail":"GitHub token exposed in code"}
+      ]
+    }
+  },
+  "runtime_and_ops": {
+    "deploy_targets": ["Local", "Windows Installer", "Mac DMG", "Linux AppImage"],
+    "current_envs": [
+      {"name":"dev", "url":"http://localhost:5173", "status":"active"}
+    ],
+    "monitoring": ["electron-log", "Sentry"],
+    "ci_cd": {"provider":"GitHub Actions", "status":"configured"}
+  },
+  "api_and_integration": {
+    "external_apis": [
+      {"name":"OpenAI", "purpose":"LLM completions", "keys_required":true},
+      {"name":"Anthropic", "purpose":"Claude AI", "keys_required":true},
+      {"name":"GitHub", "purpose":"Repository management", "keys_required":true},
+      {"name":"Vercel", "purpose":"Deployments", "keys_required":true},
+      {"name":"Supabase", "purpose":"Database/Auth", "keys_required":true},
+      {"name":"Neon", "purpose":"PostgreSQL", "keys_required":true},
+      {"name":"Hugging Face", "purpose":"AI models", "keys_required":true},
+      {"name":"Replicate", "purpose":"AI inference", "keys_required":true}
+    ],
+    "internal_endpoints": [
+      {"method":"IPC", "path":"chat:message", "auth":"none", "purpose":"AI chat"},
+      {"method":"IPC", "path":"create-app", "auth":"none", "purpose":"App creation"},
+      {"method":"IPC", "path":"integrations:connect", "auth":"none", "purpose":"Connect services"},
+      {"method":"IPC", "path":"github:push", "auth":"token", "purpose":"Git operations"}
+    ],
+    "browser_extension": {"manifest_version":0, "permissions":[], "entrypoints":[]}
+  },
+  "product_status": {
+    "version": "0.19.0-beta.1",
+    "milestones": [
+      {"name":"Core App Builder", "status":"done", "eta":"", "notes":"Complete with AI chat"},
+      {"name":"Integrations System", "status":"in_progress", "eta":"2025-09-10", "notes":"11 services added"},
+      {"name":"Visual Builder", "status":"todo", "eta":"2025-09-20", "notes":"Drag-drop interface"},
+      {"name":"Team Collaboration", "status":"todo", "eta":"2025-10-01", "notes":"Multi-user support"}
+    ],
+    "roadmap_next_14_days": [
+      {
+        "task":"Complete integration service implementations",
+        "owner":"agent",
+        "effort":"M",
+        "risk":"low",
+        "deps":["API docs"],
+        "acceptance_criteria":["All 11 services connect", "Credentials stored securely", "Error handling complete"]
+      },
+      {
+        "task":"Add visual app builder",
+        "owner":"agent",
+        "effort":"L",
+        "risk":"med",
+        "deps":["React DnD", "Component library"],
+        "acceptance_criteria":["Drag-drop UI", "Component palette", "Real-time preview"]
+      },
+      {
+        "task":"Implement template marketplace",
+        "owner":"agent",
+        "effort":"M",
+        "risk":"low",
+        "deps":["Template storage", "Search API"],
+        "acceptance_criteria":["Browse templates", "Install with one click", "Rating system"]
+      },
+      {
+        "task":"Add deployment pipeline",
+        "owner":"agent",
+        "effort":"M",
+        "risk":"med",
+        "deps":["Vercel/Netlify APIs"],
+        "acceptance_criteria":["One-click deploy", "Environment configs", "Rollback support"]
+      },
+      {
+        "task":"Create AI agent system",
+        "owner":"agent",
+        "effort":"L",
+        "risk":"high",
+        "deps":["LangChain", "Agent framework"],
+        "acceptance_criteria":["Autonomous coding", "Multi-agent coordination", "Task planning"]
+      }
+    ],
+    "critical_blockers": [
+      {
+        "title":"GitHub token exposed in source",
+        "impact":"Security vulnerability",
+        "unblock_plan":"Move to environment variable immediately"
+      },
+      {
+        "title":"Peer dependency conflicts",
+        "impact":"Installation issues",
+        "unblock_plan":"Use --legacy-peer-deps or update packages"
+      }
+    ],
+    "open_questions": [
+      "Should we implement OAuth for integrations?",
+      "How to handle rate limits across multiple AI providers?",
+      "Should templates be version controlled?",
+      "How to monetize - subscription vs usage-based?"
+    ]
+  },
+  "readiness_score": {
+    "dev": 85,
+    "demo": 75,
+    "beta": 60,
+    "production": 40
+  },
+  "cto_recommendations": [
+    {
+      "priority":1,
+      "title":"Remove hardcoded secrets",
+      "why_it_matters":"Critical security vulnerability",
+      "proposed_fix_steps":["Scan for all secrets", "Move to env vars", "Rotate all tokens"],
+      "owner_suggestion":"human",
+      "effort":"S"
+    },
+    {
+      "priority":2,
+      "title":"Add test coverage",
+      "why_it_matters":"0% coverage despite 174 tests",
+      "proposed_fix_steps":["Configure coverage reporter", "Add integration tests", "Target 80% coverage"],
+      "owner_suggestion":"agent",
+      "effort":"M"
+    },
+    {
+      "priority":3,
+      "title":"Implement OAuth for integrations",
+      "why_it_matters":"Better security and UX",
+      "proposed_fix_steps":["Add OAuth flow", "Store refresh tokens", "Auto-refresh logic"],
+      "owner_suggestion":"agent",
+      "effort":"M"
+    },
+    {
+      "priority":4,
+      "title":"Add error boundaries",
+      "why_it_matters":"Improve app stability",
+      "proposed_fix_steps":["Wrap major components", "Add fallback UI", "Log to Sentry"],
+      "owner_suggestion":"agent",
+      "effort":"S"
+    },
+    {
+      "priority":5,
+      "title":"Optimize bundle size",
+      "why_it_matters":"Large Electron app size",
+      "proposed_fix_steps":["Code splitting", "Lazy loading", "Tree shaking"],
+      "owner_suggestion":"agent",
+      "effort":"M"
+    }
+  ],
+  "meta": {
+    "generated_at": "2025-09-04T21:33:00Z",
+    "generator_agent": "Senior Engineer v1.0",
+    "commit_ref": "ef743514031161fd98085653e2f9c54d7f2b9627"
+  }
+}

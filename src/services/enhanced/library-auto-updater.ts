@@ -58,7 +58,7 @@ export class LibraryAutoUpdater extends EventEmitter {
       autoDownloadPopular: true,
       popularThreshold: 1000, // Auto-download projects with >1000 stars
       categories: [], // Empty means all categories
-      githubToken: process.env.GITHUB_TOKEN,
+      githubToken: process.env.GITHUB_TOKEN, // Pull from environment only
     };
 
     this.initialize();
@@ -73,8 +73,15 @@ export class LibraryAutoUpdater extends EventEmitter {
       // Load configuration
       if (await fs.pathExists(this.configPath)) {
         const savedConfig = await fs.readJson(this.configPath);
+        // Don't override the GitHub token from environment
+        delete savedConfig.githubToken;
         this.config = { ...this.config, ...savedConfig };
-        logger.info("Loaded auto-updater configuration", this.config);
+        // Ensure GitHub token comes from environment only
+        this.config.githubToken = process.env.GITHUB_TOKEN;
+        logger.info("Loaded auto-updater configuration", {
+          ...this.config,
+          githubToken: this.config.githubToken ? "[REDACTED]" : undefined
+        });
       } else {
         await this.saveConfig();
       }
@@ -98,7 +105,10 @@ export class LibraryAutoUpdater extends EventEmitter {
   }
 
   private async saveConfig() {
-    await fs.writeJson(this.configPath, this.config, { spaces: 2 });
+    // Don't save the GitHub token to file for security
+    const configToSave = { ...this.config };
+    delete configToSave.githubToken;
+    await fs.writeJson(this.configPath, configToSave, { spaces: 2 });
     logger.info("Saved auto-updater configuration");
   }
 
