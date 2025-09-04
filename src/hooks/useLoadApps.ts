@@ -10,13 +10,13 @@ export function useLoadApps() {
   const [error, setError] = useState<Error | null>(null);
 
   const refreshApps = useCallback(async () => {
-    console.log('[useLoadApps] Starting to refresh apps...');
+//     console.log('[useLoadApps] Starting to refresh apps...');
     setLoading(true);
     try {
       const ipcClient = IpcClient.getInstance();
-      console.log('[useLoadApps] Calling listApps...');
+//       console.log('[useLoadApps] Calling listApps...');
       const appListResponse = await ipcClient.listApps();
-      console.log('[useLoadApps] Got response:', appListResponse);
+//       console.log('[useLoadApps] Got response:', appListResponse);
       setApps(appListResponse.apps);
       setAppBasePath(appListResponse.appBasePath);
       setError(null);

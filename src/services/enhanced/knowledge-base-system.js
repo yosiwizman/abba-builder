@@ -57,7 +57,7 @@ class KnowledgeBaseSystem {
       compat.forEach((item) => this.compatibility.set(item.id, item));
     }
 
-    console.log(
+//     console.log(
       `📚 Knowledge Base loaded: ${this.bugs.size} bugs, ${this.patterns.size} patterns, ${this.failures.size} failures`,
     );
   }
@@ -136,7 +136,7 @@ class KnowledgeBaseSystem {
     });
 
     this.saveKnowledge();
-    console.log(`✅ Learned from success: Pattern ${pattern.id} added/updated`);
+//     console.log(`✅ Learned from success: Pattern ${pattern.id} added/updated`);
   }
 
   learnFromFailure(failureData) {
@@ -177,7 +177,7 @@ class KnowledgeBaseSystem {
     }
 
     this.saveKnowledge();
-    console.log(`❌ Learned from failure: ${failure.errorType} recorded`);
+//     console.log(`❌ Learned from failure: ${failure.errorType} recorded`);
   }
 
   getRecommendations(requirements, techStack = []) {
@@ -650,7 +650,7 @@ class KnowledgeBaseSystem {
     };
 
     fs.writeFileSync(exportPath, JSON.stringify(exportData, null, 2));
-    console.log(`📚 Knowledge exported to ${exportPath}`);
+//     console.log(`📚 Knowledge exported to ${exportPath}`);
 
     return exportPath;
   }
@@ -663,7 +663,7 @@ class KnowledgeBaseSystem {
     if (type === "all" || type === "solutions") this.solutions.clear();
 
     this.saveKnowledge();
-    console.log(`🧹 Knowledge base cleared: ${type}`);
+//     console.log(`🧹 Knowledge base cleared: ${type}`);
   }
 }
 

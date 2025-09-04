@@ -52,7 +52,7 @@ class VisualRegressionTester {
    * Capture baseline screenshots for a deployed application
    */
   async captureBaseline(page, appIdentifier, testScenarios = []) {
-    console.log(`📸 Capturing baseline for ${appIdentifier}...`);
+//     console.log(`📸 Capturing baseline for ${appIdentifier}...`);
     const baselineData = {
       appId: appIdentifier,
       timestamp: Date.now(),
@@ -98,7 +98,7 @@ class VisualRegressionTester {
             size: screenshot.length,
           });
 
-          console.log(`✅ Captured ${viewport.name} @ ${density}x density`);
+//           console.log(`✅ Captured ${viewport.name} @ ${density}x density`);
         }
       }
 
@@ -141,7 +141,7 @@ class VisualRegressionTester {
     const scenarioScreenshots = [];
 
     for (const scenario of scenarios) {
-      console.log(`🎬 Running scenario: ${scenario.name}`);
+//       console.log(`🎬 Running scenario: ${scenario.name}`);
 
       // Execute scenario actions
       if (scenario.actions) {
@@ -209,7 +209,7 @@ class VisualRegressionTester {
    * Compare current version against baseline
    */
   async detectVisualChanges(page, appIdentifier, options = {}) {
-    console.log(`🔍 Detecting visual changes for ${appIdentifier}...`);
+//     console.log(`🔍 Detecting visual changes for ${appIdentifier}...`);
 
     const results = {
       appId: appIdentifier,
@@ -252,17 +252,17 @@ class VisualRegressionTester {
 
         if (comparison.passed) {
           results.summary.passed++;
-          console.log(
+//           console.log(
             `✅ ${config.name}: Passed (${comparison.difference.toFixed(2)}% diff)`,
           );
         } else if (comparison.warning) {
           results.summary.warnings++;
-          console.log(
+//           console.log(
             `⚠️ ${config.name}: Warning (${comparison.difference.toFixed(2)}% diff)`,
           );
         } else {
           results.summary.failed++;
-          console.log(
+//           console.log(
             `❌ ${config.name}: Failed (${comparison.difference.toFixed(2)}% diff)`,
           );
         }
@@ -441,7 +441,7 @@ class VisualRegressionTester {
       return await page.screenshot(options);
     } catch (error) {
       if (attempts < this.config.retryAttempts) {
-        console.log(
+//         console.log(
           `⏳ Retrying screenshot capture (attempt ${attempts + 1})...`,
         );
         await page.waitForTimeout(1000);
@@ -510,7 +510,7 @@ class VisualRegressionTester {
         });
       } catch (evalError) {
         // If both methods fail, log warning but continue
-        console.log(
+//         console.log(
           "⚠️  Could not disable animations (CSP restriction), continuing anyway...",
         );
       }
@@ -732,7 +732,7 @@ class VisualRegressionTester {
 </html>`;
 
     fs.writeFileSync(reportPath, html);
-    console.log(`📊 Visual report generated: ${reportPath}`);
+//     console.log(`📊 Visual report generated: ${reportPath}`);
 
     return reportPath;
   }
@@ -827,11 +827,11 @@ class VisualRegressionTester {
    * Cross-browser visual testing
    */
   async testAcrossBrowsers(url, appIdentifier) {
-    console.log(`🌐 Testing across browsers for ${appIdentifier}...`);
+//     console.log(`🌐 Testing across browsers for ${appIdentifier}...`);
     const browserResults = {};
 
     for (const browserType of this.config.browsers) {
-      console.log(`🔧 Testing in ${browserType}...`);
+//       console.log(`🔧 Testing in ${browserType}...`);
 
       try {
         // This would integrate with Playwright for multi-browser support
@@ -916,7 +916,7 @@ class VisualRegressionTester {
    * Update baseline with current screenshots
    */
   async updateBaseline(appIdentifier) {
-    console.log(`🔄 Updating baseline for ${appIdentifier}...`);
+//     console.log(`🔄 Updating baseline for ${appIdentifier}...`);
 
     try {
       // Archive old baseline
@@ -958,7 +958,7 @@ class VisualRegressionTester {
         fs.copyFileSync(currentPath, baselinePath);
       });
 
-      console.log(
+//       console.log(
         `✅ Baseline updated successfully. Old baseline archived at: ${archivePath}`,
       );
 

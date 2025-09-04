@@ -586,7 +586,7 @@ class ContextMemorySystem {
 
       this.saveUserProfile(userId, newProfile);
 
-      console.log(`User data cleared. Backup saved to ${backupPath}`);
+//       console.log(`User data cleared. Backup saved to ${backupPath}`);
     }
   }
 }

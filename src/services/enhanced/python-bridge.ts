@@ -37,7 +37,7 @@ export class PythonBridge {
           const result = await this.executeCommand(cmd, ['--version']);
           if (result.includes('Python')) {
             this.pythonPath = cmd;
-            console.log(`✅ Python found: ${cmd}`);
+//             console.log(`✅ Python found: ${cmd}`);
             return;
           }
         } catch {

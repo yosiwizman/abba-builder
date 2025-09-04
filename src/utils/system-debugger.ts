@@ -38,7 +38,7 @@ export class SystemDebugger {
    * Run complete system diagnostics
    */
   async runDiagnostics(): Promise<SystemHealth> {
-    console.log('🔍 Running Enterprise System Diagnostics...\n');
+//     console.log('🔍 Running Enterprise System Diagnostics...\n');
     
     const checks: HealthCheck[] = [];
     const recommendations: string[] = [];
@@ -561,7 +561,7 @@ export class SystemDebugger {
    * Auto-fix common issues
    */
   async autoFix(): Promise<{ fixed: string[], failed: string[] }> {
-    console.log('🔧 Running Auto-Fix...\n');
+//     console.log('🔧 Running Auto-Fix...\n');
     const fixed: string[] = [];
     const failed: string[] = [];
     
@@ -612,8 +612,8 @@ NODE_ENV=development`;
       }
     }
     
-    console.log(`✅ Fixed: ${fixed.length} issues`);
-    console.log(`❌ Failed: ${failed.length} issues`);
+//     console.log(`✅ Fixed: ${fixed.length} issues`);
+//     console.log(`❌ Failed: ${failed.length} issues`);
     
     return { fixed, failed };
   }
@@ -647,9 +647,9 @@ NODE_ENV=development`;
    * Print health summary
    */
   private printHealthSummary(health: SystemHealth): void {
-    console.log('\n' + '='.repeat(60));
-    console.log('📊 SYSTEM HEALTH REPORT');
-    console.log('='.repeat(60));
+//     console.log('\n' + '='.repeat(60));
+//     console.log('📊 SYSTEM HEALTH REPORT');
+//     console.log('='.repeat(60));
     
     // Status emoji
     const statusEmoji = {
@@ -658,27 +658,27 @@ NODE_ENV=development`;
       critical: '❌'
     };
     
-    console.log(`\nOverall Status: ${statusEmoji[health.status]} ${health.status.toUpperCase()}`);
-    console.log(`Success Rate: ${health.successRate.toFixed(1)}%`);
-    console.log(`Timestamp: ${new Date(health.timestamp).toLocaleString()}`);
+//     console.log(`\nOverall Status: ${statusEmoji[health.status]} ${health.status.toUpperCase()}`);
+//     console.log(`Success Rate: ${health.successRate.toFixed(1)}%`);
+//     console.log(`Timestamp: ${new Date(health.timestamp).toLocaleString()}`);
     
     // Check summary
-    console.log('\n📋 Health Checks:');
+//     console.log('\n📋 Health Checks:');
     health.checks.forEach(check => {
       const emoji = check.status === 'pass' ? '✅' : 
                     check.status === 'warning' ? '⚠️' : '❌';
-      console.log(`  ${emoji} ${check.name}: ${check.message}`);
+//       console.log(`  ${emoji} ${check.name}: ${check.message}`);
     });
     
     // Recommendations
     if (health.recommendations.length > 0) {
-      console.log('\n💡 Recommendations:');
+//       console.log('\n💡 Recommendations:');
       health.recommendations.forEach((rec, i) => {
-        console.log(`  ${i + 1}. ${rec}`);
+//         console.log(`  ${i + 1}. ${rec}`);
       });
     }
     
-    console.log('\n' + '='.repeat(60));
+//     console.log('\n' + '='.repeat(60));
   }
 }
 

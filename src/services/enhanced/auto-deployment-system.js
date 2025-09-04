@@ -33,7 +33,7 @@ class AutoDeploymentSystem {
 
   async deployEverywhere(code, appConfig) {
     const deploymentId = `deploy_${Date.now()}`;
-    console.log(`🚀 Starting deployment ${deploymentId}...`);
+//     console.log(`🚀 Starting deployment ${deploymentId}...`);
 
     const deployment = {
       id: deploymentId,
@@ -50,7 +50,7 @@ class AutoDeploymentSystem {
           code,
           appConfig,
         );
-        console.log(
+//         console.log(
           `✅ Vercel deployment successful: ${deployment.platforms.vercel.url}`,
         );
       }
@@ -58,7 +58,7 @@ class AutoDeploymentSystem {
       // Setup database if needed
       if (appConfig.needsDatabase) {
         deployment.platforms.database = await this.setupDatabase(appConfig);
-        console.log(`✅ Database setup complete`);
+//         console.log(`✅ Database setup complete`);
       }
 
       // Generate access methods
@@ -67,7 +67,7 @@ class AutoDeploymentSystem {
       );
 
       deployment.status = "success";
-      console.log(`✅ Deployment ${deploymentId} successful!`);
+//       console.log(`✅ Deployment ${deploymentId} successful!`);
     } catch (error) {
       deployment.status = "failed";
       deployment.error = error.message;
@@ -260,7 +260,7 @@ class AutoDeploymentSystem {
   async createSupabaseTable(tableConfig) {
     // This would use Supabase admin API to create tables
     // For now, we'll log the intention
-    console.log(
+//     console.log(
       `Would create table: ${tableConfig.name} with columns:`,
       tableConfig.columns,
     );
@@ -360,7 +360,7 @@ class AutoDeploymentSystem {
     const previousDeployment = history[currentIndex - 1];
 
     // Trigger rollback
-    console.log(
+//     console.log(
       `Rolling back from ${deploymentId} to ${previousDeployment.id}`,
     );
 

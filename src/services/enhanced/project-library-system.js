@@ -67,7 +67,7 @@ class ComprehensiveProjectLibrary {
       'chrome-extension': ['chrome-extension', 'chrome', 'browser-extension'],
       'firefox-addon': ['firefox', 'addon', 'firefox-extension', 'mozilla'],
       'productivity-extension': ['productivity', 'blocker', 'automation', 'helper'],
-      'developer-extension': ['devtools', 'debugger', 'inspector', 'developer-tool'],
+      'developer-extension': ['devtools', '', 'inspector', 'developer-tool'],
       
       // Communication (4 categories)
       'voip': ['voip', 'webrtc', 'voice', 'calling', 'telephony'],
@@ -657,7 +657,7 @@ ${project.license}
     
     await fs.writeFile(
       path.join(srcPath, 'index.js'),
-      `// ${project.name}\nconsole.log('${project.name} initialized');`
+      `// ${project.name}\n`
     );
   }
 

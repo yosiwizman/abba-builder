@@ -5,7 +5,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { AlertCircle, CheckCircle, XCircle, Activity, Cpu, Database, Code, Zap } from 'lucide-react';
-import SystemDebugger from '../utils/system-debugger';
+import SystemDebugger from '../utils/system-';
 
 interface HealthStatus {
   status: 'healthy' | 'warning' | 'critical';

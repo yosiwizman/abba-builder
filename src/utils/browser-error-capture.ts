@@ -102,14 +102,14 @@ export class BrowserErrorCapture {
     
     window.addEventListener('DOMContentLoaded', () => {
       if (!this.isDevelopment) {
-        console.log('[BrowserErrorCapture] DOM Loaded');
+//         console.log('[BrowserErrorCapture] DOM Loaded');
       }
       this.checkPageStatus();
     });
     
     window.addEventListener('load', () => {
       if (!this.isDevelopment) {
-        console.log('[BrowserErrorCapture] Page Fully Loaded');
+//         console.log('[BrowserErrorCapture] Page Fully Loaded');
       }
       this.checkPageStatus();
     });
@@ -138,7 +138,7 @@ export class BrowserErrorCapture {
     
     // Only log actual errors to console, not warnings in development
     if (!this.isDevelopment || type === 'Console Error' || type === 'Window Error') {
-      console.log(
+//       console.log(
         `%c[${type}]`,
         'background: red; color: white; padding: 2px 5px; border-radius: 3px;',
         data
@@ -184,7 +184,7 @@ export class BrowserErrorCapture {
     
     // Only log in production or if there's an actual issue
     if (!this.isDevelopment && !status.hasContent) {
-      console.log('[Page Status]', status);
+//       console.log('[Page Status]', status);
       this.captureError('Page Load Failed', status);
     }
   }
@@ -211,7 +211,7 @@ export class BrowserErrorCapture {
       }
     };
     
-    console.log('[Error Report]', report);
+//     console.log('[Error Report]', report);
     return report;
   }
 }
@@ -222,6 +222,6 @@ if (typeof window !== 'undefined') {
   // Only log initialization in production
   const isDevelopment = process.env.NODE_ENV === 'development' || (window as any).location?.hostname === 'localhost';
   if (!isDevelopment) {
-    console.log('[BrowserErrorCapture] Initialized');
+//     console.log('[BrowserErrorCapture] Initialized');
   }
 }

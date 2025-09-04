@@ -60,7 +60,7 @@ export function ChatPanel({
   };
 
   useEffect(() => {
-    console.log("streamCount", streamCount);
+//     console.log("streamCount", streamCount);
     scrollToBottom();
   }, [streamCount]);
 

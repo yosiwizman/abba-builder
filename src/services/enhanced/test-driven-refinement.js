@@ -11,7 +11,7 @@ class TestDrivenRefinement {
   }
 
   async refineBasedOnTestResults(code, testResults, requirements = "") {
-    console.log("🔧 Starting test-driven refinement...");
+//     console.log("🔧 Starting test-driven refinement...");
 
     let refinedCode = code;
     let currentTests = testResults;
@@ -22,11 +22,11 @@ class TestDrivenRefinement {
       iteration < this.maxRefinementIterations
     ) {
       iteration++;
-      console.log(`\n🔄 Refinement iteration ${iteration}`);
+//       console.log(`\n🔄 Refinement iteration ${iteration}`);
 
       // Analyze failures
       const analysis = this.analyzeTestFailures(currentTests);
-      console.log(`Found ${analysis.failures.length} failures to fix`);
+//       console.log(`Found ${analysis.failures.length} failures to fix`);
 
       // Generate fixes for each failure
       const fixes = await this.generateFixes(
@@ -51,14 +51,14 @@ class TestDrivenRefinement {
 
       // Check improvement
       if (this.hasImproved(testResults, currentTests)) {
-        console.log("✅ Tests improved!");
+//         console.log("✅ Tests improved!");
       } else {
-        console.log("⚠️ No improvement detected");
+//         console.log("⚠️ No improvement detected");
         break;
       }
     }
 
-    console.log(`\n🎯 Refinement complete after ${iteration} iterations`);
+//     console.log(`\n🎯 Refinement complete after ${iteration} iterations`);
     return refinedCode;
   }
 
@@ -231,7 +231,7 @@ class TestDrivenRefinement {
   async generateFix(code, priorityItem, requirements) {
     const { type, item } = priorityItem;
 
-    console.log(`Generating fix for ${type}...`);
+//     console.log(`Generating fix for ${type}...`);
 
     switch (type) {
       case "syntax":
@@ -457,7 +457,7 @@ class TestDrivenRefinement {
     let fixedCode = code;
 
     for (const fix of fixes) {
-      console.log(`Applying ${fix.type} fix: ${fix.description}`);
+//       console.log(`Applying ${fix.type} fix: ${fix.description}`);
 
       for (const change of fix.changes) {
         if (change.pattern && change.replacement) {
@@ -478,7 +478,7 @@ class TestDrivenRefinement {
 
           const after = fixedCode.length;
           if (after !== before) {
-            console.log(`  ✓ Applied: ${change.description}`);
+//             console.log(`  ✓ Applied: ${change.description}`);
           }
         }
       }
@@ -486,7 +486,7 @@ class TestDrivenRefinement {
 
     // Final validation
     if (!this.validateCode(fixedCode)) {
-      console.log("⚠️ Fixed code failed validation, reverting...");
+//       console.log("⚠️ Fixed code failed validation, reverting...");
       return code;
     }
 
@@ -520,7 +520,7 @@ class TestDrivenRefinement {
   async runTests(code) {
     // This would run actual tests
     // For now, return mock improved results
-    console.log("Running tests on refined code...");
+//     console.log("Running tests on refined code...");
 
     return {
       total: 10,

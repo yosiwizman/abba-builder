@@ -25,8 +25,8 @@ class IntegrationHub {
   }
 
   async buildAndDeploy(userId, request, options = {}) {
-    console.log("🚀 Starting integrated build and deploy...");
-    console.log("📝 Request:", request.substring(0, 100) + "...");
+//     console.log("🚀 Starting integrated build and deploy...");
+//     console.log("📝 Request:", request.substring(0, 100) + "...");
 
     const startTime = Date.now();
     const buildSession = {
@@ -40,7 +40,7 @@ class IntegrationHub {
 
     try {
       // STEP 1: Check knowledge base FIRST
-      console.log("\n📚 Step 1: Checking knowledge base...");
+//       console.log("\n📚 Step 1: Checking knowledge base...");
       const recommendations = this.knowledge.getRecommendations(
         request,
         options.techStack || [],
@@ -53,25 +53,25 @@ class IntegrationHub {
         warnings: recommendations.warnings.length,
       });
 
-      console.log(`  Found ${recommendations.knownBugs.length} known bugs`);
-      console.log(
+//       console.log(`  Found ${recommendations.knownBugs.length} known bugs`);
+//       console.log(
         `  Found ${recommendations.patterns.length} matching patterns`,
       );
-      console.log(`  Found ${recommendations.warnings.length} warnings`);
+//       console.log(`  Found ${recommendations.warnings.length} warnings`);
 
       // Apply recommendations to options
       if (recommendations.warnings.length > 0) {
-        console.log("  ⚠️ Applying warning mitigations...");
+//         console.log("  ⚠️ Applying warning mitigations...");
         options.avoidFeatures = recommendations.warnings.map((w) => w.type);
       }
 
       if (recommendations.patterns.length > 0) {
-        console.log("  ✅ Using successful pattern as template");
+//         console.log("  ✅ Using successful pattern as template");
         options.templatePattern = recommendations.patterns[0];
       }
 
       // STEP 2: Enhance with user memory
-      console.log("\n🧠 Step 2: Enhancing with user preferences...");
+//       console.log("\n🧠 Step 2: Enhancing with user preferences...");
       const enhanced = this.memory.enhanceRequest(userId, request);
 
       buildSession.steps.push({
@@ -80,7 +80,7 @@ class IntegrationHub {
       });
 
       // STEP 3: Build with never-fail guarantee
-      console.log("\n🛡️ Step 3: Building with never-fail guarantee...");
+//       console.log("\n🛡️ Step 3: Building with never-fail guarantee...");
       const buildResult = await this.neverFail.build(enhanced, options);
 
       buildSession.steps.push({
@@ -94,19 +94,19 @@ class IntegrationHub {
         throw new Error("Build failed to produce code");
       }
 
-      console.log(
+//       console.log(
         `  Built using ${buildResult.strategy} strategy in ${buildResult.attempts} attempts`,
       );
 
       // STEP 4: Test and refine if needed
-      console.log("\n🧪 Step 4: Testing and refining...");
+//       console.log("\n🧪 Step 4: Testing and refining...");
       let finalCode = buildResult.code;
 
       if (
         buildResult.testResults &&
         !this.allTestsPass(buildResult.testResults)
       ) {
-        console.log("  Tests failed, starting refinement...");
+//         console.log("  Tests failed, starting refinement...");
         finalCode = await this.refinement.refineBasedOnTestResults(
           buildResult.code,
           buildResult.testResults,
@@ -119,7 +119,7 @@ class IntegrationHub {
           testsPassed: true,
         });
       } else {
-        console.log("  ✅ All tests passed!");
+//         console.log("  ✅ All tests passed!");
         buildSession.steps.push({
           step: "testing",
           testsPassed: true,
@@ -130,7 +130,7 @@ class IntegrationHub {
       let deployment = null;
 
       if (options.deploy !== false) {
-        console.log("\n☁️ Step 5: Deploying application...");
+//         console.log("\n☁️ Step 5: Deploying application...");
 
         deployment = await this.deployment.deployEverywhere(finalCode, {
           projectName: options.projectName || `abba-app-${Date.now()}`,
@@ -146,15 +146,15 @@ class IntegrationHub {
           url: deployment.platforms?.vercel?.url,
         });
 
-        console.log(`  Deployment ${deployment.status}`);
+//         console.log(`  Deployment ${deployment.status}`);
         if (deployment.platforms?.vercel?.url) {
-          console.log(`  🌐 URL: ${deployment.platforms.vercel.url}`);
+//           console.log(`  🌐 URL: ${deployment.platforms.vercel.url}`);
         }
       }
 
       // STEP 6: Start monitoring if deployment succeeded
       if (deployment && deployment.status === "success") {
-        console.log("\n🩺 Step 6: Starting health monitoring...");
+//         console.log("\n🩺 Step 6: Starting health monitoring...");
         await this.healing.startMonitoring(deployment);
 
         buildSession.steps.push({
@@ -164,7 +164,7 @@ class IntegrationHub {
       }
 
       // STEP 7: CRITICAL - Learn from outcome
-      console.log("\n📖 Step 7: Learning from outcome...");
+//       console.log("\n📖 Step 7: Learning from outcome...");
 
       const success = deployment ? deployment.status === "success" : true;
 
@@ -175,7 +175,7 @@ class IntegrationHub {
           techStack: options.techStack || [],
           testResults: buildResult.testResults,
         });
-        console.log("  ✅ Learned from success");
+//         console.log("  ✅ Learned from success");
       } else {
         this.knowledge.learnFromFailure({
           code: finalCode,
@@ -183,7 +183,7 @@ class IntegrationHub {
           techStack: options.techStack || [],
           context: request,
         });
-        console.log("  📝 Learned from failure");
+//         console.log("  📝 Learned from failure");
       }
 
       buildSession.steps.push({
@@ -193,7 +193,7 @@ class IntegrationHub {
       });
 
       // STEP 8: Record in user memory
-      console.log("\n💾 Step 8: Recording interaction...");
+//       console.log("\n💾 Step 8: Recording interaction...");
 
       const interactionId = this.memory.recordInteraction(userId, {
         type: options.appType || "web",
@@ -235,11 +235,11 @@ class IntegrationHub {
         statistics: this.getStatistics(),
       };
 
-      console.log("\n✨ Build and deploy complete!");
-      console.log(
+//       console.log("\n✨ Build and deploy complete!");
+//       console.log(
         `  Total time: ${(buildSession.duration / 1000).toFixed(1)}s`,
       );
-      console.log(`  Success rate: ${this.getSuccessRateString()}`);
+//       console.log(`  Success rate: ${this.getSuccessRateString()}`);
 
       return result;
     } catch (error) {
@@ -381,7 +381,7 @@ class IntegrationHub {
 
   async quickBuild(request, options = {}) {
     // Simplified build for quick prototypes
-    console.log("⚡ Quick build mode...");
+//     console.log("⚡ Quick build mode...");
 
     const userId = "quick-user";
 
@@ -400,7 +400,7 @@ class IntegrationHub {
       throw new Error("Session not found");
     }
 
-    console.log("🔄 Rebuilding with improvements...");
+//     console.log("🔄 Rebuilding with improvements...");
 
     // Use learned knowledge to improve
     const improvements = {
@@ -429,14 +429,14 @@ class IntegrationHub {
 
   importKnowledge(data) {
     // Import previously exported knowledge
-    console.log("📥 Importing knowledge...");
+//     console.log("📥 Importing knowledge...");
 
     if (data.buildHistory) {
       this.buildHistory = data.buildHistory;
     }
 
     // Knowledge base would need an import method
-    console.log("Knowledge import complete");
+//     console.log("Knowledge import complete");
   }
 }
 

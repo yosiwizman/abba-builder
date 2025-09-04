@@ -93,7 +93,7 @@ function generateAllIcons() {
     const filename = `icon-${size}x${size}.png`;
     const filepath = path.join(outputDir, filename);
     fs.writeFileSync(filepath, buffer);
-    console.log(`Generated ${filename}`);
+//     console.log(`Generated ${filename}`);
   });
 
   // Generate ICO file for Windows (using 256x256 as base)
@@ -103,13 +103,13 @@ function generateAllIcons() {
 
   // For simplicity, save as PNG (you'd need ico library for proper ICO)
   fs.writeFileSync(icoPath.replace(".ico", ".png"), icoBuffer);
-  console.log("Generated icon.png (use online converter for .ico)");
+//   console.log("Generated icon.png (use online converter for .ico)");
 
   // Generate ICNS file for macOS (placeholder)
-  console.log("Note: Use iconutil on macOS to generate .icns from PNG files");
+//   console.log("Note: Use iconutil on macOS to generate .icns from PNG files");
 
-  console.log("\nAll icons generated successfully!");
-  console.log(`Output directory: ${outputDir}`);
+//   console.log("\nAll icons generated successfully!");
+//   console.log(`Output directory: ${outputDir}`);
 }
 
 // Run the generation

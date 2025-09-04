@@ -13,7 +13,7 @@ class DesktopCodeGenerator {
    * Generate complete desktop application
    */
   async generateDesktopApp(request, framework, context) {
-    console.log(`Generating ${framework} desktop app for: ${request}`);
+//     console.log(`Generating ${framework} desktop app for: ${request}`);
 
     try {
       // Get appropriate template
@@ -338,7 +338,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 function initializeApp() {
-    console.log('App initialized');
+//     console.log('App initialized');
     // Add your app logic here
 }`,
       "style.css": `* {

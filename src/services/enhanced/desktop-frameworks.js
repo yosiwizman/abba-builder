@@ -72,19 +72,19 @@ class DesktopFrameworkManager {
 
     // Web developers → Electron (familiar with JS/HTML/CSS)
     if (this.hasWebExperience(request)) {
-      console.log("Selected Electron: Web developer background detected");
+//       console.log("Selected Electron: Web developer background detected");
       return "electron";
     }
 
     // Performance critical → Tauri (faster, smaller)
     if (this.requiresPerformance(request)) {
-      console.log("Selected Tauri: Performance requirements detected");
+//       console.log("Selected Tauri: Performance requirements detected");
       return "tauri";
     }
 
     // Cross-platform mobile + desktop → Flutter
     if (targetPlatforms.includes("Mobile") || requestLower.includes("mobile")) {
-      console.log("Selected Flutter: Mobile platform required");
+//       console.log("Selected Flutter: Mobile platform required");
       return "flutter";
     }
 
@@ -96,13 +96,13 @@ class DesktopFrameworkManager {
         requestLower.includes("wpf") ||
         requestLower.includes("winui"))
     ) {
-      console.log("Selected .NET: Windows-specific app");
+//       console.log("Selected .NET: Windows-specific app");
       return "dotnet";
     }
 
     // Simple apps → Python
     if (this.isSimpleApp(request)) {
-      console.log("Selected Python: Simple app requirements");
+//       console.log("Selected Python: Simple app requirements");
       return "python";
     }
 
@@ -111,7 +111,7 @@ class DesktopFrameworkManager {
       return "python";
     }
 
-    console.log("Selected Electron: Default choice for general desktop apps");
+//     console.log("Selected Electron: Default choice for general desktop apps");
     return "electron";
   }
 

@@ -17,7 +17,7 @@ class GitHubIssuesHarvester {
    */
   async harvestIssues(repoOwner = 'facebook', repoName = 'react') {
     const repo = `${repoOwner}/${repoName}`;
-    console.log(`🔄 Harvesting issues from GitHub: ${repo}`);
+//     console.log(`🔄 Harvesting issues from GitHub: ${repo}`);
     
     try {
       // For now, simulate harvesting with realistic data
@@ -36,7 +36,7 @@ class GitHubIssuesHarvester {
       this.harvestedData.set(repo, [...existingData, ...newIssues]);
       this.lastUpdateTimes.set(repo, new Date().toISOString());
       
-      console.log(`✅ Harvested ${newIssues.length} new issues from ${repo}`);
+//       console.log(`✅ Harvested ${newIssues.length} new issues from ${repo}`);
       
       return {
         harvested: simulatedIssues.length,

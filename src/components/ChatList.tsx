@@ -51,7 +51,7 @@ export function ChatList({ show }: { show?: boolean }) {
     if (isChatRoute) {
       const id = routerState.location.search.id;
       if (id) {
-        console.log("Setting selected chat id to", id);
+//         console.log("Setting selected chat id to", id);
         setSelectedChatId(id);
       }
     }

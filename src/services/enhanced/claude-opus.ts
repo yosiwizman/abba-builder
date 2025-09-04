@@ -52,7 +52,7 @@ export class ClaudeOpusService {
         this.client = new Anthropic({
           apiKey: this.apiKey
         });
-        console.log(`Claude initialized with model: ${this.currentModel}`);
+//         console.log(`Claude initialized with model: ${this.currentModel}`);
       } catch (error) {
         console.error('Failed to initialize Claude client:', error);
       }
@@ -80,7 +80,7 @@ export class ClaudeOpusService {
     const modelsToTry = [this.currentModel, this.fallbackModel];
     const preferStreaming = Boolean(process.env.CLAUDE_FORCE_STREAMING === 'true' || (projectContext?.totalTokens || 0) > 10000);
 
-    console.log(`🔍 Claude.generateWithFullContext -> preferStreaming=${preferStreaming}, modelsToTry=${modelsToTry.join(' -> ')}`);
+//     console.log(`🔍 Claude.generateWithFullContext -> preferStreaming=${preferStreaming}, modelsToTry=${modelsToTry.join(' -> ')}`);
 
     let lastError: any = null;
 
@@ -304,7 +304,7 @@ Always think step-by-step and explain your reasoning when implementing complex s
 
     const contextualPrompt = this.buildContextualPrompt(prompt, projectContext);
     const modelsToTry = [this.currentModel, this.fallbackModel];
-    console.log(`🔍 Claude.generateWithStreaming(timeout=${timeoutMs}) models=${modelsToTry.join(' -> ')}`);
+//     console.log(`🔍 Claude.generateWithStreaming(timeout=${timeoutMs}) models=${modelsToTry.join(' -> ')}`);
 
     let lastError: any = null;
     for (const model of modelsToTry) {
@@ -392,7 +392,7 @@ Always think step-by-step and explain your reasoning when implementing complex s
       } catch {}
 
       const duration = Date.now() - start;
-      console.log(`✅ Claude ${model} streamed response in ${duration}ms, ${content.length} chars`);
+//       console.log(`✅ Claude ${model} streamed response in ${duration}ms, ${content.length} chars`);
       return {
         success: true,
         content,
@@ -436,7 +436,7 @@ Always think step-by-step and explain your reasoning when implementing complex s
       .map((block: any) => block.text)
       .join('\n');
 
-    console.log(`✅ Claude ${model} responded in ${duration}ms`);
+//     console.log(`✅ Claude ${model} responded in ${duration}ms`);
 
     return {
       success: true,
@@ -488,10 +488,10 @@ Always think step-by-step and explain your reasoning when implementing complex s
           max_tokens: 10,
           messages: [{ role: 'user', content: 'test' }],
         });
-        console.log(`✅ Model ${model} available`);
+//         console.log(`✅ Model ${model} available`);
         available.push(model);
       } catch (e: any) {
-        console.log(`❌ Model ${model} unavailable: ${e?.message || e}`);
+//         console.log(`❌ Model ${model} unavailable: ${e?.message || e}`);
       }
     }
     return available;

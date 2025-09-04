@@ -18,7 +18,7 @@ class NeverFailStack {
   }
 
   async build(request, options = {}) {
-    console.log("🛡️ Never-Fail Stack: Starting guaranteed build process...");
+//     console.log("🛡️ Never-Fail Stack: Starting guaranteed build process...");
 
     let lastError = null;
     let bestAttempt = null;
@@ -26,7 +26,7 @@ class NeverFailStack {
 
     for (const strategy of this.strategies) {
       attempt++;
-      console.log(`\n📍 Attempt ${attempt}: Using ${strategy} strategy`);
+//       console.log(`\n📍 Attempt ${attempt}: Using ${strategy} strategy`);
 
       try {
         const result = await this.executeStrategy(
@@ -41,7 +41,7 @@ class NeverFailStack {
           const testResult = await this.quickTest(result.code, options);
 
           if (testResult.success) {
-            console.log(`✅ Success with ${strategy} strategy!`);
+//             console.log(`✅ Success with ${strategy} strategy!`);
 
             // Record successful attempt
             this.recordAttempt({
@@ -59,7 +59,7 @@ class NeverFailStack {
               testResults: testResult,
             };
           } else {
-            console.log(
+//             console.log(
               `⚠️ ${strategy} strategy produced code but tests failed`,
             );
             lastError = testResult.error;
@@ -91,10 +91,10 @@ class NeverFailStack {
     }
 
     // If all strategies fail, return the best attempt or create minimal version
-    console.log("⚠️ All strategies exhausted, creating fallback...");
+//     console.log("⚠️ All strategies exhausted, creating fallback...");
 
     if (bestAttempt) {
-      console.log("Returning best attempt with partial success");
+//       console.log("Returning best attempt with partial success");
       return {
         ...bestAttempt,
         partial: true,
@@ -136,7 +136,7 @@ class NeverFailStack {
 
   async directStrategy(request, options) {
     // Try direct generation with the orchestrator
-    console.log("Attempting direct generation...");
+//     console.log("Attempting direct generation...");
 
     const result = await this.orchestrator.generateCode(request, {
       ...options,
@@ -149,7 +149,7 @@ class NeverFailStack {
 
   async templateStrategy(request, options) {
     // Use proven templates
-    console.log("Searching for matching templates...");
+//     console.log("Searching for matching templates...");
 
     const templates = await this.findBestTemplates(request, options);
 
@@ -159,7 +159,7 @@ class NeverFailStack {
 
     // Use the best template
     const template = templates[0];
-    console.log(`Using template: ${template.name}`);
+//     console.log(`Using template: ${template.name}`);
 
     // Adapt template to requirements
     const adapted = await this.adaptTemplate(template, request, options);
@@ -173,10 +173,10 @@ class NeverFailStack {
 
   async decomposeStrategy(request, options) {
     // Break the request into smaller, manageable parts
-    console.log("Decomposing request into smaller parts...");
+//     console.log("Decomposing request into smaller parts...");
 
     const parts = this.decomposeRequest(request);
-    console.log(`Decomposed into ${parts.length} parts`);
+//     console.log(`Decomposed into ${parts.length} parts`);
 
     const results = [];
 
@@ -212,7 +212,7 @@ class NeverFailStack {
 
   async fallbackStrategy(request, options, lastError) {
     // Use simpler alternatives based on what failed
-    console.log("Generating simplified fallback version...");
+//     console.log("Generating simplified fallback version...");
 
     const simplified = this.simplifyRequest(request, lastError);
 
@@ -232,7 +232,7 @@ class NeverFailStack {
 
   async minimalStrategy(request, options) {
     // Create absolute minimal working version
-    console.log("Creating minimal viable version...");
+//     console.log("Creating minimal viable version...");
 
     const appType = this.detectAppType(request);
     const minimal = this.getMinimalCode(appType, request);
@@ -246,7 +246,7 @@ class NeverFailStack {
   }
 
   async createMinimalVersion(request, options) {
-    console.log("Creating ultimate fallback - minimal working app...");
+//     console.log("Creating ultimate fallback - minimal working app...");
 
     const appType = this.detectAppType(request);
     const title = this.extractTitle(request);
@@ -691,7 +691,7 @@ ${frontend ? frontend.code : "// Frontend code here"}
     </div>
     
     <script>
-        console.log('App initialized');
+//         console.log('App initialized');
         // Add your JavaScript here
     </script>
 </body>
@@ -731,7 +731,7 @@ app.post('/api/data', (req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(\`Server running on port \${PORT}\`);
+//     console.log(\`Server running on port \${PORT}\`);
 });`;
   }
 

@@ -179,7 +179,7 @@ const AppGalleryEnhanced = () => {
       if (window.electronAPI?.launchApp) {
         await window.electronAPI.launchApp(app.id, app.location);
       } else {
-        console.log("Launching app:", app.name);
+//         console.log("Launching app:", app.name);
       }
     } catch (error) {
       console.error("Failed to launch app:", error);
@@ -191,7 +191,7 @@ const AppGalleryEnhanced = () => {
       if (window.electronAPI?.openFolder) {
         await window.electronAPI.openFolder(location);
       } else {
-        console.log("Opening folder:", location);
+//         console.log("Opening folder:", location);
       }
     } catch (error) {
       console.error("Failed to open folder:", error);

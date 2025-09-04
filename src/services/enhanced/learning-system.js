@@ -13,7 +13,7 @@ class LearningSystem {
    * Run a learning cycle to analyze and improve patterns
    */
   async runLearningCycle() {
-    console.log('🧠 Running learning cycle...');
+//     console.log('🧠 Running learning cycle...');
     this.learningCycles++;
     
     const learned = Math.floor(Math.random() * 20) + 5;
@@ -26,7 +26,7 @@ class LearningSystem {
       improved: improved
     });
     
-    console.log(`✅ Learning cycle ${this.learningCycles} completed: ${learned} patterns learned, ${improved} improved`);
+//     console.log(`✅ Learning cycle ${this.learningCycles} completed: ${learned} patterns learned, ${improved} improved`);
     
     return { learned, improved };
   }

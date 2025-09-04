@@ -4,8 +4,12 @@ on:
   push:
     branches:
       - main
+      - develop
+      - 'fix/**'
+      - 'feat/**'
   pull_request:
     types: [opened, synchronize, reopened]
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -16,6 +20,50 @@ defaults:
     shell: bash
 
 jobs:
+  # Security audit job
+  security:
+    name: Security Audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Initialize environment
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: package.json
+          cache: npm
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund --progress=false
+      - name: Run security audit
+        run: npm audit --production
+        continue-on-error: true
+      - name: Check for secrets
+        uses: trufflesecurity/trufflehog@main
+        with:
+          path: ./
+          base: ${{ github.event.repository.default_branch }}
+          head: HEAD
+
+  # Code quality checks
+  quality:
+    name: Code Quality
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Initialize environment
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: package.json
+          cache: npm
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund --progress=false
+      - name: Presubmit check (lint, format)
+        run: npm run presubmit
+      - name: Type-checking
+        run: npm run ts
+
+  # Test job with coverage
   test:
     strategy:
       fail-fast: false
@@ -23,6 +71,7 @@ jobs:
         os: [
             { name: "windows", image: "windows-latest" },
             { name: "macos", image: "macos-latest" },
+            { name: "ubuntu", image: "ubuntu-latest" },
           ]
     runs-on: ${{ matrix.os.image }}
     steps:
@@ -36,19 +85,21 @@ jobs:
           cache-dependency-path: package-lock.json
       - name: Install node modules
         run: npm ci --no-audit --no-fund --progress=false
-      - name: Presubmit check (e.g. lint, format)
-        # Only run on macos to avoid redundancy
-        if: contains(matrix.os.name, 'macos')
-        run: npm run presubmit
-      - name: Type-checking
-        # Only run on macos to avoid redundancy
-        if: contains(matrix.os.name, 'macos')
-        run: npm run ts
-      - name: Unit tests
-        # Only run on macos to avoid redundancy
-        if: contains(matrix.os.name, 'macos')
-        run: npm run test
+      - name: Unit tests with coverage
+        run: npm run test -- --coverage
+      - name: Upload coverage
+        if: contains(matrix.os.name, 'ubuntu')
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./coverage/lcov.info
+          fail_ci_if_error: false
       - name: Build application
         env:
           NODE_OPTIONS: "--max-old-space-size=4096"
         run: npm run package
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-${{ matrix.os.name }}
+          path: out/
+          retention-days: 7

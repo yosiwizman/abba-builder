@@ -117,9 +117,9 @@ export class MasterDebugger {
       reset: '\x1b[0m'
     };
     
-    console.log(`${colors[level]}[${level.toUpperCase()}] ${source}: ${message}${colors.reset}`);
-    if (stack) console.log(stack);
-    if (context) console.log('Context:', context);
+//     console.log(`${colors[level]}[${level.toUpperCase()}] ${source}: ${message}${colors.reset}`);
+    if (stack) 
+    if (context) 
     
     // Write to file
     this.writeToFile(logEntry);

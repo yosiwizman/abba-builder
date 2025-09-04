@@ -1096,7 +1096,7 @@ class MetricsTrackingSystem {
       setInterval(async () => {
         try {
           const report = this.generateDashboard();
-          console.log("📊 Metrics Report:", report.overview);
+//           console.log("📊 Metrics Report:", report.overview);
 
           // Save to file if fs is available
           try {
@@ -1114,9 +1114,9 @@ class MetricsTrackingSystem {
               reportPath,
               JSON.stringify(report, null, 2),
             );
-            console.log(`📁 Report saved to ${reportPath}`);
+//             console.log(`📁 Report saved to ${reportPath}`);
           } catch (fsError) {
-            console.log("📊 Report (no file system):", report);
+//             console.log("📊 Report (no file system):", report);
           }
         } catch (error) {
           console.error("Error generating metrics report:", error);
@@ -1144,7 +1144,7 @@ class MetricsTrackingSystem {
       realTimeData: [],
     };
     this.activeAlerts = [];
-    console.log("✨ All metrics cleared");
+//     console.log("✨ All metrics cleared");
   }
 
   /**

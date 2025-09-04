@@ -4,7 +4,7 @@
  */
 
 import { ipcMain } from 'electron';
-import SystemDebugger from '../utils/system-debugger';
+import SystemDebugger from '../utils/system-';
 
 let cachedHealth: any = null;
 let lastCheckTime = 0;

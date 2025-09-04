@@ -328,7 +328,7 @@ ${project.license}
     
     // Create index.js
     const indexJs = `// ${project.name} - Entry point
-console.log('Starting ${project.name}...');
+// console.log('Starting ${project.name}...');
 
 // This is a template project structure
 // Replace with actual implementation

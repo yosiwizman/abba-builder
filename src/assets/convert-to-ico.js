@@ -26,8 +26,8 @@ async function convertPngToIco() {
     // Copy PNG to ICO location for compatibility
     fs.copyFileSync(sourcePng, destIco);
 
-    console.log("Icon file prepared at:", destIco);
-    console.log(
+//     console.log("Icon file prepared at:", destIco);
+//     console.log(
       "Note: For a proper ICO file, use an online converter or ico-converter package",
     );
   } catch (error) {

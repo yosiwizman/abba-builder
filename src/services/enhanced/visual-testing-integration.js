@@ -43,7 +43,7 @@ class VisualTestingIntegration {
     appIdentifier,
     options = {},
   ) {
-    console.log(`🎨 Running visual regression tests for ${appIdentifier}...`);
+//     console.log(`🎨 Running visual regression tests for ${appIdentifier}...`);
 
     const testResults = {
       appId: appIdentifier,
@@ -64,7 +64,7 @@ class VisualTestingIntegration {
 
       if (!baselineExists) {
         if (this.config.autoBaseline) {
-          console.log("📸 No baseline found. Creating initial baseline...");
+//           console.log("📸 No baseline found. Creating initial baseline...");
           const baselineResult = await this.visualTester.captureBaseline(
             page,
             appIdentifier,
@@ -99,7 +99,7 @@ class VisualTestingIntegration {
         // Update baseline if tests passed and config allows
         if (visualResult.success && this.config.updateBaselineOnSuccess) {
           await this.visualTester.updateBaseline(appIdentifier);
-          console.log("✅ Baseline updated with successful test results");
+//           console.log("✅ Baseline updated with successful test results");
         }
       }
 
@@ -163,7 +163,7 @@ class VisualTestingIntegration {
       return functionalResults;
     };
 
-    console.log("✅ Testing bot enhanced with visual regression capabilities");
+//     console.log("✅ Testing bot enhanced with visual regression capabilities");
     return testingBot;
   }
 
@@ -370,7 +370,7 @@ class VisualTestingIntegration {
    * Compare visual results across multiple versions
    */
   async compareVersions(appIdentifier, versions = []) {
-    console.log(
+//     console.log(
       `📊 Comparing ${versions.length} versions of ${appIdentifier}...`,
     );
 
@@ -531,7 +531,7 @@ class VisualTestingIntegration {
 
       // Generate CI report
       const reportPath = await this.generateCIReport(results);
-      console.log(`📊 CI visual test report: ${reportPath}`);
+//       console.log(`📊 CI visual test report: ${reportPath}`);
 
       // Exit with appropriate code for CI
       if (!results.success && config.exitOnFailure) {

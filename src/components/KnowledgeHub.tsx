@@ -75,7 +75,7 @@ const KnowledgeHub = () => {
       const result = await window.electron.invoke("knowledge:export");
       if (result.success) {
         // Handle export (save to file)
-        console.log("Exported data:", result.data);
+//         console.log("Exported data:", result.data);
       }
     } catch (error) {
       console.error("Failed to export:", error);

@@ -15,7 +15,7 @@ class StackOverflowExtractor {
    * Extract common errors and solutions from StackOverflow
    */
   async extractCommonErrors(tag = 'react') {
-    console.log(`🔍 Extracting StackOverflow data for tag: ${tag}`);
+//     console.log(`🔍 Extracting StackOverflow data for tag: ${tag}`);
     
     try {
       // Simulate extraction with realistic StackOverflow data
@@ -33,7 +33,7 @@ class StackOverflowExtractor {
       this.extractedData.set(tag, [...existingData, ...newQuestions]);
       this.lastUpdateTimes.set(tag, new Date().toISOString());
       
-      console.log(`✅ Extracted ${newQuestions.length} new Q&As for ${tag}`);
+//       console.log(`✅ Extracted ${newQuestions.length} new Q&As for ${tag}`);
       
       return {
         extracted: extractedQuestions.length,

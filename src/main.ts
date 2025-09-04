@@ -207,14 +207,55 @@ const createWindow = () => {
       y: 8,
     },
     webPreferences: {
-      nodeIntegration: false,
-      contextIsolation: true,
+      nodeIntegration: false, // Security: Disable node integration
+      contextIsolation: true, // Security: Enable context isolation
       preload: resolvePreloadPath(),
+      sandbox: true, // Security: Enable sandbox
+      webSecurity: true, // Security: Enable web security
+      allowRunningInsecureContent: false, // Security: Prevent insecure content
       // transparent: true,
     },
     show: false, // Don't show until ready
     // backgroundColor: "#00000001",
     // frame: false,
+  });
+
+  // Set Content Security Policy
+  mainWindow.webContents.session.webRequest.onHeadersReceived((details, callback) => {
+    callback({
+      responseHeaders: {
+        ...details.responseHeaders,
+        'Content-Security-Policy': [
+          "default-src 'self';",
+          "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://unpkg.com;",
+          "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;",
+          "font-src 'self' data: https://fonts.gstatic.com;",
+          "img-src 'self' data: https: blob:;",
+          "connect-src 'self' https://api.github.com https://api.openai.com https://api.anthropic.com https://api.dyad.sh wss://localhost:* ws://localhost:* http://localhost:* http://127.0.0.1:*;",
+          "media-src 'self';",
+          "object-src 'none';",
+          "base-uri 'self';",
+          "form-action 'self';",
+          "frame-ancestors 'none';"
+        ].join(' ')
+      }
+    });
+  });
+
+  // Prevent navigation to external URLs
+  mainWindow.webContents.on('will-navigate', (event, url) => {
+    const parsedUrl = new URL(url);
+    if (parsedUrl.protocol !== 'file:' && parsedUrl.protocol !== 'http:' && parsedUrl.protocol !== 'https:') {
+      event.preventDefault();
+      logger.warn(`Navigation to ${url} blocked due to invalid protocol`);
+    }
+  });
+
+  // Prevent new window creation
+  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+    // You can add URL validation here
+    logger.info(`Preventing new window for URL: ${url}`);
+    return { action: 'deny' };
   });
 
   // Show window when ready to prevent visual glitches

@@ -20,7 +20,7 @@ class SelfHealingSystem {
     const monitorId = `monitor_${deployment.id}`;
 
     if (this.monitors.has(monitorId)) {
-      console.log(`Already monitoring ${monitorId}`);
+//       console.log(`Already monitoring ${monitorId}`);
       return monitorId;
     }
 
@@ -39,7 +39,7 @@ class SelfHealingSystem {
     };
 
     this.monitors.set(monitorId, monitor);
-    console.log(
+//     console.log(
       `🩺 Started monitoring ${deployment.projectName || deployment.id}`,
     );
 
@@ -62,7 +62,7 @@ class SelfHealingSystem {
       if (!health.healthy) {
         monitor.failures++;
         monitor.consecutiveFailures++;
-        console.log(
+//         console.log(
           `⚠️ Health check failed for ${deployment.projectName || deployment.id}: ${health.issue}`,
         );
 
@@ -87,7 +87,7 @@ class SelfHealingSystem {
       } else {
         // Reset failure count on success
         if (monitor.consecutiveFailures > 0) {
-          console.log(
+//           console.log(
             `✅ ${deployment.projectName || deployment.id} recovered!`,
           );
           monitor.consecutiveFailures = 0;
@@ -239,7 +239,7 @@ class SelfHealingSystem {
   }
 
   async attemptHealing(deployment, health) {
-    console.log(
+//     console.log(
       `🔧 Attempting to heal ${deployment.projectName || deployment.id}...`,
     );
 
@@ -288,7 +288,7 @@ class SelfHealingSystem {
       }
 
       healing.success = true;
-      console.log(
+//       console.log(
         `✅ Healing successful for ${deployment.projectName || deployment.id}`,
       );
     } catch (error) {
@@ -307,48 +307,48 @@ class SelfHealingSystem {
   }
 
   async triggerRedeploy(deployment) {
-    console.log(
+//     console.log(
       `Triggering redeploy for ${deployment.projectName || deployment.id}`,
     );
 
     // This would trigger a new deployment through the deployment system
     if (deployment.platforms?.vercel?.deploymentId) {
       // Implementation would use Vercel API
-      console.log("Would trigger Vercel redeployment");
+//       console.log("Would trigger Vercel redeployment");
     }
   }
 
   async restartDeployment(deployment) {
-    console.log(`Restarting ${deployment.projectName || deployment.id}`);
+//     console.log(`Restarting ${deployment.projectName || deployment.id}`);
 
     // This would restart the deployment
     if (deployment.platforms?.vercel) {
       // Implementation would use platform-specific restart API
-      console.log("Would restart deployment");
+//       console.log("Would restart deployment");
     }
   }
 
   async resetDatabaseConnection(deployment) {
-    console.log(
+//     console.log(
       `Resetting database for ${deployment.projectName || deployment.id}`,
     );
 
     // This would reset database connections
     if (deployment.platforms?.database) {
       // Implementation would reset connection pools
-      console.log("Would reset database connections");
+//       console.log("Would reset database connections");
     }
   }
 
   async scaleDeployment(deployment, direction = "up") {
-    console.log(
+//     console.log(
       `Scaling ${direction} ${deployment.projectName || deployment.id}`,
     );
 
     // This would scale the deployment resources
     if (deployment.platforms?.vercel) {
       // Implementation would use platform scaling API
-      console.log(`Would scale deployment ${direction}`);
+//       console.log(`Would scale deployment ${direction}`);
     }
   }
 
@@ -361,7 +361,7 @@ class SelfHealingSystem {
     };
 
     // Implementation would fetch actual logs from platform
-    console.log(`Would fetch last ${lines} log lines`);
+//     console.log(`Would fetch last ${lines} log lines`);
 
     return logs;
   }
@@ -373,7 +373,7 @@ class SelfHealingSystem {
     if (monitor) {
       clearInterval(monitor.interval);
       this.monitors.delete(monitorId);
-      console.log(`🛑 Stopped monitoring ${deploymentId}`);
+//       console.log(`🛑 Stopped monitoring ${deploymentId}`);
     }
   }
 
@@ -382,7 +382,7 @@ class SelfHealingSystem {
   }
 
   sendAlert(alert) {
-    console.log(`🚨 ALERT: ${alert.message}`);
+//     console.log(`🚨 ALERT: ${alert.message}`);
 
     // Send to all registered handlers
     this.alertHandlers.forEach((handler) => {
