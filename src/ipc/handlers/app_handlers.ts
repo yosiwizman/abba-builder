@@ -12,7 +12,8 @@ import type {
 } from "../ipc_types";
 import fs from "node:fs";
 import path from "node:path";
-import { getDyadAppPath, getUserDataPath } from "../../paths/paths";
+import { getDyadAppPath } from "../../paths/paths";
+import { getAppBasePath } from "../../config/appBasePath";
 import { ChildProcess, spawn } from "node:child_process";
 import git from "isomorphic-git";
 import { promises as fsPromises } from "node:fs";
@@ -687,7 +688,7 @@ export function registerAppHandlers() {
     });
     return {
       apps: allApps,
-      appBasePath: getDyadAppPath("$APP_BASE_PATH"),
+      appBasePath: getAppBasePath(), // Use the proper helper to resolve the path
     };
   });
 

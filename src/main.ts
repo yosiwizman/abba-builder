@@ -220,24 +220,55 @@ const createWindow = () => {
     // frame: false,
   });
 
-  // Set Content Security Policy
+  // Set Content Security Policy with dev/prod awareness
+  const isDev = !app.isPackaged;
+  
   mainWindow.webContents.session.webRequest.onHeadersReceived((details, callback) => {
+    // Base script sources
+    const baseScriptSrc = ["'self'", "'unsafe-inline'"];
+    // Vite dev often requires 'unsafe-eval'. Only allow it in dev:
+    if (isDev) baseScriptSrc.push("'unsafe-eval'");
+    
+    // External script hosts we trust
+    const scriptHosts = ["https://cdn.jsdelivr.net", "https://unpkg.com"];
+    
+    // Connect sources
+    const connectHosts = [
+      "'self'",
+      "https://api.github.com",
+      "https://api.openai.com", 
+      "https://api.anthropic.com",
+      "https://api.dyad.sh",
+      "wss://localhost:*", "ws://localhost:*",
+      "http://localhost:*", "http://127.0.0.1:*"
+    ];
+    
+    // Check if analytics is enabled
+    const allowPosthog = process.env.ANALYTICS_ENABLED === 'true';
+    if (allowPosthog) {
+      scriptHosts.push(process.env.POSTHOG_ASSETS_HOST || "https://us-assets.i.posthog.com");
+      connectHosts.push(process.env.POSTHOG_API_HOST || "https://us.i.posthog.com");
+    }
+    
+    const csp = [
+      `default-src 'self'`,
+      `script-src ${[...baseScriptSrc, ...scriptHosts].join(' ')}`,
+      `style-src 'self' 'unsafe-inline' https://fonts.googleapis.com`,
+      `font-src 'self' data: https://fonts.gstatic.com`,
+      `img-src 'self' data: https: blob:`,
+      `connect-src ${connectHosts.join(' ')}`,
+      `media-src 'self'`,
+      `object-src 'none'`,
+      `base-uri 'self'`,
+      `form-action 'self'`,
+      `frame-ancestors 'none'`,
+      `frame-src 'self'`
+    ].join('; ');
+    
     callback({
       responseHeaders: {
         ...details.responseHeaders,
-        'Content-Security-Policy': [
-          "default-src 'self';",
-          "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://unpkg.com;",
-          "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;",
-          "font-src 'self' data: https://fonts.gstatic.com;",
-          "img-src 'self' data: https: blob:;",
-          "connect-src 'self' https://api.github.com https://api.openai.com https://api.anthropic.com https://api.dyad.sh wss://localhost:* ws://localhost:* http://localhost:* http://127.0.0.1:*;",
-          "media-src 'self';",
-          "object-src 'none';",
-          "base-uri 'self';",
-          "form-action 'self';",
-          "frame-ancestors 'none';"
-        ].join(' ')
+        'Content-Security-Policy': [csp]
       }
     });
   });

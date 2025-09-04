@@ -53,39 +53,51 @@ const queryClient = new QueryClient({
   }),
 });
 
-const posthogClient = posthog.init(
-  "phc_5Vxx0XT8Ug3eWROhP6mm4D6D2DgIIKT232q4AKxC2ab",
-  {
-    api_host: "https://us.i.posthog.com",
-    debug: false, // Disable debug mode to reduce console spam
-    autocapture: false,
-    capture_exceptions: true,
-    capture_pageview: false,
-    before_send: (event) => {
-      // Skip all events in development mode
-      if (import.meta.env.MODE === "development") {
-        return null; // Silently drop events in development
-      }
+// Check if analytics should be enabled
+const ANALYTICS_ENABLED = import.meta.env.VITE_ANALYTICS_ENABLED === 'true' || 
+  (import.meta.env.MODE === "production" && import.meta.env.PROD);
 
-      if (!isTelemetryOptedIn()) {
-        // Remove console.debug to reduce noise
-        return null;
-      }
-      const telemetryUserId = getTelemetryUserId();
-      if (telemetryUserId) {
-        posthogClient.identify(telemetryUserId);
-      }
+let posthogClient: any = null;
 
-      if (event?.properties["$ip"]) {
-        event.properties["$ip"] = null;
-      }
+if (ANALYTICS_ENABLED) {
+  console.info('[Analytics] Enabled - initializing PostHog');
+  posthogClient = posthog.init(
+    import.meta.env.VITE_POSTHOG_KEY || "phc_5Vxx0XT8Ug3eWROhP6mm4D6D2DgIIKT232q4AKxC2ab",
+    {
+      api_host: import.meta.env.VITE_POSTHOG_API_HOST || "https://us.i.posthog.com",
+      debug: false,
+      autocapture: false,
+      capture_exceptions: false, // Disable to avoid CSP issues
+      capture_pageview: false,
+      before_send: (event) => {
+        if (!isTelemetryOptedIn()) {
+          return null;
+        }
+        const telemetryUserId = getTelemetryUserId();
+        if (telemetryUserId) {
+          posthogClient.identify(telemetryUserId);
+        }
 
-      // Remove console.debug to reduce noise
-      return event;
+        if (event?.properties["$ip"]) {
+          event.properties["$ip"] = null;
+        }
+
+        return event;
+      },
+      persistence: "localStorage",
     },
-    persistence: "localStorage",
-  },
-);
+  );
+} else {
+  console.info('[Analytics] Disabled by environment configuration');
+  // Create a mock client that does nothing
+  posthogClient = {
+    capture: () => {},
+    identify: () => {},
+    alias: () => {},
+    people: { set: () => {} },
+    reset: () => {},
+  };
+}
 
 function App() {
   useEffect(() => {
@@ -96,16 +108,18 @@ function App() {
         return;
       }
 
-      // Capture the navigation event in PostHog
-      posthog.capture("navigation", {
-        toPath: navigation.toLocation.pathname,
-        fromPath: navigation.fromLocation?.pathname,
-      });
+      // Capture the navigation event in PostHog (only if enabled)
+      if (ANALYTICS_ENABLED && posthogClient) {
+        posthogClient.capture("navigation", {
+          toPath: navigation.toLocation.pathname,
+          fromPath: navigation.fromLocation?.pathname,
+        });
 
-      // Optionally capture as a standard pageview as well
-      posthog.capture("$pageview", {
-        path: navigation.toLocation.pathname,
-      });
+        // Optionally capture as a standard pageview as well
+        posthogClient.capture("$pageview", {
+          path: navigation.toLocation.pathname,
+        });
+      }
     });
 
     // Clean up subscription when component unmounts
