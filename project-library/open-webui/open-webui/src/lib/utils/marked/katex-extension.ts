@@ -27,7 +27,7 @@ const inlinePatterns = [];
 const blockPatterns = [];
 
 function escapeRegex(string) {
-	return string.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+	return string.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
 }
 
 function generateRegexRules(delimiters) {

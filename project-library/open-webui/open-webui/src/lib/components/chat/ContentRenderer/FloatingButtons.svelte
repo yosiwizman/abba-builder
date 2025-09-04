@@ -95,7 +95,7 @@
 		});
 
 		// legacy {{TOOL:toolId}} pattern (for backward compatibility)
-		let toolIdPattern = /\{\{TOOL:([^\}]+)\}\}/g;
+		let toolIdPattern = /\{\{TOOL:([^}]+)\}\}/g;
 		let match;
 		while ((match = toolIdPattern.exec(prompt)) !== null) {
 			toolIds.push(match[1]);

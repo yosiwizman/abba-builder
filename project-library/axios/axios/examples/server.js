@@ -82,19 +82,19 @@ server = http.createServer(function (req, res) {
   let url = req.url;
 
   // Process axios itself
-  if (/axios\.min\.js$/.test(url)) {
+  if (url.endsWith('axios.min.js')) {
     pipeFileToResponse(res, '../dist/axios.min.js', 'text/javascript');
     return;
   }
-  if (/axios\.min\.map$/.test(url)) {
+  if (url.endsWith('axios.min.map')) {
     pipeFileToResponse(res, '../dist/axios.min.map', 'text/javascript');
     return;
   }
-  if (/axios\.amd\.min\.js$/.test(url)) {
+  if (url.endsWith('axios.amd.min.js')) {
     pipeFileToResponse(res, '../dist/axios.amd.min.js', 'text/javascript');
     return;
   }
-  if (/axios\.amd\.min\.map$/.test(url)) {
+  if (url.endsWith('axios.amd.min.map')) {
     pipeFileToResponse(res, '../dist/axios.amd.min.map', 'text/javascript');
     return;
   }
@@ -106,7 +106,7 @@ server = http.createServer(function (req, res) {
   }
 
   // Format request */ -> */index.html
-  if (/\/$/.test(url)) {
+  if (url.endsWith('/')) {
     url += 'index.html';
   }
 
@@ -117,7 +117,7 @@ server = http.createServer(function (req, res) {
   }
 
   // Process index.html request
-  if (/index\.html$/.test(url)) {
+  if (url.endsWith('index.html')) {
     if (fs.existsSync(path.join(__dirname, url))) {
       pipeFileToResponse(res, url, 'text/html');
     } else {
@@ -126,7 +126,7 @@ server = http.createServer(function (req, res) {
   }
 
   // Process server request
-  else if (new RegExp('(' + dirs.join('|') + ')\/server').test(url)) {
+  else if (new RegExp('(' + dirs.join('|') + ')/server').test(url)) {
     if (fs.existsSync(path.join(__dirname, url + '.js'))) {
       import('file://' + path.join(__dirname, url + '.js')).then((server) => {
         server.default(req, res);

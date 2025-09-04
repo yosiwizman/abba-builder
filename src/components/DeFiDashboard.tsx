@@ -283,12 +283,12 @@ export const DeFiDashboard: React.FC = () => {
   ];
 
   const handleAddLiquidity = () => {
-//     console.log('Adding liquidity:', { pool: selectedPool, token0Amount, token1Amount });
+     console.log('Adding liquidity:', { pool: selectedPool, token0Amount, token1Amount });
     setIsAddLiquidityOpen(false);
   };
 
   const handleStake = () => {
-//     console.log('Staking:', { farm: selectedFarm, amount: stakeAmount });
+     console.log('Staking:', { farm: selectedFarm, amount: stakeAmount });
     setIsStakeOpen(false);
   };
 

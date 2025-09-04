@@ -136,8 +136,8 @@ export function DeploymentManager() {
       });
 
       if (result.success) {
-//         console.log(
-          `Deployment ${result.deploymentId} started for ${selectedEnvironment}`,
+        console.log(
+          `Deployment ${result.deploymentId} started for ${selectedEnvironment}`
         );
 
         setShowDeployDialog(false);
@@ -171,8 +171,8 @@ export function DeploymentManager() {
       });
 
       if (result.success) {
-//         console.log(
-          `Rolling back ${rollbackTarget.environment} to v${rollbackTarget.version}`,
+        console.log(
+          `Rolling back ${rollbackTarget.environment} to v${rollbackTarget.version}`
         );
 
         setShowRollbackDialog(false);

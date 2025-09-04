@@ -51,7 +51,7 @@
 			}
 
 			func.meta = {
-				...(func.meta ?? {}),
+				...func.meta,
 				description: frontmatter?.description ?? func.name
 			};
 

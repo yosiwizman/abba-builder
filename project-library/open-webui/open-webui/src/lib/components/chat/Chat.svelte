@@ -1722,7 +1722,7 @@
 					stop:
 						(params?.stop ?? $settings?.params?.stop ?? undefined)
 							? (params?.stop.split(',').map((token) => token.trim()) ?? $settings.params.stop).map(
-									(str) => decodeURIComponent(JSON.parse('"' + str.replace(/\"/g, '\\"') + '"'))
+									(str) => decodeURIComponent(JSON.parse('"' + str.replace(/"/g, '\\"') + '"'))
 								)
 							: undefined
 				},

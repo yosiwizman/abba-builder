@@ -49,22 +49,22 @@ module.exports = [
     VariableDeclaration(node) {
       if (node.isDeclaredConst) {
         // TODO: expand visibility and fix
-        if (node.visibility === 'private' && /^_/.test(node.name)) {
+        if (node.visibility === 'private' && node.name.startsWith('_')) {
           this.error(node, 'Constant variables should not have leading underscore');
         }
-      } else if (node.visibility === 'private' && !/^_/.test(node.name)) {
+      } else if (node.visibility === 'private' && !node.name.startsWith('_')) {
         this.error(node, 'Non-constant private variables must have leading underscore');
       }
     }
 
     FunctionDefinition(node) {
       if (node.visibility === 'private' || (node.visibility === 'internal' && node.parent.kind !== 'library')) {
-        if (!/^_/.test(node.name)) {
+        if (!node.name.startsWith('_')) {
           this.error(node, 'Private and internal functions must have leading underscore');
         }
       }
       if (node.visibility === 'internal' && node.parent.kind === 'library') {
-        if (/^_/.test(node.name)) {
+        if (node.name.startsWith('_')) {
           this.error(node, 'Library internal functions should not have leading underscore');
         }
       }

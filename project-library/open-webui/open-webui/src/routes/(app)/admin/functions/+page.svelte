@@ -6,11 +6,9 @@
 	import Functions from '$lib/components/admin/Functions.svelte';
 
 	onMount(async () => {
-		await Promise.all([
-			(async () => {
+		await (async () => {
 				functions.set(await getFunctions(localStorage.token));
-			})()
-		]);
+			})();
 	});
 </script>
 

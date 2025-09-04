@@ -238,7 +238,7 @@ export const BlockchainAnalytics: React.FC = () => {
       // Simulate contract search
       await new Promise(resolve => setTimeout(resolve, 1000));
       // In real implementation, this would fetch contract data
-//       console.log('Searching for contract:', searchAddress);
+       console.log('Searching for contract:', searchAddress);
     } finally {
       setLoading(false);
     }

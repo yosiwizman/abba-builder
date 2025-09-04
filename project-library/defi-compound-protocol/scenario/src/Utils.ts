@@ -52,7 +52,7 @@ export function encodeABI(world: World, fnABI: string, fnParams: string[]): stri
   if (fnParams.length == 0) {
     return world.web3.eth.abi.encodeFunctionSignature(fnABI);
   } else {
-    const regex = /(\w+)\(([\w,\[\]]+)\)/;
+    const regex = /(\w+)\(([\w,[\]]+)\)/;
     const res = regex.exec(fnABI);
     if (!res) {
       throw new Error(`Expected ABI signature, got: ${fnABI}`);
@@ -68,7 +68,7 @@ export function encodeABI(world: World, fnABI: string, fnParams: string[]): stri
 }
 
 export function encodeParameters(world: World, fnABI: string, fnParams: string[]): string {
-  const regex = /(\w+)\(([\w,\[\]]+)\)/;
+  const regex = /(\w+)\(([\w,[\]]+)\)/;
   const res = regex.exec(fnABI);
   if (!res) {
     return '0x0';
@@ -78,7 +78,7 @@ export function encodeParameters(world: World, fnABI: string, fnParams: string[]
 }
 
 export function decodeParameters(world: World, fnABI: string, data: string): string[] {
-  const regex = /(\w+)\(([\w,\[\]]+)\)/;
+  const regex = /(\w+)\(([\w,[\]]+)\)/;
   const res = regex.exec(fnABI);
   if (!res) {
     return [];

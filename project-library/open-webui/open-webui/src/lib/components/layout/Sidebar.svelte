@@ -93,7 +93,7 @@
 		// First pass: Initialize all folder entries
 		for (const folder of folderList) {
 			// Ensure folder is added to folders with its data
-			folders[folder.id] = { ...(folders[folder.id] || {}), ...folder };
+			folders[folder.id] = { ...folders[folder.id], ...folder };
 
 			if (newFolderId && folder.id === newFolderId) {
 				folders[folder.id].new = true;

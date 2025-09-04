@@ -24,7 +24,7 @@ export class RedisService {
     const redisUrl = process.env.REDIS_URL || 'redis://localhost:6379';
     
     try {
-//       console.log('Attempting to connect to Redis at:', redisUrl);
+       console.log('Attempting to connect to Redis at:', redisUrl);
       
       this.client = new Redis(redisUrl, {
         retryStrategy: (times) => {
@@ -33,7 +33,7 @@ export class RedisService {
             return null;
           }
           const delay = Math.min(times * 500, 3000);
-//           console.log(`Retrying Redis connection in ${delay}ms...`);
+           console.log(`Retrying Redis connection in ${delay}ms...`);
           return delay;
         },
         maxRetriesPerRequest: 3,
@@ -42,7 +42,7 @@ export class RedisService {
       });
 
       this.client.on('connect', () => {
-//         console.log('✅ Redis connected successfully');
+         console.log('✅ Redis connected successfully');
         this.isConnected = true;
         this.reconnectAttempts = 0;
       });
@@ -53,13 +53,13 @@ export class RedisService {
       });
 
       this.client.on('close', () => {
-//         console.log('Redis connection closed');
+         console.log('Redis connection closed');
         this.isConnected = false;
       });
 
       this.client.on('reconnecting', () => {
         this.reconnectAttempts++;
-//         console.log(`Reconnecting to Redis (attempt ${this.reconnectAttempts})...`);
+         console.log(`Reconnecting to Redis (attempt ${this.reconnectAttempts})...`);
       });
 
       await this.client.connect();
@@ -69,7 +69,7 @@ export class RedisService {
       
     } catch (error) {
       console.error('Failed to connect to Redis:', error);
-//       console.log('Will use in-memory fallback for caching');
+       console.log('Will use in-memory fallback for caching');
       this.client = null;
       this.isConnected = false;
       // Don't throw - allow app to work without Redis

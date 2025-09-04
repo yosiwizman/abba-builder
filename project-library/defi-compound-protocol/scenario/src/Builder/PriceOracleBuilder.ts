@@ -129,7 +129,7 @@ export async function setPriceOracle(world: World, event: Event): Promise<{world
         #### Standard
 
         * "Standard" - The standard price oracle
-          * E.g. "PriceOracle Set Standard \"0x...\" \"Standard Price Oracle\""
+          * E.g. "PriceOracle Set Standard "0x..." "Standard Price Oracle""
       `,
       "Standard",
       [

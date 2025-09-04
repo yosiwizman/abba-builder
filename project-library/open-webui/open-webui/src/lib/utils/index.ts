@@ -1429,7 +1429,7 @@ export const parseJsonValue = (value: string): any => {
 	}
 
 	// Check if it starts with square or curly brackets (JSON)
-	if (/^[\[{]/.test(value)) {
+	if (/^[[{]/.test(value)) {
 		try {
 			return JSON.parse(value);
 		} catch {

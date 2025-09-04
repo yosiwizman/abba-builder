@@ -154,7 +154,7 @@ export class AIBlockchainService {
     }
 
     // Extract name and symbol
-    const nameMatch = description.match(/called\\s+([\"']?)([^\"']+)\\1|named\\s+([\"']?)([^\"']+)\\3/i);
+    const nameMatch = description.match(/called\\s+(["']?)([^"']+)\\1|named\\s+(["']?)([^"']+)\\3/i);
     if (nameMatch) {
       intent.requirements.push({ type: 'name', value: nameMatch[2] || nameMatch[4] });
     }

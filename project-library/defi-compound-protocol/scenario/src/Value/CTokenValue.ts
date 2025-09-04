@@ -356,7 +356,7 @@ export function cTokenFetchers() {
         #### CallNum
 
         * "CToken <CToken> Call <signature>" - Simple direct call method, for now with no parameters
-          * E.g. "CToken cZRX Call \"borrowIndex()\""
+          * E.g. "CToken cZRX Call "borrowIndex()""
       `,
       "CallNum",
       [

@@ -176,7 +176,7 @@ export const PreviewIframe = ({ loading }: { loading: boolean }) => {
       }
 
       if (event.data?.type === "dyad-component-selected") {
-//         console.log("Component picked:", event.data);
+         console.log("Component picked:", event.data);
         setSelectedComponentPreview(parseComponentSelection(event.data));
         setIsPicking(false);
         return;

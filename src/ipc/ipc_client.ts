@@ -121,8 +121,8 @@ export class IpcClient {
         window.electron.ipcRenderer
       ) {
         this.ipcRenderer = window.electron.ipcRenderer as IpcRenderer;
-//         console.log(
-          "[IpcClient] Successfully initialized with window.electron.ipcRenderer",
+        console.log(
+          "[IpcClient] Successfully initialized with window.electron.ipcRenderer"
         );
 
         // Test the connection immediately
@@ -781,7 +781,7 @@ export class IpcClient {
     callback: (data: GitHubDeviceFlowUpdateData) => void,
   ): () => void {
     const listener = (data: any) => {
-//       console.log("github:flow-update", data);
+       console.log("github:flow-update", data);
       callback(data as GitHubDeviceFlowUpdateData);
     };
     this.ipcRenderer.on("github:flow-update", listener);
@@ -795,7 +795,7 @@ export class IpcClient {
     callback: (data: GitHubDeviceFlowSuccessData) => void,
   ): () => void {
     const listener = (data: any) => {
-//       console.log("github:flow-success", data);
+       console.log("github:flow-success", data);
       callback(data as GitHubDeviceFlowSuccessData);
     };
     this.ipcRenderer.on("github:flow-success", listener);
@@ -808,7 +808,7 @@ export class IpcClient {
     callback: (data: GitHubDeviceFlowErrorData) => void,
   ): () => void {
     const listener = (data: any) => {
-//       console.log("github:flow-error", data);
+       console.log("github:flow-error", data);
       callback(data as GitHubDeviceFlowErrorData);
     };
     this.ipcRenderer.on("github:flow-error", listener);
@@ -1329,8 +1329,8 @@ export class IpcClient {
   private async testConnection(): Promise<void> {
     try {
       const platform = await this.getSystemPlatform();
-//       console.log(
-        `[IpcClient] Connection test successful. Platform: ${platform}`,
+      console.log(
+        `[IpcClient] Connection test successful. Platform: ${platform}`
       );
     } catch (error) {
       console.error("[IpcClient] Connection test failed:", error);

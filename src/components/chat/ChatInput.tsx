@@ -162,7 +162,7 @@ export function ChatInput({ chatId }: { chatId?: number }) {
   const handleApprove = async () => {
     if (!chatId || !messageId || isApproving || isRejecting || isStreaming)
       return;
-//     console.log(
+     console.log(
       `Approving proposal for chatId: ${chatId}, messageId: ${messageId}`,
     );
     setIsApproving(true);
@@ -199,7 +199,7 @@ export function ChatInput({ chatId }: { chatId?: number }) {
   const handleReject = async () => {
     if (!chatId || !messageId || isApproving || isRejecting || isStreaming)
       return;
-//     console.log(
+     console.log(
       `Rejecting proposal for chatId: ${chatId}, messageId: ${messageId}`,
     );
     setIsRejecting(true);

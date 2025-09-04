@@ -267,7 +267,7 @@ export class CIProviderManager {
         activeProviderId: this.activeProviderId
       }, null, 2));
       
-//       console.log('CI provider configurations saved successfully');
+       console.log('CI provider configurations saved successfully');
     } catch (error) {
       console.error('Failed to save CI provider configurations:', error);
     }
@@ -298,7 +298,7 @@ export class CIProviderManager {
         });
         
         this.activeProviderId = data.activeProviderId || null;
-//         console.log('CI provider configurations loaded successfully');
+         console.log('CI provider configurations loaded successfully');
       }
     } catch (error) {
       console.error('Failed to load CI provider configurations:', error);

@@ -83,7 +83,7 @@ export function timelockFetchers() {
         #### TxHash
 
         * "TxHash target:<Address> value:<Number> eta:<Number> signature:<String> ...funArgs:<CoreValue>" - Returns a hash of a transactions values
-        * E.g. "Timelock TxHash \"0x0000000000000000000000000000000000000000\" 0 1569286014 \"setDelay(uint256)\" 60680"
+        * E.g. "Timelock TxHash "0x0000000000000000000000000000000000000000" 0 1569286014 "setDelay(uint256)" 60680"
       `,
       'TxHash',
       [

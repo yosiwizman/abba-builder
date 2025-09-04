@@ -111,7 +111,7 @@ export function CIDashboard() {
 
       // Listen for updates
       window.electron.on("ci:update", (event: any, update: any) => {
-//         console.log("Received CI update:", update);
+         console.log("Received CI update:", update);
 
         // Refresh the relevant data based on update type
         if (update.type === "build" || update.type === "deployment") {
@@ -148,7 +148,7 @@ export function CIDashboard() {
       if (result.success) {
         setShowTriggerDialog(false);
         // Show success notification
-//         console.log("Build triggered successfully:", result.buildId);
+         console.log("Build triggered successfully:", result.buildId);
 
         // Refresh data after a short delay to show the new build
         setTimeout(() => loadDashboardData(true), 1000);

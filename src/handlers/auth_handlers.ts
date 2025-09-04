@@ -14,12 +14,12 @@ const redisService = RedisService.getInstance();
 redisService.connect().catch(console.error);
 
 export function registerAuthHandlers() {
-//   console.log('(auth_handlers) > Registering authentication IPC handlers');
+   console.log('(auth_handlers) > Registering authentication IPC handlers');
 
   // Login handler
   ipcMain.handle('auth:login', async (event, { email, password, rememberMe }) => {
     try {
-//       console.log('(auth_handlers) > Login attempt for:', email);
+       console.log('(auth_handlers) > Login attempt for:', email);
       
       // Find user by email
       const [user] = await db
@@ -96,7 +96,7 @@ export function registerAuthHandlers() {
         role: user.role
       });
 
-//       console.log('(auth_handlers) > Login successful for:', email);
+       console.log('(auth_handlers) > Login successful for:', email);
       
       return {
         success: true,
@@ -124,7 +124,7 @@ export function registerAuthHandlers() {
   // Signup handler
   ipcMain.handle('auth:signup', async (event, { username, email, password }) => {
     try {
-//       console.log('(auth_handlers) > Signup attempt for:', email);
+       console.log('(auth_handlers) > Signup attempt for:', email);
       
       // Check if user already exists
       const [existingUser] = await db
@@ -211,7 +211,7 @@ export function registerAuthHandlers() {
         role: 'user'
       });
 
-//       console.log('(auth_handlers) > Signup successful for:', email);
+       console.log('(auth_handlers) > Signup successful for:', email);
       
       return {
         success: true,
@@ -239,7 +239,7 @@ export function registerAuthHandlers() {
   // Logout handler
   ipcMain.handle('auth:logout', async (event, { sessionId, refreshToken }) => {
     try {
-//       console.log('(auth_handlers) > Logout request for session:', sessionId);
+       console.log('(auth_handlers) > Logout request for session:', sessionId);
       
       // Delete session from database
       if (sessionId) {
@@ -262,7 +262,7 @@ export function registerAuthHandlers() {
         await authService.blacklistToken(refreshToken);
       }
 
-//       console.log('(auth_handlers) > Logout successful');
+       console.log('(auth_handlers) > Logout successful');
       
       return { success: true };
     } catch (error) {
@@ -398,5 +398,5 @@ export function registerAuthHandlers() {
     }
   });
 
-//   console.log('(auth_handlers) > Authentication IPC handlers registered successfully');
+   console.log('(auth_handlers) > Authentication IPC handlers registered successfully');
 }

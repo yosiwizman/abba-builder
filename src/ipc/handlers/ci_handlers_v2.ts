@@ -6,7 +6,7 @@
 import { ipcMain } from "electron";
 // Logger import - using console for now
 const logger = {
-  info: (...args: any[]) => ,
+  info: (...args: any[]) => console.log("[CI Info]", ...args),
   error: (...args: any[]) => console.error("[CI Error]", ...args),
   warn: (...args: any[]) => console.warn("[CI Warning]", ...args),
   debug: (...args: any[]) => console.debug("[CI Debug]", ...args),

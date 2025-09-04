@@ -176,7 +176,7 @@ export function CISettings() {
       // Set as active provider
       await window.electron.invoke("ci:set-active-provider", providerId);
 
-//       console.log(
+       console.log(
         "Configuration Saved: CI/CD provider has been configured successfully.",
       );
       alert("CI/CD provider has been configured successfully.");

@@ -123,7 +123,7 @@ const ProjectLibrary = () => {
           setLanguages(Array.from(langSet).sort());
         }
         
-//         console.log(`Loaded ${newProjects.length} projects (total: ${reset ? newProjects.length : projects.length + newProjects.length})`);
+         console.log(`Loaded ${newProjects.length} projects (total: ${reset ? newProjects.length : projects.length + newProjects.length})`);
       } else {
         console.error("Failed to load projects - no data returned");
         if (reset) {
@@ -296,7 +296,7 @@ const ProjectLibrary = () => {
           document.body.removeChild(successMessage);
         }, 5000);
         
-//         console.log("Project created from template:", result.data);
+         console.log("Project created from template:", result.data);
       } else {
         // Show error message
         const errorMessage = document.createElement('div');

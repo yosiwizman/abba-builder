@@ -286,16 +286,16 @@ export const NFTMarketplace: React.FC = () => {
   };
 
   const handleMint = () => {
-//     console.log('Minting NFT:', mintForm);
+     console.log('Minting NFT:', mintForm);
     setIsMintOpen(false);
   };
 
   const handleBuy = (nft: NFT) => {
-//     console.log('Buying NFT:', nft);
+     console.log('Buying NFT:', nft);
   };
 
   const handleBid = (nft: NFT, amount: number) => {
-//     console.log('Placing bid:', nft, amount);
+     console.log('Placing bid:', nft, amount);
   };
 
   return (

@@ -45,7 +45,7 @@ export function killProcess(process: ChildProcess): Promise<void> {
 
     process.on("close", (code, signal) => {
       clearTimeout(timeout);
-//       console.log(
+       console.log(
         `Received 'close' event for process (PID: ${process.pid}) with code ${code}, signal ${signal}.`,
       );
       resolve();
@@ -63,7 +63,7 @@ export function killProcess(process: ChildProcess): Promise<void> {
     // Ensure PID exists before attempting to kill
     if (process.pid) {
       // Use tree-kill to terminate the entire process tree
-//       console.log(
+       console.log(
         `Attempting to tree-kill process tree starting at PID ${process.pid}.`,
       );
       treeKill(process.pid, "SIGTERM", (err: Error | undefined) => {
@@ -72,7 +72,7 @@ export function killProcess(process: ChildProcess): Promise<void> {
             `tree-kill error for PID ${process.pid}: ${err.message}`,
           );
         } else {
-//           console.log(
+           console.log(
             `tree-kill signal sent successfully to PID ${process.pid}.`,
           );
         }
@@ -138,11 +138,11 @@ export function removeAppIfCurrentProcess(
   const currentAppInfo = runningApps.get(appId);
   if (currentAppInfo && currentAppInfo.process === process) {
     runningApps.delete(appId);
-//     console.log(
+     console.log(
       `Removed app ${appId} (processId ${currentAppInfo.processId}) from running map. Current size: ${runningApps.size}`,
     );
   } else {
-//     console.log(
+     console.log(
       `App ${appId} process was already removed or replaced in running map. Ignoring.`,
     );
   }

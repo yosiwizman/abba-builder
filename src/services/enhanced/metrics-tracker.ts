@@ -157,16 +157,16 @@ export class MetricsTracker {
     const typeLabel = metric.generationType === 'real_claude' ? '🤖 Claude' :
                      metric.generationType === 'fallback_template' ? '📋 Fallback' : '⚠️ Error';
     
-//     console.log(`${emoji} Generation ${id.substr(0, 12)} completed: ${typeLabel}`);
+     console.log(`${emoji} Generation ${id.substr(0, 12)} completed: ${typeLabel}`);
     
     if (metric.modelUsed) {
-//       console.log(`   Model: ${metric.modelUsed}`);
+       console.log(`   Model: ${metric.modelUsed}`);
     }
     if (metric.duration) {
-//       console.log(`   Duration: ${(metric.duration / 1000).toFixed(2)}s`);
+       console.log(`   Duration: ${(metric.duration / 1000).toFixed(2)}s`);
     }
     if (metric.tokensUsed) {
-//       console.log(`   Tokens: ${metric.tokensUsed}`);
+       console.log(`   Tokens: ${metric.tokensUsed}`);
     }
   }
   
@@ -387,47 +387,47 @@ export class MetricsTracker {
   printSummary(hoursBack: number = 24): void {
     const summary = this.getSummary(hoursBack);
     
-//     console.log('\n' + '='.repeat(60));
-//     console.log(`📊 GENERATION METRICS SUMMARY (Last ${hoursBack} hours)`);
-//     console.log('='.repeat(60));
+     console.log('\n' + '='.repeat(60));
+     console.log(`📊 GENERATION METRICS SUMMARY (Last ${hoursBack} hours)`);
+     console.log('='.repeat(60));
     
-//     console.log('\n📈 Overall Statistics:');
-//     console.log(`   Total Generations: ${summary.total}`);
-//     console.log(`   Success Rate: ${summary.successRate.toFixed(1)}% (${summary.successful}/${summary.total})`);
-//     console.log(`   Failed: ${summary.failed}`);
+     console.log('\n📈 Overall Statistics:');
+     console.log(`   Total Generations: ${summary.total}`);
+     console.log(`   Success Rate: ${summary.successRate.toFixed(1)}% (${summary.successful}/${summary.total})`);
+     console.log(`   Failed: ${summary.failed}`);
     
-//     console.log('\n🤖 Generation Types:');
-//     console.log(`   Real Claude: ${summary.realClaudeCount} (${((summary.realClaudeCount / summary.total) * 100).toFixed(1)}%)`);
-//     console.log(`   Fallback Templates: ${summary.fallbackCount} (${((summary.fallbackCount / summary.total) * 100).toFixed(1)}%)`);
-//     console.log(`   Errors: ${summary.errorCount} (${((summary.errorCount / summary.total) * 100).toFixed(1)}%)`);
+     console.log('\n🤖 Generation Types:');
+     console.log(`   Real Claude: ${summary.realClaudeCount} (${((summary.realClaudeCount / summary.total) * 100).toFixed(1)}%)`);
+     console.log(`   Fallback Templates: ${summary.fallbackCount} (${((summary.fallbackCount / summary.total) * 100).toFixed(1)}%)`);
+     console.log(`   Errors: ${summary.errorCount} (${((summary.errorCount / summary.total) * 100).toFixed(1)}%)`);
     
     if (summary.realClaudeCount > 0) {
-//       console.log(`   Claude Success Rate: ${summary.realClaudeSuccessRate.toFixed(1)}%`);
+       console.log(`   Claude Success Rate: ${summary.realClaudeSuccessRate.toFixed(1)}%`);
     }
     
-//     console.log('\n⚡ Performance:');
-//     console.log(`   Avg Duration: ${(summary.averageDuration / 1000).toFixed(2)}s`);
-//     console.log(`   Avg Tokens: ${summary.averageTokens.toFixed(0)}`);
-//     console.log(`   Avg Iterations: ${summary.averageIterations.toFixed(1)}`);
+     console.log('\n⚡ Performance:');
+     console.log(`   Avg Duration: ${(summary.averageDuration / 1000).toFixed(2)}s`);
+     console.log(`   Avg Tokens: ${summary.averageTokens.toFixed(0)}`);
+     console.log(`   Avg Iterations: ${summary.averageIterations.toFixed(1)}`);
     
     if (Object.keys(summary.byType).length > 0) {
-//       console.log('\n📦 By Type:');
+       console.log('\n📦 By Type:');
       for (const [type, metrics] of Object.entries(summary.byType)) {
-//         console.log(`   ${type}: ${metrics.successRate.toFixed(1)}% success, ${metrics.realClaudeRate.toFixed(1)}% real Claude (${metrics.total} total)`);
+         console.log(`   ${type}: ${metrics.successRate.toFixed(1)}% success, ${metrics.realClaudeRate.toFixed(1)}% real Claude (${metrics.total} total)`);
       }
     }
     
     if (Object.keys(summary.byModel).length > 0) {
-//       console.log('\n🎯 By Model:');
+       console.log('\n🎯 By Model:');
       for (const [model, metrics] of Object.entries(summary.byModel)) {
-//         console.log(`   ${model}: ${metrics.successRate.toFixed(1)}% success, ${(metrics.averageDuration / 1000).toFixed(2)}s avg (${metrics.total} uses)`);
+         console.log(`   ${model}: ${metrics.successRate.toFixed(1)}% success, ${(metrics.averageDuration / 1000).toFixed(2)}s avg (${metrics.total} uses)`);
       }
     }
     
     if (Object.keys(summary.byComplexity).length > 0) {
-//       console.log('\n📐 By Complexity:');
+       console.log('\n📐 By Complexity:');
       for (const [complexity, metrics] of Object.entries(summary.byComplexity)) {
-//         console.log(`   ${complexity}: ${metrics.successRate.toFixed(1)}% success, ${metrics.realClaudeRate.toFixed(1)}% real Claude (${metrics.total} total)`);
+         console.log(`   ${complexity}: ${metrics.successRate.toFixed(1)}% success, ${metrics.realClaudeRate.toFixed(1)}% real Claude (${metrics.total} total)`);
       }
     }
     
@@ -435,27 +435,27 @@ export class MetricsTracker {
     const isAchieved = summary.successRate >= targetRate;
     const emoji = isAchieved ? '🎉' : '⚠️';
     
-//     console.log('\n' + '='.repeat(60));
-//     console.log(`${emoji} Target Success Rate (${targetRate}%): ${isAchieved ? 'ACHIEVED' : 'NOT MET'}`);
+     console.log('\n' + '='.repeat(60));
+     console.log(`${emoji} Target Success Rate (${targetRate}%): ${isAchieved ? 'ACHIEVED' : 'NOT MET'}`);
     
     if (!isAchieved) {
       const gap = targetRate - summary.successRate;
-//       console.log(`   Gap to target: ${gap.toFixed(1)}%`);
+       console.log(`   Gap to target: ${gap.toFixed(1)}%`);
       
       // Recommendations
-//       console.log('\n💡 Recommendations:');
+       console.log('\n💡 Recommendations:');
       if (summary.fallbackCount > summary.realClaudeCount) {
-//         console.log('   - Claude API is underutilized - check API key and connection');
+         console.log('   - Claude API is underutilized - check API key and connection');
       }
       if (summary.realClaudeSuccessRate < 80) {
-//         console.log('   - Claude generations have low success rate - review prompts and context');
+         console.log('   - Claude generations have low success rate - review prompts and context');
       }
       if (summary.averageIterations > 2) {
-//         console.log('   - High iteration count - improve initial generation quality');
+         console.log('   - High iteration count - improve initial generation quality');
       }
     }
     
-//     console.log('='.repeat(60) + '\n');
+     console.log('='.repeat(60) + '\n');
   }
   
   /**
@@ -466,7 +466,7 @@ export class MetricsTracker {
       if (fs.existsSync(this.metricsFile)) {
         const data = fs.readJsonSync(this.metricsFile);
         this.metrics = data.metrics || [];
-//         console.log(`📊 Loaded ${this.metrics.length} historical metrics`);
+         console.log(`📊 Loaded ${this.metrics.length} historical metrics`);
       }
     } catch (error) {
       console.warn('⚠️ Could not load metrics:', error);
@@ -499,7 +499,7 @@ export class MetricsTracker {
     
     const removed = before - this.metrics.length;
     if (removed > 0) {
-//       console.log(`🧹 Cleaned up ${removed} old metrics`);
+       console.log(`🧹 Cleaned up ${removed} old metrics`);
       this.flush();
     }
   }
@@ -538,7 +538,7 @@ export class MetricsTracker {
     ].join('\n');
     
     fs.writeFileSync(outputPath, csv);
-//     console.log(`📄 Exported ${this.metrics.length} metrics to ${outputPath}`);
+     console.log(`📄 Exported ${this.metrics.length} metrics to ${outputPath}`);
   }
   
   /**

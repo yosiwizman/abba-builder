@@ -434,29 +434,29 @@ describe("${params.name}", function () {
     return `const hre = require("hardhat");
 
 async function main() {
-//   console.log("Deploying ${params.name}...");
+   console.log("Deploying ${params.name}...");
   
   const Token = await hre.ethers.getContractFactory("${params.name.replace(/\s/g, '')}");
   const token = await Token.deploy();
   
   await token.waitForDeployment();
   
-//   console.log("${params.name} deployed to:", await token.getAddress());
+   console.log("${params.name} deployed to:", await token.getAddress());
   
   // Verify contract on Etherscan
   if (network.name !== "localhost" && network.name !== "hardhat") {
-//     console.log("Waiting for block confirmations...");
+     console.log("Waiting for block confirmations...");
     await token.deploymentTransaction().wait(6);
     
-//     console.log("Verifying contract on Etherscan...");
+     console.log("Verifying contract on Etherscan...");
     try {
       await hre.run("verify:verify", {
         address: await token.getAddress(),
         constructorArguments: [],
       });
-//       console.log("Contract verified!");
+       console.log("Contract verified!");
     } catch (error) {
-//       console.log("Verification failed:", error);
+       console.log("Verification failed:", error);
     }
   }
 }

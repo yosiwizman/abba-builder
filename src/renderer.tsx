@@ -15,7 +15,7 @@ import {
 } from "@tanstack/react-query";
 import { showError } from "./lib/toast";
 
-// console.log("Running in mode:", import.meta.env.MODE);
+ console.log("Running in mode:", import.meta.env.MODE);
 
 interface MyMeta extends Record<string, unknown> {
   showErrorToast: boolean;

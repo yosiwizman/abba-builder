@@ -96,7 +96,7 @@ export async function buildErc20(world: World, from: string, event: Event): Prom
         #### NonStandard
 
         * "NonStandard symbol:<String> name:<String> decimals:<Number=18>" - A non-standard token, like BAT
-          * E.g. "Erc20 Deploy NonStandard BAT \"Basic Attention Token\" 18"
+          * E.g. "Erc20 Deploy NonStandard BAT "Basic Attention Token" 18"
       `,
       "NonStandard",
       [
@@ -150,7 +150,7 @@ export async function buildErc20(world: World, from: string, event: Event): Prom
         #### Evil
 
         * "Evil symbol:<String> name:<String> decimals:<Number>" - A less vanilla ERC-20 contract that fails transfers
-          * E.g. "Erc20 Deploy Evil BAT \"Basic Attention Token\" 18"
+          * E.g. "Erc20 Deploy Evil BAT "Basic Attention Token" 18"
       `,
       "Evil",
       [
@@ -174,7 +174,7 @@ export async function buildErc20(world: World, from: string, event: Event): Prom
         #### Standard
 
         * "Standard symbol:<String> name:<String> decimals:<Number>" - A vanilla ERC-20 contract
-          * E.g. "Erc20 Deploy Standard BAT \"Basic Attention Token\" 18"
+          * E.g. "Erc20 Deploy Standard BAT "Basic Attention Token" 18"
       `,
       "Standard",
       [
@@ -198,7 +198,7 @@ export async function buildErc20(world: World, from: string, event: Event): Prom
         #### WBTC
 
         * "WBTC symbol:<String> name:<String>" - The WBTC contract
-          * E.g. "Erc20 Deploy WBTC WBTC \"Wrapped Bitcoin\""
+          * E.g. "Erc20 Deploy WBTC WBTC "Wrapped Bitcoin""
       `,
       "WBTC",
       [

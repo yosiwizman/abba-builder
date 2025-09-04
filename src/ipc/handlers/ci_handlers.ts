@@ -130,17 +130,17 @@ const buildLogs: Record<string, string[]> = {
 };
 
 export function registerCIHandlers() {
-//   console.log("[CIHandlers] Registering CI/CD IPC handlers...");
+   console.log("[CIHandlers] Registering CI/CD IPC handlers...");
 
   // Get builds
   ipcMain.handle("ci:get-builds", async () => {
-//     console.log(`[CIHandlers] Returning ${cicdData.builds.length} builds`);
+     console.log(`[CIHandlers] Returning ${cicdData.builds.length} builds`);
     return cicdData.builds;
   });
 
   // Get deployments
   ipcMain.handle("ci:get-deployments", async () => {
-//     console.log(
+     console.log(
       `[CIHandlers] Returning ${cicdData.deployments.length} deployments`,
     );
     return cicdData.deployments;
@@ -148,13 +148,13 @@ export function registerCIHandlers() {
 
   // Get statistics
   ipcMain.handle("ci:get-statistics", async () => {
-//     console.log("[CIHandlers] Returning statistics");
+     console.log("[CIHandlers] Returning statistics");
     return cicdData.statistics;
   });
 
   // Trigger a new build
   ipcMain.handle("ci:trigger-build", async (_, { project, branch }) => {
-//     console.log(
+     console.log(
       `[CIHandlers] Triggering build for ${project} on branch ${branch}`,
     );
     const newBuild = {
@@ -197,7 +197,7 @@ export function registerCIHandlers() {
 
   // Get build details/logs
   ipcMain.handle("ci:get-build-details", async (_, buildId) => {
-//     console.log(`[CIHandlers] Getting details for build ${buildId}`);
+     console.log(`[CIHandlers] Getting details for build ${buildId}`);
     const build = cicdData.builds.find((b) => b.id === buildId);
     const logs = buildLogs[buildId] || ["No logs available for this build"];
 
@@ -207,5 +207,5 @@ export function registerCIHandlers() {
     };
   });
 
-//   console.log("[CIHandlers] CI/CD IPC handlers registered successfully");
+   console.log("[CIHandlers] CI/CD IPC handlers registered successfully");
 }

@@ -448,7 +448,7 @@
 		const updatedMessage = {
 			...message,
 			annotation: {
-				...(message?.annotation ?? {}),
+				...message?.annotation,
 				...(rating !== null ? { rating: rating } : {}),
 				...(details ? details : {})
 			}

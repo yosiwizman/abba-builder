@@ -96,8 +96,7 @@
 			}));
 		let collection_files =
 			knowledgeItems.length > 0
-				? [
-						...knowledgeItems
+				? knowledgeItems
 							.reduce((a, item) => {
 								return [
 									...new Set([
@@ -115,7 +114,6 @@
 								description: `${file?.collection?.name} - ${file?.collection?.description}`,
 								type: 'file'
 							}))
-					]
 				: [];
 
 		items = [...notes, ...collections, ...legacy_collections].map((item) => {

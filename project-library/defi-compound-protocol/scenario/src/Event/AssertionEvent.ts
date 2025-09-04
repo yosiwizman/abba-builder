@@ -386,7 +386,7 @@ export function assertionCommands() {
         #### ReadRevert
 
         * "ReadRevert event:<Event> message:<String>" - Asserts that reading the given value reverts with given message.
-          * E.g. "Assert ReadRevert (Comptroller CheckMembership Geoff cETH) \"revert\""
+          * E.g. "Assert ReadRevert (Comptroller CheckMembership Geoff cETH) "revert""
       `,
       "ReadRevert",
       [
@@ -400,7 +400,7 @@ export function assertionCommands() {
         #### ReadError
 
         * "ReadError event:<Event> message:<String>" - Asserts that reading the given value throws given error
-          * E.g. "Assert ReadError (Comptroller Bad Address) \"cannot find comptroller\""
+          * E.g. "Assert ReadError (Comptroller Bad Address) "cannot find comptroller""
       `,
       "ReadError",
       [
@@ -430,7 +430,7 @@ export function assertionCommands() {
         #### RevertFailure
 
         * "RevertFailure error:<String> message:<String>" - Assert last transaction reverted with a message beginning with an error code
-          * E.g. "Assert RevertFailure UNAUTHORIZED \"set reserves failed\""
+          * E.g. "Assert RevertFailure UNAUTHORIZED "set reserves failed""
       `,
       "RevertFailure",
       [
@@ -444,7 +444,7 @@ export function assertionCommands() {
         #### RevertCustomError
 
         * "RevertCustomError error:<String> args:<[]Value>" - Assert last transaction reverted with a message beginning with an error code
-          * E.g. "Assert RevertFailure UNAUTHORIZED \"set reserves failed\""
+          * E.g. "Assert RevertFailure UNAUTHORIZED "set reserves failed""
       `,
       "RevertCustomError",
       [

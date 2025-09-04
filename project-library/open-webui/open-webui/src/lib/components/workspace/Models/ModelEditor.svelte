@@ -256,7 +256,7 @@
 					return item;
 				}
 			});
-			capabilities = { ...capabilities, ...(model?.meta?.capabilities ?? {}) };
+			capabilities = { ...capabilities, ...model?.meta?.capabilities };
 
 			if ('access_control' in model) {
 				accessControl = model.access_control;

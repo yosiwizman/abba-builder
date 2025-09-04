@@ -6,11 +6,9 @@
 	import Knowledge from '$lib/components/workspace/Knowledge.svelte';
 
 	onMount(async () => {
-		await Promise.all([
-			(async () => {
+		await (async () => {
 				knowledge.set(await getKnowledgeBases(localStorage.token));
-			})()
-		]);
+			})();
 	});
 </script>
 

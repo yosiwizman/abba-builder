@@ -239,7 +239,7 @@ export function timelockCommands() {
         #### SetPendingAdmin
 
         * "SetPendingAdmin <Address>" - Sets the pending admin for the Timelock
-        * E.g. "Timelock SetPendingAdmin \"0x0000000000000000000000000000000000000000\""
+        * E.g. "Timelock SetPendingAdmin "0x0000000000000000000000000000000000000000""
     `,
       'SetPendingAdmin',
       [new Arg('timelock', getTimelock, { implicit: true }), new Arg('admin', getAddressV)],
@@ -250,7 +250,7 @@ export function timelockCommands() {
         #### SetAdmin
 
         * "SetAdmin <Address>" - Sets the admin for the Timelock through the harness
-        * E.g. "Timelock SetAdmin \"0x0000000000000000000000000000000000000000\""
+        * E.g. "Timelock SetAdmin "0x0000000000000000000000000000000000000000""
     `,
       'SetAdmin',
       [new Arg('timelock', getTimelock, { implicit: true }), new Arg('admin', getAddressV)],
@@ -268,7 +268,7 @@ export function timelockCommands() {
         #### QueueTransaction
 
         * "QueueTransaction target:<Address> value:<Number> eta:<Number> signature:<String> ...funArgs:<CoreValue>" - Queues a transaction for the Timelock
-        * E.g. "Timelock QueueTransaction \"0x0000000000000000000000000000000000000000\" 0 1569286014 \"setDelay(uint256)\" 60680"
+        * E.g. "Timelock QueueTransaction "0x0000000000000000000000000000000000000000" 0 1569286014 "setDelay(uint256)" 60680"
         *
     `,
       'QueueTransaction',
@@ -297,7 +297,7 @@ export function timelockCommands() {
         #### CancelTransaction
 
         * "CancelTransaction target:<Address> value:<Number> eta:<Number> signature:<String> ...funArgs:<CoreValue>" - Cancels a transaction from the Timelock
-        * E.g. "Timelock CancelTransaction \"0x0000000000000000000000000000000000000000\" 0 1569286014 \"setDelay(uint256)\" 60680"
+        * E.g. "Timelock CancelTransaction "0x0000000000000000000000000000000000000000" 0 1569286014 "setDelay(uint256)" 60680"
     `,
       'CancelTransaction',
       [
@@ -325,7 +325,7 @@ export function timelockCommands() {
         #### ExecuteTransaction
 
         * "ExecuteTransaction target:<Address> value:<Number> eta:<Number> signature:<String> ...funArgs:<CoreValue>" - Executes a transaction from the Timelock
-        * E.g. "Timelock ExecuteTransaction \"0x0000000000000000000000000000000000000000\" 0 1569286014 \"setDelay(uint256)\" 60680"
+        * E.g. "Timelock ExecuteTransaction "0x0000000000000000000000000000000000000000" 0 1569286014 "setDelay(uint256)" 60680"
     `,
       'ExecuteTransaction',
       [

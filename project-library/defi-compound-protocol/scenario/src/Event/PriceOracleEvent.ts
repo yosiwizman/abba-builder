@@ -85,7 +85,7 @@ export function priceOracleCommands() {
         #### Set
 
         * "Set ...params" - Sets the price oracle to given deployed contract
-          * E.g. "PriceOracle Set Standard \"0x...\" \"My Already Deployed Oracle\""
+          * E.g. "PriceOracle Set Standard "0x..." "My Already Deployed Oracle""
       `,
       "Set",
       [

@@ -133,7 +133,7 @@ export abstract class Expression<Args> {
         } else {
           try {
             if (arg.mapped) {
-              val = await await Promise.all(mustArray<Event>(eventArg).map((el) => arg.getter(world, el)));
+              val = await Promise.all(mustArray<Event>(eventArg).map((el) => arg.getter(world, el)));
             } else {
               val = await arg.getter(world, eventArg);
             }

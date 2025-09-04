@@ -21,11 +21,9 @@
 
 	onMount(async () => {
 		if ($user?.role === 'admin') {
-			await Promise.all([
-				(async () => {
+			await (async () => {
 					ollamaConfig = await getOllamaConfig(localStorage.token);
-				})()
-			]);
+				})();
 
 			if (ollamaConfig) {
 				selected = 'ollama';

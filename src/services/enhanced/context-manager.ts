@@ -46,18 +46,18 @@ export class ContextManager {
     projectPath: string, 
     userRequest: string
   ): Promise<ProjectContext> {
-//     console.log('📊 Aggregating project context...');
+     console.log('📊 Aggregating project context...');
     
     // Scan all project files
     const allFiles = await this.scanProjectFiles(projectPath);
-//     console.log(`Found ${allFiles.length} files in project`);
+     console.log(`Found ${allFiles.length} files in project`);
     
     // Score files by relevance
     const scoredFiles = this.scoreFileRelevance(allFiles, userRequest);
     
     // Select files within token limit
     const selectedFiles = this.selectWithinTokenLimit(scoredFiles);
-//     console.log(`Selected ${selectedFiles.length} most relevant files`);
+     console.log(`Selected ${selectedFiles.length} most relevant files`);
     
     // Get project structure
     const projectStructure = await this.getProjectStructure(projectPath);

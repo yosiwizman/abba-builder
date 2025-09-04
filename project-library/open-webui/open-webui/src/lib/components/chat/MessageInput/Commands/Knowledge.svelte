@@ -135,8 +135,7 @@
 			}));
 		let collection_files =
 			$knowledge.length > 0
-				? [
-						...$knowledge
+				? $knowledge
 							.reduce((a, item) => {
 								return [
 									...new Set([
@@ -155,7 +154,6 @@
 								knowledge: true, // DO NOT REMOVE, USED TO INDICATE KNOWLEDGE BASE FILE
 								type: 'file'
 							}))
-					]
 				: [];
 
 		items = [

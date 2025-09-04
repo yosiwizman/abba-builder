@@ -21,11 +21,11 @@ export function AppList({ show }: { show?: boolean }) {
   const { apps, loading, error } = useLoadApps();
 
   // Debug logging
-//   console.log('[AppList] Component rendered', { show, loading, error, appsCount: apps?.length });
-//   console.log('[AppList] Apps:', apps);
+   console.log('[AppList] Component rendered', { show, loading, error, appsCount: apps?.length });
+   console.log('[AppList] Apps:', apps);
 
   if (!show) {
-//     console.log('[AppList] Not showing because show prop is false');
+     console.log('[AppList] Not showing because show prop is false');
     return null;
   }
 

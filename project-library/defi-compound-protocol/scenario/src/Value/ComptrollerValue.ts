@@ -439,7 +439,7 @@ export function comptrollerFetchers() {
         #### CallNum
 
         * "CallNum signature:<String> ...callArgs<CoreValue>" - Simple direct call method
-          * E.g. "Comptroller CallNum \"compSpeeds(address)\" (Address Coburn)"
+          * E.g. "Comptroller CallNum "compSpeeds(address)" (Address Coburn)"
       `,
       "CallNum",
       [

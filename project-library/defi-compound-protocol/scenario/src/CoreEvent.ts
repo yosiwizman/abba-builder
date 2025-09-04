@@ -206,7 +206,7 @@ export const commands: (View<any> | ((world: World) => Promise<View<any>>))[] = 
       #### Throw
 
       * "Throw errMsg:<String>" - Throws given error
-        * E.g. "Throw \"my error message\""
+        * E.g. "Throw "my error message""
     `,
     'Throw',
     [new Arg('errMsg', getStringV)],
@@ -238,7 +238,7 @@ export const commands: (View<any> | ((world: World) => Promise<View<any>>))[] = 
       #### Print
 
       * "Print ..." - Prints given string
-        * E.g. "Print \"Hello there\""
+        * E.g. "Print "Hello there""
     `,
     'Print',
     [new Arg('message', getStringV)],
@@ -249,7 +249,7 @@ export const commands: (View<any> | ((world: World) => Promise<View<any>>))[] = 
       #### PrintNumber
 
       * "Print ..." - Prints given number
-        * E.g. "Print \"Hello there\""
+        * E.g. "Print "Hello there""
     `,
     'PrintNumber',
     [new Arg('num', getNumberV)],
@@ -276,7 +276,7 @@ export const commands: (View<any> | ((world: World) => Promise<View<any>>))[] = 
       #### Web3Fork
 
       * "Web3Fork url:<String> unlockedAccounts:<String>[]" - Creates an in-memory ganache
-        * E.g. "Web3Fork \"https://mainnet.infura.io/v3/e1a5d4d2c06a4e81945fca56d0d5d8ea\" (\"0x8b8592e9570e96166336603a1b4bd1e8db20fa20\")"
+        * E.g. "Web3Fork "https://mainnet.infura.io/v3/e1a5d4d2c06a4e81945fca56d0d5d8ea" ("0x8b8592e9570e96166336603a1b4bd1e8db20fa20")"
     `,
     'Web3Fork',
     [
@@ -318,7 +318,7 @@ export const commands: (View<any> | ((world: World) => Promise<View<any>>))[] = 
       #### MyAddress
 
       * "MyAddress address:<String>" - Sets default from address (same as "Alias Me <addr>")
-        * E.g. "MyAddress \"0x9C1856636d78C051deAd6CAB9c5699e4E25549e9\""
+        * E.g. "MyAddress "0x9C1856636d78C051deAd6CAB9c5699e4E25549e9""
     `,
     'MyAddress',
     [new Arg('address', getAddressV)],
@@ -335,7 +335,7 @@ export const commands: (View<any> | ((world: World) => Promise<View<any>>))[] = 
       #### Alias
 
       * "Alias name:<String> address:<String>" - Stores an alias between name and address
-        * E.g. "Alias Me \"0x9C1856636d78C051deAd6CAB9c5699e4E25549e9\""
+        * E.g. "Alias Me "0x9C1856636d78C051deAd6CAB9c5699e4E25549e9""
     `,
     'Alias',
     [new Arg('name', getStringV), new Arg('address', getAddressV)],

@@ -2485,10 +2485,10 @@
 							Re = x(/\{\{[\w\W]*|[\w\W]*\}\}/gm),
 							qe = x(/<%[\w\W]*|[\w\W]*%>/gm),
 							$e = x(/\${[\w\W]*}/gm),
-							ze = x(/^data-[\-\w.\u00B7-\uFFFF]/),
-							We = x(/^aria-[\-\w]+$/),
+							ze = x(/^data-[-\w.\u00B7-\uFFFF]/),
+							We = x(/^aria-[-\w]+$/),
 							He = x(
-								/^(?:(?:(?:f|ht)tps?|mailto|tel|callto|sms|cid|xmpp):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i
+								/^(?:(?:(?:f|ht)tps?|mailto|tel|callto|sms|cid|xmpp):|[^a-z]|[a-z+.-]+(?:[^a-z+.\-:]|$))/i
 							),
 							Ye = x(/^(?:\w+script|data):/i),
 							Xe = x(/[\u0000-\u0020\u00A0\u1680\u180E\u2000-\u2029\u205F\u3000]/g),
@@ -5330,7 +5330,7 @@
 				26571: (s) => {
 					s.exports = function powershell(s) {
 						const o = {
-								$pattern: /-?[A-z\.\-]+\b/,
+								$pattern: /-?[A-z.-]+\b/,
 								keyword:
 									'if else foreach return do while until elseif begin for trap data dynamicparam end break throw param continue finally in switch exit filter try process catch hidden static parameter',
 								built_in:
@@ -5495,7 +5495,7 @@
 										className: 'built_in',
 										relevance: 0
 									},
-									{ className: 'type', begin: /[\.\w\d]+/, relevance: 0 }
+									{ className: 'type', begin: /[.\w\d]+/, relevance: 0 }
 								)
 							};
 						return (
@@ -15811,7 +15811,7 @@
 						['rowSpan', 'start'].forEach(function (s) {
 							V[s] = new v(s, 5, !1, s.toLowerCase(), null, !1, !1);
 						});
-					var U = /[\-:]([a-z])/g;
+					var U = /[-:]([a-z])/g;
 					function sa(s) {
 						return s[1].toUpperCase();
 					}
@@ -27341,7 +27341,7 @@
 											});
 										}),
 										__publicField(this, 'availableUUIDs', (s = this.uuidLength) =>
-											parseFloat(Math.pow([...new Set(this.dict)].length, s).toFixed(0))
+											parseFloat(Math.pow(new Set(this.dict).size, s).toFixed(0))
 										),
 										__publicField(
 											this,
@@ -31831,7 +31831,7 @@
 				const createDeepLinkPath = (s) =>
 						'string' == typeof s || s instanceof String ? s.trim().replace(/\s/g, '%20') : '',
 					escapeDeepLinkPath = (s) => Et()(createDeepLinkPath(s).replace(/%20/g, '_')),
-					getExtensions = (s) => s.filter((s, o) => /^x-/.test(o)),
+					getExtensions = (s) => s.filter((s, o) => o.startsWith('x-')),
 					getCommonExtensions = (s) =>
 						s.filter((s, o) => /^pattern|maxLength|minLength|maximum|minimum/.test(o));
 				function deeplyStripKey(s, o, i = () => !0) {
@@ -33554,9 +33554,9 @@
 					Lr =
 						/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F-\x84\x86-\x9F\uFFFE\uFFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF]/,
 					Br = /[\x85\u2028\u2029]/,
-					Fr = /[,\[\]\{\}]/,
-					qr = /^(?:!|!!|![a-z\-]+!)$/i,
-					$r = /^(?:!|[^,\[\]\{\}])(?:%[0-9a-f]{2}|[0-9a-z\-#;\/\?:@&=\+\$,_\.!~\*'\(\)\[\]])*$/i;
+					Fr = /[,[\]{}]/,
+					qr = /^(?:!|!!|![a-z-]+!)$/i,
+					$r = /^(?:!|[^,[\]{}])(?:%[0-9a-f]{2}|[0-9a-z\-#;/?:@&=+$,_.!~*'()[\]])*$/i;
 				function _class(s) {
 					return Object.prototype.toString.call(s);
 				}
@@ -35704,7 +35704,7 @@
 						return s.indexOf(o) < 0 ? s : s.split(o)[0].trim();
 					},
 					escapeShell = (s) =>
-						'-d ' === s || /^[_\/-]/g.test(s) ? s : "'" + s.replace(/'/g, "'\\''") + "'",
+						'-d ' === s || /^[_/-]/g.test(s) ? s : "'" + s.replace(/'/g, "'\\''") + "'",
 					escapeCMD = (s) =>
 						'-d ' ===
 						(s = s
@@ -35713,7 +35713,7 @@
 							.replace(/"/g, '""')
 							.replace(/\n/g, '^\n'))
 							? s.replace(/-d /g, '-d ^\n')
-							: /^[_\/-]/g.test(s)
+							: /^[_/-]/g.test(s)
 								? s
 								: '"' + s + '"',
 					escapePowershell = (s) => {
@@ -35721,7 +35721,7 @@
 						if (/\n/.test(s)) {
 							return `@"\n${s.replace(/`/g, '``').replace(/\$/g, '`$')}\n"@`;
 						}
-						if (!/^[_\/-]/.test(s)) {
+						if (!/^[_/-]/.test(s)) {
 							return `'${s.replace(/'/g, "''")}'`;
 						}
 						return s;
@@ -37441,9 +37441,7 @@
 							{ className: 'json-schema-array' },
 							L
 								? j.map((o, i) => {
-										const x = (0, qe.fromJS)([
-											...u.filter((s) => s.index === i).map((s) => s.error)
-										]);
+										const x = (0, qe.fromJS)(u.filter((s) => s.index === i).map((s) => s.error));
 										return Pe.createElement(
 											'div',
 											{ key: i, className: 'json-schema-form-item' },
@@ -45187,7 +45185,7 @@
 						const o = ((...s) => {
 							var o;
 							const i = new Set(),
-								u = new Set([...s]);
+								u = new Set(s);
 							for (; u.size > 0; )
 								for (let s of u) {
 									const _ = protoChain(s.prototype).map((s) => s.constructor),
@@ -54119,7 +54117,7 @@
 							: encodeURIComponent(s).replace(/%5B/g, '[').replace(/%5D/g, ']'),
 					RS = ['literals', 'server-variable-name'],
 					es_substitute = (s, o, i = {}) => {
-						const u = { ...{ encoder: encodeServerVariable }, ...i },
+						const u = {  encoder: encodeServerVariable, ...i },
 							_ = openapi_server_url_templating_es_parse(s);
 						if (!_.result.success) return s;
 						const w = [];
@@ -54447,7 +54445,7 @@
 						'template-expression-param-name'
 					],
 					openapi_path_templating_es_resolve = (s, o, i = {}) => {
-						const u = { ...{ encoder: encodePathComponent }, ...i },
+						const u = {  encoder: encodePathComponent, ...i },
 							_ = openapi_path_templating_es_parse(s);
 						if (!_.result.success) return s;
 						const w = [];
@@ -61740,7 +61738,7 @@
 						s
 					);
 				}
-				var nC = /\\([\\!"#$%&'()*+,.\/:;<=>?@[\]^_`{|}~-])/g;
+				var nC = /\\([\\!"#$%&'()*+,./:;<=>?@[\]^_`{|}~-])/g;
 				function unescapeMd(s) {
 					return s.indexOf('\\') < 0 ? s : s.replace(nC, '$1');
 				}
@@ -62311,7 +62309,7 @@
 					});
 				var pC = ' \n()[]\'".,!?-';
 				function regEscape(s) {
-					return s.replace(/([-()\[\]{}+?*.$\^|,:#<!\\])/g, '\\$1');
+					return s.replace(/([-()[\]{}+?*.$^|,:#<!\\])/g, '\\$1');
 				}
 				var hC = /\+-|\.\.|\?\?\?\?|!!!!|,,|--/,
 					dC = /\((c|tm|r|p)\)/gi,
@@ -62325,7 +62323,7 @@
 				}
 				var mC = /['"]/,
 					gC = /['"]/g,
-					yC = /[-\s()\[\]]/;
+					yC = /[-\s()[\]]/;
 				function isLetter(s, o) {
 					return !(o < 0 || o >= s.length) && !yC.test(s[o]);
 				}
@@ -62797,7 +62795,7 @@
 				].forEach(function (s) {
 					bC[s] = !0;
 				});
-				var _C = /^<([a-zA-Z]{1,15})[\s\/>]/,
+				var _C = /^<([a-zA-Z]{1,15})[\s/>]/,
 					EC = /^<\/([a-zA-Z]{1,15})[\s>]/;
 				function index_browser_getLine(s, o) {
 					var i = s.bMarks[o] + s.blkIndent,
@@ -63571,8 +63569,8 @@
 				'\\!"#$%&\'()*+,./:;<=>?@[]^_`{|}~-'.split('').forEach(function (s) {
 					CC[s.charCodeAt(0)] = 1;
 				});
-				var AC = /\\([ \\!"#$%&'()*+,.\/:;<=>?@[\]^_`{|}~-])/g;
-				var jC = /\\([ \\!"#$%&'()*+,.\/:;<=>?@[\]^_`{|}~-])/g;
+				var AC = /\\([ \\!"#$%&'()*+,./:;<=>?@[\]^_`{|}~-])/g;
+				var jC = /\\([ \\!"#$%&'()*+,./:;<=>?@[\]^_`{|}~-])/g;
 				var IC = [
 						'coap',
 						'doi',
@@ -63740,8 +63738,8 @@
 						'ymsgr'
 					],
 					PC =
-						/^<([a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*)>/,
-					MC = /^<([a-zA-Z.\-]{1,25}):([^<>\x00-\x20]*)>/;
+						/^<([a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*)>/,
+					MC = /^<([a-zA-Z.-]{1,25}):([^<>\x00-\x20]*)>/;
 				function replace$1(s, o) {
 					return (
 						(s = s.source),
@@ -64782,7 +64780,7 @@
 													);
 												})(s);
 											if (x.query) {
-												var C = x.query.match(/^(.*?)(?=(\?|\#))(.*?)$/i);
+												var C = x.query.match(/^(.*?)(?=(\?|#))(.*?)$/i);
 												C && ((x.query = x.query.substr(0, C[1].length)), (s = buildUrl(x)));
 											}
 											if (s.length <= o) return s;
@@ -65460,7 +65458,7 @@
 											if (U > 0 && '@' === Y) return 'continue';
 											if (U > 0 && z && j.wordCharRegExp.test(Y)) return 'continue';
 											if (
-												(/\?$/.test(i) && (i = i.substr(0, i.length - 1)),
+												(i.endsWith('?') && (i = i.substr(0, i.length - 1)),
 												j.matchHasUnbalancedClosingParen(i))
 											)
 												i = i.substr(0, i.length - 1);
@@ -65525,7 +65523,7 @@
 									? -1
 									: ((i += u[1].length),
 										(s = s.slice(u[1].length)),
-										/^[^-.A-Za-z0-9:\/?#]/.test(s) ? i : -1);
+										/^[^-.A-Za-z0-9:/?#]/.test(s) ? i : -1);
 							}),
 							UrlMatcher
 						);
@@ -66235,7 +66233,7 @@
 						);
 					})();
 				const NO = TO;
-				var RO = /www|@|\:\/\//;
+				var RO = /www|@|:\/\//;
 				function isLinkOpen(s) {
 					return /^<a[>\s]/i.test(s);
 				}

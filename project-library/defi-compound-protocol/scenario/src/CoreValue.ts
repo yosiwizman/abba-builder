@@ -313,7 +313,7 @@ const fetchers = [
       #### Hex
 
       * "Hex <HexVal>" - Returns a byte string with given hex value
-        * E.g. "Hex \"0xffff\""
+        * E.g. "Hex "0xffff""
     `,
     'Hex',
     [new Arg('hexVal', getEventV)],
@@ -808,7 +808,7 @@ const fetchers = [
         #### EncodeParameters
 
         * "EncodeParameters (...argTypes:<String>) (...args:<Anything>)
-          * E.g. "EncodeParameters (\"address\" \"address\") (\"0xabc\" \"0x123\")
+          * E.g. "EncodeParameters ("address" "address") ("0xabc" "0x123")
       `,
       'EncodeParameters',
       [

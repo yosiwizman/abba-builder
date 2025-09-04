@@ -238,7 +238,7 @@ class GitHubAPIService {
   async importRepositoryAsTemplate(repoUrl: string): Promise<any> {
     try {
       // Parse the GitHub URL
-      const match = repoUrl.match(/github\.com\/([^\/]+)\/([^\/]+)/);
+      const match = repoUrl.match(/github\.com\/([^/]+)\/([^/]+)/);
       if (!match) {
         throw new Error('Invalid GitHub repository URL');
       }

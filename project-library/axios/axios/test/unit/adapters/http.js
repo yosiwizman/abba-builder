@@ -951,7 +951,7 @@ describe('supports http with nodejs', function () {
         );
         assert.fail('expected ENOENT error');
       } catch (err) {
-        assert.equal(err.message, `ENOENT: no such file or directory, open \'${notExitPath}\'`);
+        assert.equal(err.message, `ENOENT: no such file or directory, open '${notExitPath}'`);
       }
     });
 

@@ -53,7 +53,7 @@ export class DyadOrchestrator {
     
     if (!resolvedApiKey) {
       console.warn('⚠️ No Claude API key found. Will use fallback mode.');
-//       console.log('💡 Set ANTHROPIC_API_KEY or CLAUDE_API_KEY environment variable to enable Claude AI.');
+       console.log('💡 Set ANTHROPIC_API_KEY or CLAUDE_API_KEY environment variable to enable Claude AI.');
     }
     
     this.claude = new ClaudeOpusService({ 
@@ -79,7 +79,7 @@ export class DyadOrchestrator {
   async initialize(): Promise<void> {
     if (this.initialized) return;
     
-//     console.log('🚀 Initializing Enhanced Orchestrator...');
+     console.log('🚀 Initializing Enhanced Orchestrator...');
     
     try {
       // Advanced stacks are optional and disabled in the minimal orchestrator to ensure reliability
@@ -96,7 +96,7 @@ export class DyadOrchestrator {
       }
       
       this.initialized = true;
-//       console.log('✅ Orchestrator initialized successfully');
+       console.log('✅ Orchestrator initialized successfully');
     } catch (error) {
       console.error('❌ Failed to initialize orchestrator:', error);
       throw error;
@@ -117,7 +117,7 @@ export class DyadOrchestrator {
     });
     
     try {
-//       console.log('\n📋 Processing request:', request.request.substring(0, 100) + '...');
+       console.log('\n📋 Processing request:', request.request.substring(0, 100) + '...');
       
       // Direct generation (never-fail stack disabled in minimal orchestrator)
       return await this.directGeneration(request, metricsId);
@@ -136,7 +136,7 @@ export class DyadOrchestrator {
       return await this.minimalFallback(request);
     } finally {
       const duration = Date.now() - startTime;
-//       console.log(`⏱️ Generation completed in ${duration}ms`);
+       console.log(`⏱️ Generation completed in ${duration}ms`);
     }
   }
   
@@ -151,21 +151,21 @@ export class DyadOrchestrator {
     const projectPath = request.projectPath || process.cwd();
     
     // Step 1: Aggregate context
-//     console.log('📊 Aggregating project context...');
+     console.log('📊 Aggregating project context...');
     const context = await this.contextManager.aggregateProjectContext(
       projectPath,
       request.request
     );
-//     console.log(`📝 Context aggregated: ${context.totalTokens} tokens from ${context.totalFiles} files`);
+     console.log(`📝 Context aggregated: ${context.totalTokens} tokens from ${context.totalFiles} files`);
     
     // Step 2: Multi-stage generation with Claude
-//     console.log('🤖 Attempting Claude API call (multi-stage)...');
+     console.log('🤖 Attempting Claude API call (multi-stage)...');
     const generation = await this.claude.generateWithThinking(
       request.request,
       context,
       ['analyze', 'plan', 'implement', 'optimize']
     );
-//     console.log(`⚡ Result type: ${generation.generationType || 'unknown'} | Model: ${generation.modelUsed || 'n/a'} | Tokens: ${generation.usage?.total_tokens ?? 'n/a'}`);
+     console.log(`⚡ Result type: ${generation.generationType || 'unknown'} | Model: ${generation.modelUsed || 'n/a'} | Tokens: ${generation.usage?.total_tokens ?? 'n/a'}`);
     
     if (!generation.success) {
       throw new Error(generation.error || 'Generation failed');
@@ -175,7 +175,7 @@ export class DyadOrchestrator {
     const code = this.extractCode(generation.content);
     
     // Step 4: Validate code
-//     console.log('✅ Validating generated code...');
+     console.log('✅ Validating generated code...');
     const validation = await this.pythonBridge.validateCode(
       code,
       this.detectLanguage(code)
@@ -191,7 +191,7 @@ export class DyadOrchestrator {
     
     // Step 6: Refine if needed
     if (!validation.success || (testResults && !testResults.success)) {
-//       console.log('🔧 Refining code...');
+       console.log('🔧 Refining code...');
       const refinedResult = await this.refineCode(
         code,
         validation,
@@ -212,7 +212,7 @@ export class DyadOrchestrator {
     }
     
     // Success!
-//     console.log('📊 Recording metrics for successful generation...');
+     console.log('📊 Recording metrics for successful generation...');
     this.metrics.completeGeneration(metricsId, true, {
       generationType: generation.generationType || 'real_claude',
       modelUsed: generation.modelUsed,
@@ -299,7 +299,7 @@ Provide the complete fixed code.`;
    * Enhanced fallback using project library templates
    */
   private async minimalFallback(request: GenerationRequest): Promise<GenerationResult> {
-//     console.log('🔄 Creating enhanced fallback from project library...');
+     console.log('🔄 Creating enhanced fallback from project library...');
     
     try {
       // Try to find a matching template from project library
@@ -343,7 +343,7 @@ Provide the complete fixed code.`;
         
         // If we found a match, use it as template
         if (bestMatch && bestScore > 0) {
-//           console.log(`📦 Using project template: ${bestMatch} (score: ${bestScore})`);
+           console.log(`📦 Using project template: ${bestMatch} (score: ${bestScore})`);
           
           // Read the main file from the template
           const possibleEntryPoints = ['src/index.tsx', 'src/App.tsx', 'index.html', 'src/main.ts', 'app.js'];
@@ -419,7 +419,7 @@ Provide the complete fixed code.`;
         </div>
     </div>
     <script>
-//         console.log('App initialized');
+         console.log('App initialized');
         // Add your JavaScript here
     </script>
 </body>
@@ -497,7 +497,7 @@ function App() {
   
   useEffect(() => {
     // Component mounted
-//     console.log('App component mounted');
+     console.log('App component mounted');
   }, []);
   
   const handleAction = async () => {
