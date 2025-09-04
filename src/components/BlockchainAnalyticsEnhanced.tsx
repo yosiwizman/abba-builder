@@ -202,6 +202,7 @@ export const BlockchainAnalyticsEnhanced: React.FC = () => {
       });
       if (result?.success) {
         setWhaleTransactions(result.data);
+      }
     } catch (err) {
       console.error('Failed to fetch whale transactions:', err);
     }
