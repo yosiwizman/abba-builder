@@ -107,7 +107,7 @@ export class NgPlural {
 export class NgPluralCase {
   constructor(
     @Attribute('ngPluralCase') public value: string,
-    template: TemplateRef<Object>,
+    template: TemplateRef<object>,
     viewContainer: ViewContainerRef,
     @Host() ngPlural: NgPlural,
   ) {

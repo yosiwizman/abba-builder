@@ -82,7 +82,7 @@ export interface RouterOutletContract {
   isActivated: boolean;
 
   /** The instance of the activated component or `null` if the outlet is not activated. */
-  component: Object | null;
+  component: object | null;
 
   /**
    * The `Data` of the `ActivatedRoute` snapshot.
@@ -312,7 +312,7 @@ export class RouterOutlet implements OnDestroy, OnInit, RouterOutletContract {
    * @returns The currently activated component instance.
    * @throws An error if the outlet is not activated.
    */
-  get component(): Object {
+  get component(): object {
     if (!this.activated)
       throw new RuntimeError(
         RuntimeErrorCode.OUTLET_NOT_ACTIVATED,

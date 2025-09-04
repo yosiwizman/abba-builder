@@ -1307,13 +1307,13 @@ describe('parser', () => {
 
       it('should retain // in complex strings', () => {
         checkInterpolation(
-          `{{"//a\'//b\`//c\`//d\'//e" //comment}}`,
-          `{{ "//a\'//b\`//c\`//d\'//e" }}`,
+          `{{"//a'//b\`//c\`//d'//e" //comment}}`,
+          `{{ "//a'//b\`//c\`//d'//e" }}`,
         );
       });
 
       it('should retain // in nested, unterminated strings', () => {
-        checkInterpolation(`{{ "a\'b\`" //comment}}`, `{{ "a\'b\`" }}`);
+        checkInterpolation(`{{ "a'b\`" //comment}}`, `{{ "a'b\`" }}`);
       });
 
       it('should ignore quotes inside a comment', () => {

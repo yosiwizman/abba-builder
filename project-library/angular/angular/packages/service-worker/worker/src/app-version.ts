@@ -308,7 +308,7 @@ export class AppVersion implements UpdateSource {
   /**
    * Get the opaque application data which was provided with the manifest.
    */
-  get appData(): Object | null {
+  get appData(): object | null {
     return this.manifest.appData || null;
   }
 

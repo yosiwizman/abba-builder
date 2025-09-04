@@ -1344,7 +1344,7 @@ describe('template-driven forms integration tests', () => {
       expect(form.value).toEqual({});
 
       let formValidity: string = undefined!;
-      let formValue: Object = undefined!;
+      let formValue: object = undefined!;
 
       form.statusChanges!.subscribe((status: string) => (formValidity = status));
       form.valueChanges!.subscribe((value: string) => (formValue = value));

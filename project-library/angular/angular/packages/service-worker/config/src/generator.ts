@@ -29,7 +29,7 @@ export class Generator {
     private baseHref: string,
   ) {}
 
-  async process(config: Config): Promise<Object> {
+  async process(config: Config): Promise<object> {
     const unorderedHashTable = {};
     const assetGroups = await this.processAssetGroups(config, unorderedHashTable);
 
@@ -52,7 +52,7 @@ export class Generator {
   private async processAssetGroups(
     config: Config,
     hashTable: {[file: string]: string | undefined},
-  ): Promise<Object[]> {
+  ): Promise<object[]> {
     // Retrieve all files of the build.
     const allFiles = await this.fs.list('/');
     const seenMap = new Set<string>();
@@ -97,7 +97,7 @@ export class Generator {
     }));
   }
 
-  private processDataGroups(config: Config): Object[] {
+  private processDataGroups(config: Config): object[] {
     return (config.dataGroups || []).map((group) => {
       return {
         name: group.name,

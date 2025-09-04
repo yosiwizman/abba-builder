@@ -25,7 +25,7 @@ import {NgtscTestEnvironment} from './env';
 
 const trim = (input: string): string => input.replace(/\s+/g, ' ').trim();
 
-const varRegExp = (name: string): RegExp => new RegExp(`const \\w+ = \\[\"${name}\"\\];`);
+const varRegExp = (name: string): RegExp => new RegExp(`const \\w+ = \\["${name}"\\];`);
 
 const viewQueryRegExp = (predicate: string, flags: number, ref?: string): RegExp => {
   const maybeRef = ref ? `, ${ref}` : ``;

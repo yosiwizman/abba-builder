@@ -71,7 +71,7 @@ export class Animation {
     config?: Partial<AnimationConfig>,
   ) {
     this.renderer = injector.get(RendererFactory2).createRenderer(null, null);
-    this.config = {...DEFAULT_CONFIG, ...(config || {})};
+    this.config = {...DEFAULT_CONFIG, ...config};
 
     // Set layer elements in the objects map.
     this.allObjects = new Map(layers.map((f) => [f.id(), f.elementRef.nativeElement]));

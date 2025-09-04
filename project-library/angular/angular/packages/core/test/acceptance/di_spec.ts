@@ -1149,7 +1149,7 @@ describe('di', () => {
 
       TestBed.configureTestingModule({declarations: [DirectiveA, DirectiveB, MyComp]});
       expect(() => TestBed.createComponent(MyComp)).toThrowError(
-        /NG0201\: No provider found for `DirectiveB`/,
+        /NG0201: No provider found for `DirectiveB`/,
       );
     });
 
@@ -2200,7 +2200,7 @@ describe('di', () => {
             TestBed.configureTestingModule({declarations: [MyComp]});
 
             expect(() => TestBed.createComponent(MyComp)).toThrowError(
-              /NG0201\: No provider found for `ViewContainerRef`/,
+              /NG0201: No provider found for `ViewContainerRef`/,
             );
           });
         });
@@ -2299,7 +2299,7 @@ describe('di', () => {
             });
 
             expect(() => TestBed.createComponent(MyComponent)).toThrowError(
-              /NG0201\: No provider found for `ChangeDetectorRef`/,
+              /NG0201: No provider found for `ChangeDetectorRef`/,
             );
           });
 
@@ -2357,9 +2357,9 @@ describe('di', () => {
             })
             class Child {
               constructor(
-                @Inject('Blah') public blah: String,
-                @Inject('Foo') public foo: String,
-                @SkipSelf() @Inject('Bar') public bar: String,
+                @Inject('Blah') public blah: string,
+                @Inject('Foo') public foo: string,
+                @SkipSelf() @Inject('Bar') public bar: string,
               ) {}
             }
 
@@ -2409,9 +2409,9 @@ describe('di', () => {
             })
             class Child {
               constructor(
-                @Inject('Blah') public blah: String,
-                @Inject('Foo') public foo: String,
-                @SkipSelf() @Inject('Bar') public bar: String,
+                @Inject('Blah') public blah: string,
+                @Inject('Foo') public foo: string,
+                @SkipSelf() @Inject('Bar') public bar: string,
               ) {}
             }
 
@@ -2437,7 +2437,7 @@ describe('di', () => {
             TestBed.configureTestingModule({declarations: [Child, Parent, MyApp]});
 
             expect(() => TestBed.createComponent(MyApp)).toThrowError(
-              /NG0201\: No provider found for `Bar`/,
+              /NG0201: No provider found for `Bar`/,
             );
           });
 
@@ -2454,9 +2454,9 @@ describe('di', () => {
             })
             class Child {
               constructor(
-                @Inject('Blah') public blah: String,
-                @Inject('Foo') public foo: String,
-                @SkipSelf() @Optional() @Inject('Bar') public bar: String,
+                @Inject('Blah') public blah: string,
+                @Inject('Foo') public foo: string,
+                @SkipSelf() @Optional() @Inject('Bar') public bar: string,
               ) {}
             }
 
@@ -2482,7 +2482,7 @@ describe('di', () => {
             TestBed.configureTestingModule({declarations: [Child, Parent, MyApp]});
 
             expect(() => TestBed.createComponent(MyApp)).not.toThrowError(
-              /NG0201\: No provider found for `Bar`/,
+              /NG0201: No provider found for `Bar`/,
             );
           });
         });
@@ -2502,7 +2502,7 @@ describe('di', () => {
           standalone: false,
         })
         class DirectiveString {
-          constructor(@Host() public s: String) {}
+          constructor(@Host() public s: string) {}
         }
 
         it('should find viewProviders on the host itself', () => {
@@ -5632,7 +5632,7 @@ describe('di', () => {
 
     TestBed.configureTestingModule({declarations: [App]});
     expect(() => TestBed.createComponent(App)).toThrowError(
-      /NG0201\: No provider found for `ViewRef`/,
+      /NG0201: No provider found for `ViewRef`/,
     );
   });
 

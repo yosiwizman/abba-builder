@@ -219,7 +219,7 @@ function runCanActivateChild(
 }
 
 function runCanDeactivate(
-  component: Object | null,
+  component: object | null,
   currARS: ActivatedRouteSnapshot,
   currRSS: RouterStateSnapshot,
   futureRSS: RouterStateSnapshot,

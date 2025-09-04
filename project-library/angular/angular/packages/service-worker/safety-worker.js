@@ -23,7 +23,7 @@ self.addEventListener('activate', (event) => {
 
   event.waitUntil(
     caches.keys().then((cacheNames) => {
-      const ngswCacheNames = cacheNames.filter((name) => /^ngsw:/.test(name));
+      const ngswCacheNames = cacheNames.filter((name) => name.startsWith('ngsw:'));
       return Promise.all(ngswCacheNames.map((name) => caches.delete(name)));
     }),
   );

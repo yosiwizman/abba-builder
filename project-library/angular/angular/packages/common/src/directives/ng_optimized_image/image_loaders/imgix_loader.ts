@@ -18,7 +18,7 @@ export const imgixLoaderInfo: ImageLoaderInfo = {
   testUrl: isImgixUrl,
 };
 
-const IMGIX_LOADER_REGEX = /https?\:\/\/[^\/]+\.imgix\.net\/.+/;
+const IMGIX_LOADER_REGEX = /https?:\/\/[^/]+\.imgix\.net\/.+/;
 /**
  * Tests whether a URL is from Imgix CDN.
  */

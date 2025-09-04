@@ -187,9 +187,9 @@ class NeedsAttribute {
   titleAttribute: any;
   fooAttribute: any;
   constructor(
-    @Attribute('type') typeAttribute: String,
-    @Attribute('title') titleAttribute: String,
-    @Attribute('foo') fooAttribute: String,
+    @Attribute('type') typeAttribute: string,
+    @Attribute('title') titleAttribute: string,
+    @Attribute('foo') fooAttribute: string,
   ) {
     this.typeAttribute = typeAttribute;
     this.titleAttribute = titleAttribute;
@@ -226,7 +226,7 @@ class NeedsViewContainerRef {
   standalone: false,
 })
 class NeedsTemplateRef {
-  constructor(public templateRef: TemplateRef<Object>) {}
+  constructor(public templateRef: TemplateRef<object>) {}
 }
 
 @Directive({
@@ -234,7 +234,7 @@ class NeedsTemplateRef {
   standalone: false,
 })
 class OptionallyNeedsTemplateRef {
-  constructor(@Optional() public templateRef: TemplateRef<Object>) {}
+  constructor(@Optional() public templateRef: TemplateRef<object>) {}
 }
 
 @Directive({

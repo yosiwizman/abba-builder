@@ -107,7 +107,7 @@ export interface DebugState {
 
 export interface DebugVersion {
   hash: string;
-  manifest: Object;
+  manifest: object;
   clients: string[];
   status: string;
 }

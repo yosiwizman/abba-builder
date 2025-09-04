@@ -284,7 +284,7 @@ export function getInherited(
     inherited = {
       params: {...route.params},
       data: {...route.data},
-      resolve: {...route.data, ...(route._resolvedData ?? {})},
+      resolve: {...route.data, ...route._resolvedData},
     };
   }
 

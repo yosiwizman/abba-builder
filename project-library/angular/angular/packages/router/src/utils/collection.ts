@@ -41,7 +41,7 @@ export function shallowEqual(
 /**
  * Gets the keys of an object, including `symbol` keys.
  */
-export function getDataKeys(obj: Object): Array<string | symbol> {
+export function getDataKeys(obj: object): Array<string | symbol> {
   return [...Object.keys(obj), ...Object.getOwnPropertySymbols(obj)];
 }
 

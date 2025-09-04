@@ -12,17 +12,21 @@ import { eq } from "drizzle-orm";
 import { GithubUser } from "../../lib/schemas";
 import log from "electron-log";
 import { IS_TEST_BUILD } from "../utils/test_utils";
+import { getGitHubOAuthConfig, getGitHubToken } from "../../config/secrets";
 
 const logger = log.scope("github_handlers");
 
 // --- GitHub Device Flow Constants ---
-// GitHub client ID - use environment variable or fallback for development
-const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID || "Ov23licV8gG1BhPJX3gE"; // Public OAuth App ID for development
+// Pull GitHub OAuth config from secrets module
+const githubOAuthConfig = getGitHubOAuthConfig();
+const GITHUB_CLIENT_ID = githubOAuthConfig.clientId || "Ov23licV8gG1BhPJX3gE"; // Fallback for development if not configured
+const GITHUB_CLIENT_SECRET = githubOAuthConfig.clientSecret;
 
-if (!GITHUB_CLIENT_ID && !IS_TEST_BUILD) {
-  logger.error("GITHUB_CLIENT_ID environment variable is not set. GitHub integration will not work.");
-} else if (GITHUB_CLIENT_ID) {
-  logger.info("GitHub OAuth configured");
+if (!githubOAuthConfig.available && !IS_TEST_BUILD) {
+  logger.warn("GitHub OAuth not configured. GitHub login will be disabled.");
+  logger.info("To enable GitHub integration, set GITHUB_CLIENT_ID and GITHUB_CLIENT_SECRET in your .env file");
+} else if (githubOAuthConfig.available || GITHUB_CLIENT_ID) {
+  logger.info("GitHub OAuth configured and ready");
 }
 
 // Use test server URLs when in test mode
@@ -118,6 +122,7 @@ async function pollForAccessToken(event: IpcMainInvokeEvent) {
       },
       body: JSON.stringify({
         client_id: GITHUB_CLIENT_ID,
+        client_secret: GITHUB_CLIENT_SECRET, // Include secret for better security
         device_code: deviceCode,
         grant_type: "urn:ietf:params:oauth:grant-type:device_code",
       }),
@@ -222,6 +227,15 @@ function handleStartGithubFlow(
   args: { appId: number | null },
 ) {
   logger.debug(`Received github:start-flow for appId: ${args.appId}`);
+  
+  // Check if GitHub OAuth is configured
+  if (!githubOAuthConfig.available) {
+    logger.error("GitHub OAuth not configured - cannot start flow");
+    event.sender.send("github:flow-error", {
+      error: "GitHub integration is not configured. Please contact your administrator.",
+    });
+    return;
+  }
 
   // If a flow is already in progress, maybe cancel it or send an error
   if (currentFlowState && currentFlowState.isPolling) {
@@ -725,7 +739,27 @@ async function handleFetchIssues(
   }
 }
 
+/**
+ * Check if GitHub OAuth is available
+ */
+async function handleGetGithubOAuthStatus(
+  event: IpcMainInvokeEvent,
+): Promise<{ available: boolean; message: string }> {
+  if (githubOAuthConfig.available) {
+    return { 
+      available: true, 
+      message: "GitHub OAuth is configured and ready"
+    };
+  } else {
+    return { 
+      available: false, 
+      message: "GitHub OAuth is not configured. Set GITHUB_CLIENT_ID and GITHUB_CLIENT_SECRET to enable."
+    };
+  }
+}
+
 export function registerGithubHandlers() {
+  ipcMain.handle("github:oauth-status", handleGetGithubOAuthStatus);
   ipcMain.handle("github:start-flow", handleStartGithubFlow);
   ipcMain.handle("github:list-repos", handleListGithubRepos);
   ipcMain.handle(

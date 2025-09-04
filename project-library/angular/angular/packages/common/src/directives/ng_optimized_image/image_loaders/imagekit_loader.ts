@@ -18,7 +18,7 @@ export const imageKitLoaderInfo: ImageLoaderInfo = {
   testUrl: isImageKitUrl,
 };
 
-const IMAGE_KIT_LOADER_REGEX = /https?\:\/\/[^\/]+\.imagekit\.io\/.+/;
+const IMAGE_KIT_LOADER_REGEX = /https?:\/\/[^/]+\.imagekit\.io\/.+/;
 /**
  * Tests whether a URL is from ImageKit CDN.
  */

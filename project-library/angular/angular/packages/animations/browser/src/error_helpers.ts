@@ -244,7 +244,7 @@ export function missingTrigger(phase: string, name: string): Error {
   return new RuntimeError(
     RuntimeErrorCode.MISSING_TRIGGER,
     ngDevMode &&
-      `Unable to listen on the animation trigger event "${phase}" because the animation trigger "${name}" doesn\'t exist!`,
+      `Unable to listen on the animation trigger event "${phase}" because the animation trigger "${name}" doesn't exist!`,
   );
 }
 

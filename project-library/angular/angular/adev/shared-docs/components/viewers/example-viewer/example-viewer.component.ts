@@ -92,7 +92,7 @@ export class ExampleViewer {
     // Lazy load live example component
     if (this.exampleMetadata()?.path && this.exampleMetadata()?.preview) {
       this.exampleComponent = await this.exampleViewerContentLoader.loadPreview(
-        this.exampleMetadata()?.path!,
+        this.exampleMetadata()?.path,
       );
     }
 

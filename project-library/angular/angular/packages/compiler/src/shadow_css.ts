@@ -346,7 +346,7 @@ export class ShadowCss {
    * semicolon or the end of the string
    */
   private _animationDeclarationKeyframesRe =
-    /(^|\s+|,)(?:(?:(['"])((?:\\\\|\\\2|(?!\2).)+)\2)|(-?[A-Za-z][\w\-]*))(?=[,\s]|$)/g;
+    /(^|\s+|,)(?:(?:(['"])((?:\\\\|\\\2|(?!\2).)+)\2)|(-?[A-Za-z][\w-]*))(?=[,\s]|$)/g;
 
   /**
    * Scope an animation rule so that the keyframes mentioned in such rule
@@ -773,7 +773,7 @@ export class ShadowCss {
       while (result.match(_polyfillHostNoCombinatorRe)) {
         result = result.replace(_polyfillHostNoCombinatorRe, (_hnc, selector) => {
           return selector.replace(
-            /([^:\)]*)(:*)(.*)/,
+            /([^:)]*)(:*)(.*)/,
             (_: string, before: string, colon: string, after: string) => {
               return before + replaceBy + colon + after;
             },

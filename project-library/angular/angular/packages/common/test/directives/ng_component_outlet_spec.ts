@@ -206,7 +206,7 @@ describe('insert/remove', () => {
     fixture.componentInstance.currentComponent = Module2InjectedComponent;
     fixture.detectChanges();
 
-    const moduleRef = fixture.componentInstance.ngComponentOutlet?.['_moduleRef']!;
+    const moduleRef = fixture.componentInstance.ngComponentOutlet?.['_moduleRef'];
     spyOn(moduleRef, 'destroy').and.callThrough();
 
     expect(moduleRef.destroy).not.toHaveBeenCalled();

@@ -28,7 +28,7 @@ export const getHeaderId = (heading: string): string => {
       .replace(/\s|\//g, '-') // remove spaces and slashes
       .replace(/gt;|lt;/g, '') // remove escaped < and >
       .replace(/&#\d+;/g, '') // remove HTML entities
-      .replace(/[^\p{L}\d\-]/gu, ''); // only keep letters, digits & dashes
+      .replace(/[^\p{L}\d-]/gu, ''); // only keep letters, digits & dashes
   }
 
   const headerId = numberOfHeaderOccurrencesInTheDocument

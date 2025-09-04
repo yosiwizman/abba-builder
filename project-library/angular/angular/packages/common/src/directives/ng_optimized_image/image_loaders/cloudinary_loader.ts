@@ -17,7 +17,7 @@ export const cloudinaryLoaderInfo: ImageLoaderInfo = {
   testUrl: isCloudinaryUrl,
 };
 
-const CLOUDINARY_LOADER_REGEX = /https?\:\/\/[^\/]+\.cloudinary\.com\/.+/;
+const CLOUDINARY_LOADER_REGEX = /https?:\/\/[^/]+\.cloudinary\.com\/.+/;
 /**
  * Tests whether a URL is from Cloudinary CDN.
  */

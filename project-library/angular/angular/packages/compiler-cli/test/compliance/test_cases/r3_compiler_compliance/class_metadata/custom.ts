@@ -6,6 +6,6 @@ export function CustomPropDecorator(): PropertyDecorator {
   return () => {};
 }
 
-export function CustomParamDecorator(): (target: Object, ...rest: any[]) => void {
+export function CustomParamDecorator(): (target: object, ...rest: any[]) => void {
   return () => {};
 }

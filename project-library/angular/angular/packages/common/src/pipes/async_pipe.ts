@@ -202,7 +202,7 @@ export class AsyncPipe implements OnDestroy, PipeTransform {
     this._strategy = this._selectStrategy(obj);
     this._subscription = this._strategy.createSubscription(
       obj,
-      (value: Object) => this._updateLatestValue(obj, value),
+      (value: object) => this._updateLatestValue(obj, value),
       (e) => this.applicationErrorHandler(e),
     );
   }
@@ -230,7 +230,7 @@ export class AsyncPipe implements OnDestroy, PipeTransform {
     this._obj = null;
   }
 
-  private _updateLatestValue(async: any, value: Object): void {
+  private _updateLatestValue(async: any, value: object): void {
     if (async === this._obj) {
       this._latestValue = value;
       if (this.markForCheckOnValueUpdate) {

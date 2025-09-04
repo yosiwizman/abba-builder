@@ -159,7 +159,7 @@ export interface BootstrapOptions {
 /** Maximum number of times ApplicationRef will refresh all attached views in a single tick. */
 const MAXIMUM_REFRESH_RERUNS = 10;
 
-export function optionsReducer<T extends Object>(dst: T, objs: T | T[]): T {
+export function optionsReducer<T extends object>(dst: T, objs: T | T[]): T {
   if (Array.isArray(objs)) {
     return objs.reduce(optionsReducer, dst);
   }

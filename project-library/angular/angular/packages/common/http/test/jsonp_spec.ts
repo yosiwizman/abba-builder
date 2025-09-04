@@ -26,7 +26,7 @@ describe('JsonpClientBackend', () => {
   let document: MockDocument;
   let backend: JsonpClientBackend;
 
-  function runOnlyCallback(home: any, data: Object) {
+  function runOnlyCallback(home: any, data: object) {
     const keys = Object.keys(home);
     expect(keys.length).toBe(1);
     const callback = home[keys[0]];

@@ -106,7 +106,7 @@ import {take} from 'rxjs/operators';
       mock.messages.subscribe((msg) => {
         scope.handleMessage(msg, 'default');
       });
-      mock.notificationClicks.subscribe((msg: Object) => {
+      mock.notificationClicks.subscribe((msg: object) => {
         scope.handleMessage(msg, 'default');
       });
 

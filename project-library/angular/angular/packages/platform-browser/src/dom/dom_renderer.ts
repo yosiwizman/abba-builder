@@ -148,7 +148,7 @@ export class DomRendererFactory2 implements RendererFactory2, OnDestroy {
     @Inject(APP_ID) private readonly appId: string,
     @Inject(REMOVE_STYLES_ON_COMPONENT_DESTROY) private removeStylesOnCompDestroy: boolean,
     @Inject(DOCUMENT) private readonly doc: Document,
-    @Inject(PLATFORM_ID) readonly platformId: Object,
+    @Inject(PLATFORM_ID) readonly platformId: object,
     readonly ngZone: NgZone,
     @Inject(CSP_NONCE) private readonly nonce: string | null = null,
     @Inject(ANIMATIONS_DISABLED) private readonly animationDisabled: boolean,

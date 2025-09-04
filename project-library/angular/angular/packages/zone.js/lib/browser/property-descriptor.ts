@@ -54,7 +54,7 @@ export function patchFilteredProperties(
  * Get all event name properties which the event name startsWith `on`
  * from the target object itself, inherited properties are not considered.
  */
-export function getOnEventNames(target: Object) {
+export function getOnEventNames(target: object) {
   return Object.getOwnPropertyNames(target)
     .filter((name) => name.startsWith('on') && name.length > 2)
     .map((name) => name.substring(2));

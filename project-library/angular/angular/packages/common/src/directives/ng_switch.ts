@@ -24,7 +24,7 @@ export class SwitchView {
 
   constructor(
     private _viewContainerRef: ViewContainerRef,
-    private _templateRef: TemplateRef<Object>,
+    private _templateRef: TemplateRef<object>,
   ) {}
 
   create(): void {
@@ -215,7 +215,7 @@ export class NgSwitchCase implements DoCheck {
 
   constructor(
     viewContainer: ViewContainerRef,
-    templateRef: TemplateRef<Object>,
+    templateRef: TemplateRef<object>,
     @Optional() @Host() private ngSwitch: NgSwitch,
   ) {
     if ((typeof ngDevMode === 'undefined' || ngDevMode) && !ngSwitch) {
@@ -257,7 +257,7 @@ export class NgSwitchCase implements DoCheck {
 export class NgSwitchDefault {
   constructor(
     viewContainer: ViewContainerRef,
-    templateRef: TemplateRef<Object>,
+    templateRef: TemplateRef<object>,
     @Optional() @Host() ngSwitch: NgSwitch,
   ) {
     if ((typeof ngDevMode === 'undefined' || ngDevMode) && !ngSwitch) {

@@ -133,7 +133,7 @@ export class InMemoryBackendConfig implements InMemoryBackendConfigArgs {
 export function parseUri(str: string): UriInfo {
   // Adapted from parseuri package - http://blog.stevenlevithan.com/archives/parseuri
   const URL_REGEX =
-    /^(?:(?![^:@]+:[^:@\/]*@)([^:\/?#.]+):)?(?:\/\/)?((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d*))?)(((\/(?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/;
+    /^(?:(?![^:@]+:[^:@/]*@)([^:/?#.]+):)?(?:\/\/)?((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:/?#]*)(?::(\d*))?)(((\/(?:[^?#](?![^?#/]*\.[^?#/.]+(?:[?#]|$)))*\/?)?([^?#/]*))(?:\?([^#]*))?(?:#(.*))?)/;
   const m = URL_REGEX.exec(str);
   const uri: UriInfo & {[key: string]: string} = {
     source: '',
@@ -274,7 +274,7 @@ export interface ResponseOptions {
   /**
    * String, Object, ArrayBuffer or Blob representing the body of the {@link Response}.
    */
-  body?: string | Object | ArrayBuffer | Blob;
+  body?: string | object | ArrayBuffer | Blob;
 
   /**
    * Response headers

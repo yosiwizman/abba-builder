@@ -14,7 +14,7 @@ const PP_ICU_VARS_REGEXP = /({\s*)(VAR_(PLURAL|SELECT)(_\d+)?)(\s*,)/g;
 const PP_ICU_PLACEHOLDERS_REGEXP = /{([A-Z0-9_]+)}/g;
 const PP_ICUS_REGEXP = /�I18N_EXP_(ICU(_\d+)?)�/g;
 const PP_CLOSE_TEMPLATE_REGEXP = /\/\*/;
-const PP_TEMPLATE_ID_REGEXP = /\d+\:(\d+)/;
+const PP_TEMPLATE_ID_REGEXP = /\d+:(\d+)/;
 
 // Parsed placeholder structure used in postprocessing (within `i18nPostprocess` function)
 // Contains the following fields: [templateId, isCloseTemplateTag, placeholder]

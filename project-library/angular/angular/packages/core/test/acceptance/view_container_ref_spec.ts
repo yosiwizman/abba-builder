@@ -1383,7 +1383,7 @@ describe('ViewContainerRef', () => {
         standalone: false,
       })
       class EmbeddedComponent implements DoCheck, OnInit {
-        constructor(public s: String) {}
+        constructor(public s: string) {}
 
         ngOnInit() {
           templateExecutionCounter++;

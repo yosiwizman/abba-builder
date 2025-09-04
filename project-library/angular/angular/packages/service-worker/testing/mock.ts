@@ -62,7 +62,7 @@ export class MockServiceWorkerContainer {
     this.onControllerChange.forEach((onChange) => onChange(this.controller));
   }
 
-  sendMessage(value: Object): void {
+  sendMessage(value: object): void {
     this.onMessage.forEach((onMessage) =>
       onMessage({
         data: value,
@@ -77,7 +77,7 @@ export class MockServiceWorker {
     readonly scriptURL: string,
   ) {}
 
-  postMessage(value: Object) {
+  postMessage(value: object) {
     this.mock.messages.next(value);
   }
 }

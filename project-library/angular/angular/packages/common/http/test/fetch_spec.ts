@@ -643,7 +643,7 @@ export class MockFetchFactory extends FetchFactory {
     }
     const response = new Response(this.response.stream, {
       statusText,
-      headers: {...this.response.headers, ...(headers ?? {})},
+      headers: {...this.response.headers, ...headers},
     });
 
     // Have to be set outside the constructor because it might throw

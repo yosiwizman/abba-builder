@@ -64,7 +64,7 @@ export const PLATFORM_INITIALIZER = new InjectionToken<ReadonlyArray<() => void>
  * A token that indicates an opaque platform ID.
  * @publicApi
  */
-export const PLATFORM_ID = new InjectionToken<Object>(ngDevMode ? 'Platform ID' : '', {
+export const PLATFORM_ID = new InjectionToken<object>(ngDevMode ? 'Platform ID' : '', {
   providedIn: 'platform',
   factory: () => 'unknown', // set a default platform name, when none set explicitly
 });

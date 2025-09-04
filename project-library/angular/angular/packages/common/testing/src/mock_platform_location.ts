@@ -37,7 +37,7 @@ import {FakeNavigation} from './navigation/fake_navigation';
  * $8 = #Related
  * $9 = Related
  */
-const urlParse = /^(([^:\/?#]+):)?(\/\/([^\/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?/;
+const urlParse = /^(([^:/?#]+):)?(\/\/([^/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?/;
 
 function parseUrl(urlStr: string, baseHref: string) {
   const verifyProtocol = /^((http[s]?|ftp):\/\/)/;

@@ -154,6 +154,6 @@ class Baz {
 
     interpolateCodeExamples(entries);
 
-    expect(getComment(entries)).toMatch(/^\`\`\`/m);
+    expect(getComment(entries)).toMatch(/^```/m);
   });
 });

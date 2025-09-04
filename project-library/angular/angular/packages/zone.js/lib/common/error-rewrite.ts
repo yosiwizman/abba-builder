@@ -230,7 +230,7 @@ export function patchError(Zone: ZoneType): void {
       Object.defineProperty(ZoneAwareError, 'captureStackTrace', {
         // add named function here because we need to remove this
         // stack frame when prepareStackTrace below
-        value: function zoneCaptureStackTrace(targetObject: Object, constructorOpt?: Function) {
+        value: function zoneCaptureStackTrace(targetObject: object, constructorOpt?: Function) {
           NativeError.captureStackTrace(targetObject, constructorOpt);
         },
       });

@@ -12,7 +12,7 @@ import {ExtendedTsCompilerHost, NgCompilerOptions} from '../ngtsc/core/api';
 
 export const DEFAULT_ERROR_CODE = 100;
 export const UNKNOWN_ERROR_CODE = 500;
-export const SOURCE = 'angular' as 'angular';
+export const SOURCE = 'angular' as const;
 
 export function isTsDiagnostic(diagnostic: any): diagnostic is ts.Diagnostic {
   return diagnostic != null && diagnostic.source !== 'angular';

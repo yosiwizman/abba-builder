@@ -35,7 +35,7 @@ import {XSS_SECURITY_URL} from '../error_details_base_url';
  *
  * This regular expression was taken from the Closure sanitization library.
  */
-const SAFE_URL_PATTERN = /^(?!javascript:)(?:[a-z0-9+.-]+:|[^&:\/?#]*(?:[\/?#]|$))/i;
+const SAFE_URL_PATTERN = /^(?!javascript:)(?:[a-z0-9+.-]+:|[^&:/?#]*(?:[/?#]|$))/i;
 export function _sanitizeUrl(url: string): string {
   url = String(url);
   if (url.match(SAFE_URL_PATTERN)) return url;

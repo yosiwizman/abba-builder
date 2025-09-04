@@ -2733,7 +2733,7 @@ async function makeRequest(
   scope: SwTestHarness,
   url: string,
   clientId = 'default',
-  init?: Object,
+  init?: object,
 ): Promise<string | null> {
   const [resPromise, done] = scope.handleFetch(new MockRequest(url, init), clientId);
   await done;
@@ -2749,7 +2749,7 @@ async function makeWorkerRequest(
   url: string,
   clientId = 'default',
   resultingClientId = 'worker',
-  init?: Object,
+  init?: object,
 ): Promise<string | null> {
   const [resPromise, done] = scope.handleFetch(
     new MockRequest(url, {...init, destination: 'worker'}),
@@ -2768,7 +2768,7 @@ function makeNavigationRequest(
   scope: SwTestHarness,
   url: string,
   clientId?: string,
-  init: Object = {},
+  init: object = {},
 ): Promise<string | null> {
   return makeRequest(scope, url, clientId, {
     headers: {

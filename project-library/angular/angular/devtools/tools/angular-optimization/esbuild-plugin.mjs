@@ -69,7 +69,7 @@ export async function createEsbuildAngularOptimizePlugin(opts, additionalBabelPl
         if (shouldRunLinker) {
           plugins.push(
             linkerCreator.babel.createEs2015LinkerPlugin({
-              ...(opts.enableLinker.linkerOptions ?? {}),
+              ...opts.enableLinker.linkerOptions,
               fileSystem: new linkerCreator.compiler.NodeJSFileSystem(),
               logger: new linkerCreator.compiler.ConsoleLogger(
                 linkerCreator.compiler.LogLevel.warn,

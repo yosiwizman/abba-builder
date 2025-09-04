@@ -1919,7 +1919,7 @@ class EmitterDirective {
 class Gh9882 implements AfterContentInit {
   constructor(
     private _viewContainer: ViewContainerRef,
-    private _templateRef: TemplateRef<Object>,
+    private _templateRef: TemplateRef<object>,
   ) {}
 
   ngAfterContentInit(): any {

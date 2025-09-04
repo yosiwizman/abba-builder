@@ -1045,7 +1045,7 @@ describe('providers', () => {
       selector: 'embedded-cmp',
     })
     class EmbeddedComponent {
-      constructor(private s: String) {}
+      constructor(private s: string) {}
     }
 
     @Component({
@@ -1125,7 +1125,7 @@ describe('providers', () => {
     it('the deps of a token declared in providers should not be resolved with tokens from viewProviders', () => {
       @Injectable()
       class MyService {
-        constructor(public value: String) {}
+        constructor(public value: string) {}
       }
 
       expectProvidersScenario({
@@ -1143,7 +1143,7 @@ describe('providers', () => {
     it('should make sure that parent service does not see overrides in child directives', () => {
       @Injectable()
       class Greeter {
-        constructor(public greeting: String) {}
+        constructor(public greeting: string) {}
       }
 
       expectProvidersScenario({
@@ -1181,12 +1181,12 @@ describe('providers', () => {
 
   describe('from a node without injector', () => {
     abstract class Some {
-      abstract location: String;
+      abstract location: string;
     }
 
     @Injectable()
     class SomeInj implements Some {
-      constructor(public location: String) {}
+      constructor(public location: string) {}
     }
 
     @Component({

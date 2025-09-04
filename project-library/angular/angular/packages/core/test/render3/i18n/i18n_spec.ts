@@ -607,7 +607,7 @@ describe('Runtime i18n', () => {
         matchDebug([
           `if (mask & 0b1) { (lView[${
             HEADER_OFFSET + 0
-          }] as Element).setAttribute('title', \`Hello \$\{lView[i-1]}!\`); }`,
+          }] as Element).setAttribute('title', \`Hello $\{lView[i-1]}!\`); }`,
         ]),
       );
     });
@@ -632,7 +632,7 @@ describe('Runtime i18n', () => {
         matchDebug([
           `if (mask & 0b11) { (lView[${
             HEADER_OFFSET + 0
-          }] as Element).setAttribute('title', \`Hello \$\{lView[i-1]} and \$\{lView[i-2]}, again \$\{lView[i-1]}!\`); }`,
+          }] as Element).setAttribute('title', \`Hello $\{lView[i-1]} and $\{lView[i-2]}, again $\{lView[i-1]}!\`); }`,
         ]),
       );
     });

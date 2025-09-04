@@ -136,7 +136,7 @@ export class HammerGestureConfig {
    * [HammerJS documentation](https://hammerjs.github.io/).
    *
    */
-  overrides: {[key: string]: Object} = {};
+  overrides: {[key: string]: object} = {};
 
   /**
    * Properties whose default values can be overridden for a given event.

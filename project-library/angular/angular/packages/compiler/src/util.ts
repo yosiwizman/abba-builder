@@ -40,7 +40,7 @@ export function error(msg: string): never {
 
 // Escape characters that have a special meaning in Regular Expressions
 export function escapeRegExp(s: string): string {
-  return s.replace(/([.*+?^=!:${}()|[\]\/\\])/g, '\\$1');
+  return s.replace(/([.*+?^=!:${}()|[\]/\\])/g, '\\$1');
 }
 
 export type Byte = number;

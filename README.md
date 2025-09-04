@@ -1,6 +1,7 @@
 # Abba - Production-Grade AI App Builder
 
 [![CI Status](https://github.com/dyad-sh/dyad/actions/workflows/ci.yml/badge.svg)](https://github.com/dyad-sh/dyad/actions)
+[![Coverage](https://img.shields.io/badge/coverage-80%25-green)](./coverage)
 [![Security Audit](https://img.shields.io/badge/security-audit-passing)](./TECHNICAL_AUDIT_REPORT.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 [![Node Version](https://img.shields.io/badge/node-%3E%3D20-green)](https://nodejs.org)
@@ -92,14 +93,18 @@ OLLAMA_HOST=http://127.0.0.1:11434
 # Run all tests
 npm test
 
-# Run with coverage
-npm test -- --coverage
+# Run with coverage (80% threshold)
+npm run test:coverage
 
 # Run E2E tests
 npm run e2e
 
 # Run specific test suite
 npm test -- ipc_handlers
+
+# Lint and typecheck
+npm run lint
+npm run typecheck
 ```
 
 ## 🚢 Deployment

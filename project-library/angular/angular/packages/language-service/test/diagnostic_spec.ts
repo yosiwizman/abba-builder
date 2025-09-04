@@ -403,7 +403,7 @@ describe('getSemanticDiagnostics', () => {
     const diags = project.getDiagnosticsForFile('app.ts');
     expect(diags.length).toEqual(0);
     expect(logger.perftrc).toHaveBeenCalledWith(
-      jasmine.stringMatching(/LanguageService\#LsDiagnostics\:.*\"LsDiagnostics\":\s*\d+.*/g),
+      jasmine.stringMatching(/LanguageService#LsDiagnostics:.*"LsDiagnostics":\s*\d+.*/g),
     );
   });
 

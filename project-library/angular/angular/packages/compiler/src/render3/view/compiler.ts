@@ -542,7 +542,7 @@ function createHostBindingsFunction(
   return emitHostBindingFunction(hostJob);
 }
 
-const HOST_REG_EXP = /^(?:\[([^\]]+)\])|(?:\(([^\)]+)\))$/;
+const HOST_REG_EXP = /^(?:\[([^\]]+)\])|(?:\(([^)]+)\))$/;
 // Represents the groups in the above regex.
 const enum HostBindingGroup {
   // group 1: "prop" from "[prop]", or "attr.role" from "[attr.role]", or @anim from [@anim]

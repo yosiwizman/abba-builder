@@ -1315,17 +1315,17 @@ export abstract class AbstractControl<
   /**
    * Sets the value of the control. Abstract method (implemented in sub-classes).
    */
-  abstract setValue(value: TRawValue, options?: Object): void;
+  abstract setValue(value: TRawValue, options?: object): void;
 
   /**
    * Patches the value of the control. Abstract method (implemented in sub-classes).
    */
-  abstract patchValue(value: TValue, options?: Object): void;
+  abstract patchValue(value: TValue, options?: object): void;
 
   /**
    * Resets the control. Abstract method (implemented in sub-classes).
    */
-  abstract reset(value?: TValueWithOptionalControlStates, options?: Object): void;
+  abstract reset(value?: TValueWithOptionalControlStates, options?: object): void;
 
   /**
    * The raw value of this control. For most control implementations, the raw value will include

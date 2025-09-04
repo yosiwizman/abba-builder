@@ -133,13 +133,12 @@ class Scheduler {
     },
   ): number {
     options = {
-      ...{
+      
         args: [],
         isPeriodic: false,
         isRequestAnimationFrame: false,
         id: -1,
         isRequeuePeriodic: false,
-      },
       ...options,
     };
     let currentId = options.id! < 0 ? Scheduler.nextId : options.id!;
@@ -592,7 +591,7 @@ class FakeAsyncTestZoneSpec implements ZoneSpec {
       // Waiting for a macrotask would otherwise allow the browser to execute
       // other macrotasks before the currently scheduled microtasks are flushed.
       await safeAsync(async () => {
-        await void 0;
+        void 0;
         specZone.run(() => {
           this.flushMicrotasks();
         });

@@ -347,7 +347,7 @@ describe('createCustomElement', () => {
     @Input({isSignal: true} as Input) fooSignal = input<string | null>(null);
 
     @Output() bazBaz = new EventEmitter<boolean>();
-    @Output('quxqux') quxQux = new EventEmitter<Object>();
+    @Output('quxqux') quxQux = new EventEmitter<object>();
   }
   @NgModule({
     imports: [BrowserModule],

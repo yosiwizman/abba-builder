@@ -29,7 +29,7 @@ export async function generateNavItems(
 
   for (const path of mdFilesPaths) {
     const fullPath = resolve(dirname(path), basename(path));
-    const name = path.split('/').pop()?.replace('.md', '')!;
+    const name = path.split('/').pop()?.replace('.md', '');
     const firstLine = await getMdFileHeading(fullPath);
 
     navItems.push({

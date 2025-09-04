@@ -73,7 +73,7 @@ export abstract class JsonpCallbackContext {
  *
  *
  */
-export function jsonpCallbackContext(): Object {
+export function jsonpCallbackContext(): object {
   if (typeof window === 'object') {
     return window;
   }

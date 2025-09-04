@@ -176,7 +176,7 @@ beforeEach(function () {
             return {
               pass: false,
               message: msgFn(
-                `Expected actual to be of type \'ComponentFixture\' [actual=${actualFixture.constructor.name}]`,
+                `Expected actual to be of type 'ComponentFixture' [actual=${actualFixture.constructor.name}]`,
               ),
             };
           }

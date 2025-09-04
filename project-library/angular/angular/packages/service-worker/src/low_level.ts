@@ -25,7 +25,7 @@ export const ERR_SW_NOT_SUPPORTED = 'Service workers are disabled or not support
  */
 export interface NoNewVersionDetectedEvent {
   type: 'NO_NEW_VERSION_DETECTED';
-  version: {hash: string; appData?: Object};
+  version: {hash: string; appData?: object};
 }
 
 /**
@@ -230,7 +230,7 @@ export class NgswCommChannel {
     }
   }
 
-  postMessage(action: string, payload: Object): Promise<void> {
+  postMessage(action: string, payload: object): Promise<void> {
     return new Promise<void>((resolve) => {
       this.worker.pipe(take(1)).subscribe((sw) => {
         sw.postMessage({
@@ -245,7 +245,7 @@ export class NgswCommChannel {
 
   postMessageWithOperation(
     type: string,
-    payload: Object,
+    payload: object,
     operationNonce: number,
   ): Promise<boolean> {
     const waitForOperationCompleted = this.waitForOperationCompleted(operationNonce);

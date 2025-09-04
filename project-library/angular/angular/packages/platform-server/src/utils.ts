@@ -251,7 +251,7 @@ export const SERVER_CONTEXT = new InjectionToken<string>('SERVER_CONTEXT');
  * - returns `other` if nothing is provided or the string is empty after sanitization
  */
 function sanitizeServerContext(serverContext: string): string {
-  const context = serverContext.replace(/[^a-zA-Z0-9\-]/g, '');
+  const context = serverContext.replace(/[^a-zA-Z0-9-]/g, '');
   return context.length > 0 ? context : DEFAULT_SERVER_CONTEXT;
 }
 

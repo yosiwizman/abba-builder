@@ -22,7 +22,7 @@ import {parseTsconfig, createPathsMatcher} from 'get-tsconfig';
 import path from 'node:path';
 
 const explicitExtensionRe = /\.[mc]?js$/;
-const nonModuleImportRe = /^[.\/]/;
+const nonModuleImportRe = /^[./]/;
 
 const runfilesRoot = process.env.JS_BINARY__RUNFILES;
 

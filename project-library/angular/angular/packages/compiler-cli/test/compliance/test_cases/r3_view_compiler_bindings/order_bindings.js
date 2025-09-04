@@ -1,4 +1,4 @@
-hostAttrs: ["literal1", "foo"]
+["literal1", "foo"]
 // ...
 function MyCmp_HostBindings(rf, ctx) {
 	if (rf & 1) {

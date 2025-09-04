@@ -9,7 +9,7 @@
 import {h} from 'preact';
 import {getSymbolUrl} from '../symbol-context.mjs';
 
-const symbolRegex = /([a-zA-Z_$][a-zA-Z_$0-9\.]*)/;
+const symbolRegex = /([a-zA-Z_$][a-zA-Z_$0-9.]*)/;
 
 /**
  * Component that generates a code block with a link to a Symbol if it's known,

@@ -198,6 +198,19 @@ const validInvokeChannels = [
   "blockchain:stop-watching",
   // Enhanced system channels
   "enhanced:get-metrics",
+  // Integrations channels
+  "integrations:connect",
+  "integrations:disconnect",
+  "integrations:get-status",
+  "integrations:get-statuses",
+  "integrations:list-providers",
+  "integrations:get-stored-data",
+  "integrations:github:list-repos",
+  "integrations:github:create-repo",
+  "integrations:vercel:list-projects",
+  "integrations:vercel:deploy",
+  "integrations:supabase:query",
+  "integrations:supabase:insert",
   // Test-only channels
   // These should ALWAYS be guarded with IS_TEST_BUILD in the main process.
   // We can't detect with IS_TEST_BUILD in the preload script because

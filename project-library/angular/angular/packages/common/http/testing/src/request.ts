@@ -67,8 +67,8 @@ export class TestRequest {
       | boolean
       | string
       | number
-      | Object
-      | (boolean | string | number | Object | null)[]
+      | object
+      | (boolean | string | number | object | null)[]
       | null,
     opts: {
       headers?: HttpHeaders | {[name: string]: string | string[]};
@@ -146,7 +146,7 @@ export class TestRequest {
  * Helper function to convert a response body to an ArrayBuffer.
  */
 function _toArrayBufferBody(
-  body: ArrayBuffer | Blob | string | number | Object | (string | number | Object | null)[],
+  body: ArrayBuffer | Blob | string | number | object | (string | number | object | null)[],
 ): ArrayBuffer {
   if (typeof ArrayBuffer === 'undefined') {
     throw new Error('ArrayBuffer responses are not supported on this platform.');
@@ -161,7 +161,7 @@ function _toArrayBufferBody(
  * Helper function to convert a response body to a Blob.
  */
 function _toBlob(
-  body: ArrayBuffer | Blob | string | number | Object | (string | number | Object | null)[],
+  body: ArrayBuffer | Blob | string | number | object | (string | number | object | null)[],
 ): Blob {
   if (typeof Blob === 'undefined') {
     throw new Error('Blob responses are not supported on this platform.');
@@ -185,10 +185,10 @@ function _toJsonBody(
     | boolean
     | string
     | number
-    | Object
-    | (boolean | string | number | Object | null)[],
+    | object
+    | (boolean | string | number | object | null)[],
   format: string = 'JSON',
-): Object | string | number | (Object | string | number)[] {
+): object | string | number | (object | string | number)[] {
   if (typeof ArrayBuffer !== 'undefined' && body instanceof ArrayBuffer) {
     throw new Error(`Automatic conversion to ${format} is not supported for ArrayBuffers.`);
   }
@@ -211,7 +211,7 @@ function _toJsonBody(
  * Helper function to convert a response body to a string.
  */
 function _toTextBody(
-  body: ArrayBuffer | Blob | string | number | Object | (string | number | Object | null)[],
+  body: ArrayBuffer | Blob | string | number | object | (string | number | object | null)[],
 ): string {
   if (typeof body === 'string') {
     return body;
@@ -230,8 +230,8 @@ function _toTextBody(
  */
 function _maybeConvertBody(
   responseType: string,
-  body: ArrayBuffer | Blob | string | number | Object | (string | number | Object | null)[] | null,
-): ArrayBuffer | Blob | string | number | Object | (string | number | Object | null)[] | null {
+  body: ArrayBuffer | Blob | string | number | object | (string | number | object | null)[] | null,
+): ArrayBuffer | Blob | string | number | object | (string | number | object | null)[] | null {
   if (body === null) {
     return null;
   }

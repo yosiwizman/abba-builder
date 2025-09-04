@@ -342,7 +342,7 @@ describe('projection', () => {
       standalone: false,
     })
     class ManualViewportDirective {
-      constructor(public templateRef: TemplateRef<Object>) {
+      constructor(public templateRef: TemplateRef<object>) {
         sourceDirective = this;
       }
     }
@@ -755,7 +755,7 @@ describe('projection', () => {
     class DelayedInsertTplRef {
       constructor(
         public vc: ViewContainerRef,
-        public templateRef: TemplateRef<Object>,
+        public templateRef: TemplateRef<object>,
       ) {}
       show() {
         this.vc.createEmbeddedView(this.templateRef);
@@ -938,7 +938,7 @@ class SingleContentTagComponent {}
 class ManualViewportDirective {
   constructor(
     public vc: ViewContainerRef,
-    public templateRef: TemplateRef<Object>,
+    public templateRef: TemplateRef<object>,
   ) {}
   show() {
     this.vc.createEmbeddedView(this.templateRef);
@@ -954,7 +954,7 @@ class ManualViewportDirective {
 })
 class ProjectDirective {
   constructor(public vc: ViewContainerRef) {}
-  show(templateRef: TemplateRef<Object>) {
+  show(templateRef: TemplateRef<object>) {
     this.vc.createEmbeddedView(templateRef);
   }
   hide() {

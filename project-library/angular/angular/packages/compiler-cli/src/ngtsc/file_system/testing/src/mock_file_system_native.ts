@@ -58,13 +58,13 @@ export class MockFileSystemNative extends MockFileSystem {
     // (see `MockFileSystemWindows`) so that the behavior is identical between native Windows and
     // emulated Windows mode.
     if (isWindows) {
-      path = path.replace(/^[\/\\]/i, 'C:/') as T;
+      path = path.replace(/^[/\\]/i, 'C:/') as T;
     }
 
     return NodeJSFileSystem.prototype.normalize.call(this, path) as T;
   }
 
   protected override splitPath<T>(path: string): string[] {
-    return path.split(/[\\\/]/);
+    return path.split(/[\\/]/);
   }
 }

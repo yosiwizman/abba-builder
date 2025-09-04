@@ -430,7 +430,7 @@ describe('deeplySerializeSelectedProperties', () => {
     const result = deeplySerializeSelectedProperties(
       {
         set foo(_: any) {},
-        get bar(): Object {
+        get bar(): object {
           return {foo: 1};
         },
       },
@@ -542,8 +542,8 @@ describe('deeplySerializeSelectedProperties', () => {
     const instance = {
       baz: 2,
       __proto__: {
-        set __proto__(newObj: Object) {},
-        get __proto__(): Object {
+        set __proto__(newObj: object) {},
+        get __proto__(): object {
           return {};
         },
       },

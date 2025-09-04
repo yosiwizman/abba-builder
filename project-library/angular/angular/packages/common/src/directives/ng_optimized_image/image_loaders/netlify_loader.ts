@@ -26,7 +26,7 @@ export const netlifyLoaderInfo: ImageLoaderInfo = {
   testUrl: isNetlifyUrl,
 };
 
-const NETLIFY_LOADER_REGEX = /https?\:\/\/[^\/]+\.netlify\.app\/.+/;
+const NETLIFY_LOADER_REGEX = /https?:\/\/[^/]+\.netlify\.app\/.+/;
 
 /**
  * Tests whether a URL is from a Netlify site. This won't catch sites with a custom domain,

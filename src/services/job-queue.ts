@@ -1,7 +1,15 @@
-import Bull, { Queue, Job, JobOptions, JobStatus } from "bull";
-import Redis from "ioredis";
+import type { Queue, Job, JobOptions, JobStatus } from "bull";
+let Bull: any;
+let Redis: any;
+try {
+  Bull = require("bull");
+  Redis = require("ioredis");
+} catch (e) {
+  // Redis/Bull not installed, will use in-memory fallback
+}
 import log from "electron-log";
 import { EventEmitter } from "events";
+import { getRedisUrl, getQueueClient, initializeRedis, isRedisAvailable } from "../config/redis";
 
 const logger = log.scope("job-queue");
 
@@ -76,47 +84,66 @@ export class JobQueueService extends EventEmitter {
     if (this.isInitialized) return;
 
     try {
-      // Create Redis client with limited retries
-      this.redisClient = new Redis({
-        host: this.config.redis!.host,
-        port: this.config.redis!.port,
-        password: this.config.redis!.password,
-        db: this.config.redis!.db,
-        retryStrategy: (times) => {
-          // Stop retrying after 3 attempts
-          if (times > 3) {
-            logger.warn("Redis unavailable, stopping connection attempts");
-            return null;
+      // Initialize Redis from centralized config
+      await initializeRedis();
+      const redisUrl = getRedisUrl();
+      
+      if (redisUrl && await isRedisAvailable()) {
+        // Parse Redis URL for Bull configuration
+        const url = new URL(redisUrl);
+        this.config.redis = {
+          host: url.hostname,
+          port: parseInt(url.port || '6379'),
+          password: url.password || undefined,
+          db: parseInt(url.pathname.slice(1) || '0'),
+        };
+        
+        // Create Redis client for internal use if Redis module is available
+        if (Redis) {
+          this.redisClient = new Redis({
+          host: this.config.redis.host,
+          port: this.config.redis.port,
+          password: this.config.redis.password,
+          db: this.config.redis.db,
+          retryStrategy: (times) => {
+            if (times > 3) {
+              logger.info("Redis connection attempts exceeded");
+              return null;
+            }
+            return Math.min(times * 50, 2000);
+          },
+          maxRetriesPerRequest: 3,
+          enableOfflineQueue: false,
+          lazyConnect: true,
+        });
+
+        // Handle Redis errors
+        this.redisClient.on('error', (err) => {
+          if (err.code !== 'ECONNREFUSED' && !err.message?.includes('Connection is closed')) {
+            logger.warn('Redis error:', err.message);
           }
-          const delay = Math.min(times * 50, 2000);
-          return delay;
-        },
-        maxRetriesPerRequest: 3,
-        enableOfflineQueue: false,
-        lazyConnect: true,
-      });
+        });
 
-      // Handle Redis errors silently to prevent unhandled error events
-      this.redisClient.on('error', (err) => {
-        if (err.code === 'ECONNREFUSED') {
-          // Silently handle connection refused - we'll fallback to in-memory
-          // logger.debug('Redis connection refused - using in-memory queue');
-        } else if (err.message && !err.message.includes('Connection is closed')) {
-          logger.warn('Redis error:', err.message);
+          await this.redisClient.connect();
+          await this.redisClient.ping();
+          
+          this.isRedisAvailable = true;
+          logger.info("Job queue service initialized with Redis");
+        } else {
+          this.isRedisAvailable = false;
+          logger.info("Redis module not available, using in-memory queue");
         }
-      });
-
-      // Test Redis connection
-      await this.redisClient.connect();
-      await this.redisClient.ping();
-
-      this.isRedisAvailable = true;
+      } else {
+        this.isRedisAvailable = false;
+        logger.info("Redis not available, using in-memory queue (jobs will not persist)");
+      }
+      
       this.isInitialized = true;
-      logger.info("Job queue service initialized with Redis");
-      this.emit("ready");
+      this.emit("ready", { redisAvailable: this.isRedisAvailable });
     } catch (error) {
-      // Silently fallback to in-memory queue if Redis is not available
-      logger.debug("Redis not available, using in-memory queue (jobs will not persist)");
+      // Fallback to in-memory queue
+      logger.info("Redis not available, using in-memory queue (jobs will not persist)");
+      this.isRedisAvailable = false;
       this.isInitialized = true;
       this.emit("ready", { warning: "Using in-memory queue" });
     }
@@ -126,9 +153,9 @@ export class JobQueueService extends EventEmitter {
    * Create or get a queue
    */
   getQueue(queueName: string): Queue | null {
-    // If Redis is not available, return null for in-memory fallback
-    if (!this.isRedisAvailable) {
-      logger.debug(`Queue '${queueName}' not available - Redis not connected`);
+    // If Redis or Bull is not available, return null for in-memory fallback
+    if (!this.isRedisAvailable || !Bull) {
+      logger.debug(`Queue '${queueName}' not available - Redis/Bull not connected`);
       return null;
     }
 

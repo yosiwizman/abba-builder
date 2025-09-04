@@ -7,6 +7,8 @@ import { ClaudeOpusService } from './claude-opus';
 import { ContextManager } from './context-manager';
 import { PythonBridge } from './python-bridge';
 import { MetricsTracker, getMetricsTracker } from './metrics-tracker';
+import { getAnthropicKey } from '../../config/secrets';
+import * as log from 'electron-log';
 // Optional advanced modules are omitted to keep orchestrator minimal and working by default
 // import AbbaTestingBots from './testing-bots';
 // import MetricsTrackingSystem from './metrics-tracking-system';
@@ -39,6 +41,7 @@ export class DyadOrchestrator {
   private claude: ClaudeOpusService;
   private contextManager: ContextManager;
   private pythonBridge: PythonBridge;
+  private logger = log.scope('orchestrator');
   // private testingBots: AbbaTestingBots;
   // Integrated metrics tracker
   private metrics: MetricsTracker;
@@ -48,12 +51,12 @@ export class DyadOrchestrator {
   private initialized: boolean = false;
   
   constructor(apiKey?: string) {
-    // Initialize core services with validation
-    const resolvedApiKey = apiKey || process.env.ANTHROPIC_API_KEY || process.env.CLAUDE_API_KEY || '';
+    // Initialize core services with validation - prioritize secrets module
+    const resolvedApiKey = apiKey || getAnthropicKey() || '';
     
     if (!resolvedApiKey) {
-      console.warn('⚠️ No Claude API key found. Will use fallback mode.');
-       console.log('💡 Set ANTHROPIC_API_KEY or CLAUDE_API_KEY environment variable to enable Claude AI.');
+      this.logger.warn('⚠️ No Claude API key found. Will use fallback mode.');
+      this.logger.info('💡 Set ANTHROPIC_API_KEY environment variable to enable Claude AI.');
     }
     
     this.claude = new ClaudeOpusService({ 

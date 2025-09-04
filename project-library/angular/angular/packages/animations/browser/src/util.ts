@@ -40,7 +40,7 @@ export const NG_ANIMATING_SELECTOR = '.ng-animating';
 export function resolveTimingValue(value: string | number) {
   if (typeof value == 'number') return value;
 
-  const matches = value.match(/^(-?[\.\d]+)(m?s)/);
+  const matches = value.match(/^(-?[.\d]+)(m?s)/);
   if (!matches || matches.length < 2) return 0;
 
   return _convertTimeValueToMS(parseFloat(matches[1]), matches[2]);
@@ -66,7 +66,7 @@ export function resolveTiming(
 }
 
 const PARSE_TIME_EXPRESSION_REGEX =
-  /^(-?[\.\d]+)(m?s)(?:\s+(-?[\.\d]+)(m?s))?(?:\s+([-a-z]+(?:\(.+?\))?))?$/i;
+  /^(-?[.\d]+)(m?s)(?:\s+(-?[.\d]+)(m?s))?(?:\s+([-a-z]+(?:\(.+?\))?))?$/i;
 function parseTimeExpression(
   exp: string | number,
   errors: Error[],

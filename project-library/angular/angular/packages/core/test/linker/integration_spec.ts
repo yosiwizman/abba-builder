@@ -2204,7 +2204,7 @@ describe('integration tests', function () {
 
       TestBed.configureTestingModule({declarations: [MainComp]});
       expect(() => TestBed.createComponent(MainComp)).toThrowError(
-        /^NG0981: Orphan component found\! Trying to render the component MainComp \(at test\.ts:11\) without first loading the NgModule that declares it/,
+        /^NG0981: Orphan component found! Trying to render the component MainComp \(at test\.ts:11\) without first loading the NgModule that declares it/,
       );
     });
 
@@ -3049,11 +3049,11 @@ class ChildConsumingEventBus {
   standalone: false,
 })
 class SomeImperativeViewport {
-  view: EmbeddedViewRef<Object> | null;
+  view: EmbeddedViewRef<object> | null;
   anchor: any;
   constructor(
     public vc: ViewContainerRef,
-    public templateRef: TemplateRef<Object>,
+    public templateRef: TemplateRef<object>,
     @Inject(ANCHOR_ELEMENT) anchor: any,
   ) {
     this.view = null;

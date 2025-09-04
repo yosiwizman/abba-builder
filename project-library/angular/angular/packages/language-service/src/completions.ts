@@ -1475,7 +1475,7 @@ function tagCompletionKind(directive: PotentialDirective | null): ts.ScriptEleme
   return unsafeCastDisplayInfoKindToScriptElementKind(kind);
 }
 
-const BINDING_SUGAR = /[\[\(\)\]]/g;
+const BINDING_SUGAR = /[[()\]]/g;
 
 function stripBindingSugar(binding: string): {name: string; kind: DisplayInfoKind} {
   const name = binding.replace(BINDING_SUGAR, '');

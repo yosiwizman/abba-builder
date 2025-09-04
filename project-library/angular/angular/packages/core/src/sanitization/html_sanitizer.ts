@@ -270,7 +270,7 @@ function clobberedElementError(node: Node) {
 // Regular Expressions for parsing tags and attributes
 const SURROGATE_PAIR_REGEXP = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g;
 // ! to ~ is the ASCII range.
-const NON_ALPHANUMERIC_REGEXP = /([^\#-~ |!])/g;
+const NON_ALPHANUMERIC_REGEXP = /([^#-~ |!])/g;
 
 /**
  * Escapes all potentially dangerous characters, so that the

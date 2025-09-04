@@ -50,10 +50,10 @@ describe('XMLHttpRequest', function () {
           );
           if (supportPatchXHROnProperty()) {
             expect(wtfMock.log[wtfMock.log.length - 3]).toMatch(
-              /\< Zone\:invokeTask.*addEventListener\:load/,
+              /< Zone:invokeTask.*addEventListener:load/,
             );
             expect(wtfMock.log[wtfMock.log.length - 4]).toMatch(
-              /\> Zone\:invokeTask.*addEventListener\:load/,
+              /> Zone:invokeTask.*addEventListener:load/,
             );
           }
           // if browser can patch onload

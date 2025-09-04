@@ -46,7 +46,7 @@ describe('sourcemaps', function () {
       'utf-8',
     ).split('\n');
     expect(sourceCodeLines[originalPosition.line! - 1]).toMatch(
-      /throw new Error\(\'Sourcemap test\'\)/,
+      /throw new Error\('Sourcemap test'\)/,
     );
   });
 });

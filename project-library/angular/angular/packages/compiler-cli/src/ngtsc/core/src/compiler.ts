@@ -610,9 +610,7 @@ export class NgCompiler {
    * If a `ts.SourceFile` is passed, only diagnostics related to that file are returned.
    */
   getDiagnosticsForFile(file: ts.SourceFile, optimizeFor: OptimizeFor): ts.Diagnostic[] {
-    const diagnostics: ts.Diagnostic[] = [
-      ...this.getNonTemplateDiagnostics().filter((diag) => diag.file === file),
-    ];
+    const diagnostics: ts.Diagnostic[] = this.getNonTemplateDiagnostics().filter((diag) => diag.file === file);
 
     // Type check code may throw fatal diagnostic errors if e.g. the type check
     // block cannot be generated. Gracefully return the associated diagnostic.

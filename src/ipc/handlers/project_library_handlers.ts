@@ -947,7 +947,8 @@ export function registerProjectLibraryHandlers() {
 
           // Use the GitHub API service to fetch real repository data
           const GitHubAPIService = (await import('../../services/github-api')).default;
-          const githubToken = process.env.GITHUB_TOKEN || 'REMOVED';
+          const { getGitHubToken } = await import('../../config/secrets');
+          const githubToken = getGitHubToken() || '';
           const githubAPI = new GitHubAPIService(githubToken);
 
           try {

@@ -4,6 +4,8 @@
  */
 
 import { Anthropic } from '@anthropic-ai/sdk';
+import { getAnthropicKey, getOpenAIKey } from '../../config/secrets';
+import * as log from 'electron-log';
 
 interface ClaudeOpusConfig {
   apiKey: string;
@@ -30,6 +32,7 @@ interface GenerationResult {
 
 export class ClaudeOpusService {
   private client: Anthropic | null = null;
+  private logger = log.scope('claude-opus');
   private maxContextTokens = 200000;
   private maxOutputTokens = 32000;
   private apiKey: string;
@@ -37,9 +40,11 @@ export class ClaudeOpusService {
   private fallbackModel: string;
   private MAX_RETRIES: number;
   private STREAMING_TIMEOUT_MS: number;
+  private openAIFallback: any = null;
   
   constructor(config?: ClaudeOpusConfig) {
-    this.apiKey = config?.apiKey || process.env.ANTHROPIC_API_KEY || '';
+    // Pull from secrets module first, then config, then env fallback
+    this.apiKey = config?.apiKey || getAnthropicKey() || '';
 
     // Configure models and behavior from env with sensible defaults
     this.currentModel = process.env.CLAUDE_MODEL || 'claude-3-5-sonnet-latest';
@@ -52,10 +57,31 @@ export class ClaudeOpusService {
         this.client = new Anthropic({
           apiKey: this.apiKey
         });
-         console.log(`Claude initialized with model: ${this.currentModel}`);
+        this.logger.info(`Claude initialized with model: ${this.currentModel}`);
       } catch (error) {
-        console.error('Failed to initialize Claude client:', error);
+        this.logger.error('Failed to initialize Claude client:', error);
       }
+    } else {
+      this.logger.warn('Claude API key not found, will attempt OpenAI fallback if available');
+      this.initializeOpenAIFallback();
+    }
+  }
+
+  /**
+   * Initialize OpenAI as fallback when Claude is unavailable
+   */
+  private async initializeOpenAIFallback() {
+    const openAIKey = getOpenAIKey();
+    if (openAIKey) {
+      try {
+        const OpenAI = (await import('openai')).default;
+        this.openAIFallback = new OpenAI({ apiKey: openAIKey });
+        this.logger.info('OpenAI fallback initialized successfully');
+      } catch (error) {
+        this.logger.error('Failed to initialize OpenAI fallback:', error);
+      }
+    } else {
+      this.logger.warn('No OpenAI API key available for fallback');
     }
   }
   
@@ -69,10 +95,16 @@ export class ClaudeOpusService {
     thinkingTokens = 50000
   ): Promise<GenerationResult> {
     if (!this.client) {
+      // Try OpenAI fallback
+      if (this.openAIFallback) {
+        this.logger.warn('Claude unavailable, attempting OpenAI fallback');
+        return await this.generateWithOpenAIFallback(prompt, projectContext);
+      }
+      
       return {
         success: false,
         content: '',
-        error: 'Claude API key not configured'
+        error: 'Claude API key not configured and no fallback available'
       };
     }
     
@@ -495,6 +527,95 @@ Always think step-by-step and explain your reasoning when implementing complex s
       }
     }
     return available;
+  }
+
+  /**
+   * Validate Claude API connection on startup
+   */
+  async validateConnection(): Promise<boolean> {
+    if (!this.client) {
+      this.logger.warn('No Claude client available to validate');
+      if (this.openAIFallback) {
+        this.logger.info('OpenAI fallback is available');
+        return true;  // We have fallback
+      }
+      return false;
+    }
+
+    try {
+      // Try a minimal test request
+      await this.client.messages.create({
+        model: 'claude-3-haiku-20240307',
+        max_tokens: 10,
+        messages: [{ role: 'user', content: 'test' }],
+      });
+      this.logger.info('Claude API connection validated successfully');
+      return true;
+    } catch (error: any) {
+      this.logger.error('Claude connection validation failed:', error);
+      if (error?.status === 401) {
+        this.logger.error('Invalid API key - please check your ANTHROPIC_API_KEY');
+      }
+      // Try to initialize fallback
+      await this.initializeOpenAIFallback();
+      return !!this.openAIFallback;
+    }
+  }
+
+  /**
+   * Generate using OpenAI as fallback
+   */
+  private async generateWithOpenAIFallback(
+    prompt: string,
+    projectContext: any
+  ): Promise<GenerationResult> {
+    if (!this.openAIFallback) {
+      return {
+        success: false,
+        content: '',
+        error: 'No OpenAI fallback available',
+      };
+    }
+
+    try {
+      const contextualPrompt = this.buildContextualPrompt(prompt, projectContext);
+      const start = Date.now();
+
+      const completion = await this.openAIFallback.chat.completions.create({
+        model: 'gpt-4-turbo-preview',
+        messages: [
+          { role: 'system', content: this.getSystemPrompt() },
+          { role: 'user', content: contextualPrompt },
+        ],
+        max_tokens: 4096,
+        temperature: 0.7,
+      });
+
+      const duration = Date.now() - start;
+      const content = completion.choices[0]?.message?.content || '';
+
+      this.logger.info(`OpenAI fallback responded in ${duration}ms`);
+
+      return {
+        success: true,
+        content,
+        usage: {
+          input_tokens: completion.usage?.prompt_tokens || 0,
+          output_tokens: completion.usage?.completion_tokens || 0,
+          total_tokens: completion.usage?.total_tokens || 0,
+        },
+        generationType: 'fallback_template',
+        modelUsed: 'gpt-4-turbo-preview',
+        duration,
+      };
+    } catch (error) {
+      this.logger.error('OpenAI fallback failed:', error);
+      return {
+        success: false,
+        content: '',
+        error: `OpenAI fallback failed: ${error}`,
+      };
+    }
   }
 }
 

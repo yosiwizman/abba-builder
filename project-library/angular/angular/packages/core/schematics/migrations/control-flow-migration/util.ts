@@ -793,7 +793,7 @@ export function formatTemplate(tmpl: string, templateType: string): string {
 
     // match any type of control flow block as start of string ignoring whitespace
     // @if | @switch | @case | @default | @for | } @else
-    const openBlockRegex = /^\s*\@(if|switch|case|default|for)|^\s*\}\s\@else/;
+    const openBlockRegex = /^\s*@(if|switch|case|default|for)|^\s*\}\s@else/;
 
     // regex for matching an html element opening
     // <div thing="stuff" [binding]="true"> || <div thing="stuff" [binding]="true"
@@ -822,7 +822,7 @@ export function formatTemplate(tmpl: string, templateType: string): string {
 
     // match closing block or else block
     // } | } @else
-    const closeBlockRegex = /^\s*\}\s*$|^\s*\}\s\@else/;
+    const closeBlockRegex = /^\s*\}\s*$|^\s*\}\s@else/;
 
     // matches closing of an html element
     // </element>
@@ -830,11 +830,11 @@ export function formatTemplate(tmpl: string, templateType: string): string {
 
     // matches closing of a self closing html element when the element is on multiple lines
     // [binding]="value" />
-    const closeMultiLineElRegex = /^\s*([a-zA-Z0-9\-_\[\]]+)?=?"?([^”<]+)?"?\s?\/>$/;
+    const closeMultiLineElRegex = /^\s*([a-zA-Z0-9\-_[\]]+)?=?"?([^”<]+)?"?\s?\/>$/;
 
     // matches closing of a self closing html element when the element is on multiple lines
     // with no / in the closing: [binding]="value">
-    const closeSelfClosingMultiLineRegex = /^\s*([a-zA-Z0-9\-_\[\]]+)?=?"?([^”\/<]+)?"?\s?>$/;
+    const closeSelfClosingMultiLineRegex = /^\s*([a-zA-Z0-9\-_[\]]+)?=?"?([^”/<]+)?"?\s?>$/;
 
     // matches an open and close of an html element on a single line with no breaks
     // <div>blah</div>

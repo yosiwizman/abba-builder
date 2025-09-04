@@ -90,7 +90,7 @@ function collectCommitsAsMap(rawGitCommits) {
       // and PR number may be different for the same commit in main and patch branches.
       const key = commit
         .slice(11)
-        .replace(/\(\#\d+\)/g, '')
+        .replace(/\(#\d+\)/g, '')
         .trim();
       commitsMap.set(key, [commit, version]);
     }

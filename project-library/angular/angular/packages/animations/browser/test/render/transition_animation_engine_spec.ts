@@ -280,7 +280,7 @@ const DEFAULT_NAMESPACE_ID = 'id';
         expect(() => {
           listen(element, engine, 'myTrigger', 'explode', () => {});
         }).toThrowError(
-          /Unable to listen on the animation trigger event "explode" because the animation trigger "myTrigger" doesn\'t exist!/,
+          /Unable to listen on the animation trigger event "explode" because the animation trigger "myTrigger" doesn't exist!/,
         );
       });
 

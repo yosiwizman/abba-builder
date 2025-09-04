@@ -28,13 +28,13 @@ export interface Table {
   /**
    * Read a key from a table, either as an Object or with a given type.
    */
-  read(key: string): Promise<Object>;
+  read(key: string): Promise<object>;
   read<T>(key: string): Promise<T>;
 
   /**
    * Write a new value for a key to the table, overwriting any previous value.
    */
-  write(key: string, value: Object): Promise<void>;
+  write(key: string, value: object): Promise<void>;
 }
 
 /**

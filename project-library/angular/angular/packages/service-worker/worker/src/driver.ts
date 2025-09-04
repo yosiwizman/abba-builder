@@ -559,7 +559,7 @@ export class Driver implements Debuggable, UpdateSource {
     }
 
     // Switch the client over.
-    let previous: Object | undefined = undefined;
+    let previous: object | undefined = undefined;
 
     // Look up the application data associated with the existing version. If there
     // isn't any, fall back on using the hash.
@@ -1208,10 +1208,10 @@ export class Driver implements Debuggable, UpdateSource {
     return version ? version.recentCacheStatus(url) : UpdateCacheStatus.NOT_CACHED;
   }
 
-  private mergeHashWithAppData(manifest: Manifest, hash: string): {hash: string; appData: Object} {
+  private mergeHashWithAppData(manifest: Manifest, hash: string): {hash: string; appData: object} {
     return {
       hash,
-      appData: manifest.appData as Object,
+      appData: manifest.appData as object,
     };
   }
 
@@ -1358,7 +1358,7 @@ export class Driver implements Debuggable, UpdateSource {
     );
   }
 
-  async broadcast(msg: Object): Promise<void> {
+  async broadcast(msg: object): Promise<void> {
     const clients = await this.scope.clients.matchAll();
     clients.forEach((client) => {
       client.postMessage(msg);

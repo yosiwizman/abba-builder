@@ -585,7 +585,7 @@ export class HttpClient {
       transferCache?: {includeHeaders?: string[]} | boolean;
       timeout?: number;
     },
-  ): Observable<HttpResponse<Object>>;
+  ): Observable<HttpResponse<object>>;
 
   /**
    * Constructs a request which interprets the body as a JavaScript object and returns
@@ -658,7 +658,7 @@ export class HttpClient {
       transferCache?: {includeHeaders?: string[]} | boolean;
       timeout?: number;
     },
-  ): Observable<Object>;
+  ): Observable<object>;
 
   /**
    * Constructs a request which interprets the body as a JavaScript object
@@ -1160,7 +1160,7 @@ export class HttpClient {
       timeout?: number;
       body?: any | null;
     },
-  ): Observable<HttpEvent<Object>>;
+  ): Observable<HttpEvent<object>>;
 
   /**
    * Constructs a `DELETE`request that interprets the body as JSON
@@ -1332,7 +1332,7 @@ export class HttpClient {
       timeout?: number;
       body?: any | null;
     },
-  ): Observable<HttpResponse<Object>>;
+  ): Observable<HttpResponse<object>>;
 
   /**
    * Constructs a `DELETE` request that interprets the body as JSON
@@ -1400,7 +1400,7 @@ export class HttpClient {
       timeout?: number;
       body?: any | null;
     },
-  ): Observable<Object>;
+  ): Observable<object>;
 
   /**
    * Constructs a DELETE request that interprets the body as JSON and returns
@@ -1709,7 +1709,7 @@ export class HttpClient {
       transferCache?: {includeHeaders?: string[]} | boolean;
       timeout?: number;
     },
-  ): Observable<HttpEvent<Object>>;
+  ): Observable<HttpEvent<object>>;
 
   /**
    * Constructs a `GET` request that interprets the body as JSON and returns the full
@@ -1883,7 +1883,7 @@ export class HttpClient {
       transferCache?: {includeHeaders?: string[]} | boolean;
       timeout?: number;
     },
-  ): Observable<HttpResponse<Object>>;
+  ): Observable<HttpResponse<object>>;
 
   /**
    * Constructs a `GET` request that interprets the body as JSON and
@@ -1953,7 +1953,7 @@ export class HttpClient {
       transferCache?: {includeHeaders?: string[]} | boolean;
       timeout?: number;
     },
-  ): Observable<Object>;
+  ): Observable<object>;
 
   /**
    * Constructs a `GET` request that interprets the body as JSON and returns
@@ -2262,7 +2262,7 @@ export class HttpClient {
       transferCache?: {includeHeaders?: string[]} | boolean;
       timeout?: number;
     },
-  ): Observable<HttpEvent<Object>>;
+  ): Observable<HttpEvent<object>>;
 
   /**
    * Constructs a `HEAD` request that interprets the body as JSON and
@@ -2437,7 +2437,7 @@ export class HttpClient {
       transferCache?: {includeHeaders?: string[]} | boolean;
       timeout?: number;
     },
-  ): Observable<HttpResponse<Object>>;
+  ): Observable<HttpResponse<object>>;
 
   /**
    * Constructs a `HEAD` request that interprets the body as JSON
@@ -2507,7 +2507,7 @@ export class HttpClient {
       transferCache?: {includeHeaders?: string[]} | boolean;
       timeout?: number;
     },
-  ): Observable<Object>;
+  ): Observable<object>;
 
   /**
    * Constructs a `HEAD` request that interprets the body as JSON and returns
@@ -2586,7 +2586,7 @@ export class HttpClient {
    *
    * @return An `Observable` of the response object, with response body as an object.
    */
-  jsonp(url: string, callbackParam: string): Observable<Object>;
+  jsonp(url: string, callbackParam: string): Observable<object>;
 
   /**
    * Constructs a `JSONP` request for the given URL and name of the callback parameter.
@@ -2861,7 +2861,7 @@ export class HttpClient {
       integrity?: string;
       timeout?: number;
     },
-  ): Observable<HttpEvent<Object>>;
+  ): Observable<HttpEvent<object>>;
 
   /**
    * Constructs an `OPTIONS` request that interprets the body as JSON and
@@ -3031,7 +3031,7 @@ export class HttpClient {
       integrity?: string;
       timeout?: number;
     },
-  ): Observable<HttpResponse<Object>>;
+  ): Observable<HttpResponse<object>>;
 
   /**
    * Constructs an `OPTIONS` request that interprets the body as JSON and
@@ -3099,7 +3099,7 @@ export class HttpClient {
       integrity?: string;
       timeout?: number;
     },
-  ): Observable<Object>;
+  ): Observable<object>;
 
   /**
    * Constructs an `OPTIONS` request that interprets the body as JSON and returns the
@@ -3415,7 +3415,7 @@ export class HttpClient {
       integrity?: string;
       timeout?: number;
     },
-  ): Observable<HttpEvent<Object>>;
+  ): Observable<HttpEvent<object>>;
 
   /**
    * Constructs a `PATCH` request that interprets the body as JSON
@@ -3595,7 +3595,7 @@ export class HttpClient {
       integrity?: string;
       timeout?: number;
     },
-  ): Observable<HttpResponse<Object>>;
+  ): Observable<HttpResponse<object>>;
 
   /**
    * Constructs a `PATCH` request that interprets the body as JSON
@@ -3667,7 +3667,7 @@ export class HttpClient {
       integrity?: string;
       timeout?: number;
     },
-  ): Observable<Object>;
+  ): Observable<object>;
 
   /**
    * Constructs a `PATCH` request that interprets the body as JSON
@@ -3990,7 +3990,7 @@ export class HttpClient {
       transferCache?: {includeHeaders?: string[]} | boolean;
       timeout?: number;
     },
-  ): Observable<HttpEvent<Object>>;
+  ): Observable<HttpEvent<object>>;
 
   /**
    * Constructs a POST request that interprets the body as JSON and returns the full
@@ -4175,7 +4175,7 @@ export class HttpClient {
       transferCache?: {includeHeaders?: string[]} | boolean;
       timeout?: number;
     },
-  ): Observable<HttpResponse<Object>>;
+  ): Observable<HttpResponse<object>>;
 
   /**
    * Constructs a `POST` request that interprets the body as JSON and returns the
@@ -4249,7 +4249,7 @@ export class HttpClient {
       transferCache?: {includeHeaders?: string[]} | boolean;
       timeout?: number;
     },
-  ): Observable<Object>;
+  ): Observable<object>;
 
   /**
    * Constructs a `POST` request that interprets the body as JSON
@@ -4569,7 +4569,7 @@ export class HttpClient {
       integrity?: string;
       timeout?: number;
     },
-  ): Observable<HttpEvent<Object>>;
+  ): Observable<HttpEvent<object>>;
 
   /**
    * Constructs a `PUT` request that interprets the body as JSON and returns the
@@ -4749,7 +4749,7 @@ export class HttpClient {
       integrity?: string;
       timeout?: number;
     },
-  ): Observable<HttpResponse<Object>>;
+  ): Observable<HttpResponse<object>>;
 
   /**
    * Constructs a `PUT` request that interprets the body as an instance of the requested type and
@@ -4820,7 +4820,7 @@ export class HttpClient {
       integrity?: string;
       timeout?: number;
     },
-  ): Observable<Object>;
+  ): Observable<object>;
 
   /**
    * Constructs a `PUT` request that interprets the body as an instance of the requested type

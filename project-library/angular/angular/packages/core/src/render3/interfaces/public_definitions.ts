@@ -38,7 +38,7 @@ export type ɵɵDirectiveDeclaration<
  */
 export type ɵɵComponentDeclaration<
   T,
-  Selector extends String,
+  Selector extends string,
   ExportAs extends string[],
   // `string` keys are for backwards compatibility with pre-16 versions.
   InputMap extends {[key: string]: string | {alias: string | null; required: boolean}},

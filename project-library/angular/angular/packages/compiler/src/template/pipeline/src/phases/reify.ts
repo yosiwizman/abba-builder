@@ -365,7 +365,7 @@ function reifyCreateOperations(unit: CompilationUnit, ops: ir.OpList<ir.CreateOp
             op.mainSlot.slot!,
             op.resolverFn,
             op.loadingSlot?.slot ?? null,
-            op.placeholderSlot?.slot! ?? null,
+            op.placeholderSlot?.slot ?? null,
             op.errorSlot?.slot ?? null,
             op.loadingConfig,
             op.placeholderConfig,

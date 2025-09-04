@@ -6,6 +6,7 @@ import GitHubAPIService from '../../services/github-api';
 import StackOverflowAPIService from '../../services/stackoverflow-api';
 import cacheService from '../../services/cache-service';
 import LearningSystem from '../../services/learning-system';
+import { getGitHubToken } from '../../config/secrets';
 
 const logger = log.scope('knowledge_hub_handlers');
 
@@ -17,9 +18,15 @@ let stackoverflowAPI: StackOverflowAPIService | null = null;
 // Initialize API services
 async function initializeServices() {
   if (!githubAPI) {
-    // Use the GitHub token from environment or config
-    const githubToken = process.env.GITHUB_TOKEN || 'REMOVED';
-    githubAPI = new GitHubAPIService(githubToken);
+    // Use the GitHub token from secrets module
+    const githubToken = getGitHubToken();
+    if (githubToken) {
+      githubAPI = new GitHubAPIService(githubToken);
+      logger.info('GitHub API initialized with token from secrets');
+    } else {
+      logger.warn('No GitHub token available - GitHub features will be limited');
+      githubAPI = new GitHubAPIService(''); // Initialize without token for public API access
+    }
   }
   
   if (!stackoverflowAPI) {

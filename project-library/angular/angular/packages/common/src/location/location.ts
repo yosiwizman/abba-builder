@@ -330,7 +330,7 @@ function _stripOrigin(baseHref: string): string {
   // for now, the check is rewritten to use `new RegExp` instead.
   const isAbsoluteUrl = new RegExp('^(https?:)?//').test(baseHref);
   if (isAbsoluteUrl) {
-    const [, pathname] = baseHref.split(/\/\/[^\/]+/);
+    const [, pathname] = baseHref.split(/\/\/[^/]+/);
     return pathname;
   }
   return baseHref;

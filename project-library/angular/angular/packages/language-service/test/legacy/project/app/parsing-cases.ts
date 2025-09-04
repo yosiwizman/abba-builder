@@ -64,7 +64,7 @@ export class CounterDirective implements OnChanges {
   // Object does not have an "$implicit" property.
   constructor(
     private container: ViewContainerRef,
-    private template: TemplateRef<Object>,
+    private template: TemplateRef<object>,
   ) {}
 
   @Input('counterOf') counter: number = 0;

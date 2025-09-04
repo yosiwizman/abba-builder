@@ -34,14 +34,14 @@ export class MockFileSystemWindows extends MockFileSystem {
   }
 
   override isRooted(path: string): boolean {
-    return /^([A-Z]:)?([\\\/]|$)/i.test(path);
+    return /^([A-Z]:)?([\\/]|$)/i.test(path);
   }
 
   protected override splitPath<T extends PathString>(path: T): string[] {
-    return path.split(/[\\\/]/);
+    return path.split(/[\\/]/);
   }
 
   override normalize<T extends PathString>(path: T): T {
-    return path.replace(/^[\/\\]/i, 'C:/').replace(/\\/g, '/') as T;
+    return path.replace(/^[/\\]/i, 'C:/').replace(/\\/g, '/') as T;
   }
 }

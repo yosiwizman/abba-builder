@@ -22,7 +22,7 @@ import type {
 
 export class DefaultIterableDifferFactory implements IterableDifferFactory {
   constructor() {}
-  supports(obj: Object | null | undefined): boolean {
+  supports(obj: object | null | undefined): boolean {
     return isListLikeIterable(obj);
   }
 

@@ -14,7 +14,7 @@ export const LOCAL_STORAGE = new InjectionToken<Storage | null>('LOCAL_STORAGE',
   factory: () => getStorage(inject(PLATFORM_ID)),
 });
 
-const getStorage = (platformId: Object): Storage | null => {
+const getStorage = (platformId: object): Storage | null => {
   // Prerendering: localStorage is undefined for prerender build
   return isPlatformBrowser(platformId) ? new LocalStorage() : null;
 };

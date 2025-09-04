@@ -64,7 +64,7 @@ export class SwTestHarnessImpl
   private selfMessageQueue: any[] = [];
   autoAdvanceTime = false;
   unregistered: boolean = false;
-  readonly notifications: {title: string; options: Object}[] = [];
+  readonly notifications: {title: string; options: object}[] = [];
   readonly registration: ServiceWorkerRegistration = {
     active: {
       postMessage: (msg: any) => {
@@ -72,7 +72,7 @@ export class SwTestHarnessImpl
       },
     },
     scope: this.scopeUrl,
-    showNotification: (title: string, options: Object) => {
+    showNotification: (title: string, options: object) => {
       this.notifications.push({title, options});
     },
     unregister: () => {
@@ -173,11 +173,11 @@ export class SwTestHarnessImpl
     this.eventHandlers.delete(type);
   }
 
-  override newRequest(url: string, init: Object = {}): Request {
+  override newRequest(url: string, init: object = {}): Request {
     return new MockRequest(normalizeUrl(url, this.scopeUrl), init);
   }
 
-  override newResponse(body: string, init: Object = {}): Response {
+  override newResponse(body: string, init: object = {}): Response {
     return new MockResponse(body, init);
   }
 
@@ -218,7 +218,7 @@ export class SwTestHarnessImpl
     return [event.response, event.ready];
   }
 
-  handleMessage(data: Object, clientId: string | null): Promise<void> {
+  handleMessage(data: object, clientId: string | null): Promise<void> {
     if (!this.eventHandlers.has('message')) {
       throw new Error('No message handler registered');
     }
@@ -254,7 +254,7 @@ export class SwTestHarnessImpl
     return event.ready;
   }
 
-  handlePush(data: Object): Promise<void> {
+  handlePush(data: object): Promise<void> {
     if (!this.eventHandlers.has('push')) {
       throw new Error('No push handler registered');
     }
@@ -263,7 +263,7 @@ export class SwTestHarnessImpl
     return event.ready;
   }
 
-  handleClick(notification: Object, action?: string): Promise<void> {
+  handleClick(notification: object, action?: string): Promise<void> {
     if (!this.eventHandlers.has('notificationclick')) {
       throw new Error('No notificationclick handler registered');
     }
@@ -272,7 +272,7 @@ export class SwTestHarnessImpl
     return event.ready;
   }
 
-  handleClose(notification: Object, action: string): Promise<void> {
+  handleClose(notification: object, action: string): Promise<void> {
     if (!this.eventHandlers.has('notificationclose')) {
       throw new Error('No notificationclose handler registered');
     }

@@ -47,8 +47,8 @@ type RequestBody =
   | boolean
   | string
   | number
-  | Object
-  | (boolean | string | number | Object | null)[]
+  | object
+  | (boolean | string | number | object | null)[]
   | null;
 
 describe('TransferCache', () => {

@@ -769,8 +769,8 @@ describe('providers', () => {
       })
       class Comp {
         constructor(
-          private s: String,
-          private n: Number,
+          private s: string,
+          private n: number,
         ) {}
       }
 
@@ -790,8 +790,8 @@ describe('providers', () => {
       })
       class Repeated {
         constructor(
-          private s: String,
-          private n: Number,
+          private s: string,
+          private n: number,
         ) {}
       }
 

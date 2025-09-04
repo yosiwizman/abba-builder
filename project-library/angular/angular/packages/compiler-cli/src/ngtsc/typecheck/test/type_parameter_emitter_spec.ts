@@ -142,7 +142,7 @@ runInEachFileSystem(() => {
       expect(emit(createEmitter(`export class TestClass<T extends 'a"a'> {}`))).toEqual(
         `<T extends "a\\"a">`,
       );
-      expect(emit(createEmitter(`export class TestClass<T extends "b\\\"b"> {}`))).toEqual(
+      expect(emit(createEmitter(`export class TestClass<T extends "b\\"b"> {}`))).toEqual(
         `<T extends "b\\"b">`,
       );
       expect(emit(createEmitter(`export class TestClass<T extends \`c\\\`c\`> {}`))).toEqual(

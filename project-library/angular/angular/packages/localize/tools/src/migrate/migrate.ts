@@ -26,5 +26,5 @@ export function migrateFile(sourceCode: string, mapping: MigrationMapping) {
 
 /** Escapes special regex characters in a string. */
 function escapeRegExp(str: string): string {
-  return str.replace(/([.*+?^=!:${}()|[\]\/\\])/g, '\\$1');
+  return str.replace(/([.*+?^=!:${}()|[\]/\\])/g, '\\$1');
 }

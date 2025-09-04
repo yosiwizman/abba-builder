@@ -1696,7 +1696,7 @@ describe('completions', () => {
         expect(completionEntry).toBeDefined();
 
         const detail = templateFile.getCompletionEntryDetails(
-          completionEntry?.name!,
+          completionEntry?.name,
           undefined,
           {includeCompletionsForModuleExports: true},
           completionEntry?.data,

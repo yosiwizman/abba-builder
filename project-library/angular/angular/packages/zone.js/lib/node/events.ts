@@ -25,7 +25,7 @@ export function patchEvents(Zone: ZoneType): void {
       return task.callback === delegate || task.callback.listener === delegate;
     };
 
-    const eventNameToString = function (eventName: string | Symbol) {
+    const eventNameToString = function (eventName: string | symbol) {
       if (typeof eventName === 'string') {
         return eventName;
       }

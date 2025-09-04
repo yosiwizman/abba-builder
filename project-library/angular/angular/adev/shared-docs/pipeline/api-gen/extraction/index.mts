@@ -90,7 +90,7 @@ function main() {
 
   interpolateCodeExamples(combinedEntries);
 
-  const normalized = moduleName.replace('@', '').replace(/[\/]/g, '_');
+  const normalized = moduleName.replace('@', '').replace(/[/]/g, '_');
 
   const output = JSON.stringify({
     repo,

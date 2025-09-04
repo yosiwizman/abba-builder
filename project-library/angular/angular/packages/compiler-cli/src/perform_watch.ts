@@ -89,7 +89,7 @@ export function createPerformWatchHost<CbEmitRes extends ts.EmitResult = ts.Emit
         // ignore .dotfiles, .js and .map files.
         // can't ignore other files as we e.g. want to recompile if an `.html` file changes as well.
         ignored: (path) =>
-          /((^[\/\\])\..)|(\.js$)|(\.map$)|(\.metadata\.json|node_modules)/.test(path),
+          /((^[/\\])\..)|(\.js$)|(\.map$)|(\.metadata\.json|node_modules)/.test(path),
         ignoreInitial: true,
         persistent: true,
       });

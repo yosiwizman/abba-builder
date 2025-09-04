@@ -1009,8 +1009,8 @@ class NeedsViewQueryOrderWithParent {
   standalone: false,
 })
 class NeedsTpl {
-  @ViewChildren(TemplateRef) viewQuery!: QueryList<TemplateRef<Object>>;
-  @ContentChildren(TemplateRef) query!: QueryList<TemplateRef<Object>>;
+  @ViewChildren(TemplateRef) viewQuery!: QueryList<TemplateRef<object>>;
+  @ContentChildren(TemplateRef) query!: QueryList<TemplateRef<object>>;
   constructor(public vc: ViewContainerRef) {}
 }
 
@@ -1020,8 +1020,8 @@ class NeedsTpl {
   standalone: false,
 })
 class NeedsNamedTpl {
-  @ViewChild('tpl', {static: true}) viewTpl!: TemplateRef<Object>;
-  @ContentChild('tpl', {static: true}) contentTpl!: TemplateRef<Object>;
+  @ViewChild('tpl', {static: true}) viewTpl!: TemplateRef<object>;
+  @ContentChild('tpl', {static: true}) contentTpl!: TemplateRef<object>;
   constructor(public vc: ViewContainerRef) {}
 }
 
@@ -1101,7 +1101,7 @@ class NeedsViewChildWithRead {
 class NeedsViewContainerWithRead {
   @ViewChild('q', {read: ViewContainerRef}) vc!: ViewContainerRef;
   @ViewChild('nonExisting', {read: ViewContainerRef}) nonExistingVar!: ViewContainerRef;
-  @ContentChild(TemplateRef, {static: true}) template!: TemplateRef<Object>;
+  @ContentChild(TemplateRef, {static: true}) template!: TemplateRef<object>;
 
   createView() {
     this.vc.createEmbeddedView(this.template);

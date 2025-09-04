@@ -4,5 +4,6 @@
   "maxProjectsPerUpdate": 100,
   "autoDownloadPopular": true,
   "popularThreshold": 1000,
-  "categories": []
+  "categories": [],
+  "githubToken": null
 }

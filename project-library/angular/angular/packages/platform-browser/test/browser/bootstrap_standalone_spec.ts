@@ -51,7 +51,7 @@ describe('bootstrapApplication for standalone components', () => {
         imports: [AmbientModule],
       })
       class StandaloneCmp {
-        constructor(@Inject(testToken) readonly testToken: String) {}
+        constructor(@Inject(testToken) readonly testToken: string) {}
       }
 
       const appRef = await bootstrapApplication(StandaloneCmp, {
@@ -108,7 +108,7 @@ describe('bootstrapApplication for standalone components', () => {
 
       @Injectable()
       class NeedsAmbientProvider {
-        constructor(@Inject(ambientToken) readonly ambientToken: String) {}
+        constructor(@Inject(ambientToken) readonly ambientToken: string) {}
       }
 
       @Component({

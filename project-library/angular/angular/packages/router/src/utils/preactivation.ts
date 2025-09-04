@@ -28,7 +28,7 @@ export class CanActivate {
 
 export class CanDeactivate {
   constructor(
-    public component: Object | null,
+    public component: object | null,
     public route: ActivatedRouteSnapshot,
   ) {}
 }
@@ -62,7 +62,7 @@ export function getTokenOrFunctionIdentity<T>(
   injector: Injector,
 ): Function | T {
   const NOT_FOUND = Symbol();
-  const result = injector.get<T | Symbol>(tokenOrFunction, NOT_FOUND);
+  const result = injector.get<T | symbol>(tokenOrFunction, NOT_FOUND);
   if (result === NOT_FOUND) {
     if (typeof tokenOrFunction === 'function' && !isInjectable(tokenOrFunction)) {
       // We think the token is just a function so return it as-is

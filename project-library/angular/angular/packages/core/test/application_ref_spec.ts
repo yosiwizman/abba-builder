@@ -737,7 +737,7 @@ describe('bootstrap', () => {
       standalone: false,
     })
     class EmbeddedViewComp {
-      @ViewChild(TemplateRef, {static: true}) tplRef!: TemplateRef<Object>;
+      @ViewChild(TemplateRef, {static: true}) tplRef!: TemplateRef<object>;
     }
 
     beforeEach(() => {

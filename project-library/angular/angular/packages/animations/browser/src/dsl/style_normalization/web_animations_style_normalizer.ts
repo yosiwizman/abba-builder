@@ -60,7 +60,7 @@ export class WebAnimationsStyleNormalizer extends AnimationStyleNormalizer {
       if (typeof value === 'number') {
         unit = 'px';
       } else {
-        const valAndSuffixMatch = value.match(/^[+-]?[\d\.]+([a-z]*)$/);
+        const valAndSuffixMatch = value.match(/^[+-]?[\d.]+([a-z]*)$/);
         if (valAndSuffixMatch && valAndSuffixMatch[1].length == 0) {
           errors.push(invalidCssUnitValue(userProvidedProperty, value));
         }

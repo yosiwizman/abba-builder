@@ -290,14 +290,14 @@ describe('Format date', () => {
         z: /GMT(\+|-)\d/,
         zz: /GMT(\+|-)\d/,
         zzz: /GMT(\+|-)\d/,
-        zzzz: /GMT(\+|-)\d{2}\:30/,
+        zzzz: /GMT(\+|-)\d{2}:30/,
         Z: /(\+|-)\d{2}30/,
         ZZ: /(\+|-)\d{2}30/,
         ZZZ: /(\+|-)\d{2}30/,
-        ZZZZ: /GMT(\+|-)\d{2}\:30/,
-        ZZZZZ: /(\+|-)\d{2}\:30/,
+        ZZZZ: /GMT(\+|-)\d{2}:30/,
+        ZZZZZ: /(\+|-)\d{2}:30/,
         O: /GMT(\+|-)\d/,
-        OOOO: /GMT(\+|-)\d{2}\:30/,
+        OOOO: /GMT(\+|-)\d{2}:30/,
       };
 
       Object.keys(dateFixtures).forEach((pattern: string) => {

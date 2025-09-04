@@ -132,27 +132,27 @@ function buildQueryAndParams(username: string, date: string) {
   for (let repo of REPOS) {
     dataQueries = {
       ...dataQueries,
-      [`${repo.replace(/[\/\-]/g, '_')}_issue_author`]: {
+      [`${repo.replace(/[/-]/g, '_')}_issue_author`]: {
         query: `repo:${ORG}/${repo} is:issue author:${username} ${updatedOrCreated}:>${date}`,
         label: `${ORG}/${repo} Issue Authored`,
       },
-      [`${repo.replace(/[\/\-]/g, '_')}_issues_involved`]: {
+      [`${repo.replace(/[/-]/g, '_')}_issues_involved`]: {
         query: `repo:${ORG}/${repo} is:issue -author:${username} involves:${username} ${updatedOrCreated}:>${date}`,
         label: `${ORG}/${repo} Issue Involved`,
       },
-      [`${repo.replace(/[\/\-]/g, '_')}_pr_author`]: {
+      [`${repo.replace(/[/-]/g, '_')}_pr_author`]: {
         query: `repo:${ORG}/${repo} is:pr author:${username} ${updatedOrCreated}:>${date}`,
         label: `${ORG}/${repo} PR Author`,
       },
-      [`${repo.replace(/[\/\-]/g, '_')}_pr_involved`]: {
+      [`${repo.replace(/[/-]/g, '_')}_pr_involved`]: {
         query: `repo:${ORG}/${repo} is:pr involves:${username} ${updatedOrCreated}:>${date}`,
         label: `${ORG}/${repo} PR Involved`,
       },
-      [`${repo.replace(/[\/\-]/g, '_')}_pr_reviewed`]: {
+      [`${repo.replace(/[/-]/g, '_')}_pr_reviewed`]: {
         query: `repo:${ORG}/${repo} is:pr -author:${username} reviewed-by:${username} ${updatedOrCreated}:>${date}`,
         label: `${ORG}/${repo} PR Reviewed`,
       },
-      [`${repo.replace(/[\/\-]/g, '_')}_pr_commented`]: {
+      [`${repo.replace(/[/-]/g, '_')}_pr_commented`]: {
         query: `repo:${ORG}/${repo} is:pr -author:${username} commenter:${username} ${updatedOrCreated}:>${date}`,
         label: `${ORG}/${repo} PR Commented`,
       },

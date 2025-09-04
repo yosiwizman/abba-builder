@@ -127,7 +127,7 @@ describe('ngFor', () => {
 
     getComponent().items = <any>{'stuff': 'whaaa'};
     expect(() => fixture.detectChanges()).toThrowError(
-      `NG02200: Cannot find a differ supporting object '\[object Object\]' of type 'object'. NgFor only supports binding to Iterables, such as Arrays. Did you mean to use the keyvalue pipe? Find more at https://angular.dev/errors/NG02200`,
+      `NG02200: Cannot find a differ supporting object '[object Object]' of type 'object'. NgFor only supports binding to Iterables, such as Arrays. Did you mean to use the keyvalue pipe? Find more at https://angular.dev/errors/NG02200`,
     );
   }));
 

@@ -231,8 +231,8 @@ export interface INgModelController {
   $validators: {[key: string]: Function};
   $asyncValidators: {[key: string]: Function};
   $viewChangeListeners: Function[];
-  $error: Object;
-  $pending: Object;
+  $error: object;
+  $pending: object;
   $untouched: boolean;
   $touched: boolean;
   $pristine: boolean;

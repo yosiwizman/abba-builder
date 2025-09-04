@@ -249,7 +249,7 @@ function getParamTypeString(
   let result = printer
     .printNode(ts.EmitHint.Unspecified, paramNode, sourceFile)
     // Removing the parameter name, the conditional question mark and the colon (e.g. opts?: {foo: string})
-    .replace(new RegExp(`${paramNode.name.getText()}\\??\: `), '')
+    .replace(new RegExp(`${paramNode.name.getText()}\\??: `), '')
     // Remove extra spaces/line breaks
     .replaceAll(/\s+/g, ' ');
 
