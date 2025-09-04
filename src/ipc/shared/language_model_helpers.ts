@@ -100,6 +100,30 @@ export const MODEL_OPTIONS: Record<string, ModelOption[]> = {
   // https://docs.anthropic.com/en/docs/about-claude/models/all-models#model-comparison-table
   anthropic: [
     {
+      name: "claude-opus-4.1-20250522",
+      displayName: "Claude Opus 4.1",
+      description: "Frontier intelligence for coding, agentic search, and creative writing",
+      maxOutputTokens: 32_000,  // Supports up to 32K output tokens
+      contextWindow: 200_000,
+      temperature: 0,
+    },
+    {
+      name: "claude-opus-4-20250514",
+      displayName: "Claude Opus 4",
+      description: "Most powerful model for complex challenges with extended thinking",
+      maxOutputTokens: 32_000,  // Supports up to 32K output tokens
+      contextWindow: 200_000,
+      temperature: 0,
+    },
+    {
+      name: "claude-3-opus-20240229",
+      displayName: "Claude 3 Opus",
+      description: "Previous generation - Most capable model for complex reasoning",
+      maxOutputTokens: 4_096,
+      contextWindow: 200_000,
+      temperature: 0,
+    },
+    {
       name: "claude-sonnet-4-20250514",
       displayName: "Claude 4 Sonnet",
       description: "Excellent coder",

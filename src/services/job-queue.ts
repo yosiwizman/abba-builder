@@ -99,8 +99,9 @@ export class JobQueueService extends EventEmitter {
       // Handle Redis errors silently to prevent unhandled error events
       this.redisClient.on('error', (err) => {
         if (err.code === 'ECONNREFUSED') {
-          logger.debug('Redis connection refused - using in-memory queue');
-        } else {
+          // Silently handle connection refused - we'll fallback to in-memory
+          // logger.debug('Redis connection refused - using in-memory queue');
+        } else if (err.message && !err.message.includes('Connection is closed')) {
           logger.warn('Redis error:', err.message);
         }
       });
@@ -114,9 +115,8 @@ export class JobQueueService extends EventEmitter {
       logger.info("Job queue service initialized with Redis");
       this.emit("ready");
     } catch (error) {
-      logger.error("Failed to initialize job queue service:", error);
-      // Fallback to in-memory queue if Redis is not available
-      logger.warn("Falling back to in-memory queue (jobs will not persist)");
+      // Silently fallback to in-memory queue if Redis is not available
+      logger.debug("Redis not available, using in-memory queue (jobs will not persist)");
       this.isInitialized = true;
       this.emit("ready", { warning: "Using in-memory queue" });
     }
@@ -363,7 +363,7 @@ export class JobQueueService extends EventEmitter {
    */
   processJobType(jobType: string, processor: (data: any) => Promise<any>): void {
     if (!this.isRedisAvailable) {
-      logger.debug(`Cannot process job type '${jobType}' - Redis not available`);
+      // Silently skip when Redis is not available - no need to log
       return;
     }
     

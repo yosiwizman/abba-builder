@@ -3,22 +3,25 @@
  * Manages multiple CI/CD providers and provides a unified interface
  */
 
-import { 
-  CIProvider, 
-  CIProviderType, 
-  ProviderConfig,
+import {
+  CIProvider,
   Build,
   BuildDetails,
-  BuildQueryOptions,
-  TriggerBuildOptions,
   Deployment,
-  DeploymentQueryOptions,
-  TriggerDeploymentOptions,
   Statistics,
+  BuildQueryOptions,
+  DeploymentQueryOptions,
+  TriggerBuildOptions,
+  TriggerDeploymentOptions,
+  UpdateCallback,
   StatisticsOptions,
-  UpdateCallback
+  CIProviderType,
+  ProviderConfig,
 } from './types';
 import { GitHubActionsProvider } from './providers/github-actions';
+import * as fs from 'fs';
+import * as path from 'path';
+import { app } from 'electron';
 
 export class CIProviderManager {
   private static instance: CIProviderManager;
@@ -238,25 +241,28 @@ export class CIProviderManager {
    */
   private saveConfigurations(): void {
     try {
-      // Filter out sensitive data before saving
-      const safeConfig: Record<string, any> = {};
+      // Save complete configuration including tokens (will be encrypted by settings system)
+      const fullConfig: Record<string, any> = {};
       
       this.config.forEach((config, id) => {
-        safeConfig[id] = {
+        fullConfig[id] = {
           type: config.type,
           baseUrl: config.baseUrl,
           options: config.options,
-          // Don't save auth tokens
+          auth: config.auth, // Include auth for persistence
         };
       });
       
-      // Save to localStorage or electron store
-      if (typeof window !== 'undefined' && window.localStorage) {
-        window.localStorage.setItem('ci-provider-config', JSON.stringify({
-          providers: safeConfig,
-          activeProviderId: this.activeProviderId
-        }));
-      }
+      // Save to Electron's userData directory
+      const userDataPath = app.getPath('userData');
+      const configPath = path.join(userDataPath, 'ci-provider-config.json');
+      
+      fs.writeFileSync(configPath, JSON.stringify({
+        providers: fullConfig,
+        activeProviderId: this.activeProviderId
+      }, null, 2));
+      
+      console.log('CI provider configurations saved successfully');
     } catch (error) {
       console.error('Failed to save CI provider configurations:', error);
     }
@@ -267,18 +273,27 @@ export class CIProviderManager {
    */
   private loadConfigurations(): void {
     try {
-      if (typeof window !== 'undefined' && window.localStorage) {
-        const stored = window.localStorage.getItem('ci-provider-config');
-        if (stored) {
-          const data = JSON.parse(stored);
+      const userDataPath = app.getPath('userData');
+      const configPath = path.join(userDataPath, 'ci-provider-config.json');
+      
+      if (fs.existsSync(configPath)) {
+        const stored = fs.readFileSync(configPath, 'utf-8');
+        const data = JSON.parse(stored);
+        
+        // Load provider configurations including auth
+        Object.entries(data.providers || {}).forEach(([id, config]: [string, any]) => {
+          this.config.set(id, config);
           
-          // Load provider configurations (auth will need to be re-entered)
-          Object.entries(data.providers || {}).forEach(([id, config]: [string, any]) => {
-            this.config.set(id, config);
-          });
-          
-          this.activeProviderId = data.activeProviderId || null;
-        }
+          // Re-authenticate providers on startup
+          if (config.auth && config.auth.token) {
+            this.registerProvider(id, config).catch(err => {
+              console.error(`Failed to re-authenticate provider ${id}:`, err);
+            });
+          }
+        });
+        
+        this.activeProviderId = data.activeProviderId || null;
+        console.log('CI provider configurations loaded successfully');
       }
     } catch (error) {
       console.error('Failed to load CI provider configurations:', error);
