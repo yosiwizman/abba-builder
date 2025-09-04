@@ -6,6 +6,7 @@ import {
   Store,
   BookOpen,
   Activity,
+  BarChart3,
 } from "lucide-react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useSidebar } from "@/components/ui/sidebar"; // import useSidebar hook
@@ -61,6 +62,11 @@ const items = [
     title: "CI/CD",
     to: "/ci-dashboard",
     icon: Activity,
+  },
+  {
+    title: "Metrics",
+    to: "/metrics",
+    icon: BarChart3,
   },
 ];
 
