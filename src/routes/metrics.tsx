@@ -39,9 +39,23 @@ interface SystemHealth {
   knowledge: 'synced' | 'updating' | 'stale';
 }
 
+// Generate mock data for demonstration
+const generateMockMetrics = (): MetricData[] => {
+  const now = Date.now();
+  return Array.from({ length: 20 }, (_, i) => ({
+    timestamp: new Date(now - (20 - i) * 60000).toISOString(),
+    successRate: 92 + Math.random() * 5,
+    iterations: Math.floor(100 + Math.random() * 50),
+    tokensUsed: Math.floor(5000 + Math.random() * 2000),
+    executionTime: 2.5 + Math.random() * 2,
+    selfHealingActivations: Math.floor(Math.random() * 3),
+    knowledgeBaseHits: Math.floor(10 + Math.random() * 20),
+  }));
+};
+
 export default function MetricsPage() {
   const navigate = useNavigate();
-  const [metrics, setMetrics] = useState<MetricData[]>([]);
+  const [metrics, setMetrics] = useState<MetricData[]>(generateMockMetrics());
   const [systemHealth, setSystemHealth] = useState<SystemHealth>({
     orchestrator: 'operational',
     claude: 'fallback',
@@ -49,7 +63,7 @@ export default function MetricsPage() {
     testing: 'idle',
     knowledge: 'synced',
   });
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     loadMetrics();
@@ -59,13 +73,17 @@ export default function MetricsPage() {
 
   const loadMetrics = async () => {
     try {
-      const data = await window.api.invoke('enhanced:get-metrics');
-      if (data?.metrics) {
-        setMetrics(data.metrics.slice(-50)); // Last 50 data points
-      }
-      if (data?.health) {
-        setSystemHealth(data.health);
-      }
+      // TODO: Wire up IPC handler for real metrics
+      // const data = await window.api.invoke('enhanced:get-metrics');
+      // if (data?.metrics) {
+      //   setMetrics(data.metrics.slice(-50)); // Last 50 data points
+      // }
+      // if (data?.health) {
+      //   setSystemHealth(data.health);
+      // }
+      
+      // For now, update with new mock data to simulate real-time updates
+      setMetrics(generateMockMetrics());
     } catch (error) {
       console.error('Failed to load metrics:', error);
     } finally {
@@ -104,7 +122,7 @@ export default function MetricsPage() {
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b">
         <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon" onClick={() => navigate(-1)}>
+          <Button variant="ghost" size="icon" onClick={() => navigate({ to: '/' })}>
             <ArrowLeft className="w-4 h-4" />
           </Button>
           <div>
