@@ -84,7 +84,12 @@ export class GitHubActionsProvider implements CIProvider {
       });
       
       return response.data.workflow_runs.map(run => this.mapWorkflowRunToBuild(run));
-    } catch (error) {
+    } catch (error: any) {
+      // Handle specific GitHub API errors
+      if (error.status === 404) {
+        console.warn(`Repository ${this.owner}/${this.repo} not found or no access`);
+        return []; // Return empty array instead of throwing
+      }
       console.error('Failed to fetch builds:', error);
       throw new Error('Failed to fetch builds from GitHub Actions');
     }
@@ -251,7 +256,12 @@ export class GitHubActionsProvider implements CIProvider {
       );
       
       return deployments;
-    } catch (error) {
+    } catch (error: any) {
+      // Handle specific GitHub API errors
+      if (error.status === 404) {
+        console.warn(`Repository ${this.owner}/${this.repo} not found or deployments not accessible`);
+        return []; // Return empty array instead of throwing
+      }
       console.error('Failed to fetch deployments:', error);
       throw new Error('Failed to fetch deployments from GitHub');
     }
@@ -364,7 +374,19 @@ export class GitHubActionsProvider implements CIProvider {
         failureRate: totalBuilds > 0 ? (failedBuilds / totalBuilds) * 100 : 0,
         buildsPerDay
       };
-    } catch (error) {
+    } catch (error: any) {
+      // Handle specific GitHub API errors
+      if (error.status === 404) {
+        console.warn(`Repository ${this.owner}/${this.repo} not found for statistics`);
+        // Return default statistics instead of throwing
+        return {
+          totalBuilds: 0,
+          successRate: 0,
+          averageDuration: 0,
+          failureRate: 0,
+          buildsPerDay: 0
+        };
+      }
       console.error('Failed to fetch statistics:', error);
       throw new Error('Failed to fetch statistics from GitHub Actions');
     }

@@ -9,12 +9,14 @@ import { hubRoute } from "./routes/hub";
 import { libraryRoute } from "./routes/library";
 import { ciDashboardRoute } from "./routes/ci-dashboard";
 import { metricsRoute } from "./routes/metrics.route";
+import { workflowsRoute } from "./routes/workflows";
 
 const routeTree = rootRoute.addChildren([
   homeRoute,
   hubRoute,
   libraryRoute,
   ciDashboardRoute,
+  workflowsRoute,
   metricsRoute,
   chatRoute,
   appDetailsRoute,

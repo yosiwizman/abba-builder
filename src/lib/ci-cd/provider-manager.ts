@@ -86,9 +86,14 @@ export class CIProviderManager {
         if (match) {
           return new GitHubActionsProvider(match[1], match[2]);
         } else {
-          // Fallback to options
-          const owner = config.options?.owner || 'default-owner';
-          const repo = config.options?.repo || 'default-repo';
+          // Use options if provided, but validate them
+          const owner = config.options?.owner;
+          const repo = config.options?.repo;
+          
+          if (!owner || !repo || owner.trim() === '' || repo.trim() === '') {
+            throw new Error('GitHub repository owner and name are required');
+          }
+          
           return new GitHubActionsProvider(owner, repo);
         }
       
