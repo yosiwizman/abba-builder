@@ -196,6 +196,8 @@ const validInvokeChannels = [
   "blockchain:get-token-info",
   "blockchain:watch-address",
   "blockchain:stop-watching",
+  // Enhanced system channels
+  "enhanced:get-metrics",
   // Test-only channels
   // These should ALWAYS be guarded with IS_TEST_BUILD in the main process.
   // We can't detect with IS_TEST_BUILD in the preload script because
