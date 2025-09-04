@@ -42,6 +42,7 @@ export class JobQueueService extends EventEmitter {
   private queues: Map<string, Queue> = new Map();
   private redisClient: Redis | null = null;
   private isInitialized = false;
+  private isRedisAvailable = false;
   private config: QueueConfig;
   private jobHandlers: Map<string, (job: Job) => Promise<any>> = new Map();
 
@@ -75,24 +76,42 @@ export class JobQueueService extends EventEmitter {
     if (this.isInitialized) return;
 
     try {
-      // Create Redis client
+      // Create Redis client with limited retries
       this.redisClient = new Redis({
         host: this.config.redis!.host,
         port: this.config.redis!.port,
         password: this.config.redis!.password,
         db: this.config.redis!.db,
         retryStrategy: (times) => {
+          // Stop retrying after 3 attempts
+          if (times > 3) {
+            logger.warn("Redis unavailable, stopping connection attempts");
+            return null;
+          }
           const delay = Math.min(times * 50, 2000);
           return delay;
         },
         maxRetriesPerRequest: 3,
+        enableOfflineQueue: false,
+        lazyConnect: true,
+      });
+
+      // Handle Redis errors silently to prevent unhandled error events
+      this.redisClient.on('error', (err) => {
+        if (err.code === 'ECONNREFUSED') {
+          logger.debug('Redis connection refused - using in-memory queue');
+        } else {
+          logger.warn('Redis error:', err.message);
+        }
       });
 
       // Test Redis connection
+      await this.redisClient.connect();
       await this.redisClient.ping();
 
+      this.isRedisAvailable = true;
       this.isInitialized = true;
-      logger.info("Job queue service initialized");
+      logger.info("Job queue service initialized with Redis");
       this.emit("ready");
     } catch (error) {
       logger.error("Failed to initialize job queue service:", error);
@@ -106,7 +125,13 @@ export class JobQueueService extends EventEmitter {
   /**
    * Create or get a queue
    */
-  getQueue(queueName: string): Queue {
+  getQueue(queueName: string): Queue | null {
+    // If Redis is not available, return null for in-memory fallback
+    if (!this.isRedisAvailable) {
+      logger.debug(`Queue '${queueName}' not available - Redis not connected`);
+      return null;
+    }
+
     if (!this.queues.has(queueName)) {
       const queue = new Bull(queueName, {
         redis: this.config.redis!,
@@ -156,8 +181,13 @@ export class JobQueueService extends EventEmitter {
     queueName: string,
     data: JobData,
     options?: JobOptions,
-  ): Promise<Job> {
+  ): Promise<Job | null> {
     const queue = this.getQueue(queueName);
+    if (!queue) {
+      logger.debug(`Cannot add job - queue '${queueName}' not available`);
+      return null;
+    }
+    
     const jobOptions = { ...this.config.defaultJobOptions, ...options };
 
     const job = await queue.add(data, jobOptions);
@@ -174,6 +204,11 @@ export class JobQueueService extends EventEmitter {
     jobs: Array<{ data: JobData; options?: JobOptions }>,
   ): Promise<Job[]> {
     const queue = this.getQueue(queueName);
+    if (!queue) {
+      logger.debug(`Cannot add bulk jobs - queue '${queueName}' not available`);
+      return [];
+    }
+    
     const bulkJobs = jobs.map(({ data, options }) => ({
       data,
       opts: { ...this.config.defaultJobOptions, ...options },
@@ -324,16 +359,38 @@ export class JobQueueService extends EventEmitter {
   }
 
   /**
+   * Process jobs of a specific type
+   */
+  processJobType(jobType: string, processor: (data: any) => Promise<any>): void {
+    if (!this.isRedisAvailable) {
+      logger.debug(`Cannot process job type '${jobType}' - Redis not available`);
+      return;
+    }
+    
+    this.registerHandler(jobType, async (job: Job) => {
+      return processor(job.data.payload);
+    });
+  }
+
+  /**
    * Pause/resume a queue
    */
   async pauseQueue(queueName: string): Promise<void> {
     const queue = this.getQueue(queueName);
+    if (!queue) {
+      logger.debug(`Cannot pause - queue '${queueName}' not available`);
+      return;
+    }
     await queue.pause();
     logger.info(`Queue '${queueName}' paused`);
   }
 
   async resumeQueue(queueName: string): Promise<void> {
     const queue = this.getQueue(queueName);
+    if (!queue) {
+      logger.debug(`Cannot resume - queue '${queueName}' not available`);
+      return;
+    }
     await queue.resume();
     logger.info(`Queue '${queueName}' resumed`);
   }
@@ -421,7 +478,7 @@ export async function createDelayedJob(
   queueName: string,
   data: JobData,
   delayMs: number,
-): Promise<Job> {
+): Promise<Job | null> {
   const queue = getJobQueue();
   return queue.addJob(queueName, data, { delay: delayMs });
 }
@@ -433,7 +490,7 @@ export async function createPriorityJob(
   queueName: string,
   data: JobData,
   priority: number,
-): Promise<Job> {
+): Promise<Job | null> {
   const queue = getJobQueue();
   return queue.addJob(queueName, data, { priority });
 }
@@ -444,6 +501,12 @@ export async function createPriorityJob(
 export async function retryFailedJobs(queueName: string): Promise<void> {
   const queueService = getJobQueue();
   const queue = queueService.getQueue(queueName);
+  
+  if (!queue) {
+    logger.debug(`Cannot retry failed jobs - queue '${queueName}' not available`);
+    return;
+  }
+  
   const failedJobs = await queue.getFailed();
 
   for (const job of failedJobs) {
