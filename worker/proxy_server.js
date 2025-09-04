@@ -222,8 +222,14 @@ const server = http.createServer((clientReq, clientRes) => {
   const upReq = lib.request(upOpts, (upRes) => {
     const inject = needsInjection(target.pathname);
 
+    // Remove headers that might block iframe embedding
+    const filteredHeaders = { ...upRes.headers };
+    delete filteredHeaders['x-frame-options'];
+    delete filteredHeaders['content-security-policy'];
+    delete filteredHeaders['x-content-security-policy'];
+
     if (!inject) {
-      clientRes.writeHead(upRes.statusCode, upRes.headers);
+      clientRes.writeHead(upRes.statusCode, filteredHeaders);
       return void upRes.pipe(clientRes);
     }
 
@@ -242,6 +248,10 @@ const server = http.createServer((clientReq, clientRes) => {
         delete hdrs["content-encoding"];
         // Also, remove ETag as content has changed
         delete hdrs["etag"];
+        // Remove headers that might block iframe embedding
+        delete hdrs['x-frame-options'];
+        delete hdrs['content-security-policy'];
+        delete hdrs['x-content-security-policy'];
 
         clientRes.writeHead(upRes.statusCode, hdrs);
         clientRes.end(patched);

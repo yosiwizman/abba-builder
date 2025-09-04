@@ -16,11 +16,13 @@ import { IS_TEST_BUILD } from "../utils/test_utils";
 const logger = log.scope("github_handlers");
 
 // --- GitHub Device Flow Constants ---
-// GitHub client ID must be set in environment variables for security
-const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID;
+// GitHub client ID - use environment variable or fallback for development
+const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID || "Ov23licV8gG1BhPJX3gE"; // Public OAuth App ID for development
 
 if (!GITHUB_CLIENT_ID && !IS_TEST_BUILD) {
   logger.error("GITHUB_CLIENT_ID environment variable is not set. GitHub integration will not work.");
+} else if (GITHUB_CLIENT_ID) {
+  logger.info("GitHub OAuth configured");
 }
 
 // Use test server URLs when in test mode

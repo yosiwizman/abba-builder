@@ -8,6 +8,7 @@ import {
   Activity,
   BarChart3,
   GitBranch,
+  Plug,
 } from "lucide-react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useSidebar } from "@/components/ui/sidebar"; // import useSidebar hook
@@ -58,6 +59,11 @@ const items = [
     title: "Hub",
     to: "/hub",
     icon: Store,
+  },
+  {
+    title: "Integrations",
+    to: "/integrations",
+    icon: Plug,
   },
   {
     title: "CI/CD",

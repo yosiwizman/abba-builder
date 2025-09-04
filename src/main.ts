@@ -262,7 +262,7 @@ const createWindow = () => {
       `base-uri 'self'`,
       `form-action 'self'`,
       `frame-ancestors 'none'`,
-      `frame-src 'self'`
+      `frame-src 'self' http://localhost:* http://127.0.0.1:*`
     ].join('; ');
     
     callback({
