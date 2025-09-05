@@ -946,34 +946,38 @@ export function registerProjectLibraryHandlers() {
           log.info(`Adding GitHub repository: ${owner}/${repo}`);
 
           // Use the GitHub API service to fetch real repository data
-          const GitHubAPIService = (await import('../../services/github-api')).default;
-          const { getGitHubToken } = await import('../../config/secrets');
-          const githubToken = getGitHubToken() || '';
+          const GitHubAPIService = (await import("../../services/github-api"))
+            .default;
+          const { getGitHubToken } = await import("../../../config/secrets");
+          const githubToken = getGitHubToken() || "";
           const githubAPI = new GitHubAPIService(githubToken);
 
           try {
             // Fetch repository details from GitHub
             const repoData = await githubAPI.getRepository(owner, repo);
-            
+
             // Get languages used in the repository
-            const languages = await githubAPI.getRepositoryLanguages(owner, repo);
-            
+            const languages = await githubAPI.getRepositoryLanguages(
+              owner,
+              repo,
+            );
+
             // Get recent releases if any
             const releases = await githubAPI.getRepositoryReleases(owner, repo);
-            
+
             // Prepare project data
             const projectData = {
               name: repoData.name,
               owner: repoData.owner.login,
               url: repoData.html_url,
-              description: repoData.description || 'No description',
+              description: repoData.description || "No description",
               stars: repoData.stargazers_count,
               forks: repoData.forks_count,
               watchers: repoData.watchers_count,
               language: repoData.language,
               languages: Object.keys(languages),
               topics: repoData.topics || [],
-              license: repoData.license?.name || 'Unknown',
+              license: repoData.license?.name || "Unknown",
               isPrivate: repoData.private,
               defaultBranch: repoData.default_branch,
               createdAt: repoData.created_at,
@@ -989,9 +993,15 @@ export function registerProjectLibraryHandlers() {
             };
 
             // Determine the project-library path
-            const projectLibraryPath = path.join(process.cwd(), 'project-library');
-            const projectPath = path.join(projectLibraryPath, `${owner}-${repo}`);
-            
+            const projectLibraryPath = path.join(
+              process.cwd(),
+              "project-library",
+            );
+            const projectPath = path.join(
+              projectLibraryPath,
+              `${owner}-${repo}`,
+            );
+
             // Check if project already exists
             if (await fs.pathExists(projectPath)) {
               log.info(`Project ${owner}/${repo} already exists in library`);
@@ -1008,29 +1018,39 @@ export function registerProjectLibraryHandlers() {
 
             // Clone the repository using git command
             log.info(`Cloning repository ${owner}/${repo} to ${projectPath}`);
-            const { exec } = require('child_process');
-            const { promisify } = require('util');
+            const { exec } = require("child_process");
+            const { promisify } = require("util");
             const execAsync = promisify(exec);
-            
+
             try {
               // Use sparse checkout for large repos to save space
-              await execAsync(`git clone --depth 1 --single-branch ${repoData.clone_url} "${projectPath}"`);
+              await execAsync(
+                `git clone --depth 1 --single-branch ${repoData.clone_url} "${projectPath}"`,
+              );
               log.info(`Successfully cloned ${owner}/${repo}`);
-              
+
               // Save project metadata
-              const metadataPath = path.join(projectPath, 'project.meta.json');
-              await fs.writeJson(metadataPath, {
-                ...projectData,
-                downloadedAt: new Date().toISOString(),
-                libraryVersion: '1.0.0',
-              }, { spaces: 2 });
-              
+              const metadataPath = path.join(projectPath, "project.meta.json");
+              await fs.writeJson(
+                metadataPath,
+                {
+                  ...projectData,
+                  downloadedAt: new Date().toISOString(),
+                  libraryVersion: "1.0.0",
+                },
+                { spaces: 2 },
+              );
+
               // Also update the learning system if available
-              const LearningSystem = (await import('../../services/learning-system')).default;
+              const LearningSystem = (
+                await import("../../services/learning-system")
+              ).default;
               const learningSystem = new LearningSystem();
               await learningSystem.initialize();
-              await learningSystem.scanTemplatesFromProjectLibrary(projectLibraryPath);
-              
+              await learningSystem.scanTemplatesFromProjectLibrary(
+                projectLibraryPath,
+              );
+
               return {
                 success: true,
                 data: {
@@ -1042,9 +1062,12 @@ export function registerProjectLibraryHandlers() {
             } catch (cloneError: any) {
               log.error(`Failed to clone repository: ${cloneError.message}`);
               // Even if clone fails, save the metadata for reference
-              const metadataOnlyPath = path.join(projectLibraryPath, `${owner}-${repo}.meta.json`);
+              const metadataOnlyPath = path.join(
+                projectLibraryPath,
+                `${owner}-${repo}.meta.json`,
+              );
               await fs.writeJson(metadataOnlyPath, projectData, { spaces: 2 });
-              
+
               return {
                 success: true,
                 data: {

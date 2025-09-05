@@ -3,7 +3,7 @@ import * as fs from "fs-extra";
 import * as path from "path";
 import { EventEmitter } from "events";
 import { execSync } from "child_process";
-import { getGitHubToken } from "../../config/secrets";
+import { getGitHubToken } from "../../../config/secrets";
 
 const logger = log.scope("library-auto-updater");
 

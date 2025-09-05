@@ -9,7 +9,6 @@ import {
   BarChart3,
   GitBranch,
   Plug,
-  Zap,
 } from "lucide-react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useSidebar } from "@/components/ui/sidebar"; // import useSidebar hook
@@ -80,11 +79,6 @@ const items = [
     title: "Metrics",
     to: "/metrics",
     icon: BarChart3,
-  },
-  {
-    title: "Integrations",
-    to: "/integrations",
-    icon: Zap,
   },
 ];
 

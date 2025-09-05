@@ -20,7 +20,6 @@ const routeTree = rootRoute.addChildren([
   ciDashboardRoute,
   workflowsRoute,
   metricsRoute,
-  integrationsRoute,
   chatRoute,
   appDetailsRoute,
   settingsRoute.addChildren([providerSettingsRoute]),

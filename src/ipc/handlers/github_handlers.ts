@@ -12,7 +12,12 @@ import { eq } from "drizzle-orm";
 import { GithubUser } from "../../lib/schemas";
 import log from "electron-log";
 import { IS_TEST_BUILD } from "../utils/test_utils";
-import { getGitHubOAuthConfig, getGitHubToken } from "../../config/secrets";
+// import { getGitHubOAuthConfig, getGitHubToken } from "../../../config/secrets";
+const getGitHubOAuthConfig = () => ({
+  available: !!process.env.GITHUB_CLIENT_ID,
+  clientId: process.env.GITHUB_CLIENT_ID || "Ov23licV8gG1BhPJX3gE",
+  clientSecret: process.env.GITHUB_CLIENT_SECRET || "",
+});
 
 const logger = log.scope("github_handlers");
 
@@ -24,7 +29,9 @@ const GITHUB_CLIENT_SECRET = githubOAuthConfig.clientSecret;
 
 if (!githubOAuthConfig.available && !IS_TEST_BUILD) {
   logger.warn("GitHub OAuth not configured. GitHub login will be disabled.");
-  logger.info("To enable GitHub integration, set GITHUB_CLIENT_ID and GITHUB_CLIENT_SECRET in your .env file");
+  logger.info(
+    "To enable GitHub integration, set GITHUB_CLIENT_ID and GITHUB_CLIENT_SECRET in your .env file",
+  );
 } else if (githubOAuthConfig.available || GITHUB_CLIENT_ID) {
   logger.info("GitHub OAuth configured and ready");
 }
@@ -227,12 +234,13 @@ function handleStartGithubFlow(
   args: { appId: number | null },
 ) {
   logger.debug(`Received github:start-flow for appId: ${args.appId}`);
-  
+
   // Check if GitHub OAuth is configured
   if (!githubOAuthConfig.available) {
     logger.error("GitHub OAuth not configured - cannot start flow");
     event.sender.send("github:flow-error", {
-      error: "GitHub integration is not configured. Please contact your administrator.",
+      error:
+        "GitHub integration is not configured. Please contact your administrator.",
     });
     return;
   }
@@ -743,17 +751,18 @@ async function handleFetchIssues(
  * Check if GitHub OAuth is available
  */
 async function handleGetGithubOAuthStatus(
-  event: IpcMainInvokeEvent,
+  _event: IpcMainInvokeEvent,
 ): Promise<{ available: boolean; message: string }> {
   if (githubOAuthConfig.available) {
-    return { 
-      available: true, 
-      message: "GitHub OAuth is configured and ready"
+    return {
+      available: true,
+      message: "GitHub OAuth is configured and ready",
     };
   } else {
-    return { 
-      available: false, 
-      message: "GitHub OAuth is not configured. Set GITHUB_CLIENT_ID and GITHUB_CLIENT_SECRET to enable."
+    return {
+      available: false,
+      message:
+        "GitHub OAuth is not configured. Set GITHUB_CLIENT_ID and GITHUB_CLIENT_SECRET to enable.",
     };
   }
 }
@@ -777,13 +786,11 @@ export function registerGithubHandlers() {
     ) => handleConnectToExistingRepo(event, args),
   );
   ipcMain.handle("github:push", handlePushToGithub);
-  ipcMain.handle(
-    "github:disconnect",
-    (event, args: { appId: number }) => handleDisconnectGithubRepo(event, args),
+  ipcMain.handle("github:disconnect", (event, args: { appId: number }) =>
+    handleDisconnectGithubRepo(event, args),
   );
-  ipcMain.handle(
-    "github:fetch-issues",
-    (event, args) => handleFetchIssues(event, args),
+  ipcMain.handle("github:fetch-issues", (event, args) =>
+    handleFetchIssues(event, args),
   );
 }
 

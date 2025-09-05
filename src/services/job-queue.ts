@@ -4,12 +4,16 @@ let Redis: any;
 try {
   Bull = require("bull");
   Redis = require("ioredis");
-} catch (e) {
+} catch {
   // Redis/Bull not installed, will use in-memory fallback
 }
 import log from "electron-log";
 import { EventEmitter } from "events";
-import { getRedisUrl, getQueueClient, initializeRedis, isRedisAvailable } from "../config/redis";
+import {
+  getRedisUrl,
+  initializeRedis,
+  isRedisAvailable,
+} from "../../config/redis";
 
 const logger = log.scope("job-queue");
 
@@ -87,46 +91,49 @@ export class JobQueueService extends EventEmitter {
       // Initialize Redis from centralized config
       await initializeRedis();
       const redisUrl = getRedisUrl();
-      
-      if (redisUrl && await isRedisAvailable()) {
+
+      if (redisUrl && (await isRedisAvailable())) {
         // Parse Redis URL for Bull configuration
         const url = new URL(redisUrl);
         this.config.redis = {
           host: url.hostname,
-          port: parseInt(url.port || '6379'),
+          port: parseInt(url.port || "6379"),
           password: url.password || undefined,
-          db: parseInt(url.pathname.slice(1) || '0'),
+          db: parseInt(url.pathname.slice(1) || "0"),
         };
-        
+
         // Create Redis client for internal use if Redis module is available
         if (Redis) {
           this.redisClient = new Redis({
-          host: this.config.redis.host,
-          port: this.config.redis.port,
-          password: this.config.redis.password,
-          db: this.config.redis.db,
-          retryStrategy: (times) => {
-            if (times > 3) {
-              logger.info("Redis connection attempts exceeded");
-              return null;
-            }
-            return Math.min(times * 50, 2000);
-          },
-          maxRetriesPerRequest: 3,
-          enableOfflineQueue: false,
-          lazyConnect: true,
-        });
+            host: this.config.redis.host,
+            port: this.config.redis.port,
+            password: this.config.redis.password,
+            db: this.config.redis.db,
+            retryStrategy: (times) => {
+              if (times > 3) {
+                logger.info("Redis connection attempts exceeded");
+                return null;
+              }
+              return Math.min(times * 50, 2000);
+            },
+            maxRetriesPerRequest: 3,
+            enableOfflineQueue: false,
+            lazyConnect: true,
+          });
 
-        // Handle Redis errors
-        this.redisClient.on('error', (err) => {
-          if (err.code !== 'ECONNREFUSED' && !err.message?.includes('Connection is closed')) {
-            logger.warn('Redis error:', err.message);
-          }
-        });
+          // Handle Redis errors
+          this.redisClient.on("error", (err) => {
+            if (
+              err.code !== "ECONNREFUSED" &&
+              !err.message?.includes("Connection is closed")
+            ) {
+              logger.warn("Redis error:", err.message);
+            }
+          });
 
           await this.redisClient.connect();
           await this.redisClient.ping();
-          
+
           this.isRedisAvailable = true;
           logger.info("Job queue service initialized with Redis");
         } else {
@@ -135,14 +142,18 @@ export class JobQueueService extends EventEmitter {
         }
       } else {
         this.isRedisAvailable = false;
-        logger.info("Redis not available, using in-memory queue (jobs will not persist)");
+        logger.info(
+          "Redis not available, using in-memory queue (jobs will not persist)",
+        );
       }
-      
+
       this.isInitialized = true;
       this.emit("ready", { redisAvailable: this.isRedisAvailable });
-    } catch (error) {
+    } catch {
       // Fallback to in-memory queue
-      logger.info("Redis not available, using in-memory queue (jobs will not persist)");
+      logger.info(
+        "Redis not available, using in-memory queue (jobs will not persist)",
+      );
       this.isRedisAvailable = false;
       this.isInitialized = true;
       this.emit("ready", { warning: "Using in-memory queue" });
@@ -155,7 +166,9 @@ export class JobQueueService extends EventEmitter {
   getQueue(queueName: string): Queue | null {
     // If Redis or Bull is not available, return null for in-memory fallback
     if (!this.isRedisAvailable || !Bull) {
-      logger.debug(`Queue '${queueName}' not available - Redis/Bull not connected`);
+      logger.debug(
+        `Queue '${queueName}' not available - Redis/Bull not connected`,
+      );
       return null;
     }
 
@@ -214,7 +227,7 @@ export class JobQueueService extends EventEmitter {
       logger.debug(`Cannot add job - queue '${queueName}' not available`);
       return null;
     }
-    
+
     const jobOptions = { ...this.config.defaultJobOptions, ...options };
 
     const job = await queue.add(data, jobOptions);
@@ -235,7 +248,7 @@ export class JobQueueService extends EventEmitter {
       logger.debug(`Cannot add bulk jobs - queue '${queueName}' not available`);
       return [];
     }
-    
+
     const bulkJobs = jobs.map(({ data, options }) => ({
       data,
       opts: { ...this.config.defaultJobOptions, ...options },
@@ -386,20 +399,6 @@ export class JobQueueService extends EventEmitter {
   }
 
   /**
-   * Process jobs of a specific type
-   */
-  processJobType(jobType: string, processor: (data: any) => Promise<any>): void {
-    if (!this.isRedisAvailable) {
-      // Silently skip when Redis is not available - no need to log
-      return;
-    }
-    
-    this.registerHandler(jobType, async (job: Job) => {
-      return processor(job.data.payload);
-    });
-  }
-
-  /**
    * Pause/resume a queue
    */
   async pauseQueue(queueName: string): Promise<void> {
@@ -528,12 +527,14 @@ export async function createPriorityJob(
 export async function retryFailedJobs(queueName: string): Promise<void> {
   const queueService = getJobQueue();
   const queue = queueService.getQueue(queueName);
-  
+
   if (!queue) {
-    logger.debug(`Cannot retry failed jobs - queue '${queueName}' not available`);
+    logger.debug(
+      `Cannot retry failed jobs - queue '${queueName}' not available`,
+    );
     return;
   }
-  
+
   const failedJobs = await queue.getFailed();
 
   for (const job of failedJobs) {
