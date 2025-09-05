@@ -16,7 +16,7 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuSubContent,
 } from "@/components/ui/dropdown-menu";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useLocalModels } from "@/hooks/useLocalModels";
 import { useLocalLMSModels } from "@/hooks/useLMStudioModels";
 import { useLanguageModelsByProviders } from "@/hooks/useLanguageModelsByProviders";
@@ -32,6 +32,8 @@ export function ModelPicker() {
   };
 
   const [open, setOpen] = useState(false);
+  const lastLoadTime = useRef<number>(0);
+  const MIN_LOAD_INTERVAL = 2000; // Minimum 2 seconds between loads
 
   // Cloud models from providers
   const { data: modelsByProviders, isLoading: modelsByProvidersLoading } =
@@ -57,31 +59,44 @@ export function ModelPicker() {
     loadModels: loadLMStudioModels,
   } = useLocalLMSModels();
 
-  // Load models when the dropdown opens
+  // Load models when the dropdown opens with throttling
   useEffect(() => {
     if (open) {
-      loadOllamaModels();
-      loadLMStudioModels();
+      const now = Date.now();
+      // Only load if enough time has passed since last load
+      if (now - lastLoadTime.current > MIN_LOAD_INTERVAL) {
+        lastLoadTime.current = now;
+        // Load models but don't await to prevent blocking
+        loadOllamaModels().catch(() => {
+          /* Silently handle errors */
+        });
+        loadLMStudioModels().catch(() => {
+          /* Silently handle errors */
+        });
+      }
     }
-  }, [open, loadOllamaModels, loadLMStudioModels]);
+  }, [open]); // Remove loadModels functions from deps to prevent re-renders
 
   // Get display name for the selected model with full null safety
   const getModelDisplayName = (model?: any): string => {
     if (!model) return "No Model Selected";
     // Provider string or object id/name could be missing; guard all reads
-    const providerId: string | undefined = typeof model.provider === "string" ? model.provider : model.provider?.id;
+    const providerId: string | undefined =
+      typeof model.provider === "string" ? model.provider : model.provider?.id;
     const modelName: string | undefined = model.name;
 
     if (!providerId || !modelName) return "No Model Selected";
 
     if (providerId === "ollama") {
       return (
-        ollamaModels.find((m: LocalModel) => m.modelName === modelName)?.displayName || modelName
+        ollamaModels.find((m: LocalModel) => m.modelName === modelName)
+          ?.displayName || modelName
       );
     }
     if (providerId === "lmstudio") {
       return (
-        lmStudioModels.find((m: LocalModel) => m.modelName === modelName)?.displayName || modelName
+        lmStudioModels.find((m: LocalModel) => m.modelName === modelName)
+          ?.displayName || modelName
       );
     }
 
@@ -115,7 +130,9 @@ export function ModelPicker() {
     !lmStudioLoading && !lmStudioError && lmStudioModels.length > 0;
 
   if (!settings) {
-    return <div className="text-xs text-muted-foreground">Loading models...</div>;
+    return (
+      <div className="text-xs text-muted-foreground">Loading models...</div>
+    );
   }
   const selectedModel = settings?.selectedModel;
   if (!selectedModel) {

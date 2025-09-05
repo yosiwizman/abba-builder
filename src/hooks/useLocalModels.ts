@@ -26,7 +26,13 @@ export function useLocalModels() {
 
       return modelList;
     } catch (error) {
-      console.error("Error loading local Ollama models:", error);
+      // Only log if it's not a connection error (which is expected when Ollama isn't running)
+      if (
+        !String(error).includes("ECONNREFUSED") &&
+        !String(error).includes("fetch failed")
+      ) {
+        console.error("Error loading local Ollama models:", error);
+      }
       setError(error instanceof Error ? error : new Error(String(error)));
       return [];
     } finally {
