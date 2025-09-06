@@ -1,0 +1,8 @@
+# NEVER MODIFY THESE CORE FILES
+src/router.ts
+src/components/app-sidebar.tsx
+src/services/langchain-orchestrator.ts
+src/services/enhanced/*
+package.json
+package-lock.json
+
