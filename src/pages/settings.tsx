@@ -24,6 +24,9 @@ import { AutoUpdateSwitch } from "@/components/AutoUpdateSwitch";
 import { ReleaseChannelSelector } from "@/components/ReleaseChannelSelector";
 import { NeonIntegration } from "@/components/NeonIntegration";
 import { RuntimeModeSelector } from "@/components/RuntimeModeSelector";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { selectedAppIdAtom } from "@/atoms/appAtoms";
+import { useAtomValue } from "jotai";
 
 export default function SettingsPage() {
   const [isResetDialogOpen, setIsResetDialogOpen] = useState(false);
@@ -71,6 +74,9 @@ export default function SettingsPage() {
           <GeneralSettings appVersion={appVersion} />
           <WorkflowSettings />
           <AISettings />
+
+          {/* Backup Settings */}
+          <BackupSettings />
 
           <div
             id="provider-settings"
@@ -155,6 +161,105 @@ export default function SettingsPage() {
                   </a>
                   .
                 </div>
+              </div>
+            </div>
+          </div>
+
+          {/* API Key Helper Links */}
+          <div
+            id="token-helpers"
+            className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6"
+          >
+            <h2 className="text-lg font-medium text-gray-900 dark:text-white mb-4">
+              API Key Helper Links
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <label>GitHub Token</label>
+                <a
+                  href="https://github.com/settings/tokens/new"
+                  target="_blank"
+                  className="text-sm text-blue-500"
+                >
+                  Get GitHub Token →
+                </a>
+              </div>
+
+              <div className="space-y-2">
+                <label>OpenAI API Key</label>
+                <a
+                  href="https://platform.openai.com/api-keys"
+                  target="_blank"
+                  className="text-sm text-blue-500"
+                >
+                  Get OpenAI Key →
+                </a>
+              </div>
+
+              <div className="space-y-2">
+                <label>Anthropic API Key</label>
+                <a
+                  href="https://console.anthropic.com/settings/keys"
+                  target="_blank"
+                  className="text-sm text-blue-500"
+                >
+                  Get Anthropic Key →
+                </a>
+              </div>
+
+              <div className="space-y-2">
+                <label>Google API Key</label>
+                <a
+                  href="https://makersuite.google.com/app/apikey"
+                  target="_blank"
+                  className="text-sm text-blue-500"
+                >
+                  Get Google AI Key →
+                </a>
+              </div>
+
+              <div className="space-y-2">
+                <label>Clerk Publishable Key</label>
+                <a
+                  href="https://dashboard.clerk.com/apps/new"
+                  target="_blank"
+                  className="text-sm text-blue-500"
+                >
+                  Get Clerk Keys →
+                </a>
+              </div>
+
+              <div className="space-y-2">
+                <label>SerpAPI Key</label>
+                <a
+                  href="https://serpapi.com/manage-api-key"
+                  target="_blank"
+                  className="text-sm text-blue-500"
+                >
+                  Get SerpAPI Key →
+                </a>
+              </div>
+
+              <div className="space-y-2">
+                <label>Vercel Token</label>
+                <a
+                  href="https://vercel.com/account/tokens"
+                  target="_blank"
+                  className="text-sm text-blue-500"
+                >
+                  Get Vercel Token →
+                </a>
+              </div>
+
+              <div className="space-y-2">
+                <label>Stripe Secret Key</label>
+                <a
+                  href="https://dashboard.stripe.com/apikeys"
+                  target="_blank"
+                  className="text-sm text-blue-500"
+                >
+                  Get Stripe Keys →
+                </a>
               </div>
             </div>
           </div>
@@ -297,7 +402,113 @@ export function WorkflowSettings() {
     </div>
   );
 }
+function BackupSettings() {
+  const appId = useAtomValue(selectedAppIdAtom);
+  const [frequency, setFrequency] = useState<string>("1hour");
+  const [location, setLocation] = useState<string>("local");
+
+  const backupNow = async () => {
+    if (!appId) return;
+    try {
+      await IpcClient.getInstance().invoke("backup:create", appId);
+      showSuccess("Backup created successfully");
+    } catch (e) {
+      showError(e);
+    }
+  };
+
+  const exportZip = async () => {
+    if (!appId) return;
+    try {
+      const res = await IpcClient.getInstance().invoke("backup:export-zip", appId);
+      showSuccess(`ZIP exported: ${res?.path}`);
+    } catch (e) {
+      showError(e);
+    }
+  };
+
+  return (
+    <div id="backup-settings" className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
+      <h2 className="text-lg font-medium text-gray-900 dark:text-white mb-4">Backup Settings</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label className="mb-1 block text-sm">Backup Frequency</label>
+          <Select value={frequency} onValueChange={(v) => setFrequency(v)}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select frequency" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="5min">Every 5 minutes</SelectItem>
+              <SelectItem value="1hour">Every hour</SelectItem>
+              <SelectItem value="daily">Daily</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        <div>
+          <label className="mb-1 block text-sm">Backup Location</label>
+          <Select value={location} onValueChange={(v) => setLocation(v)}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select location" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="local">Local only</SelectItem>
+              <SelectItem value="gdrive">Google Drive</SelectItem>
+              <SelectItem value="dropbox">Dropbox</SelectItem>
+              <SelectItem value="s3">Amazon S3</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+      <div className="mt-4 flex gap-2">
+        <Button onClick={backupNow}>Backup Now</Button>
+        <Button variant="outline" onClick={exportZip}>Export as ZIP</Button>
+      </div>
+    </div>
+  );
+}
+
 export function AISettings() {
+  const { settings, updateSettings, refreshSettings } = useSettings();
+
+  const modelOptions = [
+    { label: 'Auto', value: 'auto:auto' },
+    { label: 'OpenAI: GPT-4 Turbo', value: 'openai:gpt-4-turbo-preview' },
+    { label: 'OpenAI: GPT-3.5 Turbo', value: 'openai:gpt-3.5-turbo' },
+    { label: 'Anthropic: Claude 3 Opus', value: 'anthropic:claude-3-opus-20240229' },
+    { label: 'Anthropic: Claude 3 Haiku', value: 'anthropic:claude-3-haiku-20240307' },
+    { label: 'Google: Gemini Pro', value: 'google:gemini-pro' },
+    { label: 'Ollama: llama2', value: 'ollama:llama2' },
+  ];
+
+  const getValue = (task: 'code' | 'analysis' | 'quick') => {
+    const pref = settings?.preferredModelsByTask?.[task];
+    if (pref?.provider && pref?.name) return `${pref.provider}:${pref.name}`;
+    const sel = settings?.selectedModel;
+    return sel ? `${sel.provider}:${sel.name}` : 'auto:auto';
+  };
+
+  const handleModelChange = async (task: 'code' | 'analysis' | 'quick', value: string) => {
+    try {
+      console.log('Changing model for', task, 'to', value);
+      const [provider, name] = value.split(':');
+      const updated = {
+        preferredModelsByTask: {
+          ...settings?.preferredModelsByTask,
+          [task]: { provider, name },
+        },
+        selectedModel: { provider, name },
+      } as any;
+      console.log('Current model settings:', settings?.preferredModelsByTask);
+      console.log('Updating to:', { task, provider, name });
+      console.log('Updating settings:', updated);
+      await updateSettings(updated);
+      await refreshSettings();
+      console.log('Settings after save:', await window.electron.invoke('get-user-settings'));
+    } catch (e) {
+      console.error('Failed to change model:', e);
+    }
+  };
+
   return (
     <div
       id="ai-settings"
@@ -313,6 +524,62 @@ export function AISettings() {
 
       <div className="mt-4">
         <MaxChatTurnsSelector />
+      </div>
+
+      {/* Simple Model Selector (temporary sprint fix) */}
+      <div className="mt-6">
+        <h3 className="text-md font-medium mb-3">Model</h3>
+        <select
+          defaultValue={settings?.selectedModel ? `${settings.selectedModel.provider}:${settings.selectedModel.name}` : 'openai:gpt-3.5-turbo'}
+          onChange={(e) => {
+            console.log('CHANGING all to', e.target.value);
+            const [provider, model] = e.target.value.split(':');
+            const newSettings = {
+              ...settings,
+              selectedModel: { provider, name: model },
+            } as any;
+            ;(window as any).electron.invoke('set-user-settings', newSettings).then(() => {
+              console.log('SAVED!');
+              window.location.reload();
+            });
+          }}
+          className="w-full p-2 border rounded"
+        >
+          <option value="openai:gpt-4">GPT-4</option>
+          <option value="openai:gpt-3.5-turbo">GPT-3.5</option>
+          <option value="anthropic:claude-3-opus">Claude Opus</option>
+          <option value="anthropic:claude-3-haiku">Claude Haiku</option>
+        </select>
+      </div>
+
+      {/* Consensus and Prompt Enhancement */}
+      <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="space-y-1">
+          <div className="flex items-center space-x-2">
+            <Switch
+              id="use-multi-model-consensus"
+              checked={!!settings?.useMultiModelConsensus}
+              onCheckedChange={(checked) => updateSettings({ useMultiModelConsensus: checked })}
+            />
+            <Label htmlFor="use-multi-model-consensus">Use multiple models for consensus</Label>
+          </div>
+          <div className="text-sm text-gray-500 dark:text-gray-400">
+            Aggregate outputs from multiple models for more reliable results.
+          </div>
+        </div>
+        <div className="space-y-1">
+          <div className="flex items-center space-x-2">
+            <Switch
+              id="auto-enhance-prompts"
+              checked={settings?.autoEnhancePrompts !== false}
+              onCheckedChange={(checked) => updateSettings({ autoEnhancePrompts: checked })}
+            />
+            <Label htmlFor="auto-enhance-prompts">Auto-enhance my prompts</Label>
+          </div>
+          <div className="text-sm text-gray-500 dark:text-gray-400">
+            Improve simple requests into detailed prompts automatically.
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -43,6 +43,12 @@ import { registerMessageStreamingHandlers } from "./handlers/message_streaming_h
 import { registerBlockchainHandlers } from './handlers/blockchain_handlers';
 import { registerAIContractHandlers } from './handlers/ai_contract_handlers';
 import { registerIntegrationHandlers } from './handlers/integrations_handlers';
+import { registerNFTHandlers } from "./handlers/nft_handlers";
+import { registerStoreDeploymentHandlers } from "./handlers/store_deployment_handlers";
+import { registerSearchHandlers } from "./handlers/search_handlers";
+import { registerAuthHandlers } from "./handlers/auth_handlers";
+import { registerBackupHandlers } from "./handlers/backup_handlers";
+import { registerCostHandlers } from "./handlers/cost_handlers";
 
 export async function setupApiEndpoints(_userId?: string): Promise<void> {
   // Register all IPC handlers by category
@@ -89,6 +95,12 @@ export async function setupApiEndpoints(_userId?: string): Promise<void> {
   registerAIContractHandlers();
   registerIntegrationHandlers();
   registerRendererLogHandlers();
+  registerNFTHandlers();
+  registerStoreDeploymentHandlers();
+  registerSearchHandlers();
+  registerAuthHandlers();
+  registerBackupHandlers();
+  registerCostHandlers();
   // Use V2 handlers if available, fallback to V1
   try {
     registerCIHandlersV2();

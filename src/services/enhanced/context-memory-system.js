@@ -37,6 +37,34 @@ class ContextMemorySystem {
     return userId;
   }
 
+  async rememberUserBehavior(event) {
+    // Store using existing mechanism
+    if (typeof this.storeContext === 'function') {
+      await this.storeContext(event);
+    } else {
+      // Fallback: append to a local events log
+      try {
+        const eventsPath = path.join(this.memoryPath, 'events.jsonl');
+        fs.appendFileSync(eventsPath, JSON.stringify(event) + '\n');
+      } catch {}
+    }
+
+    // Analytics: PostHog (renderer only)
+    try {
+      if (typeof window !== 'undefined' && window.posthog && typeof window.posthog.capture === 'function') {
+        window.posthog.capture(event.type || 'user-event', event.data || {});
+      }
+    } catch {}
+  }
+
+  // Optional: basic context storage used by rememberUserBehavior
+  storeContext(event) {
+    try {
+      const ctxPath = path.join(this.memoryPath, 'context.jsonl');
+      fs.appendFileSync(ctxPath, JSON.stringify(event) + '\n');
+    } catch {}
+  }
+
   getUserProfile(userId = this.getUserId()) {
     const profilePath = path.join(this.memoryPath, `${userId}.json`);
 

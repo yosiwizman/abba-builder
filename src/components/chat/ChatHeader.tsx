@@ -11,6 +11,12 @@ import { selectedAppIdAtom } from "@/atoms/appAtoms";
 import { useVersions } from "@/hooks/useVersions";
 import { Button } from "../ui/button";
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
@@ -21,7 +27,7 @@ import { useRouter } from "@tanstack/react-router";
 import { selectedChatIdAtom } from "@/atoms/chatAtoms";
 import { useChats } from "@/hooks/useChats";
 import { showError, showSuccess } from "@/lib/toast";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useStreamChat } from "@/hooks/useStreamChat";
 import { useCurrentBranch } from "@/hooks/useCurrentBranch";
 import { useCheckoutVersion } from "@/hooks/useCheckoutVersion";
@@ -44,6 +50,7 @@ export function ChatHeader({
 }: ChatHeaderProps) {
   const appId = useAtomValue(selectedAppIdAtom);
   const { versions, loading: versionsLoading } = useVersions(appId);
+  const [isSaving, setIsSaving] = useState(false);
   const { navigate } = useRouter();
   const [selectedChatId, setSelectedChatId] = useAtom(selectedChatIdAtom);
   const { refreshChats } = useChats(appId);
@@ -104,6 +111,17 @@ export function ChatHeader({
   const isNotMainBranch = branchInfo && branchInfo.branch !== "main";
 
   const currentBranchName = branchInfo?.branch;
+
+  // Cost summary state (Phase 3)
+  const [costSummary, setCostSummary] = useState<{ spentToday: number; dailyLimit: number } | null>(null);
+  useEffect(() => {
+    (async () => {
+      try {
+        const summary = await (window as any).electron.invoke('costs:get-summary');
+        setCostSummary(summary);
+      } catch {}
+    })();
+  }, []);
 
   return (
     <div className="flex flex-col w-full @container">
@@ -181,6 +199,22 @@ export function ChatHeader({
       {/* Why is this pt-0.5? Because the loading bar is h-1 (it always takes space) and we want the vertical spacing to be consistent.*/}
       <div className="@container flex items-center justify-between pb-1.5 pt-0.5">
         <div className="flex items-center space-x-2">
+          {/* Cost meter */}
+          {costSummary && (
+            <div className="flex items-center gap-2 pr-3 border-r">
+              <span className="text-xs">${costSummary.spentToday.toFixed(2)} / ${costSummary.dailyLimit.toFixed(2)}</span>
+              <div className="w-16 h-1.5 bg-gray-200 dark:bg-gray-700 rounded">
+                <div className="h-1.5 bg-green-500 rounded" style={{ width: `${Math.min(100, (costSummary.spentToday / costSummary.dailyLimit) * 100)}%` }} />
+              </div>
+            </div>
+          )}
+
+          {/* Auto-save indicator */}
+          <div
+            className={`w-2 h-2 rounded-full ${isSaving ? 'bg-yellow-400' : 'bg-green-400'}`}
+            title={isSaving ? 'Saving…' : 'Saved'}
+          />
+
           <Button
             onClick={handleNewChat}
             variant="ghost"
@@ -189,16 +223,61 @@ export function ChatHeader({
             <PlusCircle size={16} />
             <span>New Chat</span>
           </Button>
+
+          {/* Save checkpoint */}
           <Button
-            onClick={onVersionClick}
             variant="ghost"
-            className="hidden @6xs:flex cursor-pointer items-center gap-1 text-sm px-2 py-1 rounded-md"
+            className="hidden @2xs:flex items-center gap-1 text-sm px-2 py-1"
+            onClick={async () => {
+              if (!appId) return;
+              try {
+                setIsSaving(true);
+                await IpcClient.getInstance().invoke('version:create-checkpoint', { appId, name: 'Manual checkpoint' });
+                showSuccess('Checkpoint created');
+              } catch (e) {
+                showError(e);
+              } finally {
+                setTimeout(() => setIsSaving(false), 800);
+              }
+            }}
           >
-            <History size={16} />
-            {versionsLoading
-              ? "..."
-              : `Version ${versions.length}${versionPostfix}`}
+            <GitBranch size={16} />
+            Save Checkpoint
           </Button>
+
+          {/* Version history dropdown */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                className="hidden @6xs:flex cursor-pointer items-center gap-1 text-sm px-2 py-1 rounded-md"
+              >
+                <History size={16} />
+                {versionsLoading ? '...' : `Version ${versions.length}${versionPostfix}`}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="min-w-[300px]">
+              {(versions || []).slice(0, 10).map((v) => (
+                <DropdownMenuItem
+                  key={v.oid}
+                  onClick={async () => {
+                    if (!appId) return;
+                    try {
+                      await IpcClient.getInstance().revertVersion({ appId, previousVersionId: v.oid });
+                      showSuccess(`Reverted to ${v.oid.slice(0,7)}`);
+                    } catch (e) {
+                      showError(e);
+                    }
+                  }}
+                >
+                  <div className="flex flex-col">
+                    <span className="font-mono text-xs">{v.oid.slice(0,7)}</span>
+                    <span className="text-xs opacity-80 truncate">{(v.message || '').split('\n')[0]}</span>
+                  </div>
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
 
         <button

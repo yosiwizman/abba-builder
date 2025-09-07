@@ -190,6 +190,22 @@ const validators = {
 };
 
 export function registerEnhancedHandlers() {
+  // Metrics current snapshot via orchestrator
+  try {
+    const { ipcMain } = require('electron');
+    ipcMain.handle('metrics:get-current', async () => {
+      try {
+        const { LangChainOrchestrator } = require('../services/langchain-orchestrator');
+        const orchestrator = new LangChainOrchestrator();
+        if (typeof orchestrator.getMetrics === 'function') {
+          return await orchestrator.getMetrics();
+        }
+        return { successRate: 0, averageBuildTime: 0, totalBuilds: 0, failureRate: 0, deploymentFrequency: 0, mttr: 0 };
+      } catch (e) {
+        return { successRate: 0, averageBuildTime: 0, totalBuilds: 0, failureRate: 0, deploymentFrequency: 0, mttr: 0 };
+      }
+    });
+  } catch {}
   logger.info("Registering enhanced IPC handlers with structured logging");
 
   // Build and Deploy handler

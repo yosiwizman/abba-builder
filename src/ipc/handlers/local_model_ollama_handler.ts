@@ -59,7 +59,7 @@ export async function fetchOllamaModels(): Promise<LocalModelListResponse> {
   try {
     const response = await fetch(`${getOllamaApiUrl()}/api/tags`);
     if (!response.ok) {
-      throw new Error(`Failed to fetch model: ${response.statusText}`);
+      return { models: [] };
     }
 
     const data = await response.json();
@@ -83,16 +83,9 @@ export async function fetchOllamaModels(): Promise<LocalModelListResponse> {
     });
     logger.info(`Successfully fetched ${models.length} models from Ollama`);
     return { models };
-  } catch (error) {
-    if (
-      error instanceof TypeError &&
-      (error as Error).message.includes("fetch failed")
-    ) {
-      throw new Error(
-        "Could not connect to Ollama. Make sure it's running at http://localhost:11434",
-      );
-    }
-    throw new Error("Failed to fetch models from Ollama");
+  } catch {
+    // Silent fail to avoid noisy console when Ollama is not running
+    return { models: [] };
   }
 }
 

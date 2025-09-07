@@ -185,8 +185,8 @@ export function registerCIHandlersV2() {
         const provider = providerManager.getActiveProvider();
 
         if (!provider || !provider.isAuthenticated()) {
-          logger.warn(`${LOG_PREFIX} No active provider, returning mock data`);
-          return mockData.builds;
+          logger.warn(`${LOG_PREFIX} No active provider, returning empty builds`);
+          return [];
         }
 
         const builds = await providerManager.getBuilds({
@@ -245,14 +245,8 @@ export function registerCIHandlersV2() {
         const provider = providerManager.getActiveProvider();
 
         if (!provider || !provider.isAuthenticated()) {
-          logger.warn(`${LOG_PREFIX} No active provider, returning mock data`);
-          return mockData.deployments.map((d) => ({
-            id: d.id,
-            environment: d.environment,
-            status: mapDeploymentStatus(d.status),
-            version: d.version,
-            timestamp: d.deployedAt.toLocaleString(),
-          }));
+          logger.warn(`${LOG_PREFIX} No active provider, returning empty deployments`);
+          return [];
         }
 
         const deployments = await providerManager.getDeployments({
@@ -302,9 +296,15 @@ export function registerCIHandlersV2() {
 
         if (!provider || !provider.isAuthenticated()) {
           logger.warn(
-            `${LOG_PREFIX} No active provider, returning mock statistics`,
+            `${LOG_PREFIX} No active provider, returning zero statistics`,
           );
-          return mockData.statistics;
+          return {
+            totalBuilds: 0,
+            successRate: 0,
+            averageDuration: 0,
+            failureRate: 0,
+            buildsPerDay: 0,
+          } as any;
         }
 
         const stats = await providerManager.getStatistics(options);
@@ -356,6 +356,21 @@ export function registerCIHandlersV2() {
         error:
           error instanceof Error ? error.message : "Failed to trigger build",
       };
+    }
+  });
+
+  // Build count helper
+  ipcMain.handle("ci:get-build-count", async () => {
+    try {
+      const provider = providerManager.getActiveProvider();
+      if (!provider || !provider.isAuthenticated()) {
+        return 0;
+      }
+      const builds = await providerManager.getBuilds({ limit: 100 });
+      return Array.isArray(builds) ? builds.length : 0;
+    } catch (e) {
+      logger.error(`${LOG_PREFIX} Error getting build count:`, e);
+      return 0;
     }
   });
 
@@ -417,15 +432,85 @@ export function registerCIHandlersV2() {
       try {
         const provider = providerManager.getActiveProvider();
 
+        // Optional: get an AI-assisted deployment plan via LangChain
+        try {
+          const orchestratorModule = await import("../../services/langchain-orchestrator");
+          const LangChainOrchestrator =
+            (orchestratorModule as any).LangChainOrchestrator ||
+            (orchestratorModule as any).default?.LangChainOrchestrator;
+          if (LangChainOrchestrator) {
+            const orchestrator = new LangChainOrchestrator();
+            const plan = await (orchestrator.createDeploymentPlan
+              ? orchestrator.createDeploymentPlan({ environment, version })
+              : orchestrator.generateFromPrompt(
+                  `Create a deployment plan for env=${environment} version=${version}`,
+                ));
+            logger.info(`${LOG_PREFIX} Deployment plan via LC:`, plan);
+          }
+        } catch (e) {
+          logger.debug?.(`${LOG_PREFIX} LangChain planning not available`, e);
+        }
+
         if (!provider || !provider.isAuthenticated()) {
-          logger.warn(
-            `${LOG_PREFIX} No active provider, simulating deployment`,
-          );
-          return {
-            success: true,
-            deploymentId: `mock-deploy-${Date.now()}`,
-            message: "Deployment triggered (simulation)",
-          };
+          // Attempt real deployment via enhanced auto-deployment system if tokens are configured
+          const hasVercel = !!process.env.VERCEL_TOKEN;
+          const hasNetlify = !!process.env.NETLIFY_TOKEN; // Not implemented, reserved
+
+          if (!hasVercel && !hasNetlify) {
+            logger.warn(
+              `${LOG_PREFIX} No CI provider and no deployment tokens configured. Cannot deploy.`,
+            );
+            return {
+              success: false,
+              error:
+                "No deployment tokens configured. Add VERCEL_TOKEN (or NETLIFY_TOKEN) to .env to enable real deployments.",
+            };
+          }
+
+          try {
+            // Lazy import to avoid overhead when not used and avoid Vite pre-bundling
+            const modulePath = "../../services/enhanced/auto-deployment-system.js";
+            const AutoDeploymentModule = await import(/* @vite-ignore */ modulePath);
+            const AutoDeploymentSystem =
+              (AutoDeploymentModule as any).default ?? AutoDeploymentModule;
+            const ads = new AutoDeploymentSystem();
+
+            // Minimal static site or placeholder; in a real pipeline this would point to artifacts
+            const minimalHtml = `<!DOCTYPE html><html><head><meta charset=\"utf-8\"/><title>Abba Deploy</title></head><body><h1>Deployment ${version ||
+              "v"}${environment ? " to " + environment : ""}</h1><p>Powered by Abba Builder</p></body></html>`;
+
+            let result: any;
+            if (hasVercel) {
+              logger.info(
+                `${LOG_PREFIX} Deploying via AutoDeploymentSystem to Vercel (fallback path)`,
+              );
+              result = await ads.deployToVercel(minimalHtml, {
+                projectName: `abba-${environment || "env"}-${Date.now()}`,
+                framework: null,
+              });
+            } else {
+              // Placeholder for future Netlify path
+              return {
+                success: false,
+                error:
+                  "NETLIFY_TOKEN provided but Netlify deployment path is not implemented yet.",
+              };
+            }
+
+            return {
+              success: true,
+              deploymentId: result?.deploymentId || `vercel-${Date.now()}`,
+              url: result?.url,
+              message: "Deployment triggered via Vercel",
+            };
+          } catch (err) {
+            logger.error(`${LOG_PREFIX} Auto-deployment failed:`, err);
+            return {
+              success: false,
+              error:
+                err instanceof Error ? err.message : "Auto-deployment failed",
+            };
+          }
         }
 
         logger.info(

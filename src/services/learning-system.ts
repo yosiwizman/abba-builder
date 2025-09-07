@@ -120,6 +120,15 @@ class LearningSystem {
         CREATE INDEX IF NOT EXISTS idx_patterns_category ON patterns(category);
         CREATE INDEX IF NOT EXISTS idx_patterns_success ON patterns(success_rate);
         CREATE INDEX IF NOT EXISTS idx_templates_framework ON templates(framework);
+
+        -- Monitoring table for errors (Phase 2)
+        CREATE TABLE IF NOT EXISTS error_logs (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          error TEXT,
+          context TEXT,
+          resolved INTEGER DEFAULT 0,
+          created_at INTEGER DEFAULT (strftime('%s', 'now'))
+        );
       `);
 
       // Initialize with best practices patterns
@@ -130,6 +139,64 @@ class LearningSystem {
       logger.error('Failed to initialize learning system:', error);
       throw error;
     }
+  }
+
+  // Phase 2: Error tracking and analytics
+  async trackError(error: any, context?: any): Promise<void> {
+    if (!this.db) throw new Error('Learning DB not initialized');
+    try {
+      await this.storeError(error, context);
+      // Best-effort Sentry report if available (main/renderer guarded)
+      try {
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
+        const Sentry = require('@sentry/electron');
+        if (Sentry?.captureException) {
+          Sentry.captureException(error instanceof Error ? error : new Error(String(error)), {
+            extra: { context },
+          });
+        }
+      } catch {
+        /* ignore missing sentry */
+      }
+    } catch (e) {
+      logger.error('Failed to track error:', e);
+    }
+  }
+
+  async storeError(error: any, context?: any): Promise<void> {
+    if (!this.db) throw new Error('Learning DB not initialized');
+    const stmt = this.db.prepare(
+      `INSERT INTO error_logs (error, context, resolved, created_at) VALUES (?, ?, 0, strftime('%s','now'))`,
+    );
+    const errorText = error instanceof Error ? `${error.name}: ${error.message}\n${error.stack || ''}` : String(error);
+    const contextText = context ? JSON.stringify(context) : null;
+    stmt.run(errorText, contextText);
+  }
+
+  async resolveError(id: number): Promise<void> {
+    if (!this.db) throw new Error('Learning DB not initialized');
+    const stmt = this.db.prepare(`UPDATE error_logs SET resolved = 1 WHERE id = ?`);
+    stmt.run(id);
+  }
+
+  async getErrors(limit = 100): Promise<Array<{ id: number; error: string; context: string | null; resolved: number; created_at: number }>> {
+    if (!this.db) throw new Error('Learning DB not initialized');
+    const stmt = this.db.prepare(`SELECT id, error, context, resolved, created_at FROM error_logs ORDER BY created_at DESC LIMIT ?`);
+    return stmt.all(limit) as any;
+  }
+
+  async getAnalytics(): Promise<{ totalErrors: number; unresolvedErrors: number; errorsToday: number; last24h: number }>{
+    if (!this.db) throw new Error('Learning DB not initialized');
+    const total = this.db.prepare(`SELECT COUNT(*) as c FROM error_logs`).get() as any;
+    const unresolved = this.db.prepare(`SELECT COUNT(*) as c FROM error_logs WHERE resolved = 0`).get() as any;
+    const today = this.db.prepare(`SELECT COUNT(*) as c FROM error_logs WHERE created_at >= strftime('%s','now','start of day')`).get() as any;
+    const last24h = this.db.prepare(`SELECT COUNT(*) as c FROM error_logs WHERE created_at >= strftime('%s','now','-1 day')`).get() as any;
+    return {
+      totalErrors: Number(total?.c || 0),
+      unresolvedErrors: Number(unresolved?.c || 0),
+      errorsToday: Number(today?.c || 0),
+      last24h: Number(last24h?.c || 0),
+    };
   }
 
   private async seedBestPracticePatterns(): Promise<void> {

@@ -4,9 +4,12 @@ import "./styles/globals.css";
 import "./utils/browser-error-capture";
 import { router } from "./router";
 import { RouterProvider } from "@tanstack/react-router";
+import { ClerkProvider } from "@clerk/clerk-react";
+import { clerkConfig, clerkPubKey } from "./lib/clerk-config";
 import { PostHogProvider } from "posthog-js/react";
 import { default as posthog } from "posthog-js";
 import { getTelemetryUserId, isTelemetryOptedIn } from "./hooks/useSettings";
+import * as SentryRenderer from '@sentry/electron/renderer';
 import {
   QueryCache,
   QueryClient,
@@ -58,6 +61,13 @@ const ANALYTICS_ENABLED = import.meta.env.VITE_ANALYTICS_ENABLED === 'true' ||
   (import.meta.env.MODE === "production" && import.meta.env.PROD);
 
 let posthogClient: any = null;
+
+// Initialize Sentry in renderer if DSN is present
+if (import.meta.env.VITE_SENTRY_DSN) {
+  try {
+    SentryRenderer.init({ dsn: import.meta.env.VITE_SENTRY_DSN, tracesSampleRate: 0.05 });
+  } catch {}
+}
 
 if (ANALYTICS_ENABLED) {
   console.info('[Analytics] Enabled - initializing PostHog');
@@ -128,7 +138,15 @@ function App() {
     };
   }, []);
 
-  return <RouterProvider router={router} />;
+  const content = <RouterProvider router={router} />;
+  if (clerkPubKey) {
+    return (
+      <ClerkProvider publishableKey={clerkPubKey} {...(clerkConfig as any)}>
+        {content}
+      </ClerkProvider>
+    );
+  }
+  return content;
 }
 
 const rootElement = document.getElementById("root");

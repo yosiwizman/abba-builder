@@ -15,6 +15,11 @@ export function registerSettingsHandlers() {
     "set-user-settings",
     async (_, settings: Partial<UserSettings>) => {
       writeSettings(settings);
+      try {
+        const { LangChainOrchestrator } = require("../../services/langchain-orchestrator");
+        const orchestrator = new LangChainOrchestrator();
+        await orchestrator.initialize();
+      } catch {}
       return readSettings();
     },
   );

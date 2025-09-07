@@ -168,6 +168,13 @@ async function processStreamChunks({
 export function registerChatStreamHandlers() {
   ipcMain.handle("chat:stream", async (event, req: ChatStreamParams) => {
     try {
+      // Safe debug: log presence (not values) of relevant API keys and engine settings
+      logger.info("[chat:stream] API key presence:", {
+        openai: !!process.env.OPENAI_API_KEY,
+        anthropic: !!process.env.ANTHROPIC_API_KEY,
+        dyad_engine_url: !!process.env.DYAD_ENGINE_URL,
+        dyad_gateway_url: !!process.env.DYAD_GATEWAY_URL,
+      });
       const fileUploadsState = FileUploadsState.getInstance();
       fileUploadsState.initialize({ chatId: req.chatId });
 
@@ -390,6 +397,64 @@ ${componentSnippet}
           updatedChat,
         );
       } else {
+        // If LangChain is enabled via environment, use it as primary path
+        try {
+          const useLangChain =
+            process.env.ABBA_USE_LANGCHAIN === "true" ||
+            process.env.USE_LANGCHAIN === "true";
+          if (useLangChain) {
+            const orchestratorModule = await import(
+              "../../services/langchain-orchestrator"
+            );
+            const LangChainOrchestrator =
+              (orchestratorModule as any).LangChainOrchestrator ||
+              (orchestratorModule as any).default?.LangChainOrchestrator;
+            if (LangChainOrchestrator) {
+              const orchestrator = new LangChainOrchestrator();
+              const lcResult = await orchestrator.generateFromPrompt(userPrompt, {
+                stream: false,
+                useTemplates: true,
+                context: updatedChat.messages,
+              });
+              const assistantText =
+                (lcResult &&
+                  (lcResult.text || lcResult.output || lcResult.code)) ||
+                "";
+
+              // Update placeholder assistant message in DB
+          await db
+            .update(chats)
+            .set({ content: assistantText })
+            .where(eq(messages.id, placeholderAssistantMessage.id));
+
+          // Log approximate cost (Phase 3)
+          try {
+            const { CostProtectionService } = await import("../../services/cost-protection-service");
+            const cps = new CostProtectionService();
+            const approxTokens = Math.max(500, Math.floor((assistantText?.length || 0) / 4) + Math.floor((userPrompt?.length || 0) / 4));
+            cps.logCost(settings.selectedModel?.name || "unknown", approxTokens);
+          } catch (e) {
+            logger.warn("Failed to log cost:", e);
+          }
+
+              // Send the end event to the renderer
+              safeSend(event.sender, "chat:response:end", {
+                chatId: req.chatId,
+                updatedFiles: false,
+              } satisfies ChatResponseEnd);
+
+              // Clean up state
+              activeStreams.delete(req.chatId);
+              FileUploadsState.getInstance().clear();
+
+              return req.chatId;
+            }
+          }
+        } catch (err) {
+          logger.warn("LangChain primary path disabled due to error:", err);
+          // Fall through to normal AI processing
+        }
+
         // Normal AI processing for non-test prompts
         const settings = readSettings();
 
@@ -444,8 +509,27 @@ ${componentSnippet}
           "estimated tokens",
           codebaseInfo.length / 4,
         );
+        // Phase 3: Cost protection check and potential fallback
+        let selectedModelForRequest = settings.selectedModel;
+        try {
+          const { CostProtectionService } = await import("../../services/cost-protection-service");
+          const cps = new CostProtectionService();
+          // Rough token estimate: codebase info tokens + prompt + a buffer
+          const estimatedTokens = Math.floor(codebaseInfo.length / 4) + (req.prompt?.length || 0) / 4 + 1000;
+          const decision = cps.checkBeforeRequest(selectedModelForRequest.name, estimatedTokens);
+          if (!decision.allowed && decision.fallback) {
+            // Map common fallback to provider
+            const fallbackName = decision.fallback;
+            const provider = fallbackName.startsWith("gpt-") ? "openai" : selectedModelForRequest.provider;
+            selectedModelForRequest = { provider, name: fallbackName } as any;
+            logger.warn(`Cost protection fallback: ${decision.reason}. Switching to ${provider}:${fallbackName}`);
+          }
+        } catch (e) {
+          logger.warn("Cost protection check failed (continuing):", e);
+        }
+
         const { modelClient, isEngineEnabled } = await getModelClient(
-          settings.selectedModel,
+          selectedModelForRequest,
           settings,
           files,
         );

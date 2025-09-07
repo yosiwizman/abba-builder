@@ -77,6 +77,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { useRef } from 'react';
 
 interface NFT {
   id: string;
@@ -131,102 +132,12 @@ interface Activity {
   txHash: string;
 }
 
-const MOCK_NFTS: NFT[] = [
-  {
-    id: '1',
-    name: 'CryptoPunk #1234',
-    description: 'A unique pixelated character from the CryptoPunks collection',
-    image: 'https://via.placeholder.com/400x400/FF6B6B/FFFFFF?text=Punk',
-    price: 45.5,
-    currency: 'ETH',
-    owner: '0x1234...5678',
-    creator: '0xabcd...efgh',
-    collection: 'CryptoPunks',
-    tokenId: '1234',
-    contractAddress: '0xb47e3cd837dDF8e4c57F05d70Ab865de6e193BBB',
-    likes: 342,
-    views: 5621,
-    rarity: 'legendary',
-    attributes: [
-      { trait: 'Type', value: 'Alien', rarity: 0.1 },
-      { trait: 'Hat', value: 'Beanie', rarity: 5 },
-      { trait: 'Glasses', value: '3D Glasses', rarity: 2 }
-    ],
-    history: [
-      { event: 'Sale', price: 45.5, from: '0xaaaa...bbbb', to: '0x1234...5678', date: new Date('2024-01-15') },
-      { event: 'Listing', price: 40, from: '0xcccc...dddd', to: '', date: new Date('2024-01-10') }
-    ],
-    isVerified: true,
-    chain: 'Ethereum',
-    royalties: 2.5
-  },
-  {
-    id: '2',
-    name: 'Bored Ape #5678',
-    description: 'A bored ape from the Bored Ape Yacht Club',
-    image: 'https://via.placeholder.com/400x400/4ECDC4/FFFFFF?text=Ape',
-    price: 72.3,
-    currency: 'ETH',
-    owner: '0x9876...5432',
-    creator: '0xijkl...mnop',
-    collection: 'BAYC',
-    tokenId: '5678',
-    contractAddress: '0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D',
-    likes: 892,
-    views: 12341,
-    rarity: 'epic',
-    attributes: [
-      { trait: 'Fur', value: 'Gold', rarity: 1.5 },
-      { trait: 'Eyes', value: 'Laser', rarity: 0.8 },
-      { trait: 'Mouth', value: 'Grin', rarity: 12 }
-    ],
-    history: [],
-    isVerified: true,
-    chain: 'Ethereum',
-    royalties: 5,
-    isAuction: true,
-    auctionEndTime: new Date('2024-02-01'),
-    highestBid: 68.5
-  }
-];
-
-const MOCK_COLLECTIONS: Collection[] = [
-  {
-    id: '1',
-    name: 'CryptoPunks',
-    description: '10,000 unique collectible characters with proof of ownership stored on the Ethereum blockchain',
-    image: 'https://via.placeholder.com/200x200/FF6B6B/FFFFFF?text=Punks',
-    banner: 'https://via.placeholder.com/1200x300/FF6B6B/FFFFFF?text=CryptoPunks',
-    creator: 'Larva Labs',
-    items: 10000,
-    owners: 3421,
-    floorPrice: 42.5,
-    volume: 523000,
-    volumeChange: 12.5,
-    isVerified: true,
-    chain: 'Ethereum',
-    category: 'Art'
-  },
-  {
-    id: '2',
-    name: 'Bored Ape Yacht Club',
-    description: 'BAYC is a collection of 10,000 unique Bored Ape NFTs',
-    image: 'https://via.placeholder.com/200x200/4ECDC4/FFFFFF?text=BAYC',
-    banner: 'https://via.placeholder.com/1200x300/4ECDC4/FFFFFF?text=BAYC',
-    creator: 'Yuga Labs',
-    items: 10000,
-    owners: 5892,
-    floorPrice: 68.2,
-    volume: 892000,
-    volumeChange: -5.2,
-    isVerified: true,
-    chain: 'Ethereum',
-    category: 'PFP'
-  }
-];
+// Load NFTs and collections from backend instead of mock
 
 export const NFTMarketplace: React.FC = () => {
   const [activeTab, setActiveTab] = useState('explore');
+  const [nfts, setNfts] = useState<NFT[]>([]);
+  const [collections, setCollections] = useState<Collection[]>([]);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedChain, setSelectedChain] = useState('all');
@@ -249,12 +160,28 @@ export const NFTMarketplace: React.FC = () => {
   });
 
   // Stats
-  const [stats] = useState({
-    totalVolume: 1892000,
-    totalSales: 45231,
-    totalCreators: 8923,
-    avgPrice: 12.5
+  const [stats, setStats] = useState({
+    totalVolume: 0,
+    totalSales: 0,
+    totalCreators: 0,
+    avgPrice: 0
   });
+
+  useEffect(() => {
+    // Load stats
+    window.electron.invoke('nft:get-stats').then((s: any) => {
+      setStats({
+        totalVolume: s?.totalVolume || 0,
+        totalSales: s?.totalSales || 0,
+        totalCreators: s?.totalCreators || 0,
+        avgPrice: s?.averagePrice || 0,
+      });
+    }).catch(() => {});
+
+    // Load lists
+    window.electron.invoke('nft:list').then((items: any[]) => setNfts(Array.isArray(items) ? items as any : [])).catch(() => {});
+    window.electron.invoke('nft:list-collections').then((cols: any[]) => setCollections(Array.isArray(cols) ? cols as any : [])).catch(() => {});
+  }, []);
 
   const formatPrice = (price: number): string => {
     return price.toFixed(2);
@@ -478,7 +405,7 @@ export const NFTMarketplace: React.FC = () => {
 
           {/* NFT Grid/List */}
           <div className={viewMode === 'grid' ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4' : 'space-y-4'}>
-            {MOCK_NFTS.map((nft) => (
+            {nfts.map((nft) => (
               <Card key={nft.id} className="overflow-hidden hover:shadow-lg transition-shadow">
                 <div className="aspect-square relative group cursor-pointer" onClick={() => {
                   setSelectedNFT(nft);
@@ -571,7 +498,7 @@ export const NFTMarketplace: React.FC = () => {
         {/* Collections Tab */}
         <TabsContent value="collections" className="space-y-4">
           <div className="grid gap-4">
-            {MOCK_COLLECTIONS.map((collection) => (
+            {collections.map((collection) => (
               <Card key={collection.id}>
                 <CardContent className="p-6">
                   <div className="flex items-center gap-6">
@@ -813,13 +740,11 @@ export const NFTMarketplace: React.FC = () => {
 
             <div className="space-y-2">
               <Label>Upload Image</Label>
-              <div className="border-2 border-dashed rounded-lg p-6 text-center">
-                <Upload className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
-                <p className="text-sm text-muted-foreground">
-                  Drag and drop or click to upload
-                </p>
-                <Input type="file" className="hidden" />
-              </div>
+              <NFTImageUploader onUploaded={(result) => {
+                // Store the file logically in form; keep File ref minimal for now
+                setMintForm({ ...mintForm });
+                // Optionally we could store URL for preview elsewhere
+              }} />
             </div>
 
             <div className="grid grid-cols-2 gap-4">
@@ -896,3 +821,62 @@ export const NFTMarketplace: React.FC = () => {
     </div>
   );
 };
+
+// Reusable image uploader for NFT mint dialog
+function NFTImageUploader({ onUploaded }: { onUploaded: (result: { success: boolean; path?: string; url?: string; error?: string }) => void }) {
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
+  const pickFile = () => inputRef.current?.click();
+
+  const onFileChange: React.ChangeEventHandler<HTMLInputElement> = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = async () => {
+      try {
+        setBusy(true);
+        const dataUrl = reader.result as string;
+        setPreviewUrl(dataUrl);
+        const result = await window.electron.invoke('nft:upload-image', dataUrl);
+        onUploaded(result);
+      } catch (err) {
+        onUploaded({ success: false, error: err instanceof Error ? err.message : String(err) });
+      } finally {
+        setBusy(false);
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
+  return (
+    <div>
+      <div
+        className="border-2 border-dashed rounded-lg p-6 text-center cursor-pointer"
+        onClick={pickFile}
+        role="button"
+        aria-label="Upload NFT image"
+      >
+        <Upload className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
+        <p className="text-sm text-muted-foreground">
+          {busy ? 'Uploading...' : 'Drag and drop or click to upload'}
+        </p>
+        <input
+          ref={inputRef}
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={onFileChange}
+        />
+      </div>
+      {previewUrl && (
+        <div className="mt-3 flex items-center gap-3">
+          <img src={previewUrl} alt="Preview" className="w-20 h-20 object-cover rounded" />
+          <span className="text-xs text-muted-foreground">Preview</span>
+        </div>
+      )}
+    </div>
+  );
+}

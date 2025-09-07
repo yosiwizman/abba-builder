@@ -796,6 +796,29 @@ export function registerProjectLibraryHandlers() {
     ),
   );
 
+  // Intelligent best match via LangChain orchestrator
+  ipcMain.handle(
+    "project-library:find-best-match",
+    withProjectLibraryLogging(
+      "project-library:find-best-match",
+      async (_event, prompt: string) => {
+        try {
+          const { LangChainOrchestrator } = require("../../services/langchain-orchestrator");
+          const orchestrator = new LangChainOrchestrator();
+          if (typeof orchestrator.findBestTemplate === "function") {
+            const data = await orchestrator.findBestTemplate(prompt);
+            return { success: true, data };
+          }
+          const fallback = await orchestrator.generateFromPrompt(prompt);
+          return { success: true, data: fallback };
+        } catch (error: any) {
+          return { success: false, error: error.message };
+        }
+      },
+      projectLibraryValidators.findTemplate,
+    ),
+  );
+
   // Use project as template - ENHANCED with real implementation
   ipcMain.handle(
     "project-library:use-template",

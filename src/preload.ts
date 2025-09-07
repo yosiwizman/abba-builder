@@ -107,6 +107,34 @@ const validInvokeChannels = [
   "restart-dyad",
   "get-templates",
   "portal:migrate-create",
+  // NFTs
+  "nft:upload-image",
+  "nft:generate-contract",
+  "nft:get-stats",
+  "nft:list",
+  "nft:list-collections",
+  // LangChain search/enhancement
+  "langchain:search-github",
+  "langchain:search-npm",
+  "langchain:search-web",
+  "langchain:search-and-build",
+  "langchain:enhance-prompt",
+  "langchain:analyze-changes",
+  // LangChain auth + Auth
+  "langchain:setup-auth",
+  "langchain:validate-user",
+  "auth:setup",
+  "auth:validate-user",
+  "auth:get-limits",
+  // Version/Backup
+  "version:create-checkpoint",
+  "version:rollback",
+  "version:list",
+  "backup:create",
+  "backup:restore",
+  "backup:export-zip",
+  // Costs
+  "costs:get-summary",
   // Help bot
   "help:chat:start",
   "help:chat:cancel",
@@ -117,6 +145,7 @@ const validInvokeChannels = [
   "prompts:delete",
   // Knowledge Hub channels
   "knowledge:get-patterns",
+  "knowledge:analyze-pattern",
   "knowledge:get-bugs",
   "knowledge:get-scraped",
   "knowledge:get-templates",
@@ -138,10 +167,14 @@ const validInvokeChannels = [
   "project-library:search",
   "project-library:get-stats",
   "project-library:find-template",
+  "project-library:find-best-match",
   "project-library:use-template",
   "project-library:init-proven",
   "project-library:refresh",
   "project-library:add-github",
+  // Learning (Phase 2)
+  "learning:get-errors",
+  "learning:get-analytics",
   // Worker Pool channels
   "worker:analyze-code",
   "worker:compile-typescript",
@@ -158,7 +191,10 @@ const validInvokeChannels = [
   // CI/CD Dashboard channels
   "ci:get-builds",
   "ci:get-deployments",
-  "ci:get-pipelines",
+  "ci:get-statistics",
+  "ci:get-build-count",
+  // Metrics
+  "metrics:get-current",
   "ci:get-tests",
   "ci:get-statistics",
   "ci:trigger-build",
@@ -198,6 +234,10 @@ const validInvokeChannels = [
   "blockchain:stop-watching",
   // Enhanced system channels
   "enhanced:get-metrics",
+  // Store deployment
+  "store:deploy-ios",
+  "store:deploy-android",
+  "store:deploy-all",
   // Integrations channels
   "integrations:connect",
   "integrations:disconnect",

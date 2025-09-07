@@ -175,6 +175,17 @@ export const UserSettingsSchema = z.object({
   releaseChannel: ReleaseChannelSchema,
   runtimeMode2: RuntimeMode2Schema.optional(),
 
+  // New: model preferences and features
+  preferredModelsByTask: z
+    .object({
+      code: LargeLanguageModelSchema.optional(),
+      analysis: LargeLanguageModelSchema.optional(),
+      quick: LargeLanguageModelSchema.optional(),
+    })
+    .optional(),
+  useMultiModelConsensus: z.boolean().optional(),
+  autoEnhancePrompts: z.boolean().optional(),
+
   ////////////////////////////////
   // E2E TESTING ONLY.
   ////////////////////////////////

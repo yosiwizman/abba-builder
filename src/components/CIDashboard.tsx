@@ -91,13 +91,15 @@ export function CIDashboard() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [autoRefresh, setAutoRefresh] = useState(true);
 
-  // Fetch CI data
+  // Fetch CI data (real IPC calls)
   const fetchCIData = useCallback(async () => {
     setIsRefreshing(true);
     try {
-      // In a real implementation, these would be IPC calls to the backend
-      // For now, we'll use mock data
-      const mockBuilds: BuildStatus[] = [
+      const [buildsData, deploymentsData, statsData] = await Promise.all([
+        (window as any).electron.invoke('ci:get-builds', { limit: 50 }).catch(() => []),
+        (window as any).electron.invoke('ci:get-deployments', { limit: 50 }).catch(() => []),
+        (window as any).electron.invoke('ci:get-statistics', { period: 'week' }).catch(() => null),
+      ]);
         {
           id: "build-1",
           projectName: "dyad-enhanced",
@@ -139,7 +141,7 @@ export function CIDashboard() {
         },
       ];
 
-      const mockTestResults: TestResult[] = [
+      const mockTestResults: TestResult[] = [] as any;
         {
           id: "test-1",
           suite: "Unit Tests",
@@ -164,7 +166,7 @@ export function CIDashboard() {
         },
       ];
 
-      const mockDeployments: DeploymentStatus[] = [
+      const mockDeployments: DeploymentStatus[] = deploymentsData as any;
         {
           id: "deploy-1",
           environment: "Production",
@@ -185,7 +187,7 @@ export function CIDashboard() {
         },
       ];
 
-      const mockMetrics: CIMetrics = {
+      const mockMetrics: CIMetrics | null = statsData as any;
         totalBuilds: 245,
         successRate: 87.5,
         averageBuildTime: 180,
@@ -196,7 +198,7 @@ export function CIDashboard() {
         mttr: 15,
       };
 
-      setBuilds(mockBuilds);
+      setBuilds(buildsData as any);
       setTestResults(mockTestResults);
       setDeployments(mockDeployments);
       setMetrics(mockMetrics);

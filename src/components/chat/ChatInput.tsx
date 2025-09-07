@@ -65,6 +65,7 @@ import { selectedComponentPreviewAtom } from "@/atoms/previewAtoms";
 import { SelectedComponentDisplay } from "./SelectedComponentDisplay";
 import { useCheckProblems } from "@/hooks/useCheckProblems";
 import { LexicalChatInput } from "./LexicalChatInput";
+import { getRandomNumberId } from "@/hooks/useStreamChat";
 
 const showTokenBarAtom = atom(false);
 
@@ -136,7 +137,31 @@ export function ChatInput({ chatId }: { chatId?: number }) {
     setInputValue("");
     setSelectedComponent(null);
 
-    // Send message with attachments and clear them after sending
+    // 1) Ask LangChain for the enhanced prompt and show a temporary system notice
+    try {
+      const preview = await IpcClient.getInstance().invoke(
+        "langchain:enhance-prompt",
+        currentInput,
+      );
+      const understood: string | undefined = preview?.understood || undefined;
+      if (understood) {
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: getRandomNumberId(),
+            role: "assistant",
+            content:
+              `System notice: Using enhanced prompt below.\n\n> ${understood.replace(/\n/g, "\n> ")}`,
+            createdAt: new Date().toISOString(),
+          } as Message,
+        ]);
+      }
+    } catch (e) {
+      // Non-fatal; proceed with original input
+      console.warn("Failed to preview enhanced prompt", e);
+    }
+
+    // 2) Send message with attachments and clear them after sending
     await streamMessage({
       prompt: currentInput,
       chatId,

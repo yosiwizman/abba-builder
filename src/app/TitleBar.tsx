@@ -18,6 +18,8 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { PreviewHeader } from "@/components/preview_panel/PreviewHeader";
+import { UserButton } from "@clerk/clerk-react";
+import { clerkPubKey } from "@/lib/clerk-config";
 
 export const TitleBar = () => {
   const [selectedAppId] = useAtom(selectedAppIdAtom);
@@ -95,6 +97,13 @@ export const TitleBar = () => {
             <PreviewHeader />
           </div>
         )}
+
+        {/* Clerk User Menu */}
+        {clerkPubKey ? (
+          <div className="ml-auto app-region-no-drag mr-2">
+            <UserButton afterSignOutUrl="/sign-in" />
+          </div>
+        ) : null}
 
         {showWindowControls && <WindowsControls />}
       </div>

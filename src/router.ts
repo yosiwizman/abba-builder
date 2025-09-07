@@ -2,6 +2,10 @@ import { createRouter } from "@tanstack/react-router";
 import { rootRoute } from "./routes/root";
 import { homeRoute } from "./routes/home";
 import { chatRoute } from "./routes/chat";
+import { signInRoute } from "./routes/sign-in";
+import { signUpRoute } from "./routes/sign-up";
+import { onboardingRoute } from "./routes/onboarding";
+import { authSettingsRoute } from "./routes/auth-settings";
 import { settingsRoute } from "./routes/settings";
 import { providerSettingsRoute } from "./routes/settings/providers/$provider";
 import { appDetailsRoute } from "./routes/app-details";
@@ -11,6 +15,7 @@ import { ciDashboardRoute } from "./routes/ci-dashboard";
 import { metricsRoute } from "./routes/metrics.route";
 import { workflowsRoute } from "./routes/workflows";
 import { integrationsRoute } from "./routes/integrations";
+import { monitoringRoute } from "./routes/monitoring";
 
 const routeTree = rootRoute.addChildren([
   homeRoute,
@@ -20,8 +25,13 @@ const routeTree = rootRoute.addChildren([
   ciDashboardRoute,
   workflowsRoute,
   metricsRoute,
+  monitoringRoute,
   chatRoute,
+  signInRoute,
+  signUpRoute,
+  onboardingRoute,
   appDetailsRoute,
+  authSettingsRoute,
   settingsRoute.addChildren([providerSettingsRoute]),
 ]);
 

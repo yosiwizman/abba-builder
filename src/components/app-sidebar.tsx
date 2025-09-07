@@ -9,6 +9,7 @@ import {
   BarChart3,
   GitBranch,
   Plug,
+  User,
 } from "lucide-react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useSidebar } from "@/components/ui/sidebar"; // import useSidebar hook
@@ -51,6 +52,11 @@ const items = [
     icon: Settings,
   },
   {
+    title: "Auth",
+    to: "/auth-settings",
+    icon: User,
+  },
+  {
     title: "Library",
     to: "/library",
     icon: BookOpen,
@@ -79,6 +85,11 @@ const items = [
     title: "Metrics",
     to: "/metrics",
     icon: BarChart3,
+  },
+  {
+    title: "System Health",
+    to: "/monitoring",
+    icon: Activity,
   },
 ];
 

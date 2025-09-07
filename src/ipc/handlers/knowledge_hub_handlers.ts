@@ -232,6 +232,29 @@ export async function registerKnowledgeHubHandlers() {
   // Initialize services
   await initializeServices();
 
+  // Monitoring & analytics endpoints (Phase 2)
+  ipcMain.handle("learning:get-errors", async (_event, limit: number = 100) => {
+    try {
+      if (!learningSystem) await initializeServices();
+      const errors = await (learningSystem as any).getErrors?.(limit);
+      return errors || [];
+    } catch (e) {
+      logger.error('learning:get-errors failed:', e);
+      return [];
+    }
+  });
+
+  ipcMain.handle("learning:get-analytics", async () => {
+    try {
+      if (!learningSystem) await initializeServices();
+      const summary = await (learningSystem as any).getAnalytics?.();
+      return summary || { totalErrors: 0, unresolvedErrors: 0, errorsToday: 0, last24h: 0 };
+    } catch (e) {
+      logger.error('learning:get-analytics failed:', e);
+      return { totalErrors: 0, unresolvedErrors: 0, errorsToday: 0, last24h: 0 };
+    }
+  });
+
   // Get REAL patterns from learning system
   ipcMain.handle("knowledge:get-patterns", async () => {
     try {
@@ -423,6 +446,25 @@ export async function registerKnowledgeHubHandlers() {
       }
     } catch (error: any) {
       logger.error("Failed to rescan templates:", error);
+      return { success: false, error: error.message };
+    }
+  });
+
+  // Analyze a code pattern via LangChain orchestrator
+  ipcMain.handle("knowledge:analyze-pattern", async (_event, code: string) => {
+    try {
+      const { LangChainOrchestrator } = require("../../services/langchain-orchestrator");
+      const orchestrator = new LangChainOrchestrator();
+      if (typeof orchestrator.analyzeCodePattern === "function") {
+        const data = await orchestrator.analyzeCodePattern(code);
+        return { success: true, data };
+      }
+      const data = await orchestrator.generateFromPrompt(
+        `Analyze this code pattern and describe issues and improvements:\n\n${code}`,
+      );
+      return { success: true, data };
+    } catch (error: any) {
+      logger.error("Failed to analyze pattern:", error);
       return { success: false, error: error.message };
     }
   });

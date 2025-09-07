@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Settings, Activity, Rocket, Package } from "lucide-react";
+import { Settings, Activity, Rocket, Package, Smartphone } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CIDashboard } from "@/components/ci-dashboard";
 import { CISettings } from "@/components/ci-settings";
 import { DeploymentManager } from "@/components/ci-deployment-manager";
@@ -52,6 +54,20 @@ export default function CICDPage() {
 
         <TabsContent value="deployments" className="space-y-6">
           <DeploymentManager />
+
+          {/* Deploy to Stores */}
+          <Card className="deployment-manager">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Smartphone className="h-4 w-4" /> Deploy to App Stores
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="flex gap-2">
+              <Button onClick={() => (window as any).electron.invoke('store:deploy-ios')}>Deploy iOS</Button>
+              <Button onClick={() => (window as any).electron.invoke('store:deploy-android')}>Deploy Android</Button>
+              <Button onClick={() => (window as any).electron.invoke('store:deploy-all')}>Deploy Both</Button>
+            </CardContent>
+          </Card>
         </TabsContent>
 
         <TabsContent value="settings" className="space-y-6">

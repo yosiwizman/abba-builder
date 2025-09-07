@@ -1,4 +1,5 @@
-import { app, BrowserWindow, dialog } from "electron";
+import { app, BrowserWindow, dialog, crashReporter } from "electron";
+import * as SentryMain from '@sentry/electron/main';
 import * as path from "node:path";
 import { setupApiEndpoints } from "./ipc/ipc_host";
 import dotenv from "dotenv";
@@ -50,6 +51,21 @@ if (process.defaultApp) {
 }
 
 export async function onReady() {
+  // Initialize Sentry (main) if DSN provided
+  try {
+    if (process.env.SENTRY_DSN) {
+      SentryMain.init({ dsn: process.env.SENTRY_DSN, tracesSampleRate: 0.05 });
+    }
+  } catch {}
+  // Start Electron crash reporter (optional, separate from Sentry)
+  try {
+    crashReporter.start({
+      submitURL: process.env.SENTRY_DSN || 'about:blank',
+      uploadToServer: false,
+      compress: true,
+      ignoreSystemCrashHandler: true,
+    } as any);
+  } catch {}
   try {
     const backupManager = new BackupManager({
       settingsFile: getSettingsFilePath(),
@@ -442,6 +458,24 @@ app.on("window-all-closed", () => {
   }
 });
 
+// Recover last state on renderer crash
+app.on('render-process-gone', async (_event, _webContents, details) => {
+  log.error('Renderer process gone:', details);
+  try {
+    const lastState = await recoverLastState();
+    createWindow();
+    // Optionally send state to renderer if needed
+    mainWindow?.webContents.once('did-finish-load', () => {
+      if (lastState) {
+        mainWindow?.webContents.send('deep-link-received', { type: 'recovered', state: lastState });
+      }
+    });
+  } catch (e) {
+    log.error('Failed to recover last state', e);
+    createWindow();
+  }
+});
+
 app.on("activate", () => {
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
@@ -452,3 +486,12 @@ app.on("activate", () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
+
+async function recoverLastState(): Promise<any> {
+  try {
+    const settings = readSettings();
+    return { settingsSnapshot: settings };
+  } catch {
+    return null;
+  }
+}
