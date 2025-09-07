@@ -49,6 +49,11 @@ class LearningSystem {
   private dbPath: string;
   private patternsCache: Map<string, Pattern> = new Map();
 
+  // Local AI (Phase 4)
+  private localModels: { provider: 'ollama' | 'lmstudio'; modelName: string; displayName: string }[] = [];
+  private localAIEnabled = false;
+  private preferredLocalModel?: string;
+
   // Cognitive Load Principles from zakirullin/cognitive-load
   private readonly COGNITIVE_LOAD_FACTORS = {
     deepModules: -2,        // Reduces cognitive load
@@ -135,9 +140,161 @@ class LearningSystem {
       await this.seedBestPracticePatterns();
       
       logger.info('Learning system initialized successfully');
+
+      // Initialize local models in the background (best effort)
+      try {
+        await this.initializeLocalModels();
+      } catch (e) {
+        logger.debug('Local AI initialization skipped/failed:', e);
+      }
     } catch (error: any) {
       logger.error('Failed to initialize learning system:', error);
       throw error;
+    }
+  }
+
+  // Phase 4: Local AI initialization using Ollama/LM Studio (best effort, no API costs)
+  async initializeLocalModels(): Promise<{ available: boolean; models: { provider: 'ollama' | 'lmstudio'; modelName: string; displayName: string }[] }> {
+    // Attempt Ollama first
+    const ollamaModels = await this.listOllamaModels();
+    if (ollamaModels.length > 0) {
+      this.localModels = ollamaModels.map(m => ({ provider: 'ollama', modelName: m.modelName, displayName: m.displayName }));
+      this.localAIEnabled = true;
+      this.preferredLocalModel = this.localModels[0]?.modelName;
+      logger.info(`Local AI available via Ollama: ${this.localModels.length} models`);
+      return { available: true, models: this.localModels };
+    }
+
+    // LM Studio model listing can be added similarly if needed
+    this.localModels = [];
+    this.localAIEnabled = false;
+    this.preferredLocalModel = undefined;
+    return { available: false, models: [] };
+  }
+
+  private parseOllamaHost(host?: string): string {
+    if (!host) return 'http://localhost:11434';
+    if (host.startsWith('http://') || host.startsWith('https://')) return host;
+    if (host.startsWith('[') && host.includes(']:')) return `http://${host}`;
+    if (host.includes(':') && !host.includes('::') && host.split(':').length === 2) return `http://${host}`;
+    if (host.includes('::') || host.split(':').length > 2) return `http://[${host}]:11434`;
+    return `http://${host}:11434`;
+  }
+
+  private getOllamaApiUrl(): string {
+    return this.parseOllamaHost(process.env.OLLAMA_HOST);
+  }
+
+  private async listOllamaModels(): Promise<Array<{ modelName: string; displayName: string }>> {
+    try {
+      const resp = await fetch(`${this.getOllamaApiUrl()}/api/tags`);
+      if (!resp.ok) return [];
+      const data = await resp.json();
+      const list = Array.isArray(data?.models) ? data.models : [];
+      return list.map((m: any) => ({
+        modelName: String(m?.name || ''),
+        displayName: String((m?.name || '').split(':')[0]).replace(/-/g, ' ').replace(/(\d+)/, ' $1 ').split(' ').map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ').trim(),
+      })).filter(m => m.modelName);
+    } catch {
+      // Silent failure if Ollama not running
+      return [];
+    }
+  }
+
+  private async generateWithOllama(prompt: string, opts?: { modelName?: string; system?: string; temperature?: number }): Promise<string | null> {
+    const modelName = opts?.modelName || this.preferredLocalModel;
+    if (!modelName) return null;
+    try {
+      const body: any = { model: modelName, prompt, stream: false };
+      if (opts?.system) body.system = opts.system;
+      if (typeof opts?.temperature === 'number') body.options = { temperature: opts.temperature };
+      const resp = await fetch(`${this.getOllamaApiUrl()}/api/generate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      if (!resp.ok) return null;
+      const data = await resp.json();
+      // Prefer standard ollama field
+      if (typeof data?.response === 'string') return data.response;
+      // Fallback to common OpenAI-compatible shapes
+      const txt = data?.choices?.[0]?.message?.content || data?.choices?.[0]?.text;
+      return typeof txt === 'string' ? txt : null;
+    } catch {
+      return null;
+    }
+  }
+
+  // Self-healing analysis: use local models when available to enrich insights without paid APIs
+  async selfHealingAnalyzeProject(projectPath: string): Promise<LearningInsight[]> {
+    const baseInsights = await this.analyzeProjectForPatterns(projectPath);
+    if (!this.localAIEnabled || this.localModels.length === 0) {
+      return baseInsights;
+    }
+    try {
+      const prompt = `You are an expert software architect. Based on the following project characteristics, propose up to 2 additional learning insights to improve maintainability and reduce cognitive load. Respond strictly as JSON {"insights":[{ "pattern": string, "frequency": number, "context": string, "recommendation": string, "cognitiveImpact": "reduces"|"increases"|"neutral" }]}.
+
+Project path: ${projectPath}
+Existing insights: ${JSON.stringify(baseInsights).slice(0, 3000)}
+`;
+      const out = await this.generateWithOllama(prompt, { temperature: 0.2 });
+      if (!out) return baseInsights;
+      let extra: LearningInsight[] = [];
+      try {
+        const jsonStart = out.indexOf('{');
+        const jsonEnd = out.lastIndexOf('}');
+        const jsonText = jsonStart >= 0 && jsonEnd > jsonStart ? out.slice(jsonStart, jsonEnd + 1) : out;
+        const parsed = JSON.parse(jsonText);
+        extra = Array.isArray(parsed?.insights) ? parsed.insights.slice(0, 2) : [];
+      } catch {
+        // If not JSON, attempt to heuristically parse lines into one insight
+        const firstLine = out.split('\n').find((l: string) => l.trim().length > 0) || '';
+        if (firstLine) {
+          extra = [{ pattern: firstLine.slice(0, 48), frequency: 1, context: 'Local AI suggestion', recommendation: firstLine, cognitiveImpact: 'reduces' }];
+        }
+      }
+      for (const insight of extra) {
+        await this.recordInsight(insight);
+      }
+      return [...baseInsights, ...extra];
+    } catch {
+      return baseInsights;
+    }
+  }
+
+  // Public entry point used by knowledge hub refresh
+  async runLearningCycle(): Promise<{ learned: number; improved: number; usedLocalAI: boolean; model?: string }> {
+    try {
+      const { available } = await this.initializeLocalModels();
+      if (!available) {
+        return { learned: 0, improved: 0, usedLocalAI: false };
+      }
+      // Use a lightweight prompt to nudge one improvement suggestion
+      const out = await this.generateWithOllama(
+        'Suggest one concrete engineering best-practice insight in JSON {"insights":[{ "pattern": string, "frequency": 1, "context": string, "recommendation": string, "cognitiveImpact": "reduces" }]} for improving code structure with focus on reducing cognitive load.',
+        { temperature: 0.1 },
+      );
+      if (!out) {
+        return { learned: 0, improved: 0, usedLocalAI: true, model: this.preferredLocalModel };
+      }
+      let learned = 0;
+      try {
+        const jsonStart = out.indexOf('{');
+        const jsonEnd = out.lastIndexOf('}');
+        const jsonText = jsonStart >= 0 && jsonEnd > jsonStart ? out.slice(jsonStart, jsonEnd + 1) : out;
+        const parsed = JSON.parse(jsonText);
+        const items: LearningInsight[] = Array.isArray(parsed?.insights) ? parsed.insights.slice(0, 1) : [];
+        for (const insight of items) {
+          await this.recordInsight(insight);
+          learned += 1;
+        }
+      } catch {
+        // ignore
+      }
+      return { learned, improved: 0, usedLocalAI: true, model: this.preferredLocalModel };
+    } catch (e) {
+      logger.debug('runLearningCycle skipped due to local AI not available or error:', e);
+      return { learned: 0, improved: 0, usedLocalAI: false };
     }
   }
 
