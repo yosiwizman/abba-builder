@@ -47,6 +47,11 @@ if (process.defaultApp) {
   app.setAsDefaultProtocolClient("dyad");
 }
 
+// Auto-update configuration for Abba Builder
+// ABBA_ENABLE_AUTO_UPDATE controls whether auto-update is enabled (default: false)
+// This prevents accidental updates from upstream Dyad releases.
+const ABBA_AUTO_UPDATE_ENABLED = process.env.ABBA_ENABLE_AUTO_UPDATE === "true";
+
 export async function onReady() {
   try {
     const backupManager = new BackupManager({
@@ -62,22 +67,27 @@ export async function onReady() {
   await onFirstRunMaybe(settings);
   createWindow();
 
-  logger.info("Auto-update enabled=", settings.enableAutoUpdate);
-  if (settings.enableAutoUpdate) {
-    // Technically we could just pass the releaseChannel directly to the host,
-    // but this is more explicit and falls back to stable if there's an unknown
-    // release channel.
+  // Auto-update is disabled by default via ABBA_ENABLE_AUTO_UPDATE env var.
+  // When enabled, it targets yosiwizman/abba-builder releases.
+  logger.info("ABBA_ENABLE_AUTO_UPDATE=", ABBA_AUTO_UPDATE_ENABLED);
+  logger.info("settings.enableAutoUpdate=", settings.enableAutoUpdate);
+
+  if (ABBA_AUTO_UPDATE_ENABLED && settings.enableAutoUpdate) {
+    logger.info("Auto-update enabled, targeting yosiwizman/abba-builder");
+    // Use GitHub releases as the update source for Abba Builder
     const postfix = settings.releaseChannel === "beta" ? "beta" : "stable";
-    const host = `https://api.dyad.sh/v1/update/${postfix}`;
     logger.info("Auto-update release channel=", postfix);
     updateElectronApp({
       logger,
       updateSource: {
         type: UpdateSourceType.ElectronPublicUpdateService,
-        repo: "dyad-sh/dyad",
-        host,
+        repo: "yosiwizman/abba-builder",
       },
-    }); // additional configuration options available
+    });
+  } else {
+    logger.info(
+      "Auto-update disabled. Set ABBA_ENABLE_AUTO_UPDATE=true to enable.",
+    );
   }
 }
 

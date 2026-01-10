@@ -17,8 +17,8 @@ async function verifyReleaseAssets() {
     console.log(`🔍 Verifying release assets for version ${version}...`);
 
     // GitHub API configuration
-    const owner = "dyad-sh";
-    const repo = "dyad";
+    const owner = "yosiwizman";
+    const repo = "abba-builder";
     const token = process.env.GITHUB_TOKEN;
 
     if (!token) {
@@ -35,7 +35,7 @@ async function verifyReleaseAssets() {
       headers: {
         Authorization: `token ${token}`,
         Accept: "application/vnd.github.v3+json",
-        "User-Agent": "dyad-release-verifier",
+        "User-Agent": "abba-builder-release-verifier",
       },
     });
 
